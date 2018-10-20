@@ -46,7 +46,7 @@ public class Redex extends Application {
      */
     public static void main(String[] args) {
         Vista.Login login = new Vista.Login();
-        login.show();
+        login.show(); // this comment to commit something and test
         //launch(args);
     }
     
