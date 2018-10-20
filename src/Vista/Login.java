@@ -5,6 +5,7 @@
  */
 package Vista;
 
+import AccesoDatos.usuarioDA;
 import java.awt.Color;
 import java.awt.Image;
 import javafx.scene.Cursor;
@@ -215,7 +216,9 @@ public class Login extends javax.swing.JFrame {
     }
     private void buttonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonLoginMouseClicked
         // TODO add your handling code here:
-        
+        usuarioDA a = new usuarioDA(); // Esto no debe de conectarse directo a
+         // acceso a datos debe de ir a controlador, pero ya no tenia tiempo en la noche lo estilizo , solo es ejmplo
+        a.obtenerUsuario();
     }//GEN-LAST:event_buttonLoginMouseClicked
 
     private void buttonLoginMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonLoginMouseEntered
