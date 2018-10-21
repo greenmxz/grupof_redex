@@ -280,6 +280,9 @@ public class Login extends javax.swing.JFrame {
             }else{
                 if (usuarioLogin.isEncontrado()){
                     JOptionPane.showMessageDialog(null, "Datos ingresados correctos");
+                    this.dispose();
+                    menuTest menu = new menuTest();
+                    menu.show();
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Datos ingresados incorrectos\n"
