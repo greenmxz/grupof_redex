@@ -23,6 +23,7 @@ public class persona {
     private Date fechaNacimiento;
     private String ciudad;
 
+
     public persona (){
         fechaNacimiento = new Date();
     }
@@ -166,6 +167,5 @@ public class persona {
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
     }
-    
     
 }

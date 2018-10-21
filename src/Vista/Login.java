@@ -31,7 +31,7 @@ public class Login extends javax.swing.JFrame {
         inicializar();
         this.buttonLogin.hide();
         usuarioBL = new usuarioBL();
-        usuarioLogin = new usuario();
+        //usuarioLogin = new usuario();
     }
     private void inicializar(){
         ImageIcon imgUsername = new ImageIcon(getClass().getResource("/Resource/username.png"));
@@ -237,8 +237,20 @@ public class Login extends javax.swing.JFrame {
     private void buttonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonLoginMouseClicked
         // TODO add your handling code here:
         usuarioLogin = usuarioBL.obtenerUsuario(this.userName.getText(),this.password.getText());
+        System.out.println("RPTA LOGIN");
         if (usuarioLogin!=null){
-            JOptionPane.showMessageDialog(null, "Datos ingresados correctos");
+            System.out.println("AQUIAQUIAQUIQUIQI");
+            if (usuarioLogin.isBaneado()){
+                JOptionPane.showMessageDialog(null,  "Ha excedido el número de intentos permitidos,\n "
+                        + "Debe de esperar "+usuarioLogin.getTiempoRestanteBaneado()+ " segundos.");
+            }else{
+                if (usuarioLogin.isEncontrado()){
+                    JOptionPane.showMessageDialog(null, "Datos ingresados correctos sdseeeeeeed");
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Datos ingresados incorrectos");
+                }
+            }
             this.userName.setText("");
             this.password.setText("");
         }else{
@@ -262,11 +274,23 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         usuarioLogin = usuarioBL.obtenerUsuario(this.userName.getText(),this.password.getText());
         if (usuarioLogin!=null){
-            JOptionPane.showMessageDialog(null, "Datos ingresados correctos");
-            this.userName.setText("Nombre de usuario");
-            this.password.setText("*");
-            
+            if (usuarioLogin.isBaneado()){
+                JOptionPane.showMessageDialog(null,  "Ha excedido el número de intentos permitidos,\n "
+                        + "Debe de esperar "+usuarioLogin.getTiempoRestanteBaneado()+ " segundos.");
+            }else{
+                if (usuarioLogin.isEncontrado()){
+                    JOptionPane.showMessageDialog(null, "Datos ingresados correctos");
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Datos ingresados incorrectos\n"
+                            + "Le quedan "+ ((5 - usuarioLogin.getNumeroIntentos())<=0?0:(5 - usuarioLogin.getNumeroIntentos()))+" intento(s) restante(s).");
+                }
+            }
+            userName.setText("Usuario");
+            password.setText("\\u25cf");
         }else{
+            userName.setText("Usuario");
+            password.setText("\\u25cf");
             JOptionPane.showMessageDialog(null, "Usuario o contrasena incorrectos");
             
         }

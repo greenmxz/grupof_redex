@@ -15,9 +15,15 @@ public class usuario {
     private String password;
     private String rol;
     private persona persona;
+    private int numeroIntentos;
+    private boolean baneado;
+    private int tiempoRestanteBaneado;
+    private boolean encontrado;
     
     public usuario(){
         persona = new persona();
+        encontrado=false;
+        baneado=false;
     }
 
     /**
@@ -89,6 +95,64 @@ public class usuario {
     public void setId(int id) {
         this.id = id;
     }
+
+    /**
+     * @return the numeroIntentos
+     */
+    public int getNumeroIntentos() {
+        return numeroIntentos;
+    }
+
+    /**
+     * @param numeroIntentos the numeroIntentos to set
+     */
+    public void setNumeroIntentos(int numeroIntentos) {
+        this.numeroIntentos = numeroIntentos;
+    }
+
+    /**
+     * @return the baneado
+     */
+    public boolean isBaneado() {
+        return baneado;
+    }
+
+    /**
+     * @param baneado the baneado to set
+     */
+    public void setBaneado(boolean baneado) {
+        this.baneado = baneado;
+    }
+
+    /**
+     * @return the tiempoRestanteBaneado
+     */
+    public int getTiempoRestanteBaneado() {
+        return tiempoRestanteBaneado;
+    }
+
+    /**
+     * @param tiempoRestanteBaneado the tiempoRestanteBaneado to set
+     */
+    public void setTiempoRestanteBaneado(int tiempoRestanteBaneado) {
+        this.tiempoRestanteBaneado = tiempoRestanteBaneado;
+    }
+
+    /**
+     * @return the encontrado
+     */
+    public boolean isEncontrado() {
+        return encontrado;
+    }
+
+    /**
+     * @param encontrado the encontrado to set
+     */
+    public void setEncontrado(boolean encontrado) {
+        this.encontrado = encontrado;
+    }
+
+
     
 
 }
