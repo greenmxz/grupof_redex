@@ -167,5 +167,4 @@ public class persona {
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;//city
     }
-    
 }
