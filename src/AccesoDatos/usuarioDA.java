@@ -18,8 +18,6 @@ import Modelo.usuario;
 public class usuarioDA {
     public usuario obtenerUsuario(String nombreUsuario, String contraseña){ 
         try {
-            
-            System.out.println(nombreUsuario+" "+contraseña);
             database connect = new database();
             String query = "{CALL obtenerUsuario(?,?)}";
 
