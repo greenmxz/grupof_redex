@@ -46,10 +46,13 @@ public class Redex extends Application {
      */
     public static void main(String[] args) {
         Vista.Login login = new Vista.Login();
-        Vista.Secretario_AdministrarPedido  secretario_administrarPedido = new Vista.Secretario_AdministrarPedido();
-        
+        Vista.Secretario_Administrar_Pedido  secretario_administrarPedido = new Vista.Secretario_Administrar_Pedido();
+        Vista.Secretario_Crear_Pedido  secretario_crearPedido = new Vista.Secretario_Crear_Pedido();
+        Vista.Secretario_Modificar_Pedido  secretario_modificarPedido = new Vista.Secretario_Modificar_Pedido();
         login.show(); // this comment to commit something and test 2
         secretario_administrarPedido.show();
+        secretario_crearPedido.show();
+        secretario_modificarPedido.show();
         //launch(args);
     }
     
