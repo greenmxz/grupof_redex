@@ -6,10 +6,13 @@
 package Vista;
 
 import AccesoDatos.usuarioDA;
+import Controlador.usuarioBL;
+import Modelo.usuario;
 import java.awt.Color;
 import java.awt.Image;
 import javafx.scene.Cursor;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -17,7 +20,8 @@ import javax.swing.JPanel;
  * @author Moises
  */
 public class Login extends javax.swing.JFrame {
-
+    private usuarioBL usuarioBL ;
+    private usuario usuarioLogin;
     /**
      * Creates new form Login
      */
@@ -25,6 +29,9 @@ public class Login extends javax.swing.JFrame {
         
         initComponents();
         inicializar();
+        this.buttonLogin.hide();
+        usuarioBL = new usuarioBL();
+        usuarioLogin = new usuario();
     }
     private void inicializar(){
         ImageIcon imgUsername = new ImageIcon(getClass().getResource("/Resource/username.png"));
@@ -52,14 +59,15 @@ public class Login extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         userName = new javax.swing.JTextField();
-        password = new javax.swing.JTextField();
         userImg = new javax.swing.JLabel();
         passwordImg = new javax.swing.JLabel();
+        password = new javax.swing.JPasswordField();
         buttonLogin = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         frontLogin = new javax.swing.JLabel();
+        login = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,34 +78,38 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        password.setText("Contraseña");
+        userImg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        passwordImg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        password.setText("jPasswordField1");
         password.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 passwordMouseClicked(evt);
             }
         });
-
-        userImg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-
-        passwordImg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        password.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(93, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap(104, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(userImg, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34))
+                        .addComponent(userName))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(passwordImg, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(45, 45, 45))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,9 +119,9 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(userImg, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(passwordImg, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(passwordImg, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -134,7 +146,7 @@ public class Login extends javax.swing.JFrame {
             .addGroup(buttonLoginLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jLabel1)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
         buttonLoginLayout.setVerticalGroup(
             buttonLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,6 +173,13 @@ public class Login extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        login.setText("INICIAR SESIÓN");
+        login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -180,10 +199,14 @@ public class Login extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(login)
+                .addGap(148, 148, 148))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -192,7 +215,9 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(buttonLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(login)
+                .addGap(17, 17, 17))
         );
 
         pack();
@@ -202,11 +227,6 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.userName.setText("");
     }//GEN-LAST:event_userNameMouseClicked
-
-    private void passwordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordMouseClicked
-        // TODO add your handling code here:
-        this.password.setText("");
-    }//GEN-LAST:event_passwordMouseClicked
     void setColor(JPanel panel){
         panel.setBackground(new Color(30,67,112));
         //136,161,192
@@ -216,9 +236,16 @@ public class Login extends javax.swing.JFrame {
     }
     private void buttonLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonLoginMouseClicked
         // TODO add your handling code here:
-        usuarioDA a = new usuarioDA(); // Esto no debe de conectarse directo a
-         // acceso a datos debe de ir a controlador, pero ya no tenia tiempo en la noche lo estilizo , solo es ejmplo
-        a.obtenerUsuario();
+        usuarioLogin = usuarioBL.obtenerUsuario(this.userName.getText(),this.password.getText());
+        if (usuarioLogin!=null){
+            JOptionPane.showMessageDialog(null, "Datos ingresados correctos");
+            this.userName.setText("");
+            this.password.setText("");
+        }else{
+            JOptionPane.showMessageDialog(null, "Usuario o contrasena incorrectos");
+            
+        }
+        
     }//GEN-LAST:event_buttonLoginMouseClicked
 
     private void buttonLoginMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonLoginMouseEntered
@@ -230,6 +257,31 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         resetColor(this.buttonLogin);
     }//GEN-LAST:event_buttonLoginMouseReleased
+
+    private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
+        // TODO add your handling code here:
+        usuarioLogin = usuarioBL.obtenerUsuario(this.userName.getText(),this.password.getText());
+        if (usuarioLogin!=null){
+            JOptionPane.showMessageDialog(null, "Datos ingresados correctos");
+            this.userName.setText("Nombre de usuario");
+            this.password.setText("*");
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "Usuario o contrasena incorrectos");
+            
+        }
+        
+    }//GEN-LAST:event_loginActionPerformed
+
+    private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
+        // TODO add your handling code here:
+        this.password.setText("");
+    }//GEN-LAST:event_passwordActionPerformed
+
+    private void passwordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordMouseClicked
+        // TODO add your handling code here:
+        this.password.setText("");
+    }//GEN-LAST:event_passwordMouseClicked
 
     /**
      * @param args the command line arguments
@@ -273,7 +325,8 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField password;
+    private javax.swing.JButton login;
+    private javax.swing.JPasswordField password;
     private javax.swing.JLabel passwordImg;
     private javax.swing.JLabel userImg;
     private javax.swing.JTextField userName;
