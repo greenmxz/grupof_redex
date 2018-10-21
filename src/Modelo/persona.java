@@ -165,7 +165,7 @@ public class persona {
      * @param ciudad the ciudad to set
      */
     public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
+        this.ciudad = ciudad;//city
     }
     
 }
