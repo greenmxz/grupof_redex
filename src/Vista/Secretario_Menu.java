@@ -32,7 +32,7 @@ public class Secretario_Menu extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Secretario Menu");
 
         jButton1.setText("Administrar Cliente");
@@ -100,10 +100,19 @@ public class Secretario_Menu extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        
+        Vista.Secretario_Administrar_Cliente adm_cliente = new Vista.Secretario_Administrar_Cliente();
+        adm_cliente.show(rootPaneCheckingEnabled);
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        
+        Vista.Secretario_Administrar_Pedido adm_pedido = new Vista.Secretario_Administrar_Pedido();
+        adm_pedido.show(rootPaneCheckingEnabled);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
