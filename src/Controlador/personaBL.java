@@ -18,4 +18,11 @@ public class personaBL {
     public persona obtenerPersona(int id_persona){
         return personaDA.obtenerPersona(id_persona);
     }
+    public persona obtenerPersonaxDNI(int dni){
+        return personaDA.obtenerPersonaxDNI(dni);
+    }
+    
+    public boolean insertarPersona(persona persona){
+        return personaDA.insertarPersona(persona);
+    }
 }
