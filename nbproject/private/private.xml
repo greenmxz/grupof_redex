@@ -3,9 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Moises/Documents/repositorios/redex/src/Modelo/database.java</file>
-            <file>file:/C:/Users/Moises/Documents/repositorios/redex/src/Vista/Login.java</file>
-            <file>file:/C:/Users/Moises/Documents/repositorios/redex/src/redex/Redex.java</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Vista/Secretario_Modificar_Pedido.java</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Resource/password.png</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Vista/Secretario_Crear_Cliente.java</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Vista/Secretario_Modificar_Cliente.java</file>
+            <file>file:/D:/software/redex/grupof_redex/src/redex/Redex.java</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Vista/Login.java</file>
+            <file>file:/D:/software/redex/grupof_redex/nbproject/jfx-impl.xml</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Modelo/database.java</file>
+            <file>file:/D:/software/redex/grupof_redex/src/AccesoDatos/usuarioDA.java</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Vista/Secretario_Menu.java</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Vista/Secretario_Crear_Pedido.java</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Resource/username.png</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Resource/frontlogin.png</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Vista/Secretario_Administrar_Pedido.java</file>
+            <file>file:/D:/software/redex/grupof_redex/src/Vista/Secretario_Administrar_Cliente.java</file>
         </group>
     </open-files>
 </project-private>
