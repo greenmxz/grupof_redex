@@ -11,6 +11,7 @@ import Modelo.persona;
 import Modelo.aeropuerto;
 import Modelo.pedido;
 import Controlador.AdministrarClienteBL;
+import Controlador.aeropuertoBL;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.text.DateFormat;
@@ -25,7 +26,7 @@ public class AdministrarPedidoDA {
     
     
     private AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
-    
+    private aeropuertoDA controlador_aeropuerto= new aeropuertoDA();
     
     
     public java.sql.Date manejo_fechas(String s){
@@ -78,7 +79,9 @@ public class AdministrarPedidoDA {
                 pedido.setCliente_receptor(cliente_receptor);
                 
                 //obtener aeropuertos
-                
+                aeropuerto_emisor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_emisor"));
+                aeropuerto_receptor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_receptor"));
+                aeropuerto_actual = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_actual"));
                 //
                 pedido.setAeropuerto_emisor(aeropuerto_emisor);
                 pedido.setAeropuerto_receptor(aeropuerto_receptor);
@@ -145,7 +148,9 @@ public class AdministrarPedidoDA {
                 pedido.setCliente_receptor(cliente_receptor);
                 
                 //obtener aeropuertos
-                
+                aeropuerto_emisor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_emisor"));
+                aeropuerto_receptor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_receptor"));
+                aeropuerto_actual = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_actual"));
                 //
                 
                 pedido.setAeropuerto_emisor(aeropuerto_emisor);

@@ -49,9 +49,6 @@ public class personaDA {
             ResultSet rs = stmt.executeQuery();
             while (rs.next( )){
 
-                   
-                
-                
                 persona persona = new persona();
                 persona.setNombre(rs.getString("nombre"));
                 persona.setApellidoPaterno(rs.getString("apellido_paterno"));
