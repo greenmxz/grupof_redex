@@ -15,6 +15,8 @@ import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -134,10 +136,9 @@ public class AdministrarClienteDA {
             /*
             cantidad_pedidos
             doc_persona
-            id_documento
             codigo_cliente
             */
-  
+            /*
             String query = "{CALL registrarCliente(?,?,?,?)}";
 
             CallableStatement stmt = connect.getConnection().prepareCall(query);
@@ -148,7 +149,29 @@ public class AdministrarClienteDA {
             stmt.setString(4, cliente.getCodigo());
 
             stmt.executeUpdate();
+            */
             
+            //registrar persona
+           
+            
+            controlador_persona.insertarPersona(cliente.getPersona());
+            
+            int id_persona = controlador_persona.obtenerPersonaxDNI(cliente.getPersona().getNumeroDocumentoIdentidad()).getId();
+            
+            //registrar cliente
+            
+            
+            String query="INSERT INTO cliente(cantidad_pedidos,id_persona,codigo)VALUES(?,?,?);"; 
+            
+			
+	    PreparedStatement stmt1 = connect.getConnection().prepareStatement(query);
+            
+	    stmt1.setInt(1,cliente.getCantidad_pedidos());
+            stmt1.setInt(2,id_persona);
+            stmt1.setString(3,cliente.getCodigo());
+           
+	
+            stmt1.executeUpdate();
             
             
             return true;
