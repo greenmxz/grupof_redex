@@ -60,12 +60,12 @@ public class personaDA {
                 persona.setApellidoPaterno(rs.getString("apellido_paterno"));
                 persona.setApellidoMaterno(rs.getString("apellido_materno"));
                 persona.setNumeroDocumentoIdentidad(rs.getInt("numero_documento_identidad"));
-                persona.setTipoDocumento(general.obtenerTipoDocumentos().get(rs.getInt("tipo_documento")).getNombre());
+                //persona.setTipoDocumento(general.obtenerTipoDocumentos().get(rs.getInt("tipo_documento")).getNombre());
                 persona.setDireccion(rs.getString("direccion"));
                 persona.setCorreo(rs.getString("correo"));
                 persona.setTelefono(rs.getString("telefono"));
                 persona.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
-                persona.setCiudad(rs.getString("ciudad"));
+                //persona.setCiudad(rs.getString("ciudad"));
                 
                 return persona;
             }

@@ -110,16 +110,27 @@ public class AdministrarPedidoDA {
     
     public ArrayList<pedido> listarPedidos(String codigo, String fecha_entrega, String fecha_registro){ 
         try {
+            ArrayList<pedido> listPedidos = new ArrayList<>();
             SimpleDateFormat  sdf;
             String            s_fecha_entrega, s_fecha_registro;
             java.sql.Date     d_fecha_entrega, d_fecha_registro;
-            
             sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-            s_fecha_entrega = sdf.format(fecha_entrega);
-            s_fecha_registro = sdf.format(fecha_registro);
-            d_fecha_entrega = manejo_fechas(s_fecha_entrega);
-            d_fecha_registro = manejo_fechas(s_fecha_registro);
             
+            if(fecha_entrega != ""){
+                s_fecha_entrega = sdf.format(fecha_entrega);
+                d_fecha_entrega = manejo_fechas(s_fecha_entrega);
+            }else{
+                
+            }
+            
+            if(fecha_registro != ""){
+                s_fecha_registro = sdf.format(fecha_registro);
+                d_fecha_registro = manejo_fechas(s_fecha_registro);
+            }else{
+                
+            }
+
+            /*NO BORRAR
             database connect = new database();
             String query = "{CALL listarPedidos(?,?,?,?)}";
 
@@ -129,9 +140,12 @@ public class AdministrarPedidoDA {
             stmt.setDate(2, d_fecha_entrega);
             stmt.setDate(4, d_fecha_registro);
             
-            ArrayList<pedido> listPedidos = new ArrayList<>();
-            
             ResultSet rs = stmt.executeQuery();
+            */
+            database connect = new database();
+            String query = "select * from pedido;";
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
                 
                 pedido pedido = new pedido();
@@ -203,6 +217,7 @@ public class AdministrarPedidoDA {
             java.sql.Date     d_fecha_entrega, d_fecha_pedido;
             
             sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+
             s_fecha_entrega = sdf.format(pedido.getFecha_entrega());
             s_fecha_pedido = sdf.format(pedido.getFecha_pedido());
             d_fecha_entrega = manejo_fechas(s_fecha_entrega);
