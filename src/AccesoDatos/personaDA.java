@@ -11,6 +11,7 @@ import Modelo.database;
 import Controlador.generalBL;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -39,7 +40,7 @@ public class personaDA {
     
     public persona obtenerPersona(int id_persona){
         try {
-            
+            /*
             database connect = new database();
             String query = "{CALL obtenerPersona(?)}";
 
@@ -47,22 +48,24 @@ public class personaDA {
             stmt.setInt(1, id_persona);
            
             ResultSet rs = stmt.executeQuery();
+            */
+            database connect = new database();
+            String query = "select * from persona where id = " + id_persona + ";";
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
 
-                   
-                
-                
                 persona persona = new persona();
                 persona.setNombre(rs.getString("nombre"));
                 persona.setApellidoPaterno(rs.getString("apellido_paterno"));
                 persona.setApellidoMaterno(rs.getString("apellido_materno"));
                 persona.setNumeroDocumentoIdentidad(rs.getInt("numero_documento_identidad"));
-                persona.setTipoDocumento(general.obtenerTipoDocumentos().get(rs.getInt("tipo_documento")).getNombre());
+                //persona.setTipoDocumento(general.obtenerTipoDocumentos().get(rs.getInt("tipo_documento")).getNombre());
                 persona.setDireccion(rs.getString("direccion"));
                 persona.setCorreo(rs.getString("correo"));
                 persona.setTelefono(rs.getString("telefono"));
                 persona.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
-                persona.setCiudad(rs.getString("ciudad"));
+                //persona.setCiudad(rs.getString("ciudad"));
                 
                 return persona;
             }

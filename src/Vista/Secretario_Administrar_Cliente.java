@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 package Vista;
-
+import Controlador.*;
+import Modelo.cliente;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Nowa
@@ -14,6 +17,9 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
     /**
      * Creates new form Secretario_AdministrarPedido
      */
+    
+    private AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
+    
     public Secretario_Administrar_Cliente() {
         initComponents();
         inicializar();
@@ -26,8 +32,21 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
 
     
      private void inicializar_Tabla(){
-      //jTable1.removeAll();
+        //jTable1.removeAll();
+         ArrayList<cliente> lista_clientes = controlador_cliente.listarClientes(-1, "", "", "");
          
+         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+         modelo.setRowCount(0);
+         Object[] obj = new Object[5];
+         for (int i = 0; i < lista_clientes.size(); i++){
+             cliente cliente = lista_clientes.get(i);
+             obj[0] = cliente.getCodigo();
+             obj[1] = cliente.getPersona().getNumeroDocumentoIdentidad();
+             obj[2] = cliente.getPersona().getNombre();
+             obj[3] = cliente.getPersona().getApellidoPaterno();
+             obj[4] = cliente.getPersona().getApellidoMaterno();
+             modelo.addRow(obj);
+         }
      }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -199,13 +218,13 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
         jTable1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "DNI", "Nombre", "Ap.Paterno", "Ap.Materno"
+                "Codigo", "DNI", "Nombre", "Ap.Paterno", "Ap.Materno"
             }
         ));
         jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));

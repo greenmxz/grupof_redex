@@ -14,6 +14,8 @@ import Controlador.personaBL;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.sql.*;
+import java.util.*;
 
 /**
  *
@@ -27,12 +29,20 @@ public class AdministrarClienteDA {
         try {
             
             database connect = new database();
+            String query = "select * from cliente where id = " + id_cliente + ";";
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            
+            /*
+            database connect = new database();
             String query = "{CALL obtenerCliente(?)}";
 
             CallableStatement stmt = connect.getConnection().prepareCall(query);
             stmt.setInt(1, id_cliente);
            
             ResultSet rs = stmt.executeQuery();
+            */
+            
             while (rs.next( )){
 
                 
@@ -67,6 +77,8 @@ public class AdministrarClienteDA {
     
     public ArrayList<cliente> listarClientes(int numeroDocumentoIdentidad,String nombre, String apellidoPaterno, String apellidoMaterno){ 
         try {
+            ArrayList<cliente> listClientes = new ArrayList<>();
+            /* NO BORRAR
             database connect = new database();
             String query = "{CALL listarClientes(?,?,?,?)}";
 
@@ -76,10 +88,13 @@ public class AdministrarClienteDA {
             stmt.setString(3, apellidoPaterno);
             stmt.setString(4, apellidoMaterno);
 
-            
-            ArrayList<cliente> listClientes = new ArrayList<>();
-            
             ResultSet rs = stmt.executeQuery();
+            */
+            
+            database connect = new database();
+            String query = "select * from cliente;";
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
 
                 persona persona= new persona();
@@ -88,11 +103,14 @@ public class AdministrarClienteDA {
                 cliente.setId(rs.getInt("id"));
                 cliente.setCantidad_pedidos(rs.getInt("cantidad_pedidos"));
                 
-                persona.setNombre(rs.getString("nombre_persona"));
-                persona.setApellidoPaterno(rs.getString("apellido_paterno"));
-                persona.setApellidoMaterno(rs.getString("apellido_materno"));
-                persona.setNumeroDocumentoIdentidad(rs.getInt("numero_documento_identidad"));
-                persona.setNumeroDocumentoIdentidad(rs.getInt("id_tipo_documento"));
+                persona = controlador_persona.obtenerPersona(rs.getInt("id_persona"));
+                
+                persona.setNombre(persona.getNombre());
+                
+                persona.setApellidoPaterno(persona.getApellidoPaterno());
+                persona.setApellidoMaterno(persona.getApellidoMaterno());
+                persona.setNumeroDocumentoIdentidad(persona.getNumeroDocumentoIdentidad());
+                persona.setTipoDocumento(persona.getTipoDocumento());
                 
                 
                 cliente.setPersona(persona);
@@ -119,6 +137,7 @@ public class AdministrarClienteDA {
             id_documento
             codigo_cliente
             */
+  
             String query = "{CALL registrarCliente(?,?,?,?)}";
 
             CallableStatement stmt = connect.getConnection().prepareCall(query);

@@ -11,8 +11,10 @@ import Modelo.persona;
 import Modelo.aeropuerto;
 import Modelo.pedido;
 import Controlador.AdministrarClienteBL;
+import Controlador.aeropuertoBL;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ public class AdministrarPedidoDA {
     
     
     private AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
-    
+    private aeropuertoDA controlador_aeropuerto= new aeropuertoDA();
     
     
     public java.sql.Date manejo_fechas(String s){
@@ -45,7 +47,7 @@ public class AdministrarPedidoDA {
     public pedido obtenerPedido(int id_pedido){
 
       try{
-          
+          /*
             database connect = new database();
             String query = "{CALL obtenerPedido(?)}";
 
@@ -53,6 +55,14 @@ public class AdministrarPedidoDA {
             stmt.setInt(1, id_pedido);
             
             ResultSet rs = stmt.executeQuery();
+          */
+          
+            database connect = new database();
+            String query = "select * from pedido where id = " + id_pedido + ";";
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            
+            
             while (rs.next( )){
                 pedido pedido = new pedido();
                 
@@ -78,7 +88,9 @@ public class AdministrarPedidoDA {
                 pedido.setCliente_receptor(cliente_receptor);
                 
                 //obtener aeropuertos
-                
+                aeropuerto_emisor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_emisor"));
+                aeropuerto_receptor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_receptor"));
+                aeropuerto_actual = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_actual"));
                 //
                 pedido.setAeropuerto_emisor(aeropuerto_emisor);
                 pedido.setAeropuerto_receptor(aeropuerto_receptor);
@@ -98,16 +110,27 @@ public class AdministrarPedidoDA {
     
     public ArrayList<pedido> listarPedidos(String codigo, String fecha_entrega, String fecha_registro){ 
         try {
+            ArrayList<pedido> listPedidos = new ArrayList<>();
             SimpleDateFormat  sdf;
             String            s_fecha_entrega, s_fecha_registro;
             java.sql.Date     d_fecha_entrega, d_fecha_registro;
-            
             sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-            s_fecha_entrega = sdf.format(fecha_entrega);
-            s_fecha_registro = sdf.format(fecha_registro);
-            d_fecha_entrega = manejo_fechas(s_fecha_entrega);
-            d_fecha_registro = manejo_fechas(s_fecha_registro);
             
+            if(fecha_entrega != ""){
+                s_fecha_entrega = sdf.format(fecha_entrega);
+                d_fecha_entrega = manejo_fechas(s_fecha_entrega);
+            }else{
+                
+            }
+            
+            if(fecha_registro != ""){
+                s_fecha_registro = sdf.format(fecha_registro);
+                d_fecha_registro = manejo_fechas(s_fecha_registro);
+            }else{
+                
+            }
+
+            /*NO BORRAR
             database connect = new database();
             String query = "{CALL listarPedidos(?,?,?,?)}";
 
@@ -117,9 +140,12 @@ public class AdministrarPedidoDA {
             stmt.setDate(2, d_fecha_entrega);
             stmt.setDate(4, d_fecha_registro);
             
-            ArrayList<pedido> listPedidos = new ArrayList<>();
-            
             ResultSet rs = stmt.executeQuery();
+            */
+            database connect = new database();
+            String query = "select * from pedido;";
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
                 
                 pedido pedido = new pedido();
@@ -145,7 +171,9 @@ public class AdministrarPedidoDA {
                 pedido.setCliente_receptor(cliente_receptor);
                 
                 //obtener aeropuertos
-                
+                aeropuerto_emisor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_emisor"));
+                aeropuerto_receptor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_receptor"));
+                aeropuerto_actual = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_actual"));
                 //
                 
                 pedido.setAeropuerto_emisor(aeropuerto_emisor);
@@ -189,6 +217,7 @@ public class AdministrarPedidoDA {
             java.sql.Date     d_fecha_entrega, d_fecha_pedido;
             
             sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+
             s_fecha_entrega = sdf.format(pedido.getFecha_entrega());
             s_fecha_pedido = sdf.format(pedido.getFecha_pedido());
             d_fecha_entrega = manejo_fechas(s_fecha_entrega);

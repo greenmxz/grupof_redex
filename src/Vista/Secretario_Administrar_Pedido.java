@@ -5,6 +5,11 @@
  */
 package Vista;
 
+import Modelo.cliente;
+import Modelo.pedido;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import Controlador.*;
 /**
  *
  * @author Nowa
@@ -14,10 +19,42 @@ public class Secretario_Administrar_Pedido extends javax.swing.JFrame {
     /**
      * Creates new form Secretario_AdministrarPedido
      */
+    
+    
+    private AdministrarPedidoBL controlador_pedido = new AdministrarPedidoBL();
     public Secretario_Administrar_Pedido() {
         initComponents();
+        inicializar();
     }
-
+    private void inicializar(){
+        String [] rol = {"Secre"};
+        inicializar_Tabla();
+    }
+    
+    private void inicializar_Tabla(){
+         ArrayList<pedido> lista_pedidos = controlador_pedido.listarPedidos("", "", "");
+         
+         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+         modelo.setRowCount(0);
+         String nombre,ap_pat,ap_mat;
+         Object[] obj = new Object[5];
+         for (int i = 0; i < lista_pedidos.size(); i++){
+             pedido pedido = lista_pedidos.get(i);
+             obj[0] = pedido.getCodigo();
+             obj[1] = pedido.getAeropuerto_emisor().getNombre();
+             nombre = pedido.getCliente_emisor().getPersona().getNombre();
+             ap_pat = pedido.getCliente_emisor().getPersona().getApellidoPaterno();
+             ap_mat = pedido.getCliente_emisor().getPersona().getApellidoMaterno();
+             obj[2] = nombre + " " + ap_pat + " " + ap_mat;
+             obj[3] = pedido.getAeropuerto_receptor().getNombre();
+             nombre = pedido.getCliente_receptor().getPersona().getNombre();
+             ap_pat = pedido.getCliente_receptor().getPersona().getApellidoPaterno();
+             ap_mat = pedido.getCliente_receptor().getPersona().getApellidoMaterno();
+             obj[4] = nombre + " " + ap_pat + " " + ap_mat;
+             modelo.addRow(obj);
+         }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
