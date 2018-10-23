@@ -5,7 +5,14 @@
  */
 package Vista;
 
+import Controlador.generalBL;
+import Controlador.usuarioBL;
+import Modelo.*;
+import java.awt.Component;
 import java.awt.event.KeyEvent;
+import static java.lang.Integer.parseInt;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.*;
 
 
@@ -21,18 +28,36 @@ char vchar = evt.getKeyChar();
  * @author Moises
  */
 public class frmCrearCuenta extends javax.swing.JFrame {
-
+    private generalBL generalBL;
+    private ArrayList<rol> roles;
+    private ArrayList<ciudad> ciudades;
+    private ArrayList<tipoDocumento> tipoDocumentos;
+    private usuarioBL usuarioBL;
     /**
      * Creates new form frmCrearCuenta
      */
+    
     public frmCrearCuenta() {
+        generalBL = new generalBL();
+        usuarioBL = new usuarioBL();
         initComponents();
+        
         inicializar();
+        
+        
     }
     private void  inicializar(){
-        String [] rol = {"Admi","Secre"};
-        this.rol.setModel(new DefaultComboBoxModel (rol));
+        //Setear al combobox los roles del sistema
+        roles = generalBL.obtenerRoles();
+        this.rol.setModel(new DefaultComboBoxModel ( (roles).toArray()));
         
+        //Setear al combobox las ciudades del sistema
+        ciudades= generalBL.obtenerCiudades();
+        this.ciudad.setModel(new DefaultComboBoxModel( (ciudades).toArray()));
+        
+        //Setear al combobox los tipos documentos
+        tipoDocumentos = generalBL.obtenerTipoDocumentos();
+        this.tipoDocumento.setModel(new DefaultComboBoxModel( (tipoDocumentos).toArray()));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -60,6 +85,8 @@ public class frmCrearCuenta extends javax.swing.JFrame {
         ciudad = new javax.swing.JComboBox<>();
         direccion = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        correo = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         nombreUsuario = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -124,6 +151,8 @@ public class frmCrearCuenta extends javax.swing.JFrame {
 
         jLabel12.setText("Dirección:");
 
+        jLabel13.setText("Correo:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -131,7 +160,6 @@ public class frmCrearCuenta extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
@@ -150,36 +178,50 @@ public class frmCrearCuenta extends javax.swing.JFrame {
                                     .addComponent(nombrePersona, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(tipoDocumento, javax.swing.GroupLayout.Alignment.LEADING, 0, 160, Short.MAX_VALUE)))
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
                         .addGap(68, 68, 68)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel11))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(direccion)
-                            .addComponent(ciudad, 0, 160, Short.MAX_VALUE))))
+                            .addComponent(jLabel11)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel13))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(correo, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ciudad, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(direccion, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(nombrePersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11)
-                    .addComponent(ciudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel13)
+                        .addComponent(correo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(nombrePersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(apellidoPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(direccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel3)
-                    .addComponent(apellidoMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ciudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(apellidoMaterno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel12)
+                            .addComponent(direccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -206,6 +248,7 @@ public class frmCrearCuenta extends javax.swing.JFrame {
         jLabel10.setText("Rol:");
 
         rol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        rol.setSelectedItem(rol);
 
         contraseña.setText("jPasswordField1");
         contraseña.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -353,12 +396,41 @@ public class frmCrearCuenta extends javax.swing.JFrame {
         if (validarDatos()){
             JOptionPane.showMessageDialog(this, "Todos los datos fueron digitados");
             if (validarContraseña()){
-                JOptionPane.showMessageDialog(this, "Contraseñas iguales!");
+                usuario usuarioNuevo = new usuario();
+                persona personaNueva = new persona();
+                usuarioNuevo.setCodigo(this.nombreUsuario.getText());
+                usuarioNuevo.setPassword(this.contraseña.getText());
+                usuarioNuevo.setRol(this.rol.getSelectedItem().toString());
+                
+                
+                
+                personaNueva.setNombre(this.nombrePersona.getText());
+                personaNueva.setApellidoPaterno(this.apellidoPaterno.getText());
+                personaNueva.setApellidoMaterno(this.apellidoMaterno.getText());
+                personaNueva.setCorreo(this.correo.getText());
+                personaNueva.setFechaNacimiento(new Date(this.fechaNac.getText()));
+                personaNueva.setNumeroDocumentoIdentidad(parseInt(this.numeroDocumento.getText()));
+                personaNueva.setDireccion(direccion.getText());
+                personaNueva.setCiudad(ciudad.getSelectedItem().toString());
+                personaNueva.setNumeroDocumentoIdentidad(Integer.parseInt(numeroDocumento.getText()));
+                personaNueva.setTipoDocumento(tipoDocumento.getSelectedItem().toString());
+                usuarioNuevo.setPersona(personaNueva);
+               System.out.println("persona "+personaNueva.toString());
+                
+                if (usuarioBL.crearUsuario(usuarioNuevo)){
+                    JOptionPane.showMessageDialog(this, "Se registro correctamente");
+                }else{
+                    JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
+                }
+                
             }else{
                 JOptionPane.showMessageDialog(this, "Contraseñas diferentes error");
             }
             
         }else{
+            System.out.println("cbo "+this.rol.getSelectedItem());
+            Date d = new Date(this.fechaNac.getText());
+            System.out.println("date "+d);
             JOptionPane.showMessageDialog(this, "Debe de llenar todos los datos");
         }
     }//GEN-LAST:event_registrarActionPerformed
@@ -460,6 +532,7 @@ public class frmCrearCuenta extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> ciudad;
     private javax.swing.JPasswordField contraseña;
     private javax.swing.JPasswordField contraseñaRepetir;
+    private javax.swing.JTextField correo;
     private javax.swing.JTextField direccion;
     private com.github.lgooddatepicker.components.DatePicker fechaNac;
     private javax.swing.JButton jButton2;
@@ -468,6 +541,7 @@ public class frmCrearCuenta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

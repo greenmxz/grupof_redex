@@ -9,7 +9,7 @@ package Modelo;
  *
  * @author Moises
  */
-public class rol {
+public class ciudad {
     private int id;
     private String nombre;
 
@@ -40,6 +40,7 @@ public class rol {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+    
     public String toString(){
         return this.nombre;
     }

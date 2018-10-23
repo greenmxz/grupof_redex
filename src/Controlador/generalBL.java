@@ -6,7 +6,7 @@
 package Controlador;
 
 import AccesoDatos.generalDA;
-import Modelo.rol;
+import Modelo.*;
 import java.util.*;
 
 /**
@@ -21,6 +21,12 @@ public class generalBL {
     
     public ArrayList<rol> obtenerRoles(){
         return generalDA.obtenerRoles();
+    }
+    public ArrayList<ciudad> obtenerCiudades(){
+        return generalDA.obtenerCiudades();
+    }
+    public ArrayList<tipoDocumento> obtenerTipoDocumentos(){
+        return generalDA.obtenerTipoDocumentos();
     }
     
 }

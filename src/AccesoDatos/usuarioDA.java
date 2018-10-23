@@ -9,6 +9,8 @@ import java.sql.*;
 import Modelo.database;
 import Modelo.persona;
 import Modelo.usuario;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 
 /**
@@ -26,7 +28,6 @@ public class usuarioDA {
             stmt.setString(2, contraseña);
             
             ResultSet rs = stmt.executeQuery();
-            System.out.println("EEEEEEEEEEEEEEEEEEEEE");
             while (rs.next( )){
                usuario usuario= new usuario();
                if (rs.getBoolean("encontrado")){                     
@@ -76,4 +77,66 @@ public class usuarioDA {
             return null;
         }
     }
+     public boolean registrarUsuario(usuario usuario){
+         try {
+            database connect = new database();
+            String queryPersona="insert into persona (nombre,apellido_paterno,apellido_materno,"
+                    + "numero_documento_identidad,direccion,fecha_nacimiento,id_ciudad,id_tipo_documento,correo)"
+                    + "values (?,?,?,?,?,?,(select id from ciudad where nombre =?),(select id from tabla_general_detalle where valor = ?),?)"; 
+            
+            
+            PreparedStatement stmt = connect.getConnection().prepareStatement(queryPersona,Statement.RETURN_GENERATED_KEYS);
+            
+            //manejo de fechas;
+            SimpleDateFormat  sdf;
+            String            s;
+            sdf = new SimpleDateFormat("yyyy-MM-dd");  // Or whatever format you need
+            s = sdf.format(usuario.getPersona().getFechaNacimiento()); 
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date fd =   formatter.parse(s);
+            java.sql.Date sqlDate = new java.sql.Date(fd.getTime());
+            
+            //stmt.registerOutParameter("id",java.sql.Types.INTEGER );
+            stmt.setString(1,usuario.getPersona().getNombre());
+            stmt.setString(2,usuario.getPersona().getApellidoPaterno());
+            stmt.setString(3,usuario.getPersona().getApellidoMaterno());
+            stmt.setInt(4,usuario.getPersona().getNumeroDocumentoIdentidad());
+            stmt.setString(5,usuario.getPersona().getDireccion());
+            stmt.setDate(6,sqlDate);
+            System.out.println("city "+usuario.getPersona().getCiudad());
+           System.out.println("number "+usuario.getPersona().getTipoDocumento());
+            stmt.setString(7,usuario.getPersona().getCiudad());
+            stmt.setString(8,usuario.getPersona().getTipoDocumento());
+            stmt.setString(9, usuario.getPersona().getCorreo());
+            int count = stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            long id = 0 ;
+            while(rs.next()){
+                id = rs.getLong(1);
+                System.out.println("count-> "+id);
+                //Creamos el usuario
+                
+            //stmt.setString(5, usuario.getPersona());
+            }
+            String queryUsuario="insert into usuario (codigo,password,"
+                    + "id_rol,id_persona,create_date)"
+                    + "values (?,?,(select id from rol where nombre=? ),?,now())"; 
+            PreparedStatement stmt2 = connect.getConnection().prepareStatement(queryUsuario);
+            stmt2.setString(1,usuario.getCodigo());
+            stmt2.setString(2,usuario.getPassword());
+            stmt2.setString(3,usuario.getRol());
+            stmt2.setLong(4,id);
+            stmt2.executeUpdate();
+            System.out.println("Se regristro el usuario correctamente");
+            System.out.println("Se registro el usuario");
+            return true;
+            
+
+            
+         }catch(Exception ex){
+             System.out.println(ex.getMessage());
+             return false;
+         }
+         
+     }
 }
