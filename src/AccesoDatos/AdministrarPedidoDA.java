@@ -14,6 +14,7 @@ import Controlador.AdministrarClienteBL;
 import Controlador.aeropuertoBL;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class AdministrarPedidoDA {
     public pedido obtenerPedido(int id_pedido){
 
       try{
-          
+          /*
             database connect = new database();
             String query = "{CALL obtenerPedido(?)}";
 
@@ -54,6 +55,14 @@ public class AdministrarPedidoDA {
             stmt.setInt(1, id_pedido);
             
             ResultSet rs = stmt.executeQuery();
+          */
+          
+            database connect = new database();
+            String query = "select * from pedido where id = " + id_pedido + ";";
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            
+            
             while (rs.next( )){
                 pedido pedido = new pedido();
                 

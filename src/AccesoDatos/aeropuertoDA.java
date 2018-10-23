@@ -10,6 +10,7 @@ import Modelo.aeropuerto;
 import Modelo.ciudad;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  *
@@ -27,7 +28,7 @@ public class aeropuertoDA {
     
     public aeropuerto obtenerAeropuerto(int id_aeropuerto){
         try {
-            
+            /*
             database connect = new database();
             String query = "{CALL obtenerAeropuerto(?)}";
 
@@ -35,6 +36,11 @@ public class aeropuertoDA {
             stmt.setInt(1, id_aeropuerto);
            
             ResultSet rs = stmt.executeQuery();
+            */
+            database connect = new database();
+            String query = "select * from aeropuerto where id = " + id_aeropuerto + ";";
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
                 aeropuerto aeropuerto = new aeropuerto();
                 

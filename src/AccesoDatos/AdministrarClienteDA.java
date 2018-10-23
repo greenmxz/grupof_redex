@@ -14,6 +14,8 @@ import Controlador.personaBL;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.sql.*;
+import java.util.*;
 
 /**
  *
@@ -27,12 +29,20 @@ public class AdministrarClienteDA {
         try {
             
             database connect = new database();
+            String query = "select * from cliente where id = " + id_cliente + ";";
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            
+            /*
+            database connect = new database();
             String query = "{CALL obtenerCliente(?)}";
 
             CallableStatement stmt = connect.getConnection().prepareCall(query);
             stmt.setInt(1, id_cliente);
            
             ResultSet rs = stmt.executeQuery();
+            */
+            
             while (rs.next( )){
 
                 
