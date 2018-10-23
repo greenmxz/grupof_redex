@@ -4,6 +4,14 @@
  * and open the template in the editor.
  */
 package Vista;
+import Modelo.persona;
+import Modelo.cliente;
+import Controlador.AdministrarClienteBL;
+import Controlador.generalBL;
+import Modelo.ciudad;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -14,10 +22,40 @@ public class Secretario_Crear_Cliente extends javax.swing.JFrame {
     /**
      * Creates new form Secretario_AdministrarPedido
      */
+
+    AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
+    generalBL general = new generalBL();
+    
     public Secretario_Crear_Cliente() {
         initComponents();
+        inicializar();
     }
 
+    public void inicializar(){
+        jComboBox7.removeAllItems();
+        jComboBox8.removeAllItems();
+        jComboBox9.removeAllItems();
+        
+        //POR MIENTRAS
+        
+        DefaultComboBoxModel modelo1 = (DefaultComboBoxModel) jComboBox7.getModel();
+        modelo1.addElement("América");
+        
+        DefaultComboBoxModel modelo2 = (DefaultComboBoxModel) jComboBox8.getModel();
+        modelo2.addElement("Perú");
+        
+        ///ASI DEBE SER
+        ArrayList<ciudad> list_ciudades = general.obtenerCiudades();
+        
+        DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) jComboBox9.getModel();
+        Object[] obj = new Object[list_ciudades.size()];
+        for(int i = 0; i < list_ciudades.size() ; i++){
+            modelo3.addElement(list_ciudades.get(i).getNombre());
+        }
+
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -322,6 +360,11 @@ public class Secretario_Crear_Cliente extends javax.swing.JFrame {
         jLabel2.setText("Ubicación");
 
         jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox7ActionPerformed(evt);
+            }
+        });
 
         jComboBox8.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -428,6 +471,48 @@ public class Secretario_Crear_Cliente extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        
+        //registro de cliente
+        try{
+        String dni = jTextField1.getText();
+        String nombre = jTextField6.getText();
+        String ap_pat = jTextField7.getText();
+        String ap_mat = jTextField8.getText();
+        String correo = jTextField9.getText();
+        String telefono = jTextField10.getText();
+        
+        String continente = jComboBox7.getSelectedItem().toString();
+        String pais = jComboBox8.getSelectedItem().toString();
+        String ciudad = jComboBox9.getSelectedItem().toString();
+        
+        String direccion = jTextField11.getText();
+        
+        
+        persona persona = new persona();
+        
+        persona.setNumeroDocumentoIdentidad(Integer.parseInt(dni));
+        persona.setNombre(nombre);
+        persona.setApellidoPaterno(ap_pat);
+        persona.setApellidoMaterno(ap_mat);
+        persona.setCorreo(correo);
+        persona.setTelefono(telefono);
+        persona.setCiudad(ciudad);
+        persona.setPais(pais);
+        persona.setContinente(continente);
+        persona.setDireccion(direccion);
+        
+        cliente cliente = new cliente();
+        
+        cliente.setCantidad_pedidos(0);
+        cliente.setCodigo(dni);
+        cliente.setPersona(persona);
+        
+        controlador_cliente.registrarCliente(cliente);
+        
+        }catch(Exception ex){
+             System.out.println(ex.getMessage());
+             
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -441,6 +526,10 @@ public class Secretario_Crear_Cliente extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jComboBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox7ActionPerformed
 
     /**
      * @param args the command line arguments

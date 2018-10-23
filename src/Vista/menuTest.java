@@ -29,6 +29,7 @@ public class menuTest extends javax.swing.JFrame {
     private void initComponents() {
 
         crearCuenta = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -39,13 +40,22 @@ public class menuTest extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Menu Secretario");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(72, 72, 72)
-                .addComponent(crearCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(crearCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(450, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -53,7 +63,9 @@ public class menuTest extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(51, 51, 51)
                 .addComponent(crearCuenta)
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addGap(38, 38, 38)
+                .addComponent(jButton1)
+                .addContainerGap(165, Short.MAX_VALUE))
         );
 
         pack();
@@ -65,6 +77,16 @@ public class menuTest extends javax.swing.JFrame {
         frmCrearCuenta cuenta = new frmCrearCuenta();
         cuenta.show();
     }//GEN-LAST:event_crearCuentaActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+        //MenuSecretario
+        
+        this.dispose();
+        Secretario_Menu secretario_menu = new Secretario_Menu();
+        secretario_menu.show();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -103,5 +125,6 @@ public class menuTest extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton crearCuenta;
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,6 +6,7 @@
 package Vista;
 import Controlador.*;
 import Modelo.cliente;
+import Modelo.persona;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -19,6 +20,7 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
      */
     
     private AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
+    private personaBL controlador_persona = new personaBL();
     
     public Secretario_Administrar_Cliente() {
         initComponents();
@@ -369,6 +371,9 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         
+        //modelo.getValueAt(row, column);
+        
+        
         //Agregar cliente
         Vista.Secretario_Crear_Cliente c_cliente = new Vista.Secretario_Crear_Cliente();
         c_cliente.show(rootPaneCheckingEnabled);
@@ -377,6 +382,19 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         if (jTable1.getSelectedRowCount()>0){
+            
+            int select = jTable1.getSelectedRow();
+            DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+            String codigo = modelo.getValueAt(select, 0).toString();
+            String dni = modelo.getValueAt(select, 1).toString();
+            String nombre = modelo.getValueAt(select, 2).toString();
+            String ap_pat = modelo.getValueAt(select, 3).toString();
+            String ap_mat = modelo.getValueAt(select, 4).toString();
+        
+            persona persona = controlador_persona.obtenerPersonaxDNI(Integer.parseInt(dni));
+            
+            
+            
             //Modificar cliente
             Vista.Secretario_Modificar_Cliente m_cliente = new Vista.Secretario_Modificar_Cliente();
             m_cliente.show(rootPaneCheckingEnabled);
