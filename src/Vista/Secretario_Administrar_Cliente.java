@@ -26,8 +26,7 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
 
     
      private void inicializar_Tabla(){
-         jScrollPane1.removeAll();
-         
+      //jTable1.removeAll();
          
      }
     /**
