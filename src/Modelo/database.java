@@ -13,14 +13,15 @@ import java.sql.*;
  */
 public class database {
     private String driver;
-    private Connection con;
+    private Connection connection;
     
     public database(){
         try{
         this.setDriver("com.mysql.jdbc.Driver");
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3036/redexdb","root","root" );
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb","root","root" );
+        System.out.println("Se ha conectado correctamente a la base de datos");
         }catch(Exception e){
-            System.out.println("Ha ocurrido un error");
+            System.out.println("Ha ocurrido un error en la conexion");
         }
     }
     /**
@@ -40,15 +41,22 @@ public class database {
     /**
      * @return the con
      */
-    public Connection getCon() {
-        return con;
+    public Connection getConnection() {
+        return connection;
     }
 
     /**
      * @param con the con to set
      */
-    public void setCon(Connection con) {
-        this.con = con;
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+    public void closeConnection(){
+        try {
+            this.connection.close();
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
     }
     
 }
