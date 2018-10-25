@@ -25,7 +25,11 @@ public class persona {
     private String ciudad;
     private String pais;
     private String continente;
-
+    /*
+    private int id_ciudad;
+    private int id_pais;
+    private int id_continente;
+    */
     public int getId() {
         return id;
     }

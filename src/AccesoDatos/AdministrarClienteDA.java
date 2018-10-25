@@ -34,17 +34,7 @@ public class AdministrarClienteDA {
             String query = "select * from cliente where id = " + id_cliente + ";";
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
-            
-            /*
-            database connect = new database();
-            String query = "{CALL obtenerCliente(?)}";
 
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            stmt.setInt(1, id_cliente);
-           
-            ResultSet rs = stmt.executeQuery();
-            */
-            
             while (rs.next( )){
 
                 
@@ -73,7 +63,46 @@ public class AdministrarClienteDA {
     }
     
     
-    
+    public cliente obtenerClienteDNI(int dni){
+        try {
+            
+            database connect = new database();
+            
+            
+            persona persona = controlador_persona.obtenerPersonaxDNI(dni);
+            
+            if (persona != null){
+                int id_persona = persona.getId();
+            
+                String query = "select * from cliente where id_persona = " + id_persona + ";";
+                Statement sentencia= connect.getConnection().createStatement();
+                ResultSet rs = sentencia.executeQuery(query);
+
+                while (rs.next( )){
+
+                    cliente cliente = new cliente();
+
+                    cliente.setId(rs.getInt("id"));
+                    cliente.setCantidad_pedidos(rs.getInt("cantidad_pedidos"));
+                    cliente.setCodigo(rs.getString("codigo"));
+
+                    //obtener persona
+                    cliente.setPersona(persona);
+                    //
+
+
+                return cliente;
+                }
+            }
+            connect.closeConnection();
+            System.out.println("El cliente no ha sido encontrado");
+            return null;
+            
+        }catch(Exception e){
+            System.out.println("ERROR "+e.getMessage());
+            return null;
+        }
+    }
     
     
     
@@ -104,6 +133,7 @@ public class AdministrarClienteDA {
                 
                 cliente.setId(rs.getInt("id"));
                 cliente.setCantidad_pedidos(rs.getInt("cantidad_pedidos"));
+                cliente.setCodigo(rs.getString("codigo"));
                 
                 persona = controlador_persona.obtenerPersona(rs.getInt("id_persona"));
                 
@@ -130,90 +160,102 @@ public class AdministrarClienteDA {
     }
     
     
-     public boolean registrarCliente(cliente cliente){
-         try {
-            database connect = new database();
-            /*
-            cantidad_pedidos
-            doc_persona
-            codigo_cliente
-            */
-            /*
-            String query = "{CALL registrarCliente(?,?,?,?)}";
-
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            
-            stmt.setInt(1,cliente.getCantidad_pedidos());
-            stmt.setInt(2, cliente.getPersona().getNumeroDocumentoIdentidad());
-            stmt.setString(3, cliente.getPersona().getTipoDocumento());
-            stmt.setString(4, cliente.getCodigo());
-
-            stmt.executeUpdate();
+     public int registrarCliente(cliente cliente){
+            /*codigos de resultado
+            0 - error al insertar en bd
+            1 - correcto
+            2 - dni repetido
             */
             
-            //registrar persona
-           
+            try {
+                database connect = new database();
+                persona persona = null;
+                persona = controlador_persona.obtenerPersonaxDNI(cliente.getPersona().getNumeroDocumentoIdentidad());
             
-            controlador_persona.insertarPersona(cliente.getPersona());
+                if (persona == null){
+                    // nuevo cliente
+                    controlador_persona.insertarPersona(cliente.getPersona());
             
-            int id_persona = controlador_persona.obtenerPersonaxDNI(cliente.getPersona().getNumeroDocumentoIdentidad()).getId();
+                    int id_persona = controlador_persona.obtenerPersonaxDNI(cliente.getPersona().getNumeroDocumentoIdentidad()).getId();
             
-            //registrar cliente
+                    //registrar cliente
             
-            
-            String query="INSERT INTO cliente(cantidad_pedidos,id_persona,codigo)VALUES(?,?,?);"; 
-            
-			
-	    PreparedStatement stmt1 = connect.getConnection().prepareStatement(query);
-            
-	    stmt1.setInt(1,cliente.getCantidad_pedidos());
-            stmt1.setInt(2,id_persona);
-            stmt1.setString(3,cliente.getCodigo());
-           
+                    String query="INSERT INTO cliente(cantidad_pedidos,id_persona,codigo)VALUES(?,?,?);"; 
 	
-            stmt1.executeUpdate();
+                    PreparedStatement stmt1 = connect.getConnection().prepareStatement(query);
             
-            
-            return true;
-            
+                    stmt1.setInt(1,cliente.getCantidad_pedidos());
+                    stmt1.setInt(2,id_persona);
+                    stmt1.setString(3,cliente.getCodigo());
+          
+                    stmt1.executeUpdate();
+                    
+                    connect.closeConnection();
+                    return 1;
+                }else{
+                    // cliente con el mismo dni ya registrado
+                    
+                    connect.closeConnection();
+                    return 2;
+                }
 
-            
          }catch(Exception ex){
              System.out.println(ex.getMessage());
-             return false;
+             return 0;
          }
          
      }
     
-    public boolean modificarCliente(cliente cliente){
-         try {
-            database connect = new database();
-            /*
-            cantidad_pedidos
-            doc_persona
-            id_documento
-            codigo_cliente
+    public int modificarCliente(cliente cliente){
+        /*codigos de resultado
+            0 - error al insertar en bd
+            1 - correcto
+            2 - persona no existe
             */
-            String query = "{CALL modificarCliente(?,?,?,?)}";
+         try {
+             
+            database connect = new database();
 
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
+            persona persona = null;
+            persona = controlador_persona.obtenerPersonaxDNI(cliente.getPersona().getNumeroDocumentoIdentidad());
             
-            stmt.setInt(1,cliente.getCantidad_pedidos());
-            stmt.setInt(2, cliente.getPersona().getNumeroDocumentoIdentidad());
-            stmt.setString(3, cliente.getPersona().getTipoDocumento());
-            stmt.setString(4, cliente.getCodigo());
-
-            stmt.executeUpdate();
+            if (persona != null){
+                
+                //modificar persona
+                
+                if (controlador_persona.modificarPersona(cliente.getPersona()) == true){
+                    //modificar cliente
+                       
+                    String query="UPDATE cliente\n" +
+                                "SET\n" +
+                                "codigo = ?\n" +
+                                "WHERE id_persona = ?;"; 
+	
+                    PreparedStatement stmt1 = connect.getConnection().prepareStatement(query);
+                    
+                    stmt1.setString(1,cliente.getCodigo());
+                    stmt1.setInt(2,persona.getId());
+                    
+          
+                    stmt1.executeUpdate();
+                    connect.closeConnection();    
+                    return 1;
+                    
+                }
+                
+                
+                connect.closeConnection(); 
+                return 0;
             
-            
-            
-            return true;
-            
-
+            }else{
+                //persona no existe
+                connect.closeConnection();
+                return 2;
+            }
             
          }catch(Exception ex){
              System.out.println(ex.getMessage());
-             return false;
+             return 0;
          }
          
      }

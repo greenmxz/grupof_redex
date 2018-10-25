@@ -5,19 +5,143 @@
  */
 package Vista;
 
+import Controlador.AdministrarClienteBL;
+import Controlador.generalBL;
+import Modelo.ciudad;
+import Modelo.cliente;
+import Modelo.persona;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Nowa
  */
 public class Secretario_Modificar_Cliente extends javax.swing.JFrame {
 
+    AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
+    generalBL general = new generalBL();
+    javax.swing.JTable tabla;
+    cliente cliente;
     /**
      * Creates new form Secretario_AdministrarPedido
      */
+    
     public Secretario_Modificar_Cliente() {
         initComponents();
+        inicializar();
+    }
+    
+    
+     public Secretario_Modificar_Cliente(javax.swing.JTable tabla,cliente cliente){
+        initComponents();
+        this.tabla = tabla;
+        this.cliente = cliente;
+        inicializar();
     }
 
+    private void actualizar_tabla(){
+        try{
+            ArrayList<cliente> lista_clientes = controlador_cliente.listarClientes(-1, "", "", "");
+         
+            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+            modelo.setRowCount(0);
+            Object[] obj = new Object[5];
+            for (int i = 0; i < lista_clientes.size(); i++){
+                cliente cliente = lista_clientes.get(i);
+                obj[0] = cliente.getCodigo();
+                obj[1] = cliente.getPersona().getNumeroDocumentoIdentidad();
+                obj[2] = cliente.getPersona().getNombre();
+                obj[3] = cliente.getPersona().getApellidoPaterno();
+                obj[4] = cliente.getPersona().getApellidoMaterno();
+                modelo.addRow(obj);
+         }
+        }catch(Exception e){
+            System.out.println("ERROR "+e.getMessage());
+        }
+    }
+    
+     public void inicializar_cliente(){
+         try{
+            int dni = cliente.getPersona().getNumeroDocumentoIdentidad();
+            String nombre = cliente.getPersona().getNombre();
+            String ap_pat = cliente.getPersona().getApellidoPaterno();
+            String ap_mat = cliente.getPersona().getApellidoMaterno();
+            String correo = cliente.getPersona().getCorreo();
+            String telefono = cliente.getPersona().getTelefono();
+            String direccion = cliente.getPersona().getDireccion();
+
+            jTextField1.setText(Integer.toString(dni));
+            jTextField6.setText(nombre);
+            jTextField7.setText(ap_pat);
+            jTextField8.setText(ap_mat);
+            jTextField9.setText(correo);
+            jTextField10.setText(telefono);
+            jTextField11.setText(direccion);
+            
+            DefaultComboBoxModel modelo1 = (DefaultComboBoxModel) jComboBox7.getModel();
+            DefaultComboBoxModel modelo2 = (DefaultComboBoxModel) jComboBox8.getModel();
+            DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) jComboBox9.getModel();
+            
+            int i = 0;
+            for (i=0;i<modelo1.getSize();i++){
+                if (modelo1.getElementAt(i).toString().equals(cliente.getPersona().getContinente())){
+                    jComboBox7.setSelectedIndex(i);
+                }
+            }
+            for (i=0;i<modelo2.getSize();i++){
+                if (modelo2.getElementAt(i).toString().equals(cliente.getPersona().getPais())){
+                    jComboBox8.setSelectedIndex(i);
+                }
+            }
+            for (i=0;i<modelo3.getSize();i++){
+                if (modelo3.getElementAt(i).toString().equals(cliente.getPersona().getCiudad())){
+                    jComboBox9.setSelectedIndex(i);
+                }
+            }
+         }catch(Exception e){
+            System.out.println("ERROR al inicializar cliente"+e.getMessage());
+        }
+     }
+     
+     public void inicializar(){
+         try{
+            jComboBox7.removeAllItems();
+            jComboBox8.removeAllItems();
+            jComboBox9.removeAllItems();
+
+            //POR MIENTRAS
+
+            DefaultComboBoxModel modelo1 = (DefaultComboBoxModel) jComboBox7.getModel();
+            modelo1.addElement("América");
+
+            DefaultComboBoxModel modelo2 = (DefaultComboBoxModel) jComboBox8.getModel();
+            modelo2.addElement("Perú");
+
+            ///ASI DEBE SER
+            ArrayList<ciudad> list_ciudades = general.obtenerCiudades();
+
+            DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) jComboBox9.getModel();
+            Object[] obj = new Object[list_ciudades.size()];
+            for(int i = 0; i < list_ciudades.size() ; i++){
+                modelo3.addElement(list_ciudades.get(i).getNombre());
+            }
+
+            //DATA CLIENTE
+            if (cliente!=null){
+                inicializar_cliente();
+            }else {
+                JOptionPane.showMessageDialog(null, 
+                            "No se pudo cargar data del cliente", 
+                            "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+            }
+            
+        }catch(Exception e){
+            System.out.println("ERROR "+e.getMessage());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -258,7 +382,7 @@ public class Secretario_Modificar_Cliente extends javax.swing.JFrame {
 
         label6.getAccessibleContext().setAccessibleName("Name");
 
-        jButton3.setText("Registrar");
+        jButton3.setText("Modificar");
         jButton3.setToolTipText("");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -427,7 +551,79 @@ public class Secretario_Modificar_Cliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        // MODIFICAR
+        try{
+            String dni = jTextField1.getText();
+            String nombre = jTextField6.getText();
+            String ap_pat = jTextField7.getText();
+            String ap_mat = jTextField8.getText();
+            String correo = jTextField9.getText();
+            String telefono = jTextField10.getText();
+
+            String continente = jComboBox7.getSelectedItem().toString();
+            String pais = jComboBox8.getSelectedItem().toString();
+            String ciudad = jComboBox9.getSelectedItem().toString();
+
+            String direccion = jTextField11.getText();
+
+
+            persona persona = new persona();
+
+            persona.setNumeroDocumentoIdentidad(Integer.parseInt(dni));
+            persona.setNombre(nombre);
+            persona.setApellidoPaterno(ap_pat);
+            persona.setApellidoMaterno(ap_mat);
+            persona.setCorreo(correo);
+            persona.setTelefono(telefono);
+            persona.setCiudad(ciudad);
+            persona.setPais(pais);
+            persona.setContinente(continente);
+            persona.setDireccion(direccion);
+
+            cliente cliente = new cliente();
+
+            //cliente.setCantidad_pedidos(0);
+            cliente.setCodigo(dni);
+            cliente.setPersona(persona);
+            cliente.setCodigo(dni);
+            
+            
+            switch(controlador_cliente.modificarCliente(cliente)){
+                
+                case 1:
+                    
+                    JOptionPane.showMessageDialog(null, 
+                            "El cliente ha sido correctamente modificado", 
+                            "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    if(tabla != null){
+                        actualizar_tabla();
+                    }
+                    this.dispose();
+                    break;
+                case 0:
+                    JOptionPane.showMessageDialog(null, 
+                            "Error al modificar el cliente", 
+                            "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                    
+                case 2:
+                    JOptionPane.showMessageDialog(null, 
+                            "El cliente ha modificar no existe", 
+                            "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                
+            }
+            
+            
+            
+            
+        }catch(Exception ex){
+             System.out.println(ex.getMessage());
+             
+        }
+        
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -479,6 +675,7 @@ public class Secretario_Modificar_Cliente extends javax.swing.JFrame {
                 new Secretario_Modificar_Cliente().setVisible(true);
             }
         });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
