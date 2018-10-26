@@ -128,10 +128,7 @@ public class Secretario_Crear_Pedido extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jTextField1.setText("DNI_text");
-
         jTextField2.setEditable(false);
-        jTextField2.setText("Nombre_text");
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField2ActionPerformed(evt);
@@ -365,7 +362,6 @@ public class Secretario_Crear_Pedido extends javax.swing.JFrame {
         label3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         label3.setText("Monto :");
 
-        jTextField3.setText("Monto_text");
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
@@ -374,10 +370,7 @@ public class Secretario_Crear_Pedido extends javax.swing.JFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jTextField4.setText("DNI_text");
-
         jTextField5.setEditable(false);
-        jTextField5.setText("Nombre_text");
         jTextField5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField5ActionPerformed(evt);

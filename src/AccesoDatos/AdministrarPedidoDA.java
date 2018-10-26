@@ -74,8 +74,8 @@ public class AdministrarPedidoDA {
              
                 pedido.setId(rs.getInt("id"));
                 pedido.setCodigo(rs.getString("codigo"));
-                pedido.setFecha_pedido(rs.getDate("fecha_registro"));
-                pedido.setFecha_entrega(rs.getDate("fecha_entrega"));
+                pedido.setFecha_pedido(rs.getDate("fecha_pedido"));
+                //pedido.setFecha_entrega(rs.getDate("fecha_entrega"));
                 pedido.setDescripcion(rs.getString("descripcion"));
                 pedido.setMonto(rs.getDouble("monto"));
                 pedido.setEstado("estado");
@@ -144,6 +144,7 @@ public class AdministrarPedidoDA {
             */
             database connect = new database();
             String query = "select * from pedido;";
+            System.out.println("query => " + query);
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
@@ -157,8 +158,8 @@ public class AdministrarPedidoDA {
              
                 pedido.setId(rs.getInt("id"));
                 pedido.setCodigo(rs.getString("codigo"));
-                pedido.setFecha_pedido(rs.getDate("fecha_registro"));
-                pedido.setFecha_entrega(rs.getDate("fecha_entrega"));
+                pedido.setFecha_pedido(rs.getDate("fecha_pedido"));
+                //pedido.setFecha_entrega(rs.getDate("fecha_entrega"));
                 pedido.setDescripcion(rs.getString("descripcion"));
                 pedido.setMonto(rs.getDouble("monto"));
                 pedido.setEstado("estado");

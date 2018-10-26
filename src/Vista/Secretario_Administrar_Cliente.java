@@ -30,14 +30,14 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
     
     private void inicializar(){
         String [] rol = {"Secre"};
-        inicializar_Tabla();
+        ArrayList<cliente> lista_clientes = controlador_cliente.listarClientes("", "", "", "");
+        inicializar_Tabla(lista_clientes);
     }
 
     
-     private void inicializar_Tabla(){
+     private void inicializar_Tabla(ArrayList<cliente> lista_clientes){
          try{
             //jTable1.removeAll();
-             ArrayList<cliente> lista_clientes = controlador_cliente.listarClientes(-1, "", "", "");
 
              DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
              modelo.setRowCount(0);
@@ -236,6 +236,7 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
             }
         ));
         jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTable1);
 
         label2.setText("DNI :");
@@ -371,7 +372,22 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        // FILTRAR LISTADO
+        
+        /*
+        DNI, Nombre, AP_Pat, AP_Mat
+        */
+        
+        String dni = jTextField1.getText();
+        String nombre = jTextField2.getText();
+        String ap_pat = jTextField3.getText();
+        String ap_mat = jTextField4.getText();
+        
+        ArrayList<cliente> lista_clientes = controlador_cliente.listarClientes(dni,nombre, ap_pat, ap_mat);
+        
+        inicializar_Tabla(lista_clientes);
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

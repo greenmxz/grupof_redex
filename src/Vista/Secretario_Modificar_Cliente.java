@@ -44,7 +44,7 @@ public class Secretario_Modificar_Cliente extends javax.swing.JFrame {
 
     private void actualizar_tabla(){
         try{
-            ArrayList<cliente> lista_clientes = controlador_cliente.listarClientes(-1, "", "", "");
+            ArrayList<cliente> lista_clientes = controlador_cliente.listarClientes("", "", "", "");
          
             DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
             modelo.setRowCount(0);

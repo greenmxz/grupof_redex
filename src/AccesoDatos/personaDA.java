@@ -133,6 +133,8 @@ public class personaDA {
             stmt.setString(9, persona.getCorreo());
             stmt.setInt(10,persona.getNumeroDocumentoIdentidad());
             
+            System.out.println("query => "+ queryPersona);
+            
             int count = stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             
@@ -161,6 +163,7 @@ public class personaDA {
             database connect = new database();
             String query = "select * from persona where id = " + id_persona + ";";
             Statement sentencia= connect.getConnection().createStatement();
+            System.out.println("query => "+ query);
             ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
 
@@ -194,6 +197,7 @@ public class personaDA {
         try{
             database connect = new database();
             String query = "select * from ciudad where id = " + id_ciudad + ";";
+            System.out.println("query => "+ query);
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
@@ -220,6 +224,7 @@ public class personaDA {
             */
             database connect = new database();
             String query = "select * from persona where numero_documento_identidad = " + dni + ";";
+            System.out.println("query => "+ query);
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){

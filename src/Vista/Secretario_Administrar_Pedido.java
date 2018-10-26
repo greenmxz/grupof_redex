@@ -236,8 +236,6 @@ public class Secretario_Administrar_Pedido extends javax.swing.JFrame {
 
         label2.setText("Codigo :");
 
-        jTextField1.setText("Codigo_text");
-
         label3.setText("Fecha Entrega :");
 
         label4.setText("Fecha Registro :");

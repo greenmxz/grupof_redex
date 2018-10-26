@@ -26,7 +26,7 @@ public class AdministrarClienteBL {
         return AdministrarClienteDA.obtenerClienteDNI(dni);
     }
     
-    public ArrayList<cliente> listarClientes(int numeroDocumentoIdentidad,String nombre, String apellidoPaterno, String apellidoMaterno){
+    public ArrayList<cliente> listarClientes(String numeroDocumentoIdentidad,String nombre, String apellidoPaterno, String apellidoMaterno){
         return AdministrarClienteDA.listarClientes(numeroDocumentoIdentidad, nombre, apellidoPaterno, apellidoMaterno);
     }
     

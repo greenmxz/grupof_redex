@@ -106,24 +106,48 @@ public class AdministrarClienteDA {
     
     
     
-    public ArrayList<cliente> listarClientes(int numeroDocumentoIdentidad,String nombre, String apellidoPaterno, String apellidoMaterno){ 
+    public ArrayList<cliente> listarClientes(String numeroDocumentoIdentidad,String nombre, String apellidoPaterno, String apellidoMaterno){ 
         try {
-            ArrayList<cliente> listClientes = new ArrayList<>();
-            /* NO BORRAR
+            ArrayList<cliente> listClientes = new ArrayList<>();       
             database connect = new database();
-            String query = "{CALL listarClientes(?,?,?,?)}";
-
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            stmt.setInt(1, numeroDocumentoIdentidad);
-            stmt.setString(2, nombre);
-            stmt.setString(3, apellidoPaterno);
-            stmt.setString(4, apellidoMaterno);
-
-            ResultSet rs = stmt.executeQuery();
-            */
+            boolean primero = true;
             
-            database connect = new database();
-            String query = "select * from cliente;";
+            String query = "select cliente.id, cliente.cantidad_pedidos, cliente.id_persona, cliente.codigo,\n" +
+                        " persona.nombre, persona.apellido_paterno, persona.apellido_materno, persona.numero_documento_identidad,\n" +
+                        " persona.direccion, persona.correo, persona.telefono, persona.fecha_nacimiento,\n" +
+                        " ciudad.nombre as ciudad\n" +
+                        " from cliente\n" +
+                        " inner join persona on cliente.id_persona = persona.id\n" +
+                        " inner join ciudad on persona.id_ciudad = ciudad.id";
+            
+            if (!numeroDocumentoIdentidad.equals("")||!nombre.equals("")||!apellidoPaterno.equals("")||!apellidoMaterno.equals("")){
+                query += " where ";
+                
+                if (!numeroDocumentoIdentidad.equals("")){
+                    query += " persona.numero_documento_identidad = '" + numeroDocumentoIdentidad + "' ";
+                    primero = false;
+                }
+                if (!nombre.equals("")){
+                    if(!primero) query += " and ";
+                    query += " persona.nombre = '" + nombre + "' ";
+                    primero = false;
+                }
+                if (!apellidoPaterno.equals("")){
+                    if(!primero) query += " and ";
+                    query += " persona.apellido_paterno = '" + apellidoPaterno + "' ";
+                    primero = false;
+                }
+                if (!apellidoMaterno.equals("")){
+                    if(!primero) query += " and ";
+                    query += " persona.apellido_materno = '" + apellidoMaterno + "' ";
+                    primero = false;
+                }
+            }
+            
+            query += ";";
+            
+            System.out.println("query => " + query);
+
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
@@ -134,16 +158,16 @@ public class AdministrarClienteDA {
                 cliente.setId(rs.getInt("id"));
                 cliente.setCantidad_pedidos(rs.getInt("cantidad_pedidos"));
                 cliente.setCodigo(rs.getString("codigo"));
-                
-                persona = controlador_persona.obtenerPersona(rs.getInt("id_persona"));
-                
-                persona.setNombre(persona.getNombre());
-                
-                persona.setApellidoPaterno(persona.getApellidoPaterno());
-                persona.setApellidoMaterno(persona.getApellidoMaterno());
-                persona.setNumeroDocumentoIdentidad(persona.getNumeroDocumentoIdentidad());
-                persona.setTipoDocumento(persona.getTipoDocumento());
-                
+   
+                persona.setNombre(rs.getString("nombre"));
+                persona.setApellidoPaterno(rs.getString("apellido_paterno"));
+                persona.setApellidoMaterno(rs.getString("apellido_materno"));
+                persona.setNumeroDocumentoIdentidad(rs.getInt("numero_documento_identidad"));
+                persona.setDireccion(rs.getString("direccion"));
+                persona.setCorreo(rs.getString("correo"));
+                persona.setTelefono(rs.getString("telefono"));
+                //persona.setFechaNacimiento(fechaNacimiento);
+                persona.setCiudad(rs.getString("ciudad"));
                 
                 cliente.setPersona(persona);
                 

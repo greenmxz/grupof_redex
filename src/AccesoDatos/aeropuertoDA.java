@@ -39,6 +39,7 @@ public class aeropuertoDA {
             */
             database connect = new database();
             String query = "select * from aeropuerto where id = " + id_aeropuerto + ";";
+            System.out.println("query => " + query);
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
@@ -52,7 +53,7 @@ public class aeropuertoDA {
                 //ciudad
                 ciudad ciudad = new ciudad();
                 ciudad.setId(rs.getInt("id_ciudad"));
-                ciudad.setNombre(rs.getString("ciudad"));
+                //ciudad.setNombre(rs.getString("ciudad"));
                 
                 aeropuerto.setCiudad(ciudad);
                 return aeropuerto;
