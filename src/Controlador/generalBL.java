@@ -29,4 +29,18 @@ public class generalBL {
         return generalDA.obtenerTipoDocumentos();
     }
     
+    public ciudad obtenerCiudad(int id_ciudad){
+        return generalDA.obtenerCiudad(id_ciudad);
+    }
+    
+    public pais obtenerPais(int id_pais){
+        return generalDA.obtenerPais(id_pais);
+    }
+    
+    public continente obtenerContinente(int id_continente){
+        return generalDA.obtenerContinente(id_continente);
+    }
+    
+    
+    
 }

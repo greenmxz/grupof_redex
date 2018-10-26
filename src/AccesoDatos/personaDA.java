@@ -9,6 +9,9 @@ import Modelo.cliente;
 import Modelo.persona;
 import Modelo.database;
 import Controlador.generalBL;
+import Modelo.ciudad;
+import Modelo.continente;
+import Modelo.pais;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +27,6 @@ public class personaDA {
     
     
     private generalBL general = new generalBL();
-    
     
     public java.sql.Date manejo_fechas(String s){
         //manejo de fechas;
@@ -178,8 +180,17 @@ public class personaDA {
                 persona.setCorreo(rs.getString("correo"));
                 persona.setTelefono(rs.getString("telefono"));
                 persona.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
-                //persona.setCiudad(rs.getString("ciudad"));
+                //ciudad
+                ciudad ciudad = general.obtenerCiudad(rs.getInt("id_ciudad"));
+                persona.setCiudad(ciudad.getNombre());
+                //pais
+                pais pais = general.obtenerPais(ciudad.getId_pais());
+                persona.setPais(pais.getNombre());
+                //continente
+                continente continente = general.obtenerContinente(pais.getId_continente());
+                persona.setContinente(continente.getNombre());
                 
+                connect.closeConnection(); 
                 return persona;
             }
             connect.closeConnection();
@@ -187,27 +198,8 @@ public class personaDA {
             return null;
             
         }catch(Exception e){
-            System.out.println("ERROR "+e.getMessage());
+            System.out.println("ERROR en obtenerPersona "+e.getMessage());
             return null;
-        }
-    }
-    
-    
-    public String obtenerCiudad(int id_ciudad){
-        try{
-            database connect = new database();
-            String query = "select * from ciudad where id = " + id_ciudad + ";";
-            System.out.println("query => "+ query);
-            Statement sentencia= connect.getConnection().createStatement();
-            ResultSet rs = sentencia.executeQuery(query);
-            while (rs.next( )){
-                return rs.getString("nombre");             
-            }
-            connect.closeConnection(); 
-            return "ERROR";
-        }catch(Exception e){
-            System.out.println("ERROR "+e.getMessage());
-            return "ERROR";
         }
     }
     
@@ -240,10 +232,17 @@ public class personaDA {
                 persona.setCorreo(rs.getString("correo"));
                 persona.setTelefono(rs.getString("telefono"));
                 persona.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
+                //ciudad
+                ciudad ciudad = general.obtenerCiudad(rs.getInt("id_ciudad"));
+                persona.setCiudad(ciudad.getNombre());
+                //pais
+                pais pais = general.obtenerPais(ciudad.getId_pais());
+                persona.setPais(pais.getNombre());
+                //continente
+                continente continente = general.obtenerContinente(pais.getId_continente());
+                persona.setContinente(continente.getNombre());
                 
-                String ciudad = obtenerCiudad(rs.getInt("id_ciudad"));
-                persona.setCiudad(ciudad);
-
+                
                 connect.closeConnection(); 
                 return persona;
             }

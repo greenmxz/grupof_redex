@@ -5,9 +5,12 @@
  */
 package AccesoDatos;
 
+import Controlador.generalBL;
 import Modelo.database;
 import Modelo.aeropuerto;
 import Modelo.ciudad;
+import Modelo.pais;
+import Modelo.continente;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -25,18 +28,10 @@ public class aeropuertoDA {
     private int cantidad_paquetes;
     private ciudad ciudad;
     */
-    
+    private generalBL general = new generalBL();
     public aeropuerto obtenerAeropuerto(int id_aeropuerto){
         try {
-            /*
-            database connect = new database();
-            String query = "{CALL obtenerAeropuerto(?)}";
 
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            stmt.setInt(1, id_aeropuerto);
-           
-            ResultSet rs = stmt.executeQuery();
-            */
             database connect = new database();
             String query = "select * from aeropuerto where id = " + id_aeropuerto + ";";
             System.out.println("query => " + query);
@@ -51,11 +46,16 @@ public class aeropuertoDA {
                 aeropuerto.setCapacidad_maxima(rs.getInt("capacidad_maxima"));
                 aeropuerto.setCantidad_paquetes(rs.getInt("cantidad_paquetes"));
                 //ciudad
-                ciudad ciudad = new ciudad();
-                ciudad.setId(rs.getInt("id_ciudad"));
-                //ciudad.setNombre(rs.getString("ciudad"));
+                ciudad ciudad = general.obtenerCiudad(rs.getInt("id_ciudad"));
+                aeropuerto.setCiudad(ciudad.getNombre());
+                //pais
+                pais pais = general.obtenerPais(ciudad.getId_pais());
+                aeropuerto.setPais(pais.getNombre());
+                //continente
+                continente continente = general.obtenerContinente(pais.getId_continente());
+                aeropuerto.setContinente(continente.getNombre());
                 
-                aeropuerto.setCiudad(ciudad);
+                connect.closeConnection(); 
                 return aeropuerto;
             }
             connect.closeConnection();

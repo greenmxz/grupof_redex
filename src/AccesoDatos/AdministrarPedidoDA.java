@@ -46,17 +46,7 @@ public class AdministrarPedidoDA {
     
     public pedido obtenerPedido(int id_pedido){
 
-      try{
-          /*
-            database connect = new database();
-            String query = "{CALL obtenerPedido(?)}";
-
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            stmt.setInt(1, id_pedido);
-            
-            ResultSet rs = stmt.executeQuery();
-          */
-          
+      try{   
             database connect = new database();
             String query = "select * from pedido where id = " + id_pedido + ";";
             Statement sentencia= connect.getConnection().createStatement();
@@ -82,8 +72,6 @@ public class AdministrarPedidoDA {
                 //obtener clientes
                 cliente_emisor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_emisor"));
                 cliente_receptor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_receptor"));
-                //
-                
                 pedido.setCliente_emisor(cliente_emisor);
                 pedido.setCliente_receptor(cliente_receptor);
                 
@@ -91,14 +79,14 @@ public class AdministrarPedidoDA {
                 aeropuerto_emisor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_emisor"));
                 aeropuerto_receptor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_receptor"));
                 aeropuerto_actual = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_actual"));
-                //
                 pedido.setAeropuerto_emisor(aeropuerto_emisor);
                 pedido.setAeropuerto_receptor(aeropuerto_receptor);
                 pedido.setAeropuerto_actual(aeropuerto_actual);
                 
-                
+                connect.closeConnection(); 
                 return pedido;
             }
+            connect.closeConnection(); 
             return null;
       }catch(Exception e){
             System.out.println("ERROR "+e.getMessage());
@@ -166,8 +154,6 @@ public class AdministrarPedidoDA {
                 //obtener clientes
                 cliente_emisor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_emisor"));
                 cliente_receptor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_receptor"));
-                //
-                
                 pedido.setCliente_emisor(cliente_emisor);
                 pedido.setCliente_receptor(cliente_receptor);
                 
@@ -175,8 +161,6 @@ public class AdministrarPedidoDA {
                 aeropuerto_emisor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_emisor"));
                 aeropuerto_receptor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_receptor"));
                 aeropuerto_actual = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_actual"));
-                //
-                
                 pedido.setAeropuerto_emisor(aeropuerto_emisor);
                 pedido.setAeropuerto_receptor(aeropuerto_receptor);
                 pedido.setAeropuerto_actual(aeropuerto_actual);
@@ -189,7 +173,7 @@ public class AdministrarPedidoDA {
             System.out.println("Cantidad de resultados = " + listPedidos.size());
             return listPedidos;
         }catch(Exception e){
-            System.out.println("ERROR "+e.getMessage());
+            System.out.println("ERROR en listarPedidos "+e.getMessage());
             return null;
         }
     }
@@ -242,7 +226,7 @@ public class AdministrarPedidoDA {
             stmt.executeUpdate();
             
             
-            
+            connect.closeConnection(); 
             return true;
         
         }catch(Exception ex){
@@ -287,7 +271,7 @@ public class AdministrarPedidoDA {
             stmt.executeUpdate();
             
             
-            
+            connect.closeConnection(); 
             return true;
         
         }catch(Exception ex){

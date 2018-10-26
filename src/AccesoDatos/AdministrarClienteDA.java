@@ -57,7 +57,7 @@ public class AdministrarClienteDA {
             return null;
             
         }catch(Exception e){
-            System.out.println("ERROR "+e.getMessage());
+            System.out.println("ERROR en obtenerCliente "+e.getMessage());
             return null;
         }
     }
