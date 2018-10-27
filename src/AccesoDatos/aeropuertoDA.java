@@ -63,12 +63,52 @@ public class aeropuertoDA {
             return null;
             
         }catch(Exception e){
-            System.out.println("ERROR "+e.getMessage());
+            System.out.println("ERROR obtenerAeropuerto "+e.getMessage());
             return null;
         }
     }
     
-    
+    public aeropuerto obtenerAeropuertoxCiudad(String nombre_ciudad){
+        try {
+
+            database connect = new database();
+            String query = "select aeropuerto.id, aeropuerto.nombre, aeropuerto.codigo, aeropuerto.capacidad_maxima, aeropuerto.cantidad_paquetes,\n" +
+                            "continente.nombre as continente, pais.nombre as pais, ciudad.nombre as ciudad\n" +
+                            "from aeropuerto\n" +
+                            "inner join ciudad on aeropuerto.id_ciudad = ciudad.id\n" +
+                            "inner join pais on ciudad.id_pais = pais.id\n" +
+                            "inner join continente on pais.id_continente = continente.id where ciudad.nombre = '"+nombre_ciudad+"';";
+            
+            System.out.println("query => " + query);
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while (rs.next( )){
+                aeropuerto aeropuerto = new aeropuerto();
+                
+                aeropuerto.setId(rs.getInt("id"));
+                aeropuerto.setNombre(rs.getString("nombre"));
+                aeropuerto.setCodigo(rs.getString("codigo"));
+                aeropuerto.setCapacidad_maxima(rs.getInt("capacidad_maxima"));
+                aeropuerto.setCantidad_paquetes(rs.getInt("cantidad_paquetes"));
+                //ciudad
+                aeropuerto.setCiudad(rs.getString("ciudad"));
+                //pais
+                aeropuerto.setPais(rs.getString("pais"));
+                //continente
+                aeropuerto.setContinente(rs.getString("continente"));
+                
+                connect.closeConnection(); 
+                return aeropuerto;
+            }
+            connect.closeConnection();
+            System.out.println("El aeropuerto no ha sido encontrado");
+            return null;
+            
+        }catch(Exception e){
+            System.out.println("ERROR obtenerAeropuertoxCiudad "+e.getMessage());
+            return null;
+        }
+    }
     
     
     

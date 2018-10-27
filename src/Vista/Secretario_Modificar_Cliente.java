@@ -9,6 +9,8 @@ import Controlador.AdministrarClienteBL;
 import Controlador.generalBL;
 import Modelo.ciudad;
 import Modelo.cliente;
+import Modelo.continente;
+import Modelo.pais;
 import Modelo.persona;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
@@ -112,19 +114,23 @@ public class Secretario_Modificar_Cliente extends javax.swing.JFrame {
             jComboBox8.removeAllItems();
             jComboBox9.removeAllItems();
 
-            //POR MIENTRAS
+            //continente
+            ArrayList<continente> list_continente = general.obtenerContinentes();
+            DefaultComboBoxModel modelo1 = (DefaultComboBoxModel) jComboBox7.getModel();           
+            for(int i = 0; i < list_continente.size() ; i++){
+                modelo1.addElement(list_continente.get(i).getNombre());
+            }
+            
+            //pais
+            ArrayList<pais> list_pais = general.obtenerPaises();
+            DefaultComboBoxModel modelo2 = (DefaultComboBoxModel) jComboBox8.getModel();            
+            for(int i = 0; i < list_pais.size() ; i++){
+                modelo2.addElement(list_pais.get(i).getNombre());
+            }
 
-            DefaultComboBoxModel modelo1 = (DefaultComboBoxModel) jComboBox7.getModel();
-            modelo1.addElement("América");
-
-            DefaultComboBoxModel modelo2 = (DefaultComboBoxModel) jComboBox8.getModel();
-            modelo2.addElement("Perú");
-
-            ///ASI DEBE SER
+            //ciudad
             ArrayList<ciudad> list_ciudades = general.obtenerCiudades();
-
-            DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) jComboBox9.getModel();
-            Object[] obj = new Object[list_ciudades.size()];
+            DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) jComboBox9.getModel();   
             for(int i = 0; i < list_ciudades.size() ; i++){
                 modelo3.addElement(list_ciudades.get(i).getNombre());
             }

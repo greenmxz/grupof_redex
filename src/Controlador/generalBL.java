@@ -19,12 +19,30 @@ public class generalBL {
         generalDA = new generalDA();
     }
     
+    public int obtenerIdGeneral(String codigo, String valor){
+        return generalDA.obtenerIdGeneral(codigo, valor);
+    }
+    public java.sql.Date manejo_fechas(String s){
+        return generalDA.manejo_fechas(s);
+    }
+    public java.sql.Date manejo_fechas_24hs(java.util.Date fecha){
+        return generalDA.manejo_fechas_24hs(fecha);
+    }
     public ArrayList<rol> obtenerRoles(){
         return generalDA.obtenerRoles();
     }
     public ArrayList<ciudad> obtenerCiudades(){
         return generalDA.obtenerCiudades();
     }
+    
+    public ArrayList<pais> obtenerPaises(){
+        return generalDA.obtenerPaises();
+    }
+    
+    public ArrayList<continente> obtenerContinentes(){
+        return generalDA.obtenerContinentes();
+    }
+    
     public ArrayList<tipoDocumento> obtenerTipoDocumentos(){
         return generalDA.obtenerTipoDocumentos();
     }

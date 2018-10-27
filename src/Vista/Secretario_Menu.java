@@ -102,7 +102,7 @@ public class Secretario_Menu extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         Vista.Secretario_Administrar_Cliente adm_cliente = new Vista.Secretario_Administrar_Cliente();
-        adm_cliente.show(rootPaneCheckingEnabled);
+        adm_cliente.setVisible(true);
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -111,7 +111,7 @@ public class Secretario_Menu extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         Vista.Secretario_Administrar_Pedido adm_pedido = new Vista.Secretario_Administrar_Pedido();
-        adm_pedido.show(rootPaneCheckingEnabled);
+        adm_pedido.setVisible(true);
         
     }//GEN-LAST:event_jButton2ActionPerformed
 

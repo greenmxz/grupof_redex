@@ -393,7 +393,7 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         //Agregar cliente
         Vista.Secretario_Crear_Cliente c_cliente = new Vista.Secretario_Crear_Cliente(jTable1);
-        c_cliente.show(rootPaneCheckingEnabled);
+        c_cliente.setVisible(true);
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -419,7 +419,7 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
                             "Mensaje", JOptionPane.INFORMATION_MESSAGE);
                 
                 Vista.Secretario_Modificar_Cliente m_cliente = new Vista.Secretario_Modificar_Cliente(jTable1,cliente);
-                m_cliente.show(rootPaneCheckingEnabled);
+                m_cliente.setVisible(true);
             }else{
                 JOptionPane.showMessageDialog(null, 
                             "Error al obtener cliente", 

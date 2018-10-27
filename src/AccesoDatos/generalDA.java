@@ -7,6 +7,8 @@ package AccesoDatos;
 
 import Modelo.*;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -14,6 +16,65 @@ import java.util.*;
  * @author Moises
  */
 public class generalDA {
+    
+    
+    public int obtenerIdGeneral(String codigo, String valor){
+        try{
+            continente continente = new continente();
+            database connect = new database();
+            String query =  "select tabla_general.id, tabla_general.codigo, tabla_general_detalle.valor \n" +
+                            "from tabla_general\n" +
+                            "inner join tabla_general_detalle on tabla_general_detalle.id_tabla_general = tabla_general.id\n" +
+                            "where tabla_general_detalle.activo = 1 and tabla_general.codigo = '"+codigo+"' and\n" +
+                            "tabla_general_detalle.valor = '"+valor+"';";
+            
+            System.out.println("query => "+ query);
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while (rs.next( )){
+                int id = rs.getInt("id");
+                return id;
+            }
+            connect.closeConnection(); 
+            return -1;
+        
+            
+        }catch(Exception e){
+            System.out.println("ERROR obtenerIdGeneral "+e.getMessage());
+            return -1;
+        }
+    }
+    
+    
+    
+    
+    public java.sql.Date manejo_fechas(String s){
+        //manejo de fechas;
+            try {
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                java.util.Date fd =   formatter.parse(s);
+                java.sql.Date sqlDate = new java.sql.Date(fd.getTime());
+                return sqlDate;
+            }catch(Exception e){
+                System.out.println("ERROR manejo_fechas "+e.getMessage());
+            return null;
+        }
+    }
+    
+    public java.sql.Date manejo_fechas_24hs(java.util.Date fecha){
+        //manejo de fechas;
+            try {           
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  // Or whatever format you need
+                String s = sdf.format(fecha);
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                java.util.Date fd =   formatter.parse(s);
+                java.sql.Date sqlDate = new java.sql.Date(fd.getTime());
+                return sqlDate;
+            }catch(Exception e){
+                System.out.println("ERROR manejo_fechas_24hs "+e.getMessage());
+            return null;
+        }
+    }
     
     
     
@@ -118,11 +179,54 @@ public class generalDA {
                 ciudad ciudad=new ciudad();
                 ciudad.setId(rs.getInt("id"));
                 ciudad.setNombre(rs.getString("nombre"));
+                ciudad.setId_pais(rs.getInt("id_pais"));
                 listCiudad.add(ciudad);
             }
              
             connection.closeConnection();
             return listCiudad;
+        }catch(Exception ex){
+            return null;
+        }
+    }
+    
+    public ArrayList<pais> obtenerPaises(){
+        try{
+            database connection = new database();
+            String query = "select * from pais ";
+            Statement sentencia= connection.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            ArrayList<pais> listPais = new ArrayList<>();
+             while (rs.next( )){
+                pais pais=new pais();
+                pais.setId(rs.getInt("id"));
+                pais.setNombre(rs.getString("nombre"));
+                pais.setId_continente(rs.getInt("id_continente"));
+                listPais.add(pais);
+            }
+             
+            connection.closeConnection();
+            return listPais;
+        }catch(Exception ex){
+            return null;
+        }
+    }
+    
+    public ArrayList<continente> obtenerContinentes(){
+        try{
+            database connection = new database();
+            String query = "select * from continente ";
+            Statement sentencia= connection.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            ArrayList<continente> listCont = new ArrayList<>();
+             while (rs.next( )){
+                continente continente=new continente();
+                continente.setId(rs.getInt("id"));
+                continente.setNombre(rs.getString("nombre"));
+                listCont.add(continente);
+            }   
+            connection.closeConnection();
+            return listCont;
         }catch(Exception ex){
             return null;
         }
@@ -150,4 +254,9 @@ public class generalDA {
             return null;
         }
     }
+    
+    
+    
+    
+    
 }
