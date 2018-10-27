@@ -5,7 +5,6 @@
  */
 package redex;
 
-import Vista.frmReporteAeropuerto;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -46,12 +45,12 @@ public class Redex extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Vista.Login login = new Vista.Login();
+        //Vista.Login login = new Vista.Login();
         //Vista.Secretario_Menu s_menu = new Vista.Secretario_Menu();
         //Vista.Secretario_Administrar_Pedido  secretario_administrarPedido = new Vista.Secretario_Administrar_Pedido();
         //Vista.Secretario_Crear_Pedido  secretario_crearPedido = new Vista.Secretario_Crear_Pedido();
         //Vista.Secretario_Modificar_Pedido  secretario_modificarPedido = new Vista.Secretario_Modificar_Pedido();
-        login.show(); // this comment to commit something and test 2
+        //login.show(); // this comment to commit something and test 2
         //s_menu.show();
         //secretario_administrarPedido.show();
         //secretario_crearPedido.show();
@@ -60,7 +59,7 @@ public class Redex extends Application {
         
         /*Vista.frmReporteAeropuerto f = new Vista.frmReporteAeropuerto();
         f.show();*/
-        //new Vista.frmReporteAeropuerto().setVisible(true);
+        new Vista.frmMenuProvisional().setVisible(true);
     }
     
 }
