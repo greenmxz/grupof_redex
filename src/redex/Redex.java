@@ -5,6 +5,7 @@
  */
 package redex;
 
+import Vista.frmReporteAeropuerto;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -56,6 +57,10 @@ public class Redex extends Application {
         //secretario_crearPedido.show();
         //secretario_modificarPedido.show();
         //launch(args);
+        
+        /*Vista.frmReporteAeropuerto f = new Vista.frmReporteAeropuerto();
+        f.show();*/
+        //new Vista.frmReporteAeropuerto().setVisible(true);
     }
     
 }
