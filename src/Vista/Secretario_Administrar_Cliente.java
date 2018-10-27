@@ -8,6 +8,7 @@ import Controlador.*;
 import Modelo.cliente;
 import Modelo.persona;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -29,26 +30,31 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
     
     private void inicializar(){
         String [] rol = {"Secre"};
-        inicializar_Tabla();
+        ArrayList<cliente> lista_clientes = controlador_cliente.listarClientes("", "", "", "");
+        inicializar_Tabla(lista_clientes);
     }
 
     
-     private void inicializar_Tabla(){
-        //jTable1.removeAll();
-         ArrayList<cliente> lista_clientes = controlador_cliente.listarClientes(-1, "", "", "");
+     private void inicializar_Tabla(ArrayList<cliente> lista_clientes){
+         try{
+            //jTable1.removeAll();
+
+             DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+             modelo.setRowCount(0);
+             Object[] obj = new Object[5];
+             for (int i = 0; i < lista_clientes.size(); i++){
+                 cliente cliente = lista_clientes.get(i);
+                 obj[0] = cliente.getCodigo();
+                 obj[1] = cliente.getPersona().getNumeroDocumentoIdentidad();
+                 obj[2] = cliente.getPersona().getNombre();
+                 obj[3] = cliente.getPersona().getApellidoPaterno();
+                 obj[4] = cliente.getPersona().getApellidoMaterno();
+                 modelo.addRow(obj);
+             }
          
-         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
-         modelo.setRowCount(0);
-         Object[] obj = new Object[5];
-         for (int i = 0; i < lista_clientes.size(); i++){
-             cliente cliente = lista_clientes.get(i);
-             obj[0] = cliente.getCodigo();
-             obj[1] = cliente.getPersona().getNumeroDocumentoIdentidad();
-             obj[2] = cliente.getPersona().getNombre();
-             obj[3] = cliente.getPersona().getApellidoPaterno();
-             obj[4] = cliente.getPersona().getApellidoMaterno();
-             modelo.addRow(obj);
-         }
+         }catch(Exception e){
+            System.out.println("ERROR "+e.getMessage());
+        }
      }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -230,6 +236,7 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
             }
         ));
         jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTable1);
 
         label2.setText("DNI :");
@@ -365,22 +372,33 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        // FILTRAR LISTADO
+        
+        /*
+        DNI, Nombre, AP_Pat, AP_Mat
+        */
+        
+        String dni = jTextField1.getText();
+        String nombre = jTextField2.getText();
+        String ap_pat = jTextField3.getText();
+        String ap_mat = jTextField4.getText();
+        
+        ArrayList<cliente> lista_clientes = controlador_cliente.listarClientes(dni,nombre, ap_pat, ap_mat);
+        
+        inicializar_Tabla(lista_clientes);
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        
-        //modelo.getValueAt(row, column);
-        
-        
         //Agregar cliente
-        Vista.Secretario_Crear_Cliente c_cliente = new Vista.Secretario_Crear_Cliente();
-        c_cliente.show(rootPaneCheckingEnabled);
+        Vista.Secretario_Crear_Cliente c_cliente = new Vista.Secretario_Crear_Cliente(jTable1);
+        c_cliente.setVisible(true);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+         //Modificar cliente
         if (jTable1.getSelectedRowCount()>0){
             
             int select = jTable1.getSelectedRow();
@@ -391,13 +409,23 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
             String ap_pat = modelo.getValueAt(select, 3).toString();
             String ap_mat = modelo.getValueAt(select, 4).toString();
         
-            persona persona = controlador_persona.obtenerPersonaxDNI(Integer.parseInt(dni));
+            cliente cliente = controlador_cliente.obtenerClienteDNI(Integer.parseInt(dni));
             
+            if (cliente != null){
+                //Modificar cliente
+                
+                JOptionPane.showMessageDialog(null, 
+                            "Cliente con el documento de identidad " + cliente.getPersona().getNumeroDocumentoIdentidad() + " será modificado", 
+                            "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+                
+                Vista.Secretario_Modificar_Cliente m_cliente = new Vista.Secretario_Modificar_Cliente(jTable1,cliente);
+                m_cliente.setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(null, 
+                            "Error al obtener cliente", 
+                            "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+            }
             
-            
-            //Modificar cliente
-            Vista.Secretario_Modificar_Cliente m_cliente = new Vista.Secretario_Modificar_Cliente();
-            m_cliente.show(rootPaneCheckingEnabled);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

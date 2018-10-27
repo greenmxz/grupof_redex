@@ -7,50 +7,38 @@ package Modelo;
 
 /**
  *
- * @author Moises
+ * @author Nowa
  */
-public class ciudad {
+public class pais {
+    
     private int id;
     private String nombre;
-    private int id_pais;
-    /**
-     * @return the id
-     */
+    private int id_continente;
+
     public int getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(int id) {
         this.id = id;
     }
 
-    /**
-     * @return the nombre
-     */
     public String getNombre() {
         return nombre;
     }
 
-    /**
-     * @param nombre the nombre to set
-     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public int getId_continente() {
+        return id_continente;
+    }
+
+    public void setId_continente(int id_continente) {
+        this.id_continente = id_continente;
+    }
     
-    public String toString(){
-        return this.nombre;
-    }
-
-    public int getId_pais() {
-        return id_pais;
-    }
-
-    public void setId_pais(int id_pais) {
-        this.id_pais = id_pais;
-    }
+    
     
 }

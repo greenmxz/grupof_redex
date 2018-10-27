@@ -19,4 +19,7 @@ public class aeropuertoBL {
     public aeropuerto obtenerAeropuerto(int id_aeropuerto){
         return AdministrarAeropuertoDA.obtenerAeropuerto(id_aeropuerto);
     }
+    public aeropuerto obtenerAeropuertoxCiudad(String nombre_ciudad){
+        return AdministrarAeropuertoDA.obtenerAeropuertoxCiudad(nombre_ciudad);
+    }
 }

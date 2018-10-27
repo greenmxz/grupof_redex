@@ -9,9 +9,12 @@ import Modelo.cliente;
 import Controlador.AdministrarClienteBL;
 import Controlador.generalBL;
 import Modelo.ciudad;
+import Modelo.pais;
+import Modelo.continente;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,36 +28,65 @@ public class Secretario_Crear_Cliente extends javax.swing.JFrame {
 
     AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
     generalBL general = new generalBL();
+    javax.swing.JTable tabla;
     
     public Secretario_Crear_Cliente() {
         initComponents();
         inicializar();
     }
+    
+    public Secretario_Crear_Cliente(javax.swing.JTable tabla){
+        initComponents();
+        inicializar();
+        this.tabla = tabla;
+    }
 
     public void inicializar(){
-        jComboBox7.removeAllItems();
-        jComboBox8.removeAllItems();
-        jComboBox9.removeAllItems();
-        
-        //POR MIENTRAS
-        
-        DefaultComboBoxModel modelo1 = (DefaultComboBoxModel) jComboBox7.getModel();
-        modelo1.addElement("América");
-        
-        DefaultComboBoxModel modelo2 = (DefaultComboBoxModel) jComboBox8.getModel();
-        modelo2.addElement("Perú");
-        
-        ///ASI DEBE SER
-        ArrayList<ciudad> list_ciudades = general.obtenerCiudades();
-        
-        DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) jComboBox9.getModel();
-        Object[] obj = new Object[list_ciudades.size()];
-        for(int i = 0; i < list_ciudades.size() ; i++){
-            modelo3.addElement(list_ciudades.get(i).getNombre());
-        }
+        try{
+            jComboBox7.removeAllItems();
+            jComboBox8.removeAllItems();
+            jComboBox9.removeAllItems();
 
+            //continente
+            ArrayList<continente> list_continente = general.obtenerContinentes();
+            DefaultComboBoxModel modelo1 = (DefaultComboBoxModel) jComboBox7.getModel();           
+            for(int i = 0; i < list_continente.size() ; i++){
+                modelo1.addElement(list_continente.get(i).getNombre());
+            }
+            
+            //pais
+            ArrayList<pais> list_pais = general.obtenerPaises();
+            DefaultComboBoxModel modelo2 = (DefaultComboBoxModel) jComboBox8.getModel();            
+            for(int i = 0; i < list_pais.size() ; i++){
+                modelo2.addElement(list_pais.get(i).getNombre());
+            }
+
+            //ciudad
+            ArrayList<ciudad> list_ciudades = general.obtenerCiudades();
+            DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) jComboBox9.getModel();   
+            for(int i = 0; i < list_ciudades.size() ; i++){
+                modelo3.addElement(list_ciudades.get(i).getNombre());
+            }
+            
+        }catch(Exception e){
+            System.out.println("ERROR "+e.getMessage());
+        }
     }
     
+    private void actualizar_tabla(cliente cliente){
+        try{
+            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+                        Object[] obj = new Object[5];
+                        obj[0] = cliente.getCodigo();
+                        obj[1] = cliente.getPersona().getNumeroDocumentoIdentidad();
+                        obj[2] = cliente.getPersona().getNombre();
+                        obj[3] = cliente.getPersona().getApellidoPaterno();
+                        obj[4] = cliente.getPersona().getApellidoMaterno();
+            modelo.addRow(obj);
+        }catch(Exception e){
+            System.out.println("ERROR "+e.getMessage());
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -469,6 +501,7 @@ public class Secretario_Crear_Cliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         
@@ -506,8 +539,34 @@ public class Secretario_Crear_Cliente extends javax.swing.JFrame {
         cliente.setCantidad_pedidos(0);
         cliente.setCodigo(dni);
         cliente.setPersona(persona);
+        cliente.setCodigo(dni);
         
-        controlador_cliente.registrarCliente(cliente);
+        switch(controlador_cliente.registrarCliente(cliente)){
+            case 1:
+                JOptionPane.showMessageDialog(null, 
+                            "El cliente ha sido correctamente registrado", 
+                            "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+
+                if(tabla != null){
+                    actualizar_tabla(cliente);
+                }
+                this.dispose();
+                break;
+            case 0:
+                JOptionPane.showMessageDialog(null, 
+                            "No se pudo registrar usuario", 
+                            "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+                break;
+                
+            case 2:
+                JOptionPane.showMessageDialog(null, 
+                            "Otro cliente con el mismo documento de identidad ya ha sido registrado", 
+                            "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+                break;
+        }
+        
+        
+        
         
         }catch(Exception ex){
              System.out.println(ex.getMessage());

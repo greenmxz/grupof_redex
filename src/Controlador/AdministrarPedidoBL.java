@@ -22,8 +22,12 @@ public class AdministrarPedidoBL {
         return AdministrarPedidoDA.obtenerPedido(id_pedido);
     }
     
-    public ArrayList<pedido> listarPedidos(String codigo, String fecha_entrega, String fecha_registro){
-        return AdministrarPedidoDA.listarPedidos(codigo, fecha_entrega, fecha_registro);
+    public pedido obtenerPedidoxCodigo(String codigo){
+        return AdministrarPedidoDA.obtenerPedidoxCodigo(codigo);
+    }
+    
+    public ArrayList<pedido> listarPedidos(String codigo){
+        return AdministrarPedidoDA.listarPedidos(codigo);
     }
     
     public boolean registrarPedido(pedido pedido){
