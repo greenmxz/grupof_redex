@@ -29,7 +29,6 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
     }
     
     private void inicializar(){
-        String [] rol = {"Secre"};
         ArrayList<cliente> lista_clientes = controlador_cliente.listarClientes("", "", "", "");
         inicializar_Tabla(lista_clientes);
     }
@@ -435,8 +434,28 @@ public class Secretario_Administrar_Cliente extends javax.swing.JFrame {
         //Eliminar cliente
         if (jTable1.getSelectedRowCount()>0){
             //Eliminar cliente
+            int select = jTable1.getSelectedRow();
+            DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+            String dni = modelo.getValueAt(select, 1).toString();
+            cliente cliente = controlador_cliente.obtenerClienteDNI(Integer.parseInt(dni));
+            
+            if (cliente != null){
+                
+                int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar al client con numero de documento de identidad " + dni + " ?", "Alerta!", JOptionPane.YES_NO_OPTION);
+                
+                if (resp == 0){ // SI
+                    controlador_cliente.eliminarCliente(cliente.getId());
+                    inicializar();
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, 
+                            "Error al obtener cliente", 
+                            "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+            }
             
         }
+        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
