@@ -6,6 +6,7 @@
 package Controlador;
 import Modelo.aeropuerto;
 import AccesoDatos.aeropuertoDA;
+import java.util.ArrayList;
 /**
  *
  * @author Nowa
@@ -21,5 +22,8 @@ public class aeropuertoBL {
     }
     public aeropuerto obtenerAeropuertoxCiudad(String nombre_ciudad){
         return AdministrarAeropuertoDA.obtenerAeropuertoxCiudad(nombre_ciudad);
+    }
+    public ArrayList<aeropuerto> listaAeropuertos(){
+        return AdministrarAeropuertoDA.listaAeropuertos();
     }
 }

@@ -118,10 +118,11 @@ public class AdministrarClienteDA {
                         " ciudad.nombre as ciudad\n" +
                         " from cliente\n" +
                         " inner join persona on cliente.id_persona = persona.id\n" +
-                        " inner join ciudad on persona.id_ciudad = ciudad.id";
+                        " inner join ciudad on persona.id_ciudad = ciudad.id\n" +
+                        " where cliente.activo = 1 ";
             
             if (!numeroDocumentoIdentidad.equals("")||!nombre.equals("")||!apellidoPaterno.equals("")||!apellidoMaterno.equals("")){
-                query += " where ";
+                query += " and ";
                 
                 if (!numeroDocumentoIdentidad.equals("")){
                     query += " persona.numero_documento_identidad = '" + numeroDocumentoIdentidad + "' ";
@@ -204,13 +205,14 @@ public class AdministrarClienteDA {
             
                     //registrar cliente
             
-                    String query="INSERT INTO cliente(cantidad_pedidos,id_persona,codigo)VALUES(?,?,?);"; 
+                    String query="INSERT INTO cliente(cantidad_pedidos,id_persona,codigo,activo)VALUES(?,?,?,?);"; 
 	
                     PreparedStatement stmt1 = connect.getConnection().prepareStatement(query);
             
                     stmt1.setInt(1,cliente.getCantidad_pedidos());
                     stmt1.setInt(2,id_persona);
                     stmt1.setString(3,cliente.getCodigo());
+                    stmt1.setString(4,"1");
           
                     stmt1.executeUpdate();
                     
@@ -291,7 +293,10 @@ public class AdministrarClienteDA {
             /*
             codigo_cliente
             */
-            String query = "{CALL eliminarCliente(?)}";
+            String query = "UPDATE cliente\n" +
+                                "SET\n" +
+                                "activo = 0\n" +
+                                "WHERE id = ?;"; 
 
             CallableStatement stmt = connect.getConnection().prepareCall(query);
             

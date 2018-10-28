@@ -7,9 +7,12 @@ package Vista;
 
 import Modelo.cliente;
 import Modelo.pedido;
+import Modelo.estado;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.DefaultComboBoxModel;
 import Controlador.*;
+import Modelo.aeropuerto;
 import javax.swing.JOptionPane;
 /**
  *
@@ -21,19 +24,71 @@ public class Secretario_Administrar_Pedido extends javax.swing.JFrame {
      * Creates new form Secretario_AdministrarPedido
      */
     
-    
+    private generalBL general = new generalBL();
     private AdministrarPedidoBL controlador_pedido = new AdministrarPedidoBL();
+    private aeropuertoBL controlador_aeropuerto = new aeropuertoBL();
+    private AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
+    ArrayList<aeropuerto> listAero;
+    ArrayList<estado> listEstado;
+    
     public Secretario_Administrar_Pedido() {
         initComponents();
         inicializar();
     }
     private void inicializar(){
         String [] rol = {"Secre"};
-        inicializar_Tabla();
+        ArrayList<aeropuerto> listAero = controlador_aeropuerto.listaAeropuertos();
+        ArrayList<estado> listEstado = general.listaEstados("estado_pedido");
+        this.listAero = listAero;
+        this.listEstado = listEstado;
+        ArrayList<pedido> lista_pedidos = controlador_pedido.listarPedidos("","","","","","","","");
+        inicializar_Tabla(lista_pedidos);
+        inicializar_ComboBox();
     }
     
-    private void inicializar_Tabla(){
-         ArrayList<pedido> lista_pedidos = controlador_pedido.listarPedidos("");
+    private void inicializar_ComboBox(){
+        try{
+            
+            // AEROPUERTOS
+            ArrayList<String> listDetAero = new ArrayList<>();
+        
+            for(int i = 0; i < listAero.size();i++){
+                aeropuerto aeropuerto = listAero.get(i);
+                String detalle = aeropuerto.getPais() + " " + aeropuerto.getCiudad() + " - " + aeropuerto.getNombre();
+                listDetAero.add(detalle);
+            }
+            
+            jComboBox1.removeAllItems();
+            jComboBox2.removeAllItems();
+            jComboBox3.removeAllItems();
+            
+            DefaultComboBoxModel modelo1 = (DefaultComboBoxModel) jComboBox1.getModel();           
+            for(int i = 0; i < listDetAero.size() ; i++){
+                modelo1.addElement(listDetAero.get(i));
+            }
+            
+            DefaultComboBoxModel modelo2 = (DefaultComboBoxModel) jComboBox2.getModel();           
+            for(int i = 0; i < listDetAero.size() ; i++){
+                modelo2.addElement(listDetAero.get(i));
+            }
+            
+            //ESTADOS
+            
+            DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) jComboBox3.getModel();           
+            for(int i = 0; i < listEstado.size() ; i++){
+                modelo3.addElement(listEstado.get(i).getValor());
+            }
+            
+            
+        }catch(Exception e){
+            System.out.println("ERROR en inicializar_ComboBox "+e.getMessage());
+        }
+        
+        
+    }
+    
+    private void inicializar_Tabla(ArrayList<pedido> lista_pedidos){
+         
          
          DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
          modelo.setRowCount(0);
@@ -248,7 +303,7 @@ public class Secretario_Administrar_Pedido extends javax.swing.JFrame {
 
         label2.setText("Codigo :");
 
-        label3.setText("Fecha Entrega entre");
+        label3.setText("Fecha Pedido entre");
 
         label4.setText("y");
 
@@ -304,6 +359,10 @@ public class Secretario_Administrar_Pedido extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(66, 66, 66)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(label13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton1)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(jPanel1Layout.createSequentialGroup()
@@ -328,10 +387,7 @@ public class Secretario_Administrar_Pedido extends javax.swing.JFrame {
                                 .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(24, 24, 24)
-                                .addComponent(label10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(206, 206, 206))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -339,17 +395,15 @@ public class Secretario_Administrar_Pedido extends javax.swing.JFrame {
                                 .addGap(27, 27, 27)
                                 .addComponent(label3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(label10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(label13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -365,15 +419,13 @@ public class Secretario_Administrar_Pedido extends javax.swing.JFrame {
                             .addComponent(jDateChooser2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(label3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(label10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(label13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(label5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(label11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -382,9 +434,13 @@ public class Secretario_Administrar_Pedido extends javax.swing.JFrame {
                         .addComponent(label12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(label13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
                 .addComponent(jButton1)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
@@ -427,7 +483,68 @@ public class Secretario_Administrar_Pedido extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        try{
+        // FILTRAR
+
+            String codigo= "", id_aeropuerto_origen= "", id_aeropuerto_destino= "", id_cliente_emisor= "", id_cliente_receptor= "", id_estado= "", fecha_i= "", fecha_f = "";
+
+
+            cliente cliente_emisor = null, cliente_receptor = null;
+            
+            
+            if (!jTextField2.getText().equals("")){
+                cliente_emisor = controlador_cliente.obtenerClienteDNI(Integer.parseInt(jTextField2.getText()));
+                
+                if(cliente_emisor != null){
+                    System.out.println("CLIENTE e dni ->" + cliente_emisor.getPersona().getNumeroDocumentoIdentidad());
+                    id_cliente_emisor = Integer.toString(cliente_emisor.getId());
+                }else{
+                    JOptionPane.showMessageDialog(null, 
+                                "El cliente emisor ingresado no existe", 
+                                "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            
+            if (!jTextField3.getText().equals("")){
+                cliente_receptor = controlador_cliente.obtenerClienteDNI(Integer.parseInt(jTextField3.getText()));
+
+                if(cliente_receptor != null){
+                    System.out.println("CLIENTE r dni ->" + cliente_receptor.getPersona().getNumeroDocumentoIdentidad());
+                    id_cliente_receptor = Integer.toString(cliente_receptor.getId());
+                }else{
+                    JOptionPane.showMessageDialog(null, 
+                                "El cliente receptor ingresado no existe", 
+                                "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            
+                
+     
+
+            //AEROPUERTOS
+            int index = jComboBox1.getSelectedIndex();
+            //DefaultComboBoxModel modelo1 = (DefaultComboBoxModel) jComboBox1.getModel();           
+            id_aeropuerto_origen = Integer.toString(this.listAero.get(index).getId());
+
+            index = jComboBox2.getSelectedIndex();
+            //DefaultComboBoxModel modelo2 = (DefaultComboBoxModel) jComboBox2.getModel();           
+            id_aeropuerto_destino = Integer.toString(this.listAero.get(index).getId());
+
+            //ESTADOS
+            index = jComboBox3.getSelectedIndex();
+            //DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) jComboBox3.getModel();           
+            id_estado = Integer.toString(this.listEstado.get(index).getId_tabla_general());
+
+
+
+            ArrayList<pedido> lista_pedidos = controlador_pedido.listarPedidos(codigo, id_aeropuerto_origen, id_aeropuerto_destino, id_cliente_emisor, id_cliente_receptor, id_estado, fecha_i, fecha_f);
+
+
+            inicializar_Tabla(lista_pedidos);
+        
+        }catch(Exception e){
+            System.out.println("ERROR en FILTRAR pedido "+e.getMessage());
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -469,6 +586,28 @@ public class Secretario_Administrar_Pedido extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (jTable1.getSelectedRowCount()>0){
             //Eliminar pedido
+            
+            int select = jTable1.getSelectedRow();
+            DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+            String codigo = modelo.getValueAt(select, 0).toString();
+            pedido pedido = controlador_pedido.obtenerPedidoxCodigo(codigo);
+            
+            if (pedido != null){
+                
+                int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro de eliminar el pedido con codigo " + codigo + " ?", "Alerta!", JOptionPane.YES_NO_OPTION);
+                
+                if (resp == 0){ // SI
+                    
+                    controlador_pedido.eliminarPedido(pedido.getId());
+                    ArrayList<pedido> lista_pedidos = controlador_pedido.listarPedidos("","","","","","","","");
+                    inicializar_Tabla(lista_pedidos);
+                }
+                
+            }else{
+                JOptionPane.showMessageDialog(null, 
+                            "Error al obtener pedido", 
+                            "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+            }
             
         }
     }//GEN-LAST:event_jButton4ActionPerformed

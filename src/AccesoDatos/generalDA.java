@@ -45,7 +45,35 @@ public class generalDA {
         }
     }
     
-    
+    public ArrayList<estado> listaEstados(String codigo){
+        try{
+            ArrayList<estado> lista_estados = new ArrayList();
+            database connect = new database();
+            String query =  "select tabla_general.id, tabla_general.codigo,tabla_general_detalle.id as id_tabla_general_detalle,tabla_general_detalle.valor \n" +
+                            "from tabla_general\n" +
+                            "inner join tabla_general_detalle on tabla_general_detalle.id_tabla_general = tabla_general.id\n" +
+                            "where tabla_general_detalle.activo = 1 and tabla_general.codigo = '"+codigo+"';";
+            
+            System.out.println("query => "+ query);
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            
+            while (rs.next( )){
+                estado estado = new estado();
+                estado.setId_tabla_general(rs.getInt("id"));
+                estado.setId_tabla_general_detalle(rs.getInt("id_tabla_general_detalle"));
+                estado.setCodigo(codigo);
+                estado.setValor(rs.getString("valor"));
+                lista_estados.add(estado);
+            }
+ 
+            connect.closeConnection();
+            return lista_estados;
+        }catch(Exception e){
+            System.out.println("ERROR listaEstados "+e.getMessage());
+            return null;
+        }
+    }
     
     
     public java.sql.Date manejo_fechas(String s){
@@ -254,7 +282,6 @@ public class generalDA {
             return null;
         }
     }
-    
     
     
     
