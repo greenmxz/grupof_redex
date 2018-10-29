@@ -16,7 +16,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class Secretario_Crear_Pedido extends javax.swing.JPanel {
+public class Secretario_Crear_Pedido extends javax.swing.JDialog {
 
     AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
     AdministrarPedidoBL controlador_pedido = new AdministrarPedidoBL();
@@ -28,19 +28,20 @@ public class Secretario_Crear_Pedido extends javax.swing.JPanel {
     aeropuerto aeropuerto_origen = null;
     aeropuerto aeropuerto_destino = null;
     
-    public Secretario_Crear_Pedido() {
+    public Secretario_Crear_Pedido(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
     
-    public Secretario_Crear_Pedido(javax.swing.JTable tabla){
+    public Secretario_Crear_Pedido(java.awt.Frame parent, boolean modal, javax.swing.JTable tabla) {
+        super(parent, modal);
         initComponents();
         inicializar_combo(jComboBox2,jComboBox1,jComboBox3);
         inicializar_combo(jComboBox5,jComboBox4,jComboBox6);
         this.tabla = tabla;
     }
 
-    /* Métodos */
-    
+    /* Métodos */  
    public String generar_codigo_provisional(String cod){
         
         // POR CAMBIAR
@@ -154,6 +155,8 @@ public class Secretario_Crear_Pedido extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -340,8 +343,8 @@ public class Secretario_Crear_Pedido extends javax.swing.JPanel {
         jLabel2.setText("CREACIÓN DE PEDIDOS");
         panelFondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 20, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -354,15 +357,13 @@ public class Secretario_Crear_Pedido extends javax.swing.JPanel {
                 .addComponent(panelFondo, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
-
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // BUSCAR CLIENTE RECEPTOR
@@ -375,13 +376,16 @@ public class Secretario_Crear_Pedido extends javax.swing.JPanel {
         this.cliente_receptor = cliente_receptor;
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5ActionPerformed
+
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // BUCAR AEROPUERTO DESTINO
         String ciudad = jComboBox6.getSelectedItem().toString();
         aeropuerto aeropuerto = controlador_aeropuerto.obtenerAeropuertoxCiudad(ciudad);
         jTextField7.setText(aeropuerto.getNombre());
         this.aeropuerto_destino = aeropuerto;
-
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -472,7 +476,6 @@ public class Secretario_Crear_Pedido extends javax.swing.JPanel {
             }
 
         }
-
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -501,9 +504,49 @@ public class Secretario_Crear_Pedido extends javax.swing.JPanel {
         aeropuerto aeropuerto = controlador_aeropuerto.obtenerAeropuertoxCiudad(ciudad);
         jTextField6.setText(aeropuerto.getNombre());
         this.aeropuerto_origen = aeropuerto;
-
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Secretario_Crear_Pedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Secretario_Crear_Pedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Secretario_Crear_Pedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Secretario_Crear_Pedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                Secretario_Crear_Pedido dialog = new Secretario_Crear_Pedido(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

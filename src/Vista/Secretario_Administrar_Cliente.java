@@ -11,9 +11,11 @@ public class Secretario_Administrar_Cliente extends javax.swing.JPanel {
 
     private AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
     private personaBL controlador_persona = new personaBL();
+    private javax.swing.JFrame x;
     
-    public Secretario_Administrar_Cliente() {
+    public Secretario_Administrar_Cliente(javax.swing.JFrame x) {
         initComponents();
+        this.x = x;
         inicializar();
     }
 
@@ -203,8 +205,7 @@ public class Secretario_Administrar_Cliente extends javax.swing.JPanel {
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         //Agregar cliente
-//        Vista.Secretario_Crea_Cliente c_cliente = new Vista.Secretario_Crea_Cliente(tblClientes);
-//        c_cliente.setVisible(true);
+        new Vista.Secretario_Crear_Cliente(x,true,tblClientes).setVisible(true);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed

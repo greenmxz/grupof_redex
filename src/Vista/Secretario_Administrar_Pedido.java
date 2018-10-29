@@ -21,10 +21,12 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     private AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
     ArrayList<aeropuerto> listAero;
     ArrayList<estado> listEstado;
+    private javax.swing.JFrame parent;
     
-    public Secretario_Administrar_Pedido() {
+    public Secretario_Administrar_Pedido(javax.swing.JFrame parent) {
+        this.parent = parent;
         initComponents();
-//        inicializar();
+        inicializar();
     }
 
     /* Métodos */
@@ -321,13 +323,7 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-
-        //Crear pedido
-
-//        Vista.Secretario_Crear_Pedido c_pedido = new Vista.Secretario_Crear_Pedido(tblPedidos);
-
-//        c_pedido.setVisible(true);
-
+        new Vista.Secretario_Crear_Pedido(parent,true,tblPedidos);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
