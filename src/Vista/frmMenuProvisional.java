@@ -17,7 +17,8 @@ public class frmMenuProvisional extends javax.swing.JFrame {
     public frmMenuProvisional() {
         initComponents();
         this.setTitle("Sistema de distribución de paquetes para RedEx - Módulo de reportes gerenciales");
-        new CambiarPanel(panelPrincipal, new frmReporteAeropuerto());
+        //new CambiarPanel(panelPrincipal, new frmReporteAeropuerto());
+        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Pedido());
     }
 
     /**

@@ -58,12 +58,15 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
+        panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         btnExcel.setText("Exportar a hoja de cálculo");
         btnExcel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExcelActionPerformed(evt);
             }
         });
+        panelFondo.add(btnExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(263, 450, 240, -1));
 
         tblAirports.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -82,6 +85,8 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tblAirports);
+
+        panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 222, 749, 210));
 
         panelFlitrado.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Opciones de filtrado"));
         panelFlitrado.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -155,46 +160,14 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
 
         panelFlitrado.add(panelContinente, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 210, 100));
 
+        panelFondo.add(panelFlitrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 51, 750, 140));
+
         jLabel1.setText("Resultado de consulta");
+        panelFondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 202, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("REPORTE DE AEROPUERTOS");
-
-        javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
-        panelFondo.setLayout(panelFondoLayout);
-        panelFondoLayout.setHorizontalGroup(
-            panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelFlitrado, javax.swing.GroupLayout.PREFERRED_SIZE, 750, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 749, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(panelFondoLayout.createSequentialGroup()
-                                .addGap(240, 240, 240)
-                                .addComponent(btnExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1)))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(305, 305, 305)
-                        .addComponent(jLabel2)))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
-        panelFondoLayout.setVerticalGroup(
-            panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(panelFlitrado, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExcel)
-                .addGap(24, 24, 24))
-        );
+        panelFondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 18, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
