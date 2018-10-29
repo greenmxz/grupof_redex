@@ -66,7 +66,7 @@ public class Secretario_Crear_Pedido extends javax.swing.JFrame {
     
     
     private void actualizar_Tabla(){
-         ArrayList<pedido> lista_pedidos = controlador_pedido.listarPedidos("");
+         ArrayList<pedido> lista_pedidos = controlador_pedido.listarPedidos("","","","","","","","");
          
          DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
          modelo.setRowCount(0);

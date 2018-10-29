@@ -59,6 +59,8 @@ public class generalBL {
         return generalDA.obtenerContinente(id_continente);
     }
     
-    
+    public ArrayList<estado> listaEstados(String codigo){
+        return generalDA.listaEstados(codigo);
+    }
     
 }

@@ -26,8 +26,8 @@ public class AdministrarPedidoBL {
         return AdministrarPedidoDA.obtenerPedidoxCodigo(codigo);
     }
     
-    public ArrayList<pedido> listarPedidos(String codigo){
-        return AdministrarPedidoDA.listarPedidos(codigo);
+    public ArrayList<pedido> listarPedidos(String codigo, String id_aeropuerto_origen, String id_aeropuerto_destino, String id_cliente_emisor, String id_cliente_receptor, String id_estado, String fecha_i, String fecha_f){
+        return AdministrarPedidoDA.listarPedidos(codigo, id_aeropuerto_origen, id_aeropuerto_destino, id_cliente_emisor, id_cliente_receptor, id_estado, fecha_i, fecha_f);
     }
     
     public boolean registrarPedido(pedido pedido){
