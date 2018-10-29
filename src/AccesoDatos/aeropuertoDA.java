@@ -5,12 +5,17 @@
  */
 package AccesoDatos;
 
+import Controlador.generalBL;
 import Modelo.database;
 import Modelo.aeropuerto;
 import Modelo.ciudad;
+import Modelo.pais;
+import Modelo.continente;
+import Modelo.pedido;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
@@ -25,20 +30,13 @@ public class aeropuertoDA {
     private int cantidad_paquetes;
     private ciudad ciudad;
     */
-    
+    private generalBL general = new generalBL();
     public aeropuerto obtenerAeropuerto(int id_aeropuerto){
         try {
-            /*
-            database connect = new database();
-            String query = "{CALL obtenerAeropuerto(?)}";
 
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            stmt.setInt(1, id_aeropuerto);
-           
-            ResultSet rs = stmt.executeQuery();
-            */
             database connect = new database();
             String query = "select * from aeropuerto where id = " + id_aeropuerto + ";";
+            System.out.println("query => " + query);
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
@@ -50,11 +48,16 @@ public class aeropuertoDA {
                 aeropuerto.setCapacidad_maxima(rs.getInt("capacidad_maxima"));
                 aeropuerto.setCantidad_paquetes(rs.getInt("cantidad_paquetes"));
                 //ciudad
-                ciudad ciudad = new ciudad();
-                ciudad.setId(rs.getInt("id_ciudad"));
-                ciudad.setNombre(rs.getString("ciudad"));
+                ciudad ciudad = general.obtenerCiudad(rs.getInt("id_ciudad"));
+                aeropuerto.setCiudad(ciudad.getNombre());
+                //pais
+                pais pais = general.obtenerPais(ciudad.getId_pais());
+                aeropuerto.setPais(pais.getNombre());
+                //continente
+                continente continente = general.obtenerContinente(pais.getId_continente());
+                aeropuerto.setContinente(continente.getNombre());
                 
-                aeropuerto.setCiudad(ciudad);
+                connect.closeConnection(); 
                 return aeropuerto;
             }
             connect.closeConnection();
@@ -62,7 +65,7 @@ public class aeropuertoDA {
             return null;
             
         }catch(Exception e){
-            System.out.println("ERROR "+e.getMessage());
+            System.out.println("ERROR obtenerAeropuerto "+e.getMessage());
             return null;
         }
     }
@@ -71,5 +74,89 @@ public class aeropuertoDA {
     
     
     
+    
+    public aeropuerto obtenerAeropuertoxCiudad(String nombre_ciudad){
+        try {
+
+            database connect = new database();
+            String query = "select aeropuerto.id, aeropuerto.nombre, aeropuerto.codigo, aeropuerto.capacidad_maxima, aeropuerto.cantidad_paquetes,\n" +
+                            "continente.nombre as continente, pais.nombre as pais, ciudad.nombre as ciudad\n" +
+                            "from aeropuerto\n" +
+                            "inner join ciudad on aeropuerto.id_ciudad = ciudad.id\n" +
+                            "inner join pais on ciudad.id_pais = pais.id\n" +
+                            "inner join continente on pais.id_continente = continente.id where ciudad.nombre = '"+nombre_ciudad+"';";
+            
+            System.out.println("query => " + query);
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while (rs.next( )){
+                aeropuerto aeropuerto = new aeropuerto();
+                
+                aeropuerto.setId(rs.getInt("id"));
+                aeropuerto.setNombre(rs.getString("nombre"));
+                aeropuerto.setCodigo(rs.getString("codigo"));
+                aeropuerto.setCapacidad_maxima(rs.getInt("capacidad_maxima"));
+                aeropuerto.setCantidad_paquetes(rs.getInt("cantidad_paquetes"));
+                //ciudad
+                aeropuerto.setCiudad(rs.getString("ciudad"));
+                //pais
+                aeropuerto.setPais(rs.getString("pais"));
+                //continente
+                aeropuerto.setContinente(rs.getString("continente"));
+                
+                connect.closeConnection(); 
+                return aeropuerto;
+            }
+            connect.closeConnection();
+            System.out.println("El aeropuerto no ha sido encontrado");
+            return null;
+            
+        }catch(Exception e){
+            System.out.println("ERROR obtenerAeropuertoxCiudad "+e.getMessage());
+            return null;
+        }
+    }
+    
+    public ArrayList<aeropuerto> listaAeropuertos(){
+    
+        try{
+            ArrayList<aeropuerto> listAero = new ArrayList<>();
+            database connect = new database();
+            String query = "select aeropuerto.id, aeropuerto.nombre, aeropuerto.codigo, aeropuerto.capacidad_maxima, aeropuerto.cantidad_paquetes,\n" +
+                            "continente.nombre as continente, pais.nombre as pais, ciudad.nombre as ciudad\n" +
+                            "from aeropuerto\n" +
+                            "inner join ciudad on aeropuerto.id_ciudad = ciudad.id\n" +
+                            "inner join pais on ciudad.id_pais = pais.id\n" +
+                            "inner join continente on pais.id_continente = continente.id;";
+            System.out.println("query => " + query);
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while (rs.next( )){
+                aeropuerto aeropuerto = new aeropuerto();
+                
+                aeropuerto.setId(rs.getInt("id"));
+                aeropuerto.setNombre(rs.getString("nombre"));
+                aeropuerto.setCodigo(rs.getString("codigo"));
+                aeropuerto.setCapacidad_maxima(rs.getInt("capacidad_maxima"));
+                aeropuerto.setCantidad_paquetes(rs.getInt("cantidad_paquetes"));
+                //ciudad
+                aeropuerto.setCiudad(rs.getString("ciudad"));
+                //pais
+                aeropuerto.setPais(rs.getString("pais"));
+                //continente
+                aeropuerto.setContinente(rs.getString("continente"));
+                
+                listAero.add(aeropuerto);
+            }
+            
+            connect.closeConnection(); 
+            System.out.println("Cantidad de resultados = " + listAero.size());
+            return listAero;
+            
+        }catch(Exception e){
+            System.out.println("ERROR listaAeropuertos "+e.getMessage());
+            return null;
+        }
+    }
     
 }

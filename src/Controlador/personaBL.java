@@ -25,4 +25,8 @@ public class personaBL {
     public boolean insertarPersona(persona persona){
         return personaDA.insertarPersona(persona);
     }
+    
+    public boolean modificarPersona(persona persona){
+        return personaDA.modificarPersona(persona);
+    }
 }

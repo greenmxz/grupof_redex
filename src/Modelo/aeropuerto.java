@@ -15,7 +15,9 @@ public class aeropuerto {
     private String codigo;
     private int capacidad_maxima;
     private int cantidad_paquetes;
-    private ciudad ciudad;
+    private String continente;
+    private String pais;
+    private String ciudad;
 
     public int getId() {
         return id;
@@ -57,12 +59,33 @@ public class aeropuerto {
         this.cantidad_paquetes = cantidad_paquetes;
     }
 
-    public ciudad getCiudad() {
+    public String getContinente() {
+        return continente;
+    }
+
+    public void setContinente(String continente) {
+        this.continente = continente;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
+    public String getCiudad() {
         return ciudad;
     }
 
-    public void setCiudad(ciudad ciudad) {
+    public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
     }
+
+    
+
+    
+
     
 }

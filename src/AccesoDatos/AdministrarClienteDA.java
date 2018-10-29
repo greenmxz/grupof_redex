@@ -34,17 +34,7 @@ public class AdministrarClienteDA {
             String query = "select * from cliente where id = " + id_cliente + ";";
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
-            
-            /*
-            database connect = new database();
-            String query = "{CALL obtenerCliente(?)}";
 
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            stmt.setInt(1, id_cliente);
-           
-            ResultSet rs = stmt.executeQuery();
-            */
-            
             while (rs.next( )){
 
                 
@@ -67,6 +57,48 @@ public class AdministrarClienteDA {
             return null;
             
         }catch(Exception e){
+            System.out.println("ERROR en obtenerCliente "+e.getMessage());
+            return null;
+        }
+    }
+    
+    
+    public cliente obtenerClienteDNI(int dni){
+        try {
+            
+            database connect = new database();
+            
+            
+            persona persona = controlador_persona.obtenerPersonaxDNI(dni);
+            
+            if (persona != null){
+                int id_persona = persona.getId();
+            
+                String query = "select * from cliente where id_persona = " + id_persona + ";";
+                Statement sentencia= connect.getConnection().createStatement();
+                ResultSet rs = sentencia.executeQuery(query);
+
+                while (rs.next( )){
+
+                    cliente cliente = new cliente();
+
+                    cliente.setId(rs.getInt("id"));
+                    cliente.setCantidad_pedidos(rs.getInt("cantidad_pedidos"));
+                    cliente.setCodigo(rs.getString("codigo"));
+
+                    //obtener persona
+                    cliente.setPersona(persona);
+                    //
+
+
+                return cliente;
+                }
+            }
+            connect.closeConnection();
+            System.out.println("El cliente no ha sido encontrado");
+            return null;
+            
+        }catch(Exception e){
             System.out.println("ERROR "+e.getMessage());
             return null;
         }
@@ -74,27 +106,49 @@ public class AdministrarClienteDA {
     
     
     
-    
-    
-    
-    public ArrayList<cliente> listarClientes(int numeroDocumentoIdentidad,String nombre, String apellidoPaterno, String apellidoMaterno){ 
+    public ArrayList<cliente> listarClientes(String numeroDocumentoIdentidad,String nombre, String apellidoPaterno, String apellidoMaterno){ 
         try {
-            ArrayList<cliente> listClientes = new ArrayList<>();
-            /* NO BORRAR
+            ArrayList<cliente> listClientes = new ArrayList<>();       
             database connect = new database();
-            String query = "{CALL listarClientes(?,?,?,?)}";
-
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            stmt.setInt(1, numeroDocumentoIdentidad);
-            stmt.setString(2, nombre);
-            stmt.setString(3, apellidoPaterno);
-            stmt.setString(4, apellidoMaterno);
-
-            ResultSet rs = stmt.executeQuery();
-            */
+            boolean primero = true;
             
-            database connect = new database();
-            String query = "select * from cliente;";
+            String query = "select cliente.id, cliente.cantidad_pedidos, cliente.id_persona, cliente.codigo,\n" +
+                        " persona.nombre, persona.apellido_paterno, persona.apellido_materno, persona.numero_documento_identidad,\n" +
+                        " persona.direccion, persona.correo, persona.telefono, persona.fecha_nacimiento,\n" +
+                        " ciudad.nombre as ciudad\n" +
+                        " from cliente\n" +
+                        " inner join persona on cliente.id_persona = persona.id\n" +
+                        " inner join ciudad on persona.id_ciudad = ciudad.id\n" +
+                        " where cliente.activo = 1 ";
+            
+            if (!numeroDocumentoIdentidad.equals("")||!nombre.equals("")||!apellidoPaterno.equals("")||!apellidoMaterno.equals("")){
+                query += " and ";
+                
+                if (!numeroDocumentoIdentidad.equals("")){
+                    query += " persona.numero_documento_identidad = '" + numeroDocumentoIdentidad + "' ";
+                    primero = false;
+                }
+                if (!nombre.equals("")){
+                    if(!primero) query += " and ";
+                    query += " persona.nombre = '" + nombre + "' ";
+                    primero = false;
+                }
+                if (!apellidoPaterno.equals("")){
+                    if(!primero) query += " and ";
+                    query += " persona.apellido_paterno = '" + apellidoPaterno + "' ";
+                    primero = false;
+                }
+                if (!apellidoMaterno.equals("")){
+                    if(!primero) query += " and ";
+                    query += " persona.apellido_materno = '" + apellidoMaterno + "' ";
+                    primero = false;
+                }
+            }
+            
+            query += ";";
+            
+            System.out.println("query => " + query);
+
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
@@ -104,16 +158,17 @@ public class AdministrarClienteDA {
                 
                 cliente.setId(rs.getInt("id"));
                 cliente.setCantidad_pedidos(rs.getInt("cantidad_pedidos"));
-                
-                persona = controlador_persona.obtenerPersona(rs.getInt("id_persona"));
-                
-                persona.setNombre(persona.getNombre());
-                
-                persona.setApellidoPaterno(persona.getApellidoPaterno());
-                persona.setApellidoMaterno(persona.getApellidoMaterno());
-                persona.setNumeroDocumentoIdentidad(persona.getNumeroDocumentoIdentidad());
-                persona.setTipoDocumento(persona.getTipoDocumento());
-                
+                cliente.setCodigo(rs.getString("codigo"));
+   
+                persona.setNombre(rs.getString("nombre"));
+                persona.setApellidoPaterno(rs.getString("apellido_paterno"));
+                persona.setApellidoMaterno(rs.getString("apellido_materno"));
+                persona.setNumeroDocumentoIdentidad(rs.getInt("numero_documento_identidad"));
+                persona.setDireccion(rs.getString("direccion"));
+                persona.setCorreo(rs.getString("correo"));
+                persona.setTelefono(rs.getString("telefono"));
+                //persona.setFechaNacimiento(fechaNacimiento);
+                persona.setCiudad(rs.getString("ciudad"));
                 
                 cliente.setPersona(persona);
                 
@@ -130,90 +185,103 @@ public class AdministrarClienteDA {
     }
     
     
-     public boolean registrarCliente(cliente cliente){
-         try {
-            database connect = new database();
-            /*
-            cantidad_pedidos
-            doc_persona
-            codigo_cliente
-            */
-            /*
-            String query = "{CALL registrarCliente(?,?,?,?)}";
-
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            
-            stmt.setInt(1,cliente.getCantidad_pedidos());
-            stmt.setInt(2, cliente.getPersona().getNumeroDocumentoIdentidad());
-            stmt.setString(3, cliente.getPersona().getTipoDocumento());
-            stmt.setString(4, cliente.getCodigo());
-
-            stmt.executeUpdate();
+     public int registrarCliente(cliente cliente){
+            /*codigos de resultado
+            0 - error al insertar en bd
+            1 - correcto
+            2 - dni repetido
             */
             
-            //registrar persona
-           
+            try {
+                database connect = new database();
+                persona persona = null;
+                persona = controlador_persona.obtenerPersonaxDNI(cliente.getPersona().getNumeroDocumentoIdentidad());
             
-            controlador_persona.insertarPersona(cliente.getPersona());
+                if (persona == null){
+                    // nuevo cliente
+                    controlador_persona.insertarPersona(cliente.getPersona());
             
-            int id_persona = controlador_persona.obtenerPersonaxDNI(cliente.getPersona().getNumeroDocumentoIdentidad()).getId();
+                    int id_persona = controlador_persona.obtenerPersonaxDNI(cliente.getPersona().getNumeroDocumentoIdentidad()).getId();
             
-            //registrar cliente
+                    //registrar cliente
             
-            
-            String query="INSERT INTO cliente(cantidad_pedidos,id_persona,codigo)VALUES(?,?,?);"; 
-            
-			
-	    PreparedStatement stmt1 = connect.getConnection().prepareStatement(query);
-            
-	    stmt1.setInt(1,cliente.getCantidad_pedidos());
-            stmt1.setInt(2,id_persona);
-            stmt1.setString(3,cliente.getCodigo());
-           
+                    String query="INSERT INTO cliente(cantidad_pedidos,id_persona,codigo,activo)VALUES(?,?,?,?);"; 
 	
-            stmt1.executeUpdate();
+                    PreparedStatement stmt1 = connect.getConnection().prepareStatement(query);
             
-            
-            return true;
-            
+                    stmt1.setInt(1,cliente.getCantidad_pedidos());
+                    stmt1.setInt(2,id_persona);
+                    stmt1.setString(3,cliente.getCodigo());
+                    stmt1.setString(4,"1");
+          
+                    stmt1.executeUpdate();
+                    
+                    connect.closeConnection();
+                    return 1;
+                }else{
+                    // cliente con el mismo dni ya registrado
+                    
+                    connect.closeConnection();
+                    return 2;
+                }
 
-            
          }catch(Exception ex){
              System.out.println(ex.getMessage());
-             return false;
+             return 0;
          }
          
      }
     
-    public boolean modificarCliente(cliente cliente){
-         try {
-            database connect = new database();
-            /*
-            cantidad_pedidos
-            doc_persona
-            id_documento
-            codigo_cliente
+    public int modificarCliente(cliente cliente){
+        /*codigos de resultado
+            0 - error al insertar en bd
+            1 - correcto
+            2 - persona no existe
             */
-            String query = "{CALL modificarCliente(?,?,?,?)}";
+         try {
+             
+            database connect = new database();
 
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
+            persona persona = null;
+            persona = controlador_persona.obtenerPersonaxDNI(cliente.getPersona().getNumeroDocumentoIdentidad());
             
-            stmt.setInt(1,cliente.getCantidad_pedidos());
-            stmt.setInt(2, cliente.getPersona().getNumeroDocumentoIdentidad());
-            stmt.setString(3, cliente.getPersona().getTipoDocumento());
-            stmt.setString(4, cliente.getCodigo());
-
-            stmt.executeUpdate();
+            if (persona != null){
+                
+                //modificar persona
+                
+                if (controlador_persona.modificarPersona(cliente.getPersona()) == true){
+                    //modificar cliente
+                       
+                    String query="UPDATE cliente\n" +
+                                "SET\n" +
+                                "codigo = ?\n" +
+                                "WHERE id_persona = ?;"; 
+	
+                    PreparedStatement stmt1 = connect.getConnection().prepareStatement(query);
+                    
+                    stmt1.setString(1,cliente.getCodigo());
+                    stmt1.setInt(2,persona.getId());
+                    
+          
+                    stmt1.executeUpdate();
+                    connect.closeConnection();    
+                    return 1;
+                    
+                }
+                
+                
+                connect.closeConnection(); 
+                return 0;
             
-            
-            
-            return true;
-            
-
+            }else{
+                //persona no existe
+                connect.closeConnection();
+                return 2;
+            }
             
          }catch(Exception ex){
              System.out.println(ex.getMessage());
-             return false;
+             return 0;
          }
          
      }
@@ -225,7 +293,10 @@ public class AdministrarClienteDA {
             /*
             codigo_cliente
             */
-            String query = "{CALL eliminarCliente(?)}";
+            String query = "UPDATE cliente\n" +
+                                "SET\n" +
+                                "activo = 0\n" +
+                                "WHERE id = ?;"; 
 
             CallableStatement stmt = connect.getConnection().prepareCall(query);
             

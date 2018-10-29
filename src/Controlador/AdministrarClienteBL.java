@@ -22,15 +22,19 @@ public class AdministrarClienteBL {
         return AdministrarClienteDA.obtenerCliente(id_cliente);
     }
     
-    public ArrayList<cliente> listarClientes(int numeroDocumentoIdentidad,String nombre, String apellidoPaterno, String apellidoMaterno){
+    public cliente obtenerClienteDNI(int dni){
+        return AdministrarClienteDA.obtenerClienteDNI(dni);
+    }
+    
+    public ArrayList<cliente> listarClientes(String numeroDocumentoIdentidad,String nombre, String apellidoPaterno, String apellidoMaterno){
         return AdministrarClienteDA.listarClientes(numeroDocumentoIdentidad, nombre, apellidoPaterno, apellidoMaterno);
     }
     
-    public boolean registrarCliente(cliente cliente){
+    public int registrarCliente(cliente cliente){
         return AdministrarClienteDA.registrarCliente(cliente);
     }
     
-    public boolean modificarCliente(cliente cliente){
+    public int modificarCliente(cliente cliente){
         return AdministrarClienteDA.modificarCliente(cliente);
     }
     

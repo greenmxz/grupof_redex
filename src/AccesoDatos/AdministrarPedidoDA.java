@@ -12,13 +12,14 @@ import Modelo.aeropuerto;
 import Modelo.pedido;
 import Controlador.AdministrarClienteBL;
 import Controlador.aeropuertoBL;
+import Controlador.generalBL;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.sql.*;
 /**
  *
  * @author Nowa
@@ -28,7 +29,7 @@ public class AdministrarPedidoDA {
     
     private AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
     private aeropuertoDA controlador_aeropuerto= new aeropuertoDA();
-    
+    private generalBL general = new generalBL();
     
     public java.sql.Date manejo_fechas(String s){
         //manejo de fechas;
@@ -46,17 +47,7 @@ public class AdministrarPedidoDA {
     
     public pedido obtenerPedido(int id_pedido){
 
-      try{
-          /*
-            database connect = new database();
-            String query = "{CALL obtenerPedido(?)}";
-
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            stmt.setInt(1, id_pedido);
-            
-            ResultSet rs = stmt.executeQuery();
-          */
-          
+      try{   
             database connect = new database();
             String query = "select * from pedido where id = " + id_pedido + ";";
             Statement sentencia= connect.getConnection().createStatement();
@@ -74,16 +65,16 @@ public class AdministrarPedidoDA {
              
                 pedido.setId(rs.getInt("id"));
                 pedido.setCodigo(rs.getString("codigo"));
-                pedido.setFecha_pedido(rs.getDate("fecha_registro"));
-                pedido.setFecha_entrega(rs.getDate("fecha_entrega"));
+                pedido.setFecha_pedido(rs.getDate("fecha_pedido"));
+                //pedido.setFecha_entrega(rs.getDate("fecha_entrega"));
                 pedido.setDescripcion(rs.getString("descripcion"));
                 pedido.setMonto(rs.getDouble("monto"));
-                pedido.setEstado("estado");
+                
+                pedido.setEstado("Enviado"); // <---POR CAMBIAR
+                
                 //obtener clientes
                 cliente_emisor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_emisor"));
                 cliente_receptor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_receptor"));
-                //
-                
                 pedido.setCliente_emisor(cliente_emisor);
                 pedido.setCliente_receptor(cliente_receptor);
                 
@@ -91,59 +82,145 @@ public class AdministrarPedidoDA {
                 aeropuerto_emisor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_emisor"));
                 aeropuerto_receptor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_receptor"));
                 aeropuerto_actual = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_actual"));
-                //
                 pedido.setAeropuerto_emisor(aeropuerto_emisor);
                 pedido.setAeropuerto_receptor(aeropuerto_receptor);
                 pedido.setAeropuerto_actual(aeropuerto_actual);
                 
-                
+                connect.closeConnection(); 
                 return pedido;
             }
+            connect.closeConnection(); 
             return null;
       }catch(Exception e){
-            System.out.println("ERROR "+e.getMessage());
+            System.out.println("ERROR obtenerPedido "+e.getMessage());
             return null;
       }  
     }
    
+    public pedido obtenerPedidoxCodigo(String codigo){
+
+      try{   
+            database connect = new database();
+            String query = "select * from pedido where codigo = '" + codigo + "';";
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            
+            
+            while (rs.next( )){
+                pedido pedido = new pedido();
+                
+                cliente cliente_emisor = new cliente();
+                cliente cliente_receptor = new cliente();
+                aeropuerto aeropuerto_emisor = new aeropuerto();
+                aeropuerto aeropuerto_receptor = new aeropuerto();
+                aeropuerto aeropuerto_actual = new aeropuerto();
+             
+                pedido.setId(rs.getInt("id"));
+                pedido.setCodigo(rs.getString("codigo"));
+                pedido.setFecha_pedido(rs.getDate("fecha_pedido"));
+                //pedido.setFecha_entrega(rs.getDate("fecha_entrega"));
+                pedido.setDescripcion(rs.getString("descripcion"));
+                pedido.setMonto(rs.getDouble("monto"));
+                
+                pedido.setEstado("Enviado"); // <---POR CAMBIAR
+                
+                //obtener clientes
+                cliente_emisor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_emisor"));
+                cliente_receptor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_receptor"));
+                pedido.setCliente_emisor(cliente_emisor);
+                pedido.setCliente_receptor(cliente_receptor);
+                
+                //obtener aeropuertos
+                aeropuerto_emisor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_emisor"));
+                aeropuerto_receptor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_receptor"));
+                aeropuerto_actual = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_actual"));
+                pedido.setAeropuerto_emisor(aeropuerto_emisor);
+                pedido.setAeropuerto_receptor(aeropuerto_receptor);
+                pedido.setAeropuerto_actual(aeropuerto_actual);
+                
+                connect.closeConnection(); 
+                return pedido;
+            }
+            connect.closeConnection(); 
+            return null;
+      }catch(Exception e){
+            System.out.println("ERROR obtenerPedidoxCodigo "+e.getMessage());
+            return null;
+      }  
+    }
     
-    
-    public ArrayList<pedido> listarPedidos(String codigo, String fecha_entrega, String fecha_registro){ 
+    public ArrayList<pedido> listarPedidos(String codigo, String id_aeropuerto_origen, String id_aeropuerto_destino, String id_cliente_emisor, String id_cliente_receptor, String id_estado, String fecha_i, String fecha_f){ 
         try {
             ArrayList<pedido> listPedidos = new ArrayList<>();
-            SimpleDateFormat  sdf;
-            String            s_fecha_entrega, s_fecha_registro;
-            java.sql.Date     d_fecha_entrega, d_fecha_registro;
-            sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+            database connect = new database();
+            String query = "select pedido.id, pedido.codigo, pedido.fecha_pedido, pedido.descripcion, pedido.monto, pedido.fecha_entrega, pedido.id_estado,\n" +
+                            "aero_emisor.id as id_aeropuerto_emisor, aero_emisor.nombre as aeropuerto_emisor, aero_emisor.codigo as aeropuerto_emisor_codigo,\n" +
+                            "aero_receptor.id as id_aeropuerto_receptor, aero_receptor.nombre as aeropuerto_receptor, aero_receptor.codigo as aeropuerto_receptor_codigo,\n" +
+                            "aero_actual.id as id_aeropuerto_actual, aero_actual.nombre as aeropuerto_actual, aero_actual.codigo as aeropuerto_actual_codigo,\n" +
+                            "cliente_emisor.id as id_cliente_emisor, cliente_emisor.codigo as codigo_cl_emisor,\n" +
+                            "persona_emisor.numero_documento_identidad as cliente_emisor_dni,\n" +
+                            "cliente_receptor.id as id_cliente_receptor, cliente_receptor.codigo as codigo_cl_receptor,\n" +
+                            "persona_receptor.numero_documento_identidad as cliente_receptor_dni\n" +
+                            "from pedido\n" +
+                            "inner join aeropuerto as aero_emisor on pedido.id_aeropuerto_emisor = aero_emisor.id\n" +
+                            "inner join aeropuerto as aero_receptor on pedido.id_aeropuerto_receptor = aero_receptor.id\n" +
+                            "inner join aeropuerto as aero_actual on pedido.id_aeropuerto_actual = aero_actual.id\n" +
+                            "inner join cliente as cliente_emisor on pedido.id_cliente_emisor = cliente_emisor.id\n" +
+                            "inner join persona as persona_emisor on cliente_emisor.id_persona = persona_emisor.id\n" +
+                            "inner join cliente as cliente_receptor on pedido.id_cliente_receptor = cliente_receptor.id\n" +
+                            "inner join persona as persona_receptor on cliente_receptor.id_persona = persona_receptor.id\n" +
+                            "where pedido.activo = 1";
             
-            if(fecha_entrega != ""){
-                s_fecha_entrega = sdf.format(fecha_entrega);
-                d_fecha_entrega = manejo_fechas(s_fecha_entrega);
-            }else{
+            //FILTROS
+            boolean primero = true;
+            if (!codigo.equals("")||!id_aeropuerto_origen.equals("")||!id_aeropuerto_destino.equals("")
+                ||!id_cliente_emisor.equals("")||!id_cliente_receptor.equals("")
+                ||!id_estado.equals("")||!fecha_i.equals("")||!fecha_f.equals("")){
                 
+                query += " and ";
+                
+                if (!codigo.equals("")){
+                    query += " pedido.codigo = '" + codigo + "' ";
+                    primero = false;
+                }
+                
+                if (!id_aeropuerto_origen.equals("")){
+                    if(!primero) query += " and ";
+                    query += " pedido.id_aeropuerto_emisor = '" + id_aeropuerto_origen + "' ";
+                    primero = false;
+                }
+                
+                if (!id_aeropuerto_origen.equals("")){
+                    if(!primero) query += " and ";
+                    query += " pedido.id_aeropuerto_receptor = '" + id_aeropuerto_destino + "' ";
+                    primero = false;
+                }
+                
+                if (!id_cliente_emisor.equals("")){
+                    if(!primero) query += " and ";
+                    query += " pedido.id_cliente_emisor = '" + id_cliente_emisor + "' ";
+                    primero = false;
+                }
+                
+                if (!id_cliente_receptor.equals("")){
+                    if(!primero) query += " and ";
+                    query += " pedido.id_cliente_receptor = '" + id_cliente_receptor + "' ";
+                    primero = false;
+                }
+                
+                if (!id_cliente_receptor.equals("")){
+                    if(!primero) query += " and ";
+                    query += " pedido.id_estado = '" + id_estado + "' ";
+                    primero = false;
+                }
             }
             
-            if(fecha_registro != ""){
-                s_fecha_registro = sdf.format(fecha_registro);
-                d_fecha_registro = manejo_fechas(s_fecha_registro);
-            }else{
-                
-            }
-
-            /*NO BORRAR
-            database connect = new database();
-            String query = "{CALL listarPedidos(?,?,?,?)}";
-
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
+            query += ";";
             
-            stmt.setString(1,codigo);
-            stmt.setDate(2, d_fecha_entrega);
-            stmt.setDate(4, d_fecha_registro);
             
-            ResultSet rs = stmt.executeQuery();
-            */
-            database connect = new database();
-            String query = "select * from pedido;";
+            
+            //////
+            System.out.println("query => " + query);
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
@@ -157,16 +234,16 @@ public class AdministrarPedidoDA {
              
                 pedido.setId(rs.getInt("id"));
                 pedido.setCodigo(rs.getString("codigo"));
-                pedido.setFecha_pedido(rs.getDate("fecha_registro"));
-                pedido.setFecha_entrega(rs.getDate("fecha_entrega"));
+                pedido.setFecha_pedido(rs.getDate("fecha_pedido"));
+                //pedido.setFecha_entrega(rs.getDate("fecha_entrega"));
                 pedido.setDescripcion(rs.getString("descripcion"));
                 pedido.setMonto(rs.getDouble("monto"));
-                pedido.setEstado("estado");
+                
+                pedido.setEstado("Enviado"); // <---POR CAMBIAR
+                
                 //obtener clientes
                 cliente_emisor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_emisor"));
                 cliente_receptor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_receptor"));
-                //
-                
                 pedido.setCliente_emisor(cliente_emisor);
                 pedido.setCliente_receptor(cliente_receptor);
                 
@@ -174,8 +251,6 @@ public class AdministrarPedidoDA {
                 aeropuerto_emisor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_emisor"));
                 aeropuerto_receptor = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_receptor"));
                 aeropuerto_actual = controlador_aeropuerto.obtenerAeropuerto(rs.getInt("id_aeropuerto_actual"));
-                //
-                
                 pedido.setAeropuerto_emisor(aeropuerto_emisor);
                 pedido.setAeropuerto_receptor(aeropuerto_receptor);
                 pedido.setAeropuerto_actual(aeropuerto_actual);
@@ -188,7 +263,7 @@ public class AdministrarPedidoDA {
             System.out.println("Cantidad de resultados = " + listPedidos.size());
             return listPedidos;
         }catch(Exception e){
-            System.out.println("ERROR "+e.getMessage());
+            System.out.println("ERROR en listarPedidos "+e.getMessage());
             return null;
         }
     }
@@ -208,44 +283,44 @@ public class AdministrarPedidoDA {
         private aeropuerto aeropuerto_receptor;
         private aeropuerto aeropuerto_actual;
         private String estado;
-        */
+        */          
             database connect = new database();
-            String query = "{CALL registrarPedido(?,?,?,?,?,?,?,?,?,?,?)}";
-            
-            SimpleDateFormat  sdf;
-            String            s_fecha_entrega, s_fecha_pedido;
-            java.sql.Date     d_fecha_entrega, d_fecha_pedido;
-            
-            sdf = new SimpleDateFormat("yyyy-MM-dd"); 
 
-            s_fecha_entrega = sdf.format(pedido.getFecha_entrega());
-            s_fecha_pedido = sdf.format(pedido.getFecha_pedido());
-            d_fecha_entrega = manejo_fechas(s_fecha_entrega);
-            d_fecha_pedido = manejo_fechas(s_fecha_pedido);
+            String query="INSERT INTO pedido\n" +
+                        "(codigo,\n" +
+                        "fecha_pedido,\n" +
+                        "descripcion,\n" +
+                        "monto,\n" +
+                        "id_cliente_emisor,\n" +
+                        "id_aeropuerto_emisor,\n" +
+                        "id_cliente_receptor,\n" +
+                        "id_aeropuerto_receptor,\n" +
+                        "id_aeropuerto_actual,\n" +
+                        "id_estado,activo)\n" +
+                        "VALUES\n" +
+                        "(?,?,?,?,?,?,?,?,?,?,?);"; 
+	
+                    PreparedStatement stmt = connect.getConnection().prepareStatement(query);
+                           
+                    stmt.setString(1, pedido.getCodigo());
+                    stmt.setDate(2, general.manejo_fechas_24hs(pedido.getFecha_pedido()));
+                    stmt.setString(3, pedido.getDescripcion());
+                    stmt.setDouble(4, pedido.getMonto());
+                    stmt.setInt(5, pedido.getCliente_emisor().getId());
+                    stmt.setInt(6, pedido.getAeropuerto_emisor().getId());
+                    stmt.setInt(7, pedido.getCliente_receptor().getId());
+                    stmt.setInt(8, pedido.getAeropuerto_receptor().getId());
+                    stmt.setInt(9, pedido.getAeropuerto_actual().getId());
+                    stmt.setInt(10, general.obtenerIdGeneral("estado_pedido", pedido.getEstado()));
+                    stmt.setString(11, "1");
+                    stmt.executeUpdate();
+                    
+            connect.closeConnection();
 
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            
-            
-            stmt.setString(1, pedido.getCodigo());
-            stmt.setDate(2, d_fecha_pedido);
-            stmt.setDate(3, d_fecha_entrega);
-            stmt.setString(4, pedido.getDescripcion());
-            stmt.setDouble(5, pedido.getMonto());
-            stmt.setInt(6,pedido.getCliente_emisor().getId());
-            stmt.setInt(7, pedido.getAeropuerto_emisor().getId());
-            stmt.setInt(8,pedido.getCliente_receptor().getId());
-            stmt.setInt(9, pedido.getAeropuerto_receptor().getId());
-            stmt.setInt(10, pedido.getAeropuerto_actual().getId());
-            stmt.setString(11, pedido.getEstado());
-            
-            stmt.executeUpdate();
-            
-            
-            
             return true;
         
         }catch(Exception ex){
-             System.out.println(ex.getMessage());
+             System.out.println("ERROR en registrarPedido " + ex.getMessage());
              return false;
          }
         
@@ -255,38 +330,39 @@ public class AdministrarPedidoDA {
      public boolean modificarPedido(pedido pedido){
         try{
 
-            database connect = new database();
-            String query = "{CALL modificarPedido(?,?,?,?,?,?,?,?,?,?,?)}";
-            
-            SimpleDateFormat  sdf;
-            String            s_fecha_entrega, s_fecha_pedido;
-            java.sql.Date     d_fecha_entrega, d_fecha_pedido;
-            
-            sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-            s_fecha_entrega = sdf.format(pedido.getFecha_entrega());
-            s_fecha_pedido = sdf.format(pedido.getFecha_pedido());
-            d_fecha_entrega = manejo_fechas(s_fecha_entrega);
-            d_fecha_pedido = manejo_fechas(s_fecha_pedido);
+             database connect = new database();
 
-            CallableStatement stmt = connect.getConnection().prepareCall(query);
-            
-            
-            stmt.setString(1, pedido.getCodigo());
-            stmt.setDate(2, d_fecha_pedido);
-            stmt.setDate(3, d_fecha_entrega);
-            stmt.setString(4, pedido.getDescripcion());
-            stmt.setDouble(5, pedido.getMonto());
-            stmt.setInt(6,pedido.getCliente_emisor().getId());
-            stmt.setInt(7, pedido.getAeropuerto_emisor().getId());
-            stmt.setInt(8,pedido.getCliente_receptor().getId());
-            stmt.setInt(9, pedido.getAeropuerto_receptor().getId());
-            stmt.setInt(10, pedido.getAeropuerto_actual().getId());
-            stmt.setString(11, pedido.getEstado());
-            
-            stmt.executeUpdate();
-            
-            
-            
+            String query="UPDATE pedido\n" +
+                        "SET\n" +
+                        "codigo = ?,\n" +
+                        "fecha_pedido = ?,\n" +
+                        "descripcion = ?,\n" +
+                        "monto = ?,\n" +
+                        "id_cliente_emisor = ?,\n" +
+                        "id_aeropuerto_emisor = ?,\n" +
+                        "id_cliente_receptor = ?,\n" +
+                        "id_aeropuerto_receptor = ?,\n" +
+                        "id_aeropuerto_actual = ?,\n" +
+                        "id_estado = ?\n" +
+                        "WHERE id = ?;"; 
+                        
+                    PreparedStatement stmt = connect.getConnection().prepareStatement(query);
+                           
+                    stmt.setString(1, pedido.getCodigo());
+                    stmt.setDate(2, general.manejo_fechas_24hs(pedido.getFecha_pedido()));
+                    stmt.setString(3, pedido.getDescripcion());
+                    stmt.setDouble(4, pedido.getMonto());
+                    stmt.setInt(5, pedido.getCliente_emisor().getId());
+                    stmt.setInt(6, pedido.getAeropuerto_emisor().getId());
+                    stmt.setInt(7, pedido.getCliente_receptor().getId());
+                    stmt.setInt(8, pedido.getAeropuerto_receptor().getId());
+                    stmt.setInt(9, pedido.getAeropuerto_actual().getId());
+                    stmt.setInt(10, general.obtenerIdGeneral("estado_pedido", pedido.getEstado()));
+                    stmt.setInt(11, pedido.getId());
+                    System.out.println("query => " + query);
+                    stmt.executeUpdate();
+                    
+            connect.closeConnection(); 
             return true;
         
         }catch(Exception ex){
@@ -301,18 +377,17 @@ public class AdministrarPedidoDA {
         try{
 
             database connect = new database();
-            String query = "{CALL eliminarPedido(?)}";
+            String query = "UPDATE pedido\n" +
+                        "SET\n" +
+                        "activo = 0\n" +
+                        "WHERE id = ?;";
             
-
             CallableStatement stmt = connect.getConnection().prepareCall(query);
-            
-            
+                   
             stmt.setInt(1, id_pedido);
             
             stmt.executeUpdate();
-            
-            
-            
+               
             return true;
         
         }catch(Exception ex){
