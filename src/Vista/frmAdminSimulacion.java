@@ -5,6 +5,7 @@
  */
 package Vista;
 
+import com.bbn.openmap.PropertyHandler;
 import com.bbn.openmap.app.OpenMap;
 import com.bbn.openmap.gui.OpenMapFrame;
 import com.bbn.openmap.layer.shape.ShapeLayer;
