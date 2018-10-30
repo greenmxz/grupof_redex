@@ -67,6 +67,8 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         btnVuelos = new Especial.RSButtonMetro();
         btnPaquetes = new Especial.RSButtonMetro();
         btnSimulacion = new Especial.RSButtonMetro();
+        btnDetermUnit = new Especial.RSButtonMetro();
+        jSeparator1 = new javax.swing.JSeparator();
         panelPrincipal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -141,14 +143,30 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         });
         panelMenu.add(btnPaquetes, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 65, 140, 30));
 
-        btnSimulacion.setText("Simulación");
+        btnSimulacion.setText("Simulación (amp.)");
         btnSimulacion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSimulacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSimulacionActionPerformed(evt);
             }
         });
-        panelMenu.add(btnSimulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 95, 140, 30));
+        panelMenu.add(btnSimulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 135, 140, 30));
+
+        btnDetermUnit.setText("Generación (unit.)");
+        btnDetermUnit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnDetermUnit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetermUnitActionPerformed(evt);
+            }
+        });
+        panelMenu.add(btnDetermUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 105, 140, 30));
+
+        jSeparator1.setBackground(new java.awt.Color(1, 58, 223));
+        jSeparator1.setForeground(new java.awt.Color(1, 58, 223));
+        jSeparator1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jSeparator1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jSeparator1.setEnabled(false);
+        panelMenu.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 100, 140, 3));
 
         panelFondo.add(panelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 150, 500));
 
@@ -203,7 +221,6 @@ public class frmMenuProvisional extends javax.swing.JFrame {
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         int posicion = this.panelMenu.getX();
-        System.out.println(this.panelMenu.getX());
         if(posicion>-1)
             Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);            
         else
@@ -215,6 +232,12 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         if(this.panelMenu.getX()>-1)
             Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu); 
     }//GEN-LAST:event_btnSimulacionActionPerformed
+
+    private void btnDetermUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetermUnitActionPerformed
+        new CambiarPanel(panelPrincipal, new frmGeneracionRuta());
+        if(this.panelMenu.getX()>-1)
+            Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);   
+    }//GEN-LAST:event_btnDetermUnitActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -251,12 +274,14 @@ public class frmMenuProvisional extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Especial.RSButtonMetro btnAeropuertos;
     private Especial.RSButtonMetro btnCerrarSesion;
+    private Especial.RSButtonMetro btnDetermUnit;
     private javax.swing.JButton btnMenu;
     private Especial.RSButtonMetro btnPaquetes;
     private Especial.RSButtonMetro btnSimulacion;
     private Especial.RSButtonMetro btnVuelos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JPanel panelInfoUsuario;
     private javax.swing.JPanel panelMenu;
