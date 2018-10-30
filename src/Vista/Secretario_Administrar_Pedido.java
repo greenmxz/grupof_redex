@@ -264,9 +264,62 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
-//        trycatch(Exception e){
-//            System.out.println("ERROR en FILTRAR pedido "+e.getMessage());
-//        }
+        try{
+           String codigo= "", id_aeropuerto_origen= "", id_aeropuerto_destino= "", id_cliente_emisor= "", id_cliente_receptor= "", id_estado= "", fecha_i= "", fecha_f = "";
+
+           cliente cliente_emisor = null, cliente_receptor = null;
+           
+           if (!txtCodigo.getText().equals("")){
+               codigo = txtCodigo.getText();
+           }
+           
+           if (!txtDniEmisor.getText().equals("")){
+                cliente_emisor = controlador_cliente.obtenerClienteDNI(Integer.parseInt(txtDniEmisor.getText()));
+                
+                if(cliente_emisor != null){
+                    System.out.println("CLIENTE e dni ->" + cliente_emisor.getPersona().getNumeroDocumentoIdentidad());
+                    id_cliente_emisor = Integer.toString(cliente_emisor.getId());
+                }else{
+                    JOptionPane.showMessageDialog(null, 
+                                "El cliente emisor ingresado no existe", 
+                                "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+           
+            if (!txtDniReceptor.getText().equals("")){
+                cliente_receptor = controlador_cliente.obtenerClienteDNI(Integer.parseInt(txtDniReceptor.getText()));
+
+                if(cliente_receptor != null){
+                    System.out.println("CLIENTE r dni ->" + cliente_receptor.getPersona().getNumeroDocumentoIdentidad());
+                    id_cliente_receptor = Integer.toString(cliente_receptor.getId());
+                }else{
+                    JOptionPane.showMessageDialog(null, 
+                                "El cliente receptor ingresado no existe", 
+                                "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            
+             //AEROPUERTOS
+            int index = cboOrigen.getSelectedIndex();
+            //DefaultComboBoxModel modelo1 = (DefaultComboBoxModel) jComboBox1.getModel();           
+            id_aeropuerto_origen = Integer.toString(this.listAero.get(index).getId());
+
+            index = cboDestino.getSelectedIndex();
+            //DefaultComboBoxModel modelo2 = (DefaultComboBoxModel) jComboBox2.getModel();           
+            id_aeropuerto_destino = Integer.toString(this.listAero.get(index).getId());
+           
+           //ESTADOS
+            index = cboEstado.getSelectedIndex();
+            //DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) jComboBox3.getModel();           
+            id_estado = Integer.toString(this.listEstado.get(index).getId_tabla_general());
+            
+            ArrayList<pedido> lista_pedidos = controlador_pedido.listarPedidos(codigo, id_aeropuerto_origen, id_aeropuerto_destino, id_cliente_emisor, id_cliente_receptor, id_estado, fecha_i, fecha_f);
+
+            inicializar_Tabla(lista_pedidos);
+            
+       }catch(Exception e){
+           System.out.println("ERROR en FILTRAR pedido "+e.getMessage());
+       }
     }//GEN-LAST:event_btnFiltrarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
