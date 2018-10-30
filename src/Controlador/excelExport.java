@@ -22,9 +22,10 @@ import Modelo.*;
 import java.text.SimpleDateFormat;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import Modelo.aeropuertov2;
-import javax.swing.JOptionPane;
 
 public class excelExport {
+    private static final Logger LOGGER = Logger.getLogger("newexcel.ExcelOOXML");
+    
     public void excelExportAeropuertos(ArrayList<aeropuertov2> lstAeropuertos){
         // Creamos el archivo donde almacenaremos la hoja
         // de calculo, recuerde usar la extension correcta,
@@ -92,19 +93,13 @@ public class excelExport {
             
             // Cerramos el libro para concluir operaciones
             workbook.close();
-            JOptionPane.showMessageDialog(null,"Archivo creado existosamente en "+
-                    archivo.getAbsolutePath()+".\nADVERTENCIA: Para poder abrirlo"+
-                    " deberá cerrar el sistema.",
-                    "Exportación exitosa", JOptionPane.INFORMATION_MESSAGE);
+            
+            LOGGER.log(Level.INFO, "Archivo creado existosamente en {0}", archivo.getAbsolutePath());
             
         } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null,"Archivo no localizable en sistema de archivos.\n"
-                    +"Por favor, contacte al administrador para solucionar el problema",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            LOGGER.log(Level.SEVERE, "Archivo no localizable en sistema de archivos");
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null,"Ha ocurrido un error de entrada/salida.\n"
-                    +"Por favor, contacte al administrador para solucionar el problema",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            LOGGER.log(Level.SEVERE, "Error de entrada/salida");
         }
     }
     
@@ -175,19 +170,13 @@ public class excelExport {
             
             // Cerramos el libro para concluir operaciones
             workbook.close();
-            JOptionPane.showMessageDialog(null,"Archivo creado existosamente en "+
-                    archivo.getAbsolutePath()+".\nADVERTENCIA: Para poder abrirlo"+
-                    " deberá cerrar el sistema.",
-                    "Exportación exitosa", JOptionPane.INFORMATION_MESSAGE);
+            
+            LOGGER.log(Level.INFO, "Archivo creado existosamente en {0}", archivo.getAbsolutePath());
             
         } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null,"Archivo no localizable en sistema de archivos.\n"
-                    +"Por favor, contacte al administrador para solucionar el problema",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            LOGGER.log(Level.SEVERE, "Archivo no localizable en sistema de archivos");
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null,"Ha ocurrido un error de entrada/salida.\n"
-                    +"Por favor, contacte al administrador para solucionar el problema",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            LOGGER.log(Level.SEVERE, "Error de entrada/salida");
         }
     }
     
@@ -260,19 +249,13 @@ public class excelExport {
             
             // Cerramos el libro para concluir operaciones
             workbook.close();
-            JOptionPane.showMessageDialog(null,"Archivo creado existosamente en "+
-                    archivo.getAbsolutePath()+".\nADVERTENCIA: Para poder abrirlo"+
-                    " deberá cerrar el sistema.",
-                    "Exportación exitosa", JOptionPane.INFORMATION_MESSAGE);
+            
+            LOGGER.log(Level.INFO, "Archivo creado existosamente en {0}", archivo.getAbsolutePath());
             
         } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null,"Archivo no localizable en sistema de archivos.\n"
-                    +"Por favor, contacte al administrador para solucionar el problema",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            LOGGER.log(Level.SEVERE, "Archivo no localizable en sistema de archivos");
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null,"Ha ocurrido un error de entrada/salida.\n"
-                    +"Por favor, contacte al administrador para solucionar el problema",
-                    "Error", JOptionPane.INFORMATION_MESSAGE);
+            LOGGER.log(Level.SEVERE, "Error de entrada/salida");
         }
     }
 }
