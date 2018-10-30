@@ -60,6 +60,7 @@ public class Redex extends Application {
         /*Vista.frmReporteAeropuerto f = new Vista.frmReporteAeropuerto();
         f.show();*/
         new Vista.frmMenuProvisional().setVisible(true);
+        new Vista.frmMenuSecretary().setVisible(true);
     }
     
 }
