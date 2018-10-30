@@ -73,9 +73,9 @@ public class menuTest extends javax.swing.JFrame {
 
     private void crearCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearCuentaActionPerformed
         // TODO add your handling code here:
-        this.dispose();
-        frmCrearCuenta cuenta = new frmCrearCuenta();
-        cuenta.show();
+//        this.dispose();
+//        frmCreaCuenta cuenta = new frmCreaCuenta();
+//        cuenta.show();
     }//GEN-LAST:event_crearCuentaActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -83,9 +83,9 @@ public class menuTest extends javax.swing.JFrame {
         
         //MenuSecretario
         
-        this.dispose();
-        Secretario_Menu secretario_menu = new Secretario_Menu();
-        secretario_menu.show();
+//        this.dispose();
+//        Secretario_Menu secretario_menu = new Secretario_Menu();
+//        secretario_menu.show();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

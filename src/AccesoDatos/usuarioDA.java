@@ -11,6 +11,7 @@ import Modelo.persona;
 import Modelo.usuario;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 
 /**
@@ -139,4 +140,34 @@ public class usuarioDA {
          }
          
      }
+    public ArrayList<usuario> obtenerUsuarios(){
+        try{
+            database connection = new database();
+             String query="select *,u.codigo as 'nombre_usuario',p.nombre as 'nombre_persona',r.nombre as 'rol' from usuario as u "
+                     + "inner join persona as p on u.id_persona=p.id "
+                     + "inner join rol as r on r.id=u.id_rol";
+            Statement stmt = connection.getConnection().createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            ArrayList<usuario> lista = new ArrayList<>();
+            
+            while (rs.next( )){
+                usuario usuario = new usuario();
+                persona persona = new persona();     
+                usuario.setCodigo(rs.getString("nombre_usuario"));
+                usuario.setPassword(rs.getString("password"));
+                usuario.setRol(rs.getString("rol"));
+                persona.setNombre(rs.getString("nombre_persona"));
+                persona.setApellidoPaterno(rs.getString("apellido_paterno"));
+                persona.setApellidoMaterno(rs.getString("apellido_materno"));
+                persona.setCorreo((rs.getString("correo")));
+                usuario.setPersona(persona);
+                lista.add(usuario);
+            }
+            connection.getConnection().close();
+            return lista;
+        }catch(Exception ex){
+            System.out.println("Error: "+ex.getMessage());
+            return null;
+        }
+    }
 }

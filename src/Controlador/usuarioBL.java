@@ -7,6 +7,7 @@ package Controlador;
 
 import AccesoDatos.usuarioDA;
 import Modelo.usuario;
+import java.util.ArrayList;
 
 /**
  *
@@ -23,5 +24,8 @@ public class usuarioBL {
     
     public boolean crearUsuario(usuario usuario){
         return usuarioDA.registrarUsuario(usuario);
+    }
+    public ArrayList<usuario> obtenerUsuarios(){
+        return usuarioDA.obtenerUsuarios();
     }
 }
