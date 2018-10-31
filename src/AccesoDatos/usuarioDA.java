@@ -30,6 +30,7 @@ public class usuarioDA {
             
             ResultSet rs = stmt.executeQuery();
             while (rs.next( )){
+                System.out.println("Äqui"+ rs.getInt("id"));
                usuario usuario= new usuario();
                if (rs.getBoolean("encontrado")){                     
                     persona persona= new persona();

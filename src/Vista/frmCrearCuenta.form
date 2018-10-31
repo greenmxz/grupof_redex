@@ -272,8 +272,6 @@
                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="numeroDocumentoKeyTyped"/>
               </Events>
             </Component>
-            <Component class="com.github.lgooddatepicker.components.DatePicker" name="fechaNac">
-            </Component>
             <Component class="javax.swing.JLabel" name="jLabel11">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Ciudad:"/>
@@ -307,6 +305,8 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="correo">
+            </Component>
+            <Component class="com.github.lgooddatepicker.components.DatePicker" name="fechaNac">
             </Component>
           </SubComponents>
         </Container>
