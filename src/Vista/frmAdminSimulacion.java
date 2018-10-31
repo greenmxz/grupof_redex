@@ -5,19 +5,64 @@
  */
 package Vista;
 
+import com.bbn.openmap.PropertyHandler;
+import com.bbn.openmap.app.OpenMap;
+import com.bbn.openmap.gui.OpenMapFrame;
+import com.bbn.openmap.layer.shape.ShapeLayer;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Jorge F
  */
-public class frmAdminSimulacion extends javax.swing.JFrame {
+public class frmAdminSimulacion extends OpenMapFrame {
 
     /**
      * Creates new form frmAdminSimulacion
      */
     public frmAdminSimulacion() {
+        super("Simple Map");
         initComponents();
+        initMap();
     }
 
+    private void initMap(){
+        Properties shapeLayerProps = new Properties();
+        /*InputStream is = null;
+        try {
+           is = new FileInputStream("Properties.properties");
+           shapeLayerProps.load(is);
+        } catch (FileNotFoundException ex) {
+           Logger.getLogger(OpenMap.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+           Logger.getLogger(OpenMap.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+           if (is != null) {
+              try {
+                 is.close();
+              } catch (IOException ex) {
+                Logger.getLogger(OpenMap.class.getName()).log(Level.SEVERE, null, ex);
+              }
+           }
+        }*/
+          shapeLayerProps.put("prettyName", "Political Solid");
+          shapeLayerProps.put("lineColor", "000000");
+          shapeLayerProps.put("fillColor", "BDDE83");
+          shapeLayerProps.put("shapeFile", "resources/map/shape/dcwpo-browse.shp");
+          shapeLayerProps.put("spatialIndex", "resources/map/shape/dcwpo-browse.ssx");
+
+          ShapeLayer shapeLayer = new ShapeLayer();
+          shapeLayer.setProperties(shapeLayerProps);
+
+          // Add the political layer to the map
+          mapPanel.getMapBean().add(shapeLayer);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,18 +72,10 @@ public class frmAdminSimulacion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        mapPanel = new com.bbn.openmap.gui.BasicMapPanel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().add(mapPanel, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -79,5 +116,6 @@ public class frmAdminSimulacion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.bbn.openmap.gui.BasicMapPanel mapPanel;
     // End of variables declaration//GEN-END:variables
 }
