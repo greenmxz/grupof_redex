@@ -376,7 +376,7 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        new Vista.Secretario_Crear_Pedido(parent,true,tblPedidos);
+        new Vista.Secretario_Crear_Pedido(parent,true,tblPedidos).setVisible(true);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed

@@ -64,6 +64,8 @@ public class frmAdminSimulacion extends OpenMapFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        openMap1 = new Vista.OpenMap();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         pack();
@@ -96,5 +98,6 @@ public class frmAdminSimulacion extends OpenMapFrame {
     
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private Vista.OpenMap openMap1;
     // End of variables declaration//GEN-END:variables
 }

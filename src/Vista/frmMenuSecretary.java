@@ -170,7 +170,8 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null,"Gracias por su visita.\n"+
                 hora,"Gracias",
                 JOptionPane.INFORMATION_MESSAGE);
-        System.exit(0);
+        new Login().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
