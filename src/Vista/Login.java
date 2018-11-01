@@ -281,8 +281,19 @@ public class Login extends javax.swing.JFrame {
                 if (usuarioLogin.isEncontrado()){
                     JOptionPane.showMessageDialog(null, "Datos ingresados correctos");
                     this.dispose();
-                    menuTest menu = new menuTest();
-                    menu.show();
+                    System.out.println("ÜSUARIO "+ usuarioLogin.getRol());
+                     
+                    if (usuarioLogin.getRol().equals("gerente")){
+                        frmMenuProvisional menuGerente = new frmMenuProvisional();
+                    }
+                    if (usuarioLogin.getRol().equals("secretario")){
+                        frmMenuSecretary menuSecre= new frmMenuSecretary();
+                    }
+                    if (usuarioLogin.getRol().equals("administrador")){
+                        frmMenuAdmin menuAdmin = new frmMenuAdmin();
+                    }
+//                    menuTest menu = new menuTest();
+//                    menu.show();
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Datos ingresados incorrectos\n"

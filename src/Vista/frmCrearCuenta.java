@@ -6,6 +6,10 @@ import Modelo.*;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 import static java.lang.Integer.parseInt;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.*;
@@ -45,7 +49,7 @@ public class frmCrearCuenta extends javax.swing.JDialog {
     
     private boolean validarDatos(){
         if(this.nombrePersona.getText().length()>0 && this.apellidoPaterno.getText().length()>0 && 
-           this.apellidoMaterno.getText().length()>0 && this.fechaNac.getText().length()>0 &&
+           this.apellidoMaterno.getText().length()>0 && this.fechaNac.getDate()!= null &&
            this.tipoDocumento.getSelectedItem()!=null && this.numeroDocumento!=null&&
            this.nombreUsuario.getText().length()>0 && this.contraseña.getText().length()>0&&
            this.contraseñaRepetir.getText().length()>0 &&
@@ -79,13 +83,13 @@ public class frmCrearCuenta extends javax.swing.JDialog {
         tipoDocumento = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         numeroDocumento = new javax.swing.JTextField();
-        fechaNac = new com.github.lgooddatepicker.components.DatePicker();
         jLabel11 = new javax.swing.JLabel();
         ciudad = new javax.swing.JComboBox<>();
         direccion = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         correo = new javax.swing.JTextField();
+        fechaNac = new com.github.lgooddatepicker.components.DatePicker();
         jPanel2 = new javax.swing.JPanel();
         nombreUsuario = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -440,8 +444,11 @@ public class frmCrearCuenta extends javax.swing.JDialog {
 
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
         // TODO add your handling code here:
+        try {
+        
         if (validarDatos()){
             JOptionPane.showMessageDialog(this, "Todos los datos fueron digitados");
+            System.out.println("acaaaa "+ fechaNac.getDate() + " " + fechaNac.getText());
             if (validarContraseña()){
                 usuario usuarioNuevo = new usuario();
                 persona personaNueva = new persona();
@@ -453,7 +460,23 @@ public class frmCrearCuenta extends javax.swing.JDialog {
                 personaNueva.setApellidoPaterno(this.apellidoPaterno.getText());
                 personaNueva.setApellidoMaterno(this.apellidoMaterno.getText());
                 personaNueva.setCorreo(this.correo.getText());
-                personaNueva.setFechaNacimiento(new Date(this.fechaNac.getText()));
+//                
+//                SimpleDateFormat  sdf;
+//                String            s;
+//                sdf = new SimpleDateFormat("yyyy-MM-dd");  // Or whatever format you need
+//                s = sdf.format(this.fechaNac.getDate()); 
+//                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//                java.util.Date fd =   formatter.parse(s);
+//                java.sql.Date sqlDate = new java.sql.Date(fd.getTime());
+                
+//                LocalDate localDate = LocalDate.now();//For reference
+//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-LLLL-dd");
+//                String formattedString = this.fechaNac.getDate().format(formatter);
+//                
+//                System.out.println("AQI "+formattedString);
+//                
+//                personaNueva.setFechaNacimiento( new Date(formattedString) );
+
                 personaNueva.setNumeroDocumentoIdentidad(parseInt(this.numeroDocumento.getText()));
                 personaNueva.setDireccion(direccion.getText());
                 personaNueva.setCiudad(ciudad.getSelectedItem().toString());
@@ -477,6 +500,9 @@ public class frmCrearCuenta extends javax.swing.JDialog {
             Date d = new Date(this.fechaNac.getText());
             System.out.println("date "+d);
             JOptionPane.showMessageDialog(this, "Debe de llenar todos los datos");
+        }
+        }catch(Exception ex){
+            System.out.println("Error " + ex.getMessage());
         }
     }//GEN-LAST:event_registrarActionPerformed
 
