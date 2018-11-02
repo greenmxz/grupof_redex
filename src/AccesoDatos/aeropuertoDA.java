@@ -70,11 +70,6 @@ public class aeropuertoDA {
         }
     }
     
-    
-    
-    
-    
-    
     public aeropuerto obtenerAeropuertoxCiudad(String nombre_ciudad){
         try {
 
@@ -156,6 +151,17 @@ public class aeropuertoDA {
         }catch(Exception e){
             System.out.println("ERROR listaAeropuertos "+e.getMessage());
             return null;
+        }
+    }
+    
+    public void registrarAeropuertos(ArrayList<aeropuerto> lstAerop){
+        try{
+            database connect = new database();
+            for(int i=0; i<lstAerop.size(); i++){
+                
+            }
+        }catch(Exception e){
+            System.out.println("ERROR registrarAeropuertos "+e.getMessage());
         }
     }
     

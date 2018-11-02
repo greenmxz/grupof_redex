@@ -38,9 +38,9 @@ public class frmMenuSecretary extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
         if(valor==JOptionPane.YES_OPTION){
             String hora = "";
-            if(LocalTime.now().getHour() <= 19 || LocalTime.now().getHour() > 4)
+            if(LocalTime.now().getHour() >= 18 || LocalTime.now().getHour() < 4)
                 hora = "Buenas noches.";
-            else if(LocalTime.now().getHour() <= 4 && LocalTime.now().getHour() > 12)
+            else if(LocalTime.now().getHour() >= 4 && LocalTime.now().getHour() < 12)
                 hora = "Buenos días.";
             else
                 hora = "Buenas tardes.";
@@ -161,9 +161,9 @@ public class frmMenuSecretary extends javax.swing.JFrame {
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         String hora = "";
-        if(LocalTime.now().getHour() <= 19 || LocalTime.now().getHour() > 4)
+        if(LocalTime.now().getHour() >= 18 || LocalTime.now().getHour() < 4)
             hora = "Buenas noches.";
-        else if(LocalTime.now().getHour() <= 4 && LocalTime.now().getHour() > 12)
+        else if(LocalTime.now().getHour() >= 4 && LocalTime.now().getHour() < 12)
             hora = "Buenos días.";
         else
             hora = "Buenas tardes.";
