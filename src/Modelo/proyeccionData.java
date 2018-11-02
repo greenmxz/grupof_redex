@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import Modelo.coefCiudad;
+import java.util.concurrent.ThreadLocalRandom;
 
 import Modelo.PolRegresion;
 /**
@@ -47,72 +49,127 @@ import Modelo.PolRegresion;
 
 public class proyeccionData {
     
-    private ArrayList<String> CodigoAeropuertoEmisor = new ArrayList<>();
-    private ArrayList<String> CodigoEnvio = new ArrayList<>();
-    private ArrayList<String> fecha = new ArrayList<>();
-    private ArrayList<String> hora = new ArrayList<>();
-    private ArrayList<String> CodigoAeropuertoReceptor = new ArrayList<>();
-    
+ 
     private ArrayList<Integer> CantidadPedidosDia = new ArrayList<>();
-    private ArrayList<String> FechasTrabajadas = new ArrayList<>();  
+    private ArrayList<String> FechasTrabajadas = new ArrayList<>();
+    
+    private ArrayList<String> Archivos = new ArrayList<>();
+    private ArrayList<coefCiudad> coeficientes = new ArrayList<>();
+    
     
     public proyeccionData(){
         
     }
     
     
-    public void exportExcel(){
-        
-        File archivo = new File("ReporteData.xls");
-        
-        HSSFWorkbook  workbook = new HSSFWorkbook (); 
-        
-        Sheet pagina = workbook.createSheet("Reporte de data");
-        
-        CellStyle style = workbook.createCellStyle();
-        
-        style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
-        
-        String[] titulos = {"Fecha", "Cantidad de Envios"}; 
-        
-        Row fila = pagina.createRow(0);
-        
-        for(int i = 0; i < titulos.length; i++) {
-
-            Cell celda = fila.createCell(i);
-            celda.setCellStyle(style); 
-            celda.setCellValue(titulos[i]);
+    public void listFilesForFolder(final File folder) {
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                listFilesForFolder(fileEntry);
+            } else {
+                Archivos.add(fileEntry.getName());
+            }
         }
-        
-        for(int i=0; i<FechasTrabajadas.size(); i++){
-            // Ahora creamos una fila en la posicion 1
-            fila = pagina.createRow(i+1);
-            fila.createCell(0).setCellValue(FechasTrabajadas.get(i));
-            fila.createCell(1).setCellValue(CantidadPedidosDia.get(i));
+    }
+        //Ejemplo
+        //ENGM000000001-20180417-02:58-LZIB
+        //[CodigoAeropuertoEmisor][CodigoEnvio]-[AAAAMMDD]-[HH:MM]-[CodigoAeropuertoReceptor]
+    
+    
+    
+    public String aeropuertoRandom(){
+        try{
+            int index = ThreadLocalRandom.current().nextInt(0, coeficientes.size() + 1);
+            return coeficientes.get(index).getAeropuertoCod();
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("ERROR " + e.getMessage());
+            return "";
         }
-             
-        try {
-
-            FileOutputStream salida = new FileOutputStream(archivo);
-            
-            workbook.write(salida);
-
-            workbook.close();
-            
-        } catch (FileNotFoundException ex) {
-            System.out.println("ERROR "+ex.getMessage());
-        } catch (IOException ex) {
-            System.out.println("ERROR "+ex.getMessage());
-        }
-        
     }
     
     
     
-    
-    public void processPack(String namePack){
+    public void proyectar(int numeroDias){
         try{
-            
+            // se calcula los coeficientes de todos los archivos
+            calcularCoeficientes();
+            // se proyecta la data por cada archivo segun la cantidad indicada
+            for(coefCiudad coef : coeficientes){
+
+                if (numeroDias > coef.getCantidadDatosAnalizados()){
+                    for (int i = 0; i < numeroDias - coef.getCantidadDatosAnalizados(); i++){
+                        //genera data del dia siguiente
+                        //cada dia tiene una cantidad de envios realizados que se calculan con los coefientes
+                        double[] c = coef.getCoef(); // coeficientes de del aeropuerto
+                        int cant = (int)(c[0] + c[1]*numeroDias + c[2] * numeroDias*numeroDias); // cantidad de envios
+                        
+                        for (int j = 0; j < cant; j++){
+                            // por cada envio se genera la data del envio
+                            //aeropuerto receptor random
+                            String aeropuertoRand = aeropuertoRandom();
+                            // hora random
+                            
+                            // se genera codigo de envio
+                            
+                            // se guarda info de envio
+                            
+                            // se arma string de envio
+                            
+                        }
+                        
+                    }
+                }
+                
+                
+                // con cada string de envio generado se arma nuevo archivo
+                
+                
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("ERROR " + e.getMessage());
+        }
+
+    }
+    
+    public void calcularCoeficientes(){
+        try{
+        
+            final File folder = new File("resources\\pack_enviados");
+            listFilesForFolder(folder);
+
+            //por cada archivo en la carpeta va a sacar los coefs
+            for(String name : Archivos){           
+                coefCiudad coefCiudad = processPack("resources\\pack_enviados\\"+name);
+                coeficientes.add(coefCiudad);         
+            }
+
+            System.out.println("Coeficientes");
+            for (coefCiudad coef : coeficientes){
+                System.out.println("Aeropuerto : " + coef.getAeropuertoCod());
+                for(int i = 0; i < coef.getCoef().length; i++){
+                     System.out.println(coef.getCoef()[i]);
+                }
+                System.out.println("---------------------");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("ERROR " + e.getMessage());
+        }
+
+    }
+    
+    
+    public coefCiudad processPack(String namePack){
+        try{
+            ArrayList<String> CodigoAeropuertoEmisor = new ArrayList<>();
+            ArrayList<String> CodigoEnvio = new ArrayList<>();
+            ArrayList<String> fecha = new ArrayList<>();
+            ArrayList<String> hora = new ArrayList<>();
+            ArrayList<String> CodigoAeropuertoReceptor = new ArrayList<>();
+            CantidadPedidosDia = new ArrayList<>();
+            FechasTrabajadas = new ArrayList<>();
             
             BufferedReader reader = new BufferedReader(new FileReader(namePack));
             String line;
@@ -120,32 +177,21 @@ public class proyeccionData {
                 String[] arr = line.split("-");
               
                 
-                if(arr.length == 4){
-                    
+                if(arr.length == 4){       
                     CodigoAeropuertoEmisor.add(arr[0].substring(0, 4));
                     CodigoEnvio.add(arr[0]);
                     fecha.add(arr[1]);
                     hora.add(arr[2]);
                     CodigoAeropuertoReceptor.add(arr[3]);
-                    
-                    System.out.println("CodigoAeropuertoEmisor : " + arr[0].substring(0, 4));
-                    System.out.println("CodigoEnvio : " + arr[0]);
-                    System.out.println("fecha : " + arr[1]);
-                    System.out.println("hora : " + arr[2]);
-                    System.out.println("CodigoAeropuertoReceptor : " + arr[3]);
-                    System.out.println("-----------------------------------------------------");
                 }
             }
-            System.out.println("Packs' reading process successful!");
-            System.out.println("Cantidad de pedidos Totales : " + CodigoEnvio.size());
             
             for(int i = 0; i < CodigoEnvio.size(); i++){       
                 if (!FechasTrabajadas.contains(fecha.get(i))){
                     FechasTrabajadas.add(fecha.get(i));
                 }
             }
-            
-            System.out.println("Cantidad de días de data Totales : " + FechasTrabajadas.size());
+
             int count = 0;
             for(int i = 0; i < FechasTrabajadas.size(); i++){
                 for(int j = 0; j < CodigoEnvio.size(); j++){
@@ -157,13 +203,8 @@ public class proyeccionData {
                 count = 0;
             }
             
-            for(int i = 0; i < FechasTrabajadas.size(); i++){
-                System.out.println("Fecha " + FechasTrabajadas.get(i) + " pedidos : " + CantidadPedidosDia.get(i));
-            }
-            
-            exportExcel();
-            
             ///Test de regresion polinomica 2do grado
+            coefCiudad coefCiudad = new coefCiudad();
             double[] x = new double[CodigoEnvio.size()];
             double[] y = new double[CodigoEnvio.size()];
             
@@ -175,59 +216,24 @@ public class proyeccionData {
             PolRegresion PolRegresion = new PolRegresion(x,y,2);
             PolRegresion.calculaPolinomio();
             double[] coef = PolRegresion.getA();
-            System.out.println("Coeficientes");
-            for(int i = 0; i < coef.length; i++){
-                 System.out.println(coef[i]);
-            }
-            
-            
+            coefCiudad.setAeropuertoCod(CodigoAeropuertoEmisor.get(0));
+            coefCiudad.setCoef(coef);
+            coefCiudad.setCantidadDatosAnalizados(CodigoEnvio.size());
+            return coefCiudad;
             
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("There are a several problem with the flights' reading process! Check it!");
+            System.out.println("ERROR " + e.getMessage());
+            return null;
         }
     }
 
-    public ArrayList<String> getCodigoAeropuertoEmisor() {
-        return CodigoAeropuertoEmisor;
+    public ArrayList<coefCiudad> getCoeficientes() {
+        return coeficientes;
     }
 
-    public void setCodigoAeropuertoEmisor(ArrayList<String> CodigoAeropuertoEmisor) {
-        this.CodigoAeropuertoEmisor = CodigoAeropuertoEmisor;
+    public void setCoeficientes(ArrayList<coefCiudad> coeficientes) {
+        this.coeficientes = coeficientes;
     }
 
-    public ArrayList<String> getCodigoEnvio() {
-        return CodigoEnvio;
-    }
-
-    public void setCodigoEnvio(ArrayList<String> CodigoEnvio) {
-        this.CodigoEnvio = CodigoEnvio;
-    }
-
-    public ArrayList<String> getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(ArrayList<String> fecha) {
-        this.fecha = fecha;
-    }
-
-    public ArrayList<String> getHora() {
-        return hora;
-    }
-
-    public void setHora(ArrayList<String> hora) {
-        this.hora = hora;
-    }
-
-    public ArrayList<String> getCodigoAeropuertoReceptor() {
-        return CodigoAeropuertoReceptor;
-    }
-
-    public void setCodigoAeropuertoReceptor(ArrayList<String> CodigoAeropuertoReceptor) {
-        this.CodigoAeropuertoReceptor = CodigoAeropuertoReceptor;
-    }
-    
-    
-    
 }
