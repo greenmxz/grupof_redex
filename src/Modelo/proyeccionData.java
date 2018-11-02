@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import Modelo.PolRegresion;
 /**
  *
  * @author Nowa
@@ -160,6 +162,25 @@ public class proyeccionData {
             }
             
             exportExcel();
+            
+            ///Test de regresion polinomica 2do grado
+            double[] x = new double[CodigoEnvio.size()];
+            double[] y = new double[CodigoEnvio.size()];
+            
+            for(int i = 0; i < FechasTrabajadas.size(); i++){ 
+                x[i] = i + 1;
+                y[i] = CantidadPedidosDia.get(i);
+            }
+            
+            PolRegresion PolRegresion = new PolRegresion(x,y,2);
+            PolRegresion.calculaPolinomio();
+            double[] coef = PolRegresion.getA();
+            System.out.println("Coeficientes");
+            for(int i = 0; i < coef.length; i++){
+                 System.out.println(coef[i]);
+            }
+            
+            
             
         }catch(Exception e){
             e.printStackTrace();
