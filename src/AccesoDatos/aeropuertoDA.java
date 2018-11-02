@@ -158,10 +158,136 @@ public class aeropuertoDA {
         try{
             database connect = new database();
             for(int i=0; i<lstAerop.size(); i++){
+                String continente = lstAerop.get(i).getContinente();
+                String pais = lstAerop.get(i).getPais();
+                String ciudad = lstAerop.get(i).getCiudad();
+                String codigo = lstAerop.get(i).getCodigo();
+                String nombre = lstAerop.get(i).getNombre();
+                //
+                int idContinente, idPais;
+                int idCiudad, idAeropuerto;
+                /* 1er paso: Registrar continente*/
+                // 
+                Statement sentencia = connect.getConnection().createStatement();
+                String query = "SELECT id FROM redexdb.continente WHERE nombre = '" +
+                        continente + "'";
+                ResultSet rs = sentencia.executeQuery(query);
+                if(rs.next()){
+                    idContinente = rs.getInt("id");
+                }else{
+                    sentencia = connect.getConnection().createStatement();
+                    query = "SELECT MAX(id) FROM redexdb.continente";
+                    rs = sentencia.executeQuery(query);
+                    rs.next();
+                    idContinente = rs.getInt("id") + 1;
+                    /* Como es nuevo, se registra */
+                    sentencia = connect.getConnection().createStatement();
+                    query = "INSERT INTO redexdb.continente (id,nombre,codigo) VALUES ('" +
+                            String.valueOf(idContinente) + "','" + continente +
+                             "','" + codificarContinente(continente)+"')";
+                }
+                
+                /* 2er paso: Registrar pais*/
+                // 
+                sentencia = connect.getConnection().createStatement();
+                query = "SELECT id FROM redexdb.pais WHERE nombre = '" +
+                        pais + "'";
+                rs = sentencia.executeQuery(query);
+                if(rs.next()){
+                    idPais = rs.getInt("id");
+                }else{
+                    sentencia = connect.getConnection().createStatement();
+                    query = "SELECT MAX(id) FROM redexdb.pais";
+                    rs = sentencia.executeQuery(query);
+                    rs.next();
+                    idPais = rs.getInt("id") + 1;
+                    /* Como es nuevo, se registra */
+                    sentencia = connect.getConnection().createStatement();
+                    query = "INSERT INTO redexdb.pais (id,nombre,codigo,id_continente) VALUES ('" +
+                            String.valueOf(idPais) + "','" + pais +
+                             "','" + codificarPais(pais) + "','" +
+                            String.valueOf(idContinente) + "')";
+                }
+                
+                /* 3er paso: Registrar ciudad*/
+                // 
+                sentencia = connect.getConnection().createStatement();
+                query = "SELECT id FROM redexdb.ciudad WHERE nombre = '" +
+                        ciudad + "'";
+                rs = sentencia.executeQuery(query);
+                if(rs.next()){
+                    idCiudad = rs.getInt("id");
+                }else{
+                    sentencia = connect.getConnection().createStatement();
+                    query = "SELECT MAX(id) FROM redexdb.ciudad";
+                    rs = sentencia.executeQuery(query);
+                    rs.next();
+                    idCiudad = rs.getInt("id") + 1;
+                    /* Como es nuevo, se registra */
+                    sentencia = connect.getConnection().createStatement();
+                    query = "INSERT INTO redexdb.ciudad (id,nombre,codigo,id_pais,activo) VALUES ('" +
+                            String.valueOf(idCiudad) + "','" + ciudad +
+                             "','" + codificarCiudad(ciudad) + "','" +
+                            String.valueOf(idPais) + "','1')";
+                }
+                
+                /* 4er paso: Registrar aeropuerto*/
+                //
+                sentencia = connect.getConnection().createStatement();
+                query = "SELECT id FROM redexdb.aeropuerto WHERE nombre = '" +
+                        nombre + "'";
+                rs = sentencia.executeQuery(query);
+                if(rs.next()){
+                    idAeropuerto = rs.getInt("id");
+                }else{
+                    sentencia = connect.getConnection().createStatement();
+                    query = "SELECT MAX(id) FROM redexdb.aeropuerto";
+                    rs = sentencia.executeQuery(query);
+                    rs.next();
+                    idAeropuerto = rs.getInt("id") + 1;
+                    /* Como es nuevo, se registra */
+                    sentencia = connect.getConnection().createStatement();
+                    query = "INSERT INTO redexdb.aeropuerto (id,nombre,codigo,capacidad_maxima,cantidad_paquetes,id_ciudad,activo) VALUES ('" +
+                            String.valueOf(idAeropuerto) + "','" + nombre +
+                            "','" + codigo + "'," + lstAerop.get(i).getCapacidad_maxima() + "," +
+                            lstAerop.get(i).getCantidad_paquetes() + ",'" +
+                            String.valueOf(idCiudad) + "','1')";
+                }
                 
             }
         }catch(Exception e){
             System.out.println("ERROR registrarAeropuertos "+e.getMessage());
+        }
+    }
+    
+    /* Métodos */
+    public String codificarContinente(String continente){
+        String auxContinente = continente.toLowerCase();
+        if(auxContinente.split(" ").length == 1)
+            return auxContinente.substring(0, 3);
+        else{
+            return auxContinente.split(" ")[0].substring(0, 1) +
+                    auxContinente.split(" ")[auxContinente.split(" ").length - 1].substring(0, 2);
+        }
+    }
+    
+    public String codificarPais(String pais){
+        String auxPais = pais.toLowerCase();
+        if(auxPais.split(" ").length == 1)
+            return auxPais.substring(0, 3);
+        else{
+            return auxPais.split(" ")[0].substring(0, 1) +
+                    auxPais.split(" ")[auxPais.split(" ").length - 1].substring(0, 2);
+        }
+    }
+    
+    public String codificarCiudad(String ciudad){
+        String auxCiudad = ciudad.toLowerCase();
+        if(auxCiudad.split(" ").length == 1)
+            return auxCiudad.substring(0, 3);
+        else{
+            return auxCiudad.split(" ")[0].substring(0, 1) +
+                    auxCiudad.split(" ")[auxCiudad.split(" ").length - 1].substring(0, 2);
         }
     }
     

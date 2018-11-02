@@ -68,7 +68,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 btnArchivoActionPerformed(evt);
             }
         });
-        panelFondo.add(btnArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, 290, -1));
+        panelFondo.add(btnArchivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 290, -1));
 
         tblArchivos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -92,13 +92,13 @@ public class frmCargaDatos extends javax.swing.JPanel {
             tblArchivos.getColumnModel().getColumn(2).setPreferredWidth(100);
         }
 
-        panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 260, 670, 170));
+        panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, 670, 170));
 
         lblSelecArch.setText("Seleccione un archivo:");
-        panelFondo.add(lblSelecArch, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 70, -1, -1));
+        panelFondo.add(lblSelecArch, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, -1));
 
         chkCargaMultiple.setText("¿Activar carga múltiple?");
-        panelFondo.add(chkCargaMultiple, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 70, -1, -1));
+        panelFondo.add(chkCargaMultiple, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 50, -1, -1));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Detalle"));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -118,7 +118,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
         jPanel1.add(txtPathArch, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 350, -1));
 
         btnLimpiar.setText("Limpiar");
-        jPanel1.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 140, -1));
+        jPanel1.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 20, 160, -1));
 
         btnEliminar.setText("Eliminar seleccionado");
         btnEliminar.setEnabled(false);
@@ -127,7 +127,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 80, 140, -1));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 80, 160, -1));
 
         btnAnhadir.setText("Añadir a lista");
         btnAnhadir.addActionListener(new java.awt.event.ActionListener() {
@@ -135,9 +135,9 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 btnAnhadirActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAnhadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 50, 140, -1));
+        jPanel1.add(btnAnhadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 50, 160, -1));
 
-        panelFondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 670, 130));
+        panelFondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 670, 130));
 
         btnProcesar.setText("Procesar");
         btnProcesar.addActionListener(new java.awt.event.ActionListener() {
@@ -145,7 +145,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 btnProcesarActionPerformed(evt);
             }
         });
-        panelFondo.add(btnProcesar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 450, 100, -1));
+        panelFondo.add(btnProcesar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 430, 100, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
