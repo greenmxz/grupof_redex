@@ -561,7 +561,7 @@ public class frmCrearCuenta extends javax.swing.JDialog {
                     usuarioNuevo.getPersona().setId(this.usuarioSeleccionado.getPersona().getId());
                     if (usuarioBL.modificarUsuario(usuarioNuevo)){
                         
-                        JOptionPane.showMessageDialog(this, "Se registro correctamente");
+                        JOptionPane.showMessageDialog(this, "Se modifico correctamente");
                     }else{
                         JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
                     }
