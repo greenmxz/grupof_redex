@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javax.swing.UIManager;
 
 /**
  *
@@ -61,7 +62,17 @@ public class Redex extends Application {
         f.show();*/
 
         //new Vista.frmMenuProvisional().setVisible(true);
-        new Vista.Login().setVisible(true);
+        try { 
+            for(javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()){
+                if("Windows".equals(info.getName())){
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+            new Vista.Login().setVisible(true);
+        } catch (Exception ex) { 
+            ex.printStackTrace(); 
+        }
     }
     
 }
