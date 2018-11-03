@@ -154,8 +154,8 @@ public class excelExport {
             fila.createCell(0).setCellValue(ae.getCodigo());
             fila.createCell(1).setCellValue(new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(ae.getFechaSalida()));
             fila.createCell(2).setCellValue(new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(ae.getFechaLlegada()));
-            fila.createCell(3).setCellValue(ae.getContinenteOrigen());
-            fila.createCell(4).setCellValue(ae.getContinenteDestino());
+            fila.createCell(3).setCellValue(ae.getAeropuertoOrigen());
+            fila.createCell(4).setCellValue(ae.getAeropuertoDestino());
             fila.createCell(5).setCellValue(ae.getCapMax());
             fila.createCell(6).setCellValue(ae.getCapActual());
             fila.createCell(7).setCellValue(ae.getEstado());

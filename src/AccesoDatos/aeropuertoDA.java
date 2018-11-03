@@ -164,19 +164,22 @@ public class aeropuertoDA {
                 String codigo = lstAerop.get(i).getCodigo();
                 String nombre = lstAerop.get(i).getNombre();
                 //
-                int idContinente, idPais;
-                int idCiudad, idAeropuerto;
+                int idContinente = 0, idPais = 0;
+                int idCiudad = 0, idAeropuerto = 0;
                 /* 1er paso: Registrar continente*/
                 // 
+                System.out.println("[" + continente + "," + pais + "," + ciudad + "," + codigo + "]");
                 Statement sentencia = connect.getConnection().createStatement();
                 String query = "SELECT id FROM redexdb.continente WHERE nombre = '" +
                         continente + "'";
+                System.out.println(query);
                 ResultSet rs = sentencia.executeQuery(query);
                 if(rs.next()){
-                    idContinente = rs.getInt("id");
-                }else{
+                    if(rs.getObject("id") != null)
+                        idContinente = rs.getInt("id");
+                }else{  
                     sentencia = connect.getConnection().createStatement();
-                    query = "SELECT MAX(id) FROM redexdb.continente";
+                    query = "SELECT MAX(id) AS id FROM redexdb.continente";
                     rs = sentencia.executeQuery(query);
                     rs.next();
                     idContinente = rs.getInt("id") + 1;
@@ -185,6 +188,7 @@ public class aeropuertoDA {
                     query = "INSERT INTO redexdb.continente (id,nombre,codigo) VALUES ('" +
                             String.valueOf(idContinente) + "','" + continente +
                              "','" + codificarContinente(continente)+"')";
+                    sentencia.executeUpdate(query);
                 }
                 
                 /* 2er paso: Registrar pais*/
@@ -194,10 +198,11 @@ public class aeropuertoDA {
                         pais + "'";
                 rs = sentencia.executeQuery(query);
                 if(rs.next()){
-                    idPais = rs.getInt("id");
+                    if(rs.getObject("id") != null)
+                        idPais = rs.getInt("id");
                 }else{
                     sentencia = connect.getConnection().createStatement();
-                    query = "SELECT MAX(id) FROM redexdb.pais";
+                    query = "SELECT MAX(id) AS id FROM redexdb.pais";
                     rs = sentencia.executeQuery(query);
                     rs.next();
                     idPais = rs.getInt("id") + 1;
@@ -207,6 +212,7 @@ public class aeropuertoDA {
                             String.valueOf(idPais) + "','" + pais +
                              "','" + codificarPais(pais) + "','" +
                             String.valueOf(idContinente) + "')";
+                    sentencia.executeUpdate(query);
                 }
                 
                 /* 3er paso: Registrar ciudad*/
@@ -216,10 +222,11 @@ public class aeropuertoDA {
                         ciudad + "'";
                 rs = sentencia.executeQuery(query);
                 if(rs.next()){
-                    idCiudad = rs.getInt("id");
+                    if(rs.getObject("id") != null)
+                        idCiudad = rs.getInt("id");
                 }else{
                     sentencia = connect.getConnection().createStatement();
-                    query = "SELECT MAX(id) FROM redexdb.ciudad";
+                    query = "SELECT MAX(id) AS id FROM redexdb.ciudad";
                     rs = sentencia.executeQuery(query);
                     rs.next();
                     idCiudad = rs.getInt("id") + 1;
@@ -229,6 +236,7 @@ public class aeropuertoDA {
                             String.valueOf(idCiudad) + "','" + ciudad +
                              "','" + codificarCiudad(ciudad) + "','" +
                             String.valueOf(idPais) + "','1')";
+                    sentencia.executeUpdate(query);
                 }
                 
                 /* 4er paso: Registrar aeropuerto*/
@@ -238,10 +246,11 @@ public class aeropuertoDA {
                         nombre + "'";
                 rs = sentencia.executeQuery(query);
                 if(rs.next()){
-                    idAeropuerto = rs.getInt("id");
+                    if(rs.getObject("id") != null)
+                        idAeropuerto = rs.getInt("id");
                 }else{
                     sentencia = connect.getConnection().createStatement();
-                    query = "SELECT MAX(id) FROM redexdb.aeropuerto";
+                    query = "SELECT MAX(id) AS id FROM redexdb.aeropuerto";
                     rs = sentencia.executeQuery(query);
                     rs.next();
                     idAeropuerto = rs.getInt("id") + 1;
@@ -249,12 +258,13 @@ public class aeropuertoDA {
                     sentencia = connect.getConnection().createStatement();
                     query = "INSERT INTO redexdb.aeropuerto (id,nombre,codigo,capacidad_maxima,cantidad_paquetes,id_ciudad,activo) VALUES ('" +
                             String.valueOf(idAeropuerto) + "','" + nombre +
-                            "','" + codigo + "'," + lstAerop.get(i).getCapacidad_maxima() + "," +
-                            lstAerop.get(i).getCantidad_paquetes() + ",'" +
+                            "','" + codigo + "','" + lstAerop.get(i).getCapacidad_maxima() + "','" +
+                            lstAerop.get(i).getCantidad_paquetes() + "','" +
                             String.valueOf(idCiudad) + "','1')";
+                    sentencia.executeUpdate(query);
                 }
-                
             }
+            connect.getConnection().close();
         }catch(Exception e){
             System.out.println("ERROR registrarAeropuertos "+e.getMessage());
         }

@@ -69,6 +69,7 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         btnSimulacion = new Especial.RSButtonMetro();
         btnDetermUnit = new Especial.RSButtonMetro();
         jSeparator1 = new javax.swing.JSeparator();
+        btnGenData = new Especial.RSButtonMetro();
         panelPrincipal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -150,9 +151,9 @@ public class frmMenuProvisional extends javax.swing.JFrame {
                 btnSimulacionActionPerformed(evt);
             }
         });
-        panelMenu.add(btnSimulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 135, 140, 30));
+        panelMenu.add(btnSimulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 165, 140, 30));
 
-        btnDetermUnit.setText("Generación (unit.)");
+        btnDetermUnit.setText("Generación de ruta");
         btnDetermUnit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnDetermUnit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,6 +168,15 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         jSeparator1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jSeparator1.setEnabled(false);
         panelMenu.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 100, 140, 3));
+
+        btnGenData.setText("Generación de data");
+        btnGenData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGenData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenDataActionPerformed(evt);
+            }
+        });
+        panelMenu.add(btnGenData, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 135, 140, 30));
 
         panelFondo.add(panelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 150, 500));
 
@@ -239,6 +249,12 @@ public class frmMenuProvisional extends javax.swing.JFrame {
             Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);   
     }//GEN-LAST:event_btnDetermUnitActionPerformed
 
+    private void btnGenDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenDataActionPerformed
+        new CambiarPanel(panelPrincipal, new frmGenerarDataFutura());
+        if(this.panelMenu.getX()>-1)
+            Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);  
+    }//GEN-LAST:event_btnGenDataActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -275,6 +291,7 @@ public class frmMenuProvisional extends javax.swing.JFrame {
     private Especial.RSButtonMetro btnAeropuertos;
     private Especial.RSButtonMetro btnCerrarSesion;
     private Especial.RSButtonMetro btnDetermUnit;
+    private Especial.RSButtonMetro btnGenData;
     private javax.swing.JButton btnMenu;
     private Especial.RSButtonMetro btnPaquetes;
     private Especial.RSButtonMetro btnSimulacion;
