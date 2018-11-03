@@ -7,14 +7,17 @@ import javax.swing.table.DefaultTableModel;
 
 public class frmAdministrarCuenta extends javax.swing.JPanel {
     /* Atributos */
+    private  int usuarioSeleccionado;
     usuarioBL usuarioBL;
     javax.swing.JFrame x;
+    ArrayList<usuario> usuarios;
     
     public frmAdministrarCuenta(javax.swing.JFrame x) {
         initComponents();
+        int usuarioSeleccionado=-1;
         this.x = x;
         usuarioBL = new usuarioBL();
-        ArrayList<usuario> usuarios = usuarioBL.obtenerUsuarios();        
+        usuarios=  usuarioBL.obtenerUsuarios();        
         if (usuarios!=null){
             DefaultTableModel model = (DefaultTableModel) tblUsuarios.getModel();
             Object rowData[] = new Object[4];
@@ -40,6 +43,7 @@ public class frmAdministrarCuenta extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblUsuarios = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -59,6 +63,11 @@ public class frmAdministrarCuenta extends javax.swing.JPanel {
                 "Nombre de usuario", "Nombre de empleado", "Rol", "Fecha de creación"
             }
         ));
+        tblUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblUsuariosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblUsuarios);
 
         panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 710, 197));
@@ -66,6 +75,14 @@ public class frmAdministrarCuenta extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("ADMINISTRACIÓN DE USUARIOS");
         panelFondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, -1));
+
+        jButton1.setText("Editar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        panelFondo.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -81,15 +98,44 @@ public class frmAdministrarCuenta extends javax.swing.JPanel {
 
     private void registrarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarUsuarioActionPerformed
         // TODO add your handling code here:
-        new frmCrearCuenta(x,true).setVisible(true);
+        new frmCrearCuenta(x,true,this).setVisible(true);
     }//GEN-LAST:event_registrarUsuarioActionPerformed
+
+    private void tblUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUsuariosMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblUsuariosMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        System.out.println("Selected");
+        System.out.println(this.tblUsuarios.getSelectedRow());
+        System.out.println("iD: "+this.usuarios.get(this.tblUsuarios.getSelectedRow()).getId());
+        System.out.println("eee");
+        this.setUsuarioSeleccionado(this.usuarios.get(this.tblUsuarios.getSelectedRow()).getId());
+        new frmCrearCuenta(x,true,this).setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JButton registrarUsuario;
     private javax.swing.JTable tblUsuarios;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @return the usuarioSeleccionado
+     */
+    public int getUsuarioSeleccionado() {
+        return usuarioSeleccionado;
+    }
+
+    /**
+     * @param usuarioSeleccionado the usuarioSeleccionado to set
+     */
+    public void setUsuarioSeleccionado(int usuarioSeleccionado) {
+        this.usuarioSeleccionado = usuarioSeleccionado;
+    }
 }

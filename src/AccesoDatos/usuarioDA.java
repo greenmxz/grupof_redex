@@ -144,7 +144,8 @@ public class usuarioDA {
     public ArrayList<usuario> obtenerUsuarios(){
         try{
             database connection = new database();
-             String query="select *,u.codigo as 'nombre_usuario',p.nombre as 'nombre_persona',r.nombre as 'rol' from usuario as u "
+             String query="select *,u.codigo as 'nombre_usuario',p.nombre as 'nombre_persona',r.nombre as 'rol',"
+                     + "u.id as 'id_usuario' from usuario as u "
                      + "inner join persona as p on u.id_persona=p.id "
                      + "inner join rol as r on r.id=u.id_rol";
             Statement stmt = connection.getConnection().createStatement();
@@ -153,7 +154,8 @@ public class usuarioDA {
             
             while (rs.next( )){
                 usuario usuario = new usuario();
-                persona persona = new persona();     
+                persona persona = new persona(); 
+                usuario.setId(rs.getInt("id_usuario"));
                 usuario.setCodigo(rs.getString("nombre_usuario"));
                 usuario.setPassword(rs.getString("password"));
                 usuario.setRol(rs.getString("rol"));
@@ -166,6 +168,43 @@ public class usuarioDA {
             }
             connection.getConnection().close();
             return lista;
+        }catch(Exception ex){
+            System.out.println("Error: "+ex.getMessage());
+            return null;
+        }
+    }
+    public usuario obtenerInfoUsuario(int id){
+        try{
+            System.out.println("AQUI EMT "+id);
+            database connection = new database();
+             String query="select *,u.codigo as 'nombre_usuario',p.nombre as 'nombre_persona',r.nombre as 'rol', "
+                     + "u.id as 'id_usuario' from usuario as u "
+                     + "inner join persona as p on u.id_persona=p.id "
+                     + "inner join rol as r on r.id=u.id_rol "
+                     + "where u.id = ? ;";
+            //Statement stmt = connection.getConnection().createStatement();
+            PreparedStatement stmt = connection.getConnection().prepareStatement(query);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            //ArrayList<usuario> lista = new ArrayList<>();
+            usuario usuario = new usuario();
+            persona persona = new persona(); 
+            while (rs.next( )){
+                
+                
+                usuario.setId(rs.getInt("id_usuario"));
+                usuario.setCodigo(rs.getString("nombre_usuario"));
+                usuario.setPassword(rs.getString("password"));
+                usuario.setRol(rs.getString("rol"));
+                persona.setNombre(rs.getString("nombre_persona"));
+                persona.setApellidoPaterno(rs.getString("apellido_paterno"));
+                persona.setApellidoMaterno(rs.getString("apellido_materno"));
+                persona.setCorreo((rs.getString("correo")));
+                usuario.setPersona(persona);
+                //lista.add(usuario);
+            }
+            connection.getConnection().close();
+            return usuario;
         }catch(Exception ex){
             System.out.println("Error: "+ex.getMessage());
             return null;

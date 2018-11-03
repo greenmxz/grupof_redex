@@ -1,6 +1,7 @@
 package Vista;
 
 import Controlador.generalBL;
+import Vista.frmAdministrarCuenta;
 import Controlador.usuarioBL;
 import Modelo.*;
 import java.awt.Component;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.*;
 
+
 public class frmCrearCuenta extends javax.swing.JDialog {
 
     /* Atributos */
@@ -22,14 +24,25 @@ public class frmCrearCuenta extends javax.swing.JDialog {
     private ArrayList<ciudad> ciudades;
     private ArrayList<tipoDocumento> tipoDocumentos;
     private usuarioBL usuarioBL; 
+    private usuario usuarioSeleccionado;
     
-    public frmCrearCuenta(java.awt.Frame parent, boolean modal) {
+    public frmCrearCuenta(java.awt.Frame parent, boolean modal,frmAdministrarCuenta padre) {
         super(parent, modal);
         generalBL = new generalBL();
         usuarioBL = new usuarioBL();
         initComponents();
         setLocationRelativeTo(parent);
         inicializar();
+        int index=  padre.getUsuarioSeleccionado();
+        
+        if (index >=0){
+            this.usuarioSeleccionado=usuarioBL.obtenerInfoUsuario(index);
+            this.nombrePersona.setText(this.usuarioSeleccionado.getPersona().getNombre());
+            System.out.println(this.usuarioSeleccionado.getPersona().getNombre());
+        }
+        System.out.println("this selected index "+index);
+
+
     }
     
     /* Métodos */
@@ -536,7 +549,7 @@ public class frmCrearCuenta extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                frmCrearCuenta dialog = new frmCrearCuenta(new javax.swing.JFrame(), true);
+                frmCrearCuenta dialog = new frmCrearCuenta(new javax.swing.JFrame(), true,new frmAdministrarCuenta(new javax.swing.JFrame()));
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -28,4 +28,7 @@ public class usuarioBL {
     public ArrayList<usuario> obtenerUsuarios(){
         return usuarioDA.obtenerUsuarios();
     }
+    public usuario obtenerInfoUsuario(int i){
+        return usuarioDA.obtenerInfoUsuario(i);
+    }
 }
