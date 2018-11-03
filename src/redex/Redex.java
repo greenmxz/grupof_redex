@@ -62,7 +62,7 @@ public class Redex extends Application {
 
         //new Vista.frmMenuProvisional().setVisible(true);
         new Vista.Login().setVisible(true);
-
+        new Vista.Test().setVisible(true);
     }
     
 }
