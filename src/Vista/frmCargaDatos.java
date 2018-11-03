@@ -327,7 +327,6 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 "Archivos de texto (extensión TXT)", "txt");
         chooser.setFileFilter(filter);
         chooser.setMultiSelectionEnabled(chkCargaMultiple.getModel().isSelected());
-        btnAnhadir.setEnabled(true);
         boolean repetido = false;
         while(!repetido){
             int returnVal = chooser.showOpenDialog(null);
@@ -351,6 +350,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 break;
             }
         }
+        btnAnhadir.setEnabled(true);
     }//GEN-LAST:event_btnArchivoActionPerformed
 
     private void btnAnhadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnhadirActionPerformed
@@ -374,9 +374,9 @@ public class frmCargaDatos extends javax.swing.JPanel {
     private void btnProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarActionPerformed
         for(int i=0; i<listFile.size(); i++){
             if(listFile.get(i).getTipo() == "Aeropuertos"){
-//                aeropuertoBL procBL = new aeropuertoBL();
+                aeropuertoBL procBL = new aeropuertoBL();
                 procesarAeropuertos(listFile.get(i).getUbicacion());
-//                procBL.registrarAeropuertos(procesarAeropuertos(listFile.get(i).getUbicacion()));
+                procBL.registrarAeropuertos(procesarAeropuertos(listFile.get(i).getUbicacion()));
             }else if(listFile.get(i).getTipo() == "Vuelos"){
                 procesarVuelos(listFile.get(i).getUbicacion());
             }else if(listFile.get(i).getTipo() == "Paquetes"){
