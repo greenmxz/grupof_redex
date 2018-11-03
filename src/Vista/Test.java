@@ -69,11 +69,8 @@ public class Test extends javax.swing.JFrame {
         //ENGM000000001-20180417-02:58-LZIB
         //[CodigoAeropuertoEmisor][CodigoEnvio]-[AAAAMMDD]-[HH:MM]-[CodigoAeropuertoReceptor]
         
-        
-        
-       //proyeccionData.processPack("D:\\software\\redex\\grupof_redex\\resources\\pack_enviados\\pack_enviado_LHBP.txt");
-        
-        proyeccionData.calcularCoeficientes();
+                
+        proyeccionData.proyectar(130);
         
         
         
