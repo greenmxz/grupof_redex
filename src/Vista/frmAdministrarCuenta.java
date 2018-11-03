@@ -14,7 +14,7 @@ public class frmAdministrarCuenta extends javax.swing.JPanel {
     
     public frmAdministrarCuenta(javax.swing.JFrame x) {
         initComponents();
-        int usuarioSeleccionado=-1;
+        usuarioSeleccionado=-1;
         this.x = x;
         usuarioBL = new usuarioBL();
         usuarios=  usuarioBL.obtenerUsuarios();        

@@ -10,6 +10,7 @@ import static java.lang.Integer.parseInt;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +26,8 @@ public class frmCrearCuenta extends javax.swing.JDialog {
     private ArrayList<tipoDocumento> tipoDocumentos;
     private usuarioBL usuarioBL; 
     private usuario usuarioSeleccionado;
-    
+    int index;
+    int id_persona;
     public frmCrearCuenta(java.awt.Frame parent, boolean modal,frmAdministrarCuenta padre) {
         super(parent, modal);
         generalBL = new generalBL();
@@ -33,12 +35,30 @@ public class frmCrearCuenta extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(parent);
         inicializar();
-        int index=  padre.getUsuarioSeleccionado();
+        index=  padre.getUsuarioSeleccionado();
         
         if (index >=0){
+            this.registrar.setText("Modificar");
             this.usuarioSeleccionado=usuarioBL.obtenerInfoUsuario(index);
+            this.numeroDocumento.setText(Integer.toString(this.usuarioSeleccionado.getPersona().getNumeroDocumentoIdentidad()));
             this.nombrePersona.setText(this.usuarioSeleccionado.getPersona().getNombre());
-            System.out.println(this.usuarioSeleccionado.getPersona().getNombre());
+            this.apellidoPaterno.setText(this.usuarioSeleccionado.getPersona().getApellidoPaterno());
+            this.apellidoMaterno.setText(this.usuarioSeleccionado.getPersona().getApellidoMaterno());
+            setSelectedValueRol(this.rol,this.usuarioSeleccionado.getRol());
+            this.nombreUsuario.setText(this.usuarioSeleccionado.getCodigo());
+            //Setear date a localdate;
+            LocalDate date = this.usuarioSeleccionado.getPersona().getFechaNacimiento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            this.fechaNac.setDate( date);
+            setSelectedValueCiudad(this.ciudad,this.usuarioSeleccionado.getPersona().getCiudad());
+            setSelectedValueTipoDocumento(this.tipoDocumento,this.usuarioSeleccionado.getPersona().getTipoDocumento());
+            this.correo.setText(this.usuarioSeleccionado.getPersona().getCorreo());
+            this.direccion.setText(this.usuarioSeleccionado.getPersona().getDireccion());
+            System.out.println(this.usuarioSeleccionado.getPersona().getNombre()+ " - - "+this.usuarioSeleccionado.getPersona().getId());
+            this.contraseña.setText(this.usuarioSeleccionado.getPassword());
+            
+            this.contraseñaRepetir.setText(this.usuarioSeleccionado.getPassword());
+        }else{
+            this.registrar.setText("Registrar");
         }
         System.out.println("this selected index "+index);
 
@@ -59,7 +79,45 @@ public class frmCrearCuenta extends javax.swing.JDialog {
         tipoDocumentos = generalBL.obtenerTipoDocumentos();
         this.tipoDocumento.setModel(new DefaultComboBoxModel( (tipoDocumentos).toArray()));
     }
-    
+    public static void setSelectedValueRol(JComboBox comboBox, String value)
+    {
+        rol item;
+        for (int i = 0; i < comboBox.getItemCount(); i++)
+        {
+            item = (rol)comboBox.getItemAt(i);
+            if (item.getNombre().equals(value))
+            {
+                comboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
+     public static void setSelectedValueCiudad(JComboBox comboBox, String value)
+    {
+        ciudad item;
+        for (int i = 0; i < comboBox.getItemCount(); i++)
+        {
+            item = (ciudad)comboBox.getItemAt(i);
+            if (item.getNombre().equals(value))
+            {
+                comboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
+      public static void setSelectedValueTipoDocumento(JComboBox comboBox, String value)
+    {
+        tipoDocumento item;
+        for (int i = 0; i < comboBox.getItemCount(); i++)
+        {
+            item = (tipoDocumento)comboBox.getItemAt(i);
+            if (item.getNombre().equals(value))
+            {
+                comboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
     private boolean validarDatos(){
         if(this.nombrePersona.getText().length()>0 && this.apellidoPaterno.getText().length()>0 && 
            this.apellidoMaterno.getText().length()>0 && this.fechaNac.getDate()!= null &&
@@ -497,12 +555,24 @@ public class frmCrearCuenta extends javax.swing.JDialog {
                 personaNueva.setTipoDocumento(tipoDocumento.getSelectedItem().toString());
                 usuarioNuevo.setPersona(personaNueva);
                 System.out.println("persona "+personaNueva.toString());
-
-                if (usuarioBL.crearUsuario(usuarioNuevo)){
-                    JOptionPane.showMessageDialog(this, "Se registro correctamente");
+                
+                if (index>0){
+                    usuarioNuevo.setId(this.index);
+                    usuarioNuevo.getPersona().setId(this.usuarioSeleccionado.getPersona().getId());
+                    if (usuarioBL.modificarUsuario(usuarioNuevo)){
+                        
+                        JOptionPane.showMessageDialog(this, "Se registro correctamente");
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
+                    }
                 }else{
-                    JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
+                    if (usuarioBL.crearUsuario(usuarioNuevo)){
+                        JOptionPane.showMessageDialog(this, "Se registro correctamente");
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
+                    }
                 }
+                
 
             }else{
                 JOptionPane.showMessageDialog(this, "Contraseñas diferentes error");
