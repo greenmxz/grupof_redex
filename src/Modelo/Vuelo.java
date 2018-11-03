@@ -2,7 +2,7 @@ package Modelo;
 
 import java.util.Date;
 
-public class vuelo {
+public class Vuelo {
     private String codigo;
     private Date fechaSalida;
     private Date fechaLlegada;
@@ -12,7 +12,7 @@ public class vuelo {
     private int capActual;
     private String estado;
     
-    public vuelo(String codigo, Date fechaSalida, Date fechaLlegada, 
+    public Vuelo(String codigo, Date fechaSalida, Date fechaLlegada, 
             String continenteOrigen, String continenteDestino, int capMax, int capActual,
             String estado){
         this.codigo = codigo;

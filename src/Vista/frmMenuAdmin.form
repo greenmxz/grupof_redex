@@ -145,7 +145,7 @@
           <SubComponents>
             <Component class="Especial.RSButtonMetro" name="btnCuentas">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cuentas"/>
+                <Property name="text" type="java.lang.String" value="Cuentas (admin)"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
@@ -154,6 +154,20 @@
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="5" y="5" width="140" height="30"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="Especial.RSButtonMetro" name="btnCargaMasiva">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Carga de datos"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCargaMasivaActionPerformed"/>
+              </Events>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="5" y="35" width="140" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>

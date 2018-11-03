@@ -108,7 +108,7 @@ public class excelExport {
         }
     }
     
-    public void excelExportVuelos(ArrayList<vuelo> lstVuelos){
+    public void excelExportVuelos(ArrayList<Vuelo> lstVuelos){
         // Creamos el archivo donde almacenaremos la hoja
         // de calculo, recuerde usar la extension correcta,
         // en este caso .xlsx
@@ -150,7 +150,7 @@ public class excelExport {
         for(int i=0; i<lstVuelos.size(); i++){
             // Ahora creamos una fila en la posicion 1
             fila = pagina.createRow(i+1);
-            vuelo ae = lstVuelos.get(i);
+            Vuelo ae = lstVuelos.get(i);
             fila.createCell(0).setCellValue(ae.getCodigo());
             fila.createCell(1).setCellValue(new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(ae.getFechaSalida()));
             fila.createCell(2).setCellValue(new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(ae.getFechaLlegada()));

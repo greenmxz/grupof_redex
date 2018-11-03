@@ -6,7 +6,7 @@
 package Vista;
 
 import Controlador.excelExport;
-import Modelo.vuelo;
+import Modelo.Vuelo;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -26,16 +26,16 @@ import javax.swing.table.DefaultTableModel;
 public class frmReporteVuelo extends javax.swing.JPanel {
     
     /* ATRIBUTOS */
-    private ArrayList<vuelo> lstVuelo = new ArrayList<vuelo>();
-    private ArrayList<vuelo> filter = new ArrayList<vuelo>();
+    private ArrayList<Vuelo> lstVuelo = new ArrayList<Vuelo>();
+    private ArrayList<Vuelo> filter = new ArrayList<Vuelo>();
     
     public frmReporteVuelo() {
         initComponents();
-        lstVuelo.add(new vuelo("AAA01", new Date(118,9,21,15,30), 
+        lstVuelo.add(new Vuelo("AAA01", new Date(118,9,21,15,30), 
                 new Date(118,9,22,00,25), "América", "Europa", 250, 240, "Saturado"));
-        lstVuelo.add(new vuelo("AAA02", new Date(118,9,21,19,30), 
+        lstVuelo.add(new Vuelo("AAA02", new Date(118,9,21,19,30), 
                 new Date(118,9,22,12,40), "Europa", "Europa", 280, 150, "Estable")); 
-        lstVuelo.add(new vuelo("AAA03", new Date(118,9,22,00,10), 
+        lstVuelo.add(new Vuelo("AAA03", new Date(118,9,22,00,10), 
                 new Date(118,9,2,19,50), "América", "América", 295, 295, "Lleno"));
         tablaDefault();
         DefaultListModel listModel = new DefaultListModel();
@@ -277,7 +277,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         }
         Object[] obj = new Object[8];
         for(int i = 0; i < lstVuelo.size(); i++){
-            vuelo u = lstVuelo.get(i);
+            Vuelo u = lstVuelo.get(i);
             obj[0] = u.getCodigo();
             obj[1] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaSalida());
             obj[2] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaLlegada());
@@ -415,7 +415,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         return 0;
     }
     
-    public boolean filtroEstado(vuelo ae){
+    public boolean filtroEstado(Vuelo ae){
         boolean chk1 = chkEstadoEstable.isSelected();
         boolean chk2 = chkEstadoSaturado.isSelected();
         boolean chk3 = chkEstadoLleno.isSelected();
@@ -433,7 +433,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         return true;
     }
     
-    public boolean filtroContinente(vuelo ae){
+    public boolean filtroContinente(Vuelo ae){
         if(listContinenteO.getSelectedIndex() > -1){
             if((listContinenteO.getSelectedIndex() == 0) &&
                     (ae.getContinenteOrigen().equals("Europa")))
@@ -453,7 +453,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         return true;
     }
     
-    public boolean filtroCapacidad(vuelo ae){
+    public boolean filtroCapacidad(Vuelo ae){
         // Si no se indica alguno, se infiere que no habrá filtro
         if(!(txtCapMax.getText().equals("")) && 
                 (ae.getCapActual() > Integer.parseInt(txtCapMax.getText())))
@@ -464,7 +464,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         return true;
     }
     
-    public boolean filtroFechas(vuelo ae){
+    public boolean filtroFechas(Vuelo ae){
         Date fechaLlegada = ae.getFechaLlegada();
         Date fechaSalida = ae.getFechaSalida();
         LocalDate dateLlegada = fechaLlegada.toInstant()
@@ -562,7 +562,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         // Primero se tendrá que validar el filtro
-        filter = new ArrayList<vuelo>();
+        filter = new ArrayList<Vuelo>();
         if(fitroValido() == 0){
             for(int i=0; i<lstVuelo.size(); i++){
                 if(filtroEstado(lstVuelo.get(i)) &&
@@ -579,7 +579,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
             }
             for(int i = 0; i < filter.size(); i++){
                 Object[] obj = new Object[8];
-                vuelo u = filter.get(i);
+                Vuelo u = filter.get(i);
                 obj[0] = u.getCodigo();
                 obj[1] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaSalida());
                 obj[2] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaLlegada());
