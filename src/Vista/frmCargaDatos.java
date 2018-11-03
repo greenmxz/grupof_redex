@@ -1,5 +1,6 @@
 package Vista;
 
+import Controlador.VueloBL;
 import Controlador.aeropuertoBL;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -378,7 +379,9 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 procesarAeropuertos(listFile.get(i).getUbicacion());
                 procBL.registrarAeropuertos(procesarAeropuertos(listFile.get(i).getUbicacion()));
             }else if(listFile.get(i).getTipo() == "Vuelos"){
+                VueloBL procBL = new VueloBL();
                 procesarVuelos(listFile.get(i).getUbicacion());
+                procBL.registrarAeropuertos(procesarVuelos(listFile.get(i).getUbicacion()));
             }else if(listFile.get(i).getTipo() == "Paquetes"){
                 procesarPaquetes(listFile.get(i).getUbicacion());
             }
