@@ -253,7 +253,6 @@ public class aeropuertoDA {
                             lstAerop.get(i).getCantidad_paquetes() + ",'" +
                             String.valueOf(idCiudad) + "','1')";
                 }
-                
             }
         }catch(Exception e){
             System.out.println("ERROR registrarAeropuertos "+e.getMessage());

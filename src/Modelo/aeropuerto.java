@@ -19,6 +19,22 @@ public class aeropuerto {
     private String pais;
     private String ciudad;
 
+    public aeropuerto(){
+        
+    }
+    
+    public aeropuerto(int id, String nombre, String codigo, String continente,
+            String pais, String ciudad){
+        this.id = id;
+        this.nombre = nombre;
+        this.codigo = codigo;
+        this.capacidad_maxima = 750;
+        this.cantidad_paquetes = 500;
+        this.continente = continente;
+        this.pais = pais;
+        this.ciudad = ciudad;
+    }
+    
     public int getId() {
         return id;
     }
@@ -83,9 +99,12 @@ public class aeropuerto {
         this.ciudad = ciudad;
     }
 
-    
+    public void print(){
+        System.out.println("Airport " + String.valueOf(this.getNombre()) +
+                " (" + this.getCodigo() + ") - [" +
+                String.valueOf(this.getContinente()) + "," + 
+                String.valueOf(this.getPais()) + "," + 
+                String.valueOf(this.getCiudad()) + "]");
+    }
 
-    
-
-    
 }

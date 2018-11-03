@@ -281,8 +281,8 @@ public class frmReporteVuelo extends javax.swing.JPanel {
             obj[0] = u.getCodigo();
             obj[1] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaSalida());
             obj[2] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaLlegada());
-            obj[3] = u.getContinenteOrigen();
-            obj[4] = u.getContinenteDestino();
+            obj[3] = u.getAeropuertoOrigen();
+            obj[4] = u.getAeropuertoDestino();
             obj[5] = u.getCapMax();
             obj[6] = u.getCapActual();
             obj[7] = u.getEstado();
@@ -436,18 +436,18 @@ public class frmReporteVuelo extends javax.swing.JPanel {
     public boolean filtroContinente(Vuelo ae){
         if(listContinenteO.getSelectedIndex() > -1){
             if((listContinenteO.getSelectedIndex() == 0) &&
-                    (ae.getContinenteOrigen().equals("Europa")))
+                    (ae.getAeropuertoOrigen().equals("Europa")))
                 return false;
             if((listContinenteO.getSelectedIndex() == 1) &&
-                    (ae.getContinenteOrigen().equals("América")))
+                    (ae.getAeropuertoOrigen().equals("América")))
                 return false;
         }
         if(listContinenteD.getSelectedIndex() > -1){
             if((listContinenteD.getSelectedIndex() == 0) &&
-                    (ae.getContinenteDestino().equals("Europa")))
+                    (ae.getAeropuertoDestino().equals("Europa")))
                 return false;
             if((listContinenteD.getSelectedIndex() == 1) &&
-                    (ae.getContinenteDestino().equals("América")))
+                    (ae.getAeropuertoDestino().equals("América")))
                 return false;
         }
         return true;
@@ -583,8 +583,8 @@ public class frmReporteVuelo extends javax.swing.JPanel {
                 obj[0] = u.getCodigo();
                 obj[1] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaSalida());
                 obj[2] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaLlegada());
-                obj[3] = u.getContinenteOrigen();
-                obj[4] = u.getContinenteDestino();
+                obj[3] = u.getAeropuertoOrigen();
+                obj[4] = u.getAeropuertoDestino();
                 obj[5] = u.getCapMax();
                 obj[6] = u.getCapActual();
                 obj[7] = u.getEstado();

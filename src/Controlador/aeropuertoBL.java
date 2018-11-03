@@ -26,4 +26,8 @@ public class aeropuertoBL {
     public ArrayList<aeropuerto> listaAeropuertos(){
         return AdministrarAeropuertoDA.listaAeropuertos();
     }
+    
+    public void registrarAeropuertos(ArrayList<aeropuerto> lstAerop){
+        AdministrarAeropuertoDA.registrarAeropuertos(lstAerop);
+    }
 }
