@@ -198,13 +198,13 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="5" y="135" width="140" height="30"/>
+                  <AbsoluteConstraints x="5" y="165" width="140" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>
             <Component class="Especial.RSButtonMetro" name="btnDetermUnit">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Generaci&#xf3;n (unit.)"/>
+                <Property name="text" type="java.lang.String" value="Generaci&#xf3;n de ruta"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
@@ -237,6 +237,20 @@
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="5" y="100" width="140" height="3"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="Especial.RSButtonMetro" name="btnGenData">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Generaci&#xf3;n de data"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenDataActionPerformed"/>
+              </Events>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="5" y="135" width="140" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>
