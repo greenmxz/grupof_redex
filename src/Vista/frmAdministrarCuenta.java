@@ -3,6 +3,7 @@ package Vista;
 import Controlador.usuarioBL;
 import Modelo.usuario;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class frmAdministrarCuenta extends javax.swing.JPanel {
@@ -44,6 +45,7 @@ public class frmAdministrarCuenta extends javax.swing.JPanel {
         tblUsuarios = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        borrarCuenta = new javax.swing.JButton();
 
         panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -82,7 +84,15 @@ public class frmAdministrarCuenta extends javax.swing.JPanel {
                 jButton1ActionPerformed(evt);
             }
         });
-        panelFondo.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, -1, -1));
+        panelFondo.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, -1, -1));
+
+        borrarCuenta.setText("Eliminar");
+        borrarCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                borrarCuentaActionPerformed(evt);
+            }
+        });
+        panelFondo.add(borrarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 60, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -115,8 +125,23 @@ public class frmAdministrarCuenta extends javax.swing.JPanel {
         new frmCrearCuenta(x,true,this).setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void borrarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarCuentaActionPerformed
+        // TODO add your handling code here:
+        this.setUsuarioSeleccionado(this.usuarios.get(this.tblUsuarios.getSelectedRow()).getId());
+        //
+        int respuesta = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea eliminar este usuario?");
+        if ( respuesta == 0){// Si se acepta
+            if (this.usuarioBL.borrarUsuario(this.usuarioSeleccionado)){
+                JOptionPane.showMessageDialog(this,"Se ha eliminó la cuenta correctamente");
+            }else {
+                JOptionPane.showMessageDialog(this,"Ha ocurrido un error, por favor intentelo más tarde");
+            };
+        }
+    }//GEN-LAST:event_borrarCuentaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton borrarCuenta;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

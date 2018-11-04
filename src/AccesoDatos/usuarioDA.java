@@ -150,7 +150,8 @@ public class usuarioDA {
              String query="select *,u.codigo as 'nombre_usuario',p.nombre as 'nombre_persona',r.nombre as 'rol',"
                      + "u.id as 'id_usuario' from usuario as u "
                      + "inner join persona as p on u.id_persona=p.id "
-                     + "inner join rol as r on r.id=u.id_rol";
+                     + "inner join rol as r on r.id=u.id_rol "
+                     + "where u.activo = true";
             Statement stmt = connection.getConnection().createStatement();
             ResultSet rs = stmt.executeQuery(query);
             ArrayList<usuario> lista = new ArrayList<>();
@@ -239,7 +240,7 @@ public class usuarioDA {
                     + " numero_documento_identidad= ? , "
                     + " direccion=? , fecha_nacimiento= ?,  id_ciudad= (select id from ciudad where nombre = ? ), "
                     + " id_tipo_documento=(select id from tabla_general_detalle where valor = ?), "
-                    + " correo= ?"
+                    + " correo= ? "
                     + "where id = ?";
 
             
@@ -286,6 +287,25 @@ public class usuarioDA {
          }
          
      }
-    
+    public boolean borrarUsuario(int index){
+         try {
+            database connect = new database();
+            String queryUsuario="update  usuario set activo = false "
+                    + "where id = ? "; 
+            PreparedStatement stmt2 = connect.getConnection().prepareStatement(queryUsuario);
+            stmt2.setInt(1,index);
+            stmt2.executeUpdate();
+            System.out.println("Se regristro el usuario correctamente");
+            System.out.println("Se registro el usuario");
+            return true;
+            
+
+            
+         }catch(Exception ex){
+             System.out.println(ex.getMessage());
+             return false;
+         }
+         
+     }
     
 }

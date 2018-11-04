@@ -34,4 +34,7 @@ public class usuarioBL {
     public usuario obtenerInfoUsuario(int i){
         return usuarioDA.obtenerInfoUsuario(i);
     }
+    public boolean borrarUsuario(int i){
+        return usuarioDA.borrarUsuario( i);
+    }
 }
