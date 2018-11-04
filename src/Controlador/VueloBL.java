@@ -9,7 +9,7 @@ public class VueloBL {
     public VueloBL(){
         administrarVueloDA = new VueloDA();
     }
-    public void registrarAeropuertos(ArrayList<Vuelo> lstAerop){
-        administrarVueloDA.registrarVuelos(lstAerop);
+    public void registrarVuelos(ArrayList<Vuelo> lstVue){
+        administrarVueloDA.registrarVuelos(lstVue);
     }
 }

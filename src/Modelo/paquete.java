@@ -40,6 +40,9 @@ public class paquete {
         this.fechaSalida = fechaSalida;
         this.aeropuertoOrigen = aeropuertoOrigen;
         this.aeropuertoDestino = aeropuertoDestino;
+        this.clienteEmisor = String.valueOf(1);
+        this.clienteReceptor = String.valueOf(2);
+        this.estado = String.valueOf(1);
     }
     
     public String getCodigo() {
