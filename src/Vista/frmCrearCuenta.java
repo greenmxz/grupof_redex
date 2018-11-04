@@ -48,6 +48,10 @@ public class frmCrearCuenta extends javax.swing.JDialog {
             this.nombreUsuario.setText(this.usuarioSeleccionado.getCodigo());
             //Setear date a localdate;
             LocalDate date = this.usuarioSeleccionado.getPersona().getFechaNacimiento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//             this.usuarioSeleccionado.getPersona().getFechaNacimiento();
+//            LocalDate localD = date.toLocalDate();
+            System.out.println("Persona date1 " + this.usuarioSeleccionado.getPersona().getFechaNacimiento());
+            System.out.println("Persona date 2" + date);
             this.fechaNac.setDate( date);
             setSelectedValueCiudad(this.ciudad,this.usuarioSeleccionado.getPersona().getCiudad());
             setSelectedValueTipoDocumento(this.tipoDocumento,this.usuarioSeleccionado.getPersona().getTipoDocumento());
@@ -512,13 +516,18 @@ public class frmCrearCuenta extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.contraseñaRepetir.setText("");
     }//GEN-LAST:event_contraseñaRepetirActionPerformed
+    private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
 
+       java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+
+        return sDate;
+    }
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
         // TODO add your handling code here:
         try {
         
         if (validarDatos()){
-            JOptionPane.showMessageDialog(this, "Todos los datos fueron digitados");
+            //JOptionPane.showMessageDialog(this, "Todos los datos fueron digitados");
             System.out.println("acaaaa "+ fechaNac.getDate() + " " + fechaNac.getText());
             if (validarContraseña()){
                 usuario usuarioNuevo = new usuario();
@@ -547,7 +556,15 @@ public class frmCrearCuenta extends javax.swing.JDialog {
 //                System.out.println("AQI "+formattedString);
 //                
 //                personaNueva.setFechaNacimiento( new Date(formattedString) );
-
+    
+/*
+Para transformar al reves es 
+Date date = r.getDate();
+LocalDate localD = date.toLocalDate();
+*/
+                //java.sql.Date d = convertUtilToSql(this.fechaNac.getDate());
+                java.sql.Date date = java.sql.Date.valueOf(this.fechaNac.getDate());
+                personaNueva.setFechaNacimiento(date);
                 personaNueva.setNumeroDocumentoIdentidad(parseInt(this.numeroDocumento.getText()));
                 personaNueva.setDireccion(direccion.getText());
                 personaNueva.setCiudad(ciudad.getSelectedItem().toString());

@@ -96,6 +96,7 @@ public class usuarioDA {
             SimpleDateFormat  sdf;
             String            s;
             sdf = new SimpleDateFormat("yyyy-MM-dd");  // Or whatever format you need
+            System.out.println("Fecha de nac : "+ usuario.getPersona().getFechaNacimiento());
             s = sdf.format(usuario.getPersona().getFechaNacimiento()); 
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date fd =   formatter.parse(s);

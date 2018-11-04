@@ -108,6 +108,7 @@ public class frmAdministrarCuenta extends javax.swing.JPanel {
 
     private void registrarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarUsuarioActionPerformed
         // TODO add your handling code here:
+        this.usuarioSeleccionado=-1;
         new frmCrearCuenta(x,true,this).setVisible(true);
     }//GEN-LAST:event_registrarUsuarioActionPerformed
 
