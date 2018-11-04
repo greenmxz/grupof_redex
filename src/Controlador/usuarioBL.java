@@ -25,7 +25,16 @@ public class usuarioBL {
     public boolean crearUsuario(usuario usuario){
         return usuarioDA.registrarUsuario(usuario);
     }
+    public boolean modificarUsuario(usuario usuario){
+        return usuarioDA.modificarUsuario(usuario);
+    }
     public ArrayList<usuario> obtenerUsuarios(){
         return usuarioDA.obtenerUsuarios();
+    }
+    public usuario obtenerInfoUsuario(int i){
+        return usuarioDA.obtenerInfoUsuario(i);
+    }
+    public boolean borrarUsuario(int i){
+        return usuarioDA.borrarUsuario( i);
     }
 }

@@ -1,6 +1,7 @@
 package Vista;
 
 import Controlador.generalBL;
+import Vista.frmAdministrarCuenta;
 import Controlador.usuarioBL;
 import Modelo.*;
 import java.awt.Component;
@@ -9,10 +10,12 @@ import static java.lang.Integer.parseInt;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.*;
+
 
 public class frmCrearCuenta extends javax.swing.JDialog {
 
@@ -22,14 +25,48 @@ public class frmCrearCuenta extends javax.swing.JDialog {
     private ArrayList<ciudad> ciudades;
     private ArrayList<tipoDocumento> tipoDocumentos;
     private usuarioBL usuarioBL; 
-    
-    public frmCrearCuenta(java.awt.Frame parent, boolean modal) {
+    private usuario usuarioSeleccionado;
+    int index;
+    int id_persona;
+    public frmCrearCuenta(java.awt.Frame parent, boolean modal,frmAdministrarCuenta padre) {
         super(parent, modal);
         generalBL = new generalBL();
         usuarioBL = new usuarioBL();
         initComponents();
         setLocationRelativeTo(parent);
         inicializar();
+        index=  padre.getUsuarioSeleccionado();
+        
+        if (index >=0){
+            this.registrar.setText("Modificar");
+            this.usuarioSeleccionado=usuarioBL.obtenerInfoUsuario(index);
+            this.numeroDocumento.setText(Integer.toString(this.usuarioSeleccionado.getPersona().getNumeroDocumentoIdentidad()));
+            this.nombrePersona.setText(this.usuarioSeleccionado.getPersona().getNombre());
+            this.apellidoPaterno.setText(this.usuarioSeleccionado.getPersona().getApellidoPaterno());
+            this.apellidoMaterno.setText(this.usuarioSeleccionado.getPersona().getApellidoMaterno());
+            setSelectedValueRol(this.rol,this.usuarioSeleccionado.getRol());
+            this.nombreUsuario.setText(this.usuarioSeleccionado.getCodigo());
+            //Setear date a localdate;
+            LocalDate date = this.usuarioSeleccionado.getPersona().getFechaNacimiento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//             this.usuarioSeleccionado.getPersona().getFechaNacimiento();
+//            LocalDate localD = date.toLocalDate();
+            System.out.println("Persona date1 " + this.usuarioSeleccionado.getPersona().getFechaNacimiento());
+            System.out.println("Persona date 2" + date);
+            this.fechaNac.setDate( date);
+            setSelectedValueCiudad(this.ciudad,this.usuarioSeleccionado.getPersona().getCiudad());
+            setSelectedValueTipoDocumento(this.tipoDocumento,this.usuarioSeleccionado.getPersona().getTipoDocumento());
+            this.correo.setText(this.usuarioSeleccionado.getPersona().getCorreo());
+            this.direccion.setText(this.usuarioSeleccionado.getPersona().getDireccion());
+            System.out.println(this.usuarioSeleccionado.getPersona().getNombre()+ " - - "+this.usuarioSeleccionado.getPersona().getId());
+            this.contraseña.setText(this.usuarioSeleccionado.getPassword());
+            
+            this.contraseñaRepetir.setText(this.usuarioSeleccionado.getPassword());
+        }else{
+            this.registrar.setText("Registrar");
+        }
+        System.out.println("this selected index "+index);
+
+
     }
     
     /* Métodos */
@@ -46,7 +83,45 @@ public class frmCrearCuenta extends javax.swing.JDialog {
         tipoDocumentos = generalBL.obtenerTipoDocumentos();
         this.tipoDocumento.setModel(new DefaultComboBoxModel( (tipoDocumentos).toArray()));
     }
-    
+    public static void setSelectedValueRol(JComboBox comboBox, String value)
+    {
+        rol item;
+        for (int i = 0; i < comboBox.getItemCount(); i++)
+        {
+            item = (rol)comboBox.getItemAt(i);
+            if (item.getNombre().equals(value))
+            {
+                comboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
+     public static void setSelectedValueCiudad(JComboBox comboBox, String value)
+    {
+        ciudad item;
+        for (int i = 0; i < comboBox.getItemCount(); i++)
+        {
+            item = (ciudad)comboBox.getItemAt(i);
+            if (item.getNombre().equals(value))
+            {
+                comboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
+      public static void setSelectedValueTipoDocumento(JComboBox comboBox, String value)
+    {
+        tipoDocumento item;
+        for (int i = 0; i < comboBox.getItemCount(); i++)
+        {
+            item = (tipoDocumento)comboBox.getItemAt(i);
+            if (item.getNombre().equals(value))
+            {
+                comboBox.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
     private boolean validarDatos(){
         if(this.nombrePersona.getText().length()>0 && this.apellidoPaterno.getText().length()>0 && 
            this.apellidoMaterno.getText().length()>0 && this.fechaNac.getDate()!= null &&
@@ -441,13 +516,18 @@ public class frmCrearCuenta extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.contraseñaRepetir.setText("");
     }//GEN-LAST:event_contraseñaRepetirActionPerformed
+    private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
 
+       java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+
+        return sDate;
+    }
     private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
         // TODO add your handling code here:
         try {
         
         if (validarDatos()){
-            JOptionPane.showMessageDialog(this, "Todos los datos fueron digitados");
+            //JOptionPane.showMessageDialog(this, "Todos los datos fueron digitados");
             System.out.println("acaaaa "+ fechaNac.getDate() + " " + fechaNac.getText());
             if (validarContraseña()){
                 usuario usuarioNuevo = new usuario();
@@ -476,7 +556,15 @@ public class frmCrearCuenta extends javax.swing.JDialog {
 //                System.out.println("AQI "+formattedString);
 //                
 //                personaNueva.setFechaNacimiento( new Date(formattedString) );
-
+    
+/*
+Para transformar al reves es 
+Date date = r.getDate();
+LocalDate localD = date.toLocalDate();
+*/
+                //java.sql.Date d = convertUtilToSql(this.fechaNac.getDate());
+                java.sql.Date date = java.sql.Date.valueOf(this.fechaNac.getDate());
+                personaNueva.setFechaNacimiento(date);
                 personaNueva.setNumeroDocumentoIdentidad(parseInt(this.numeroDocumento.getText()));
                 personaNueva.setDireccion(direccion.getText());
                 personaNueva.setCiudad(ciudad.getSelectedItem().toString());
@@ -484,12 +572,24 @@ public class frmCrearCuenta extends javax.swing.JDialog {
                 personaNueva.setTipoDocumento(tipoDocumento.getSelectedItem().toString());
                 usuarioNuevo.setPersona(personaNueva);
                 System.out.println("persona "+personaNueva.toString());
-
-                if (usuarioBL.crearUsuario(usuarioNuevo)){
-                    JOptionPane.showMessageDialog(this, "Se registro correctamente");
+                
+                if (index>0){
+                    usuarioNuevo.setId(this.index);
+                    usuarioNuevo.getPersona().setId(this.usuarioSeleccionado.getPersona().getId());
+                    if (usuarioBL.modificarUsuario(usuarioNuevo)){
+                        
+                        JOptionPane.showMessageDialog(this, "Se modifico correctamente");
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
+                    }
                 }else{
-                    JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
+                    if (usuarioBL.crearUsuario(usuarioNuevo)){
+                        JOptionPane.showMessageDialog(this, "Se registro correctamente");
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
+                    }
                 }
+                
 
             }else{
                 JOptionPane.showMessageDialog(this, "Contraseñas diferentes error");
@@ -536,7 +636,7 @@ public class frmCrearCuenta extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                frmCrearCuenta dialog = new frmCrearCuenta(new javax.swing.JFrame(), true);
+                frmCrearCuenta dialog = new frmCrearCuenta(new javax.swing.JFrame(), true,new frmAdministrarCuenta(new javax.swing.JFrame()));
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
