@@ -67,7 +67,7 @@ public class TabuSearch {
         }
     }
     
-    public void tabuAlgorithm(String codeOrigin, String codeDestiny, String hourBegin){
+    public String tabuAlgorithm(String codeOrigin, String codeDestiny, String hourBegin){
         this.originId = inputProcess.searchAirportId(codeOrigin);
         this.destinyId = inputProcess.searchAirportId(codeDestiny);
         tabuString = new ArrayList<String>();
@@ -86,6 +86,7 @@ public class TabuSearch {
             if(i == -1) break;
             routeOptimal.add(Integer.valueOf(i));
         }
+        return "Determinamos la ruta óptima con: " + String.valueOf(getRouteLenght(routeOptimal));
     }
     
     public int isSolution(int[] route){
@@ -134,7 +135,6 @@ public class TabuSearch {
 
         // Determinate solution
         bestRoute = findBestSolution(this.numInt, this.tabuString, route);
-        System.out.println("Determinamos la ruta óptima con: " + String.valueOf(getRouteLenght(bestRoute)));
         return bestRoute;
     }
 

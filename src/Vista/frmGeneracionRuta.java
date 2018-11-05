@@ -1,14 +1,30 @@
 package Vista;
 
 import Algoritmo.TabuSearch;
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.ListModel;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 
 public class frmGeneracionRuta extends javax.swing.JPanel {
 
-    public frmGeneracionRuta() {
+    private javax.swing.JFrame x;
+    
+    public frmGeneracionRuta(javax.swing.JFrame x) {
         initComponents();
+        this.x = x;
+        dtpLlegada.setDateTimePermissive(LocalDateTime.of(2018, 4, 01, 0, 0));
+    }
+    
+    public void setOrigen(String codigo){
+        txtOrigen.setText(codigo);
+    }
+    
+    public void setDestino(String codigo){
+        txtDestino.setText(codigo);
     }
 
     @SuppressWarnings("unchecked")
@@ -31,8 +47,8 @@ public class frmGeneracionRuta extends javax.swing.JPanel {
         btnGenerar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listDetalle = new javax.swing.JList<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtInforme = new javax.swing.JTextArea();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -54,13 +70,27 @@ public class frmGeneracionRuta extends javax.swing.JPanel {
 
         jLabel4.setText("Aeropuerto de origen");
         panelConfig.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
+
+        txtDestino.setEnabled(false);
         panelConfig.add(txtDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 180, -1));
+
+        txtOrigen.setEnabled(false);
         panelConfig.add(txtOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, 180, -1));
 
         btnBuscarDestino.setText("Buscar");
+        btnBuscarDestino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarDestinoActionPerformed(evt);
+            }
+        });
         panelConfig.add(btnBuscarDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 90, -1, -1));
 
         btnBuscarOrigen.setText("Buscar");
+        btnBuscarOrigen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarOrigenActionPerformed(evt);
+            }
+        });
         panelConfig.add(btnBuscarOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 60, -1, -1));
 
         panelFondo.add(panelConfig, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 450, 130));
@@ -87,34 +117,55 @@ public class frmGeneracionRuta extends javax.swing.JPanel {
         jLabel6.setText("Detalle");
         panelFondo.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, -1, -1));
 
-        listDetalle.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "-Configure la simulación unitaria y dé cilc en \"Generar\" para iniciar el proceso-" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(listDetalle);
+        txtInforme.setEditable(false);
+        txtInforme.setColumns(20);
+        txtInforme.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        txtInforme.setRows(5);
+        txtInforme.setText("-Configure la simulación unitaria y dé cilc en \"Generar\" para iniciar el proceso-");
+        jScrollPane2.setViewportView(txtInforme);
 
-        panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 730, 150));
+        panelFondo.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 730, 170));
 
         add(panelFondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 500));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
         try{
+            String texto = "**************************************\nSIMULACIÓN UNITARIA INICIADA\n" + 
+                    "**************************************\n\n";
+            txtInforme.setText(texto);
             TabuSearch ts = new TabuSearch();
             ts.inputData("G:\\PUCP\\9no Ciclo\\DP1\\Sistema\\algoritmo\\tabuProvisional\\aeropuertos.txt",
                 "G:\\PUCP\\9no Ciclo\\DP1\\Sistema\\algoritmo\\tabuProvisional\\planes_vuelo.txt",
                 "G:\\PUCP\\9no Ciclo\\DP1\\Sistema\\algoritmo\\tabuProvisional\\pack_enviado_SKBO.txt");
-            ts.printPackList();
+            String origen = txtOrigen.getText();
+            String destino = txtDestino.getText();
+            LocalDate dia = dtpLlegada.getDatePicker().getDate();
+            LocalTime hora = dtpLlegada.getTimePicker().getTime();
+            String fecha = new SimpleDateFormat("HH:mm").format(
+                    new Date(dia.getYear()-1900, dia.getMonthValue()-1, dia.getDayOfMonth(),
+                        hora.getHour(), hora.getMinute()));
             long start = System.currentTimeMillis();
-            ts.executeVCRPTabu();
+//            ts.executeVCRPTabu();
+            texto += ts.tabuAlgorithm(origen, destino, fecha);
             long elapsedTime = System.currentTimeMillis() - start;
-            System.out.println("Tiempo: " + String.valueOf(elapsedTime) + " mseg");
+            texto += "\nTiempo empleado: " + String.valueOf(elapsedTime) + " mseg";
+            texto += "\n\nSIMULACIÓN UNITARIA FINALIZADA\n" + 
+                    "**************************************\n";
+            txtInforme.setText(texto);
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("There are a several problem with the testing data reading process! Check it!");
         }
     }//GEN-LAST:event_btnGenerarActionPerformed
+
+    private void btnBuscarOrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarOrigenActionPerformed
+        new Vista.frmBuscarAeropuerto(x,true,this,0).setVisible(true);
+    }//GEN-LAST:event_btnBuscarOrigenActionPerformed
+
+    private void btnBuscarDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarDestinoActionPerformed
+        new Vista.frmBuscarAeropuerto(x,true,this,1).setVisible(true);
+    }//GEN-LAST:event_btnBuscarDestinoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -130,11 +181,11 @@ public class frmGeneracionRuta extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JList<String> listDetalle;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel panelConfig;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JTextField txtDestino;
+    private javax.swing.JTextArea txtInforme;
     private javax.swing.JTextField txtOrigen;
     // End of variables declaration//GEN-END:variables
 }
