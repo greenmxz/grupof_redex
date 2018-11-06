@@ -5,8 +5,12 @@
  */
 package Vista;
 
+import java.awt.EventQueue;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
-
+import org.openstreetmap.gui.jmapviewer.JMapViewer;
 /**
  *
  * @author JUAN
@@ -18,8 +22,16 @@ public class frmIniciarSimulacion extends javax.swing.JPanel {
      */
     public frmIniciarSimulacion() {
         initComponents();
-        SwingUtilities.invokeLater(() -> {
-            Vista.OpenMap.create("./openmap.properties").showInFrame();
+
+        JMapViewer jmap=new JMapViewer();
+        
+        EventQueue.invokeLater(() -> {
+            try {
+                MapWorkerTest mapWorker=new MapWorkerTest();
+                mapWorker.display();
+            } catch (IOException ex) {
+                Logger.getLogger(MapWorkerTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 

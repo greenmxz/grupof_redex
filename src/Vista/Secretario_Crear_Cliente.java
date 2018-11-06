@@ -275,28 +275,34 @@ public class Secretario_Crear_Cliente extends javax.swing.JDialog {
             cliente.setPersona(persona);
             cliente.setCodigo(dni);
 
-            switch(controlador_cliente.registrarCliente(cliente)){
-                case 1:
-                JOptionPane.showMessageDialog(null,
-                    "El cliente ha sido correctamente registrado",
-                    "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+            if (!dni.equals("") && !nombre.equals("") && !ap_pat.equals("") && !ap_mat.equals("") && !correo.equals("") && !telefono.equals("")) {
+                switch (controlador_cliente.registrarCliente(cliente)) {
+                    case 1:
+                        JOptionPane.showMessageDialog(null,
+                                "El cliente ha sido correctamente registrado",
+                                "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 
-                if(tabla != null){
-                    actualizar_tabla(cliente);
+                        if (tabla != null) {
+                            actualizar_tabla(cliente);
+                        }
+                        //this.dispose();
+                        break;
+                    case 0:
+                        JOptionPane.showMessageDialog(null,
+                                "No se pudo registrar usuario",
+                                "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+
+                    case 2:
+                        JOptionPane.showMessageDialog(null,
+                                "Otro cliente con el mismo documento de identidad ya ha sido registrado",
+                                "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+                        break;
                 }
-                //this.dispose();
-                break;
-                case 0:
+            } else {
                 JOptionPane.showMessageDialog(null,
-                    "No se pudo registrar usuario",
-                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
-                break;
-
-                case 2:
-                JOptionPane.showMessageDialog(null,
-                    "Otro cliente con el mismo documento de identidad ya ha sido registrado",
-                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
-                break;
+                        "No se pudo registrar usuario, llene todos los campos.",
+                        "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
             }
 
         }catch(Exception ex){
