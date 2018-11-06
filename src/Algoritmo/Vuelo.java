@@ -1,8 +1,8 @@
 package Algoritmo;
 
 public class Vuelo {
-    private static int count = 0;
-    private int identificator;
+//    private static int count = 0;
+//    private int identificator;
     private int originAirport;
     private int originHour;
     private int originMin;
@@ -13,7 +13,7 @@ public class Vuelo {
     public Vuelo(int originAirport, int originHour, 
             int originMin, int destinyAirport, int destinyHour, 
             int destinyMin){
-        this.identificator = count + 1;
+//        this.identificator = count + 1;
         this.originAirport = originAirport;
         this.originHour = originHour;
         this.originMin = originMin;
@@ -23,16 +23,16 @@ public class Vuelo {
         if((originHour*60 + originMin)>(destinyHour*60 + destinyMin)){
             this.destinyHour += 24;
         }
-        count++;
+//        count++;
     }
 
-    public int getIdentificator() {
-        return identificator;
-    }
-
-    public void setIdentificator(int identificator) {
-        this.identificator = identificator;
-    }
+//    public int getIdentificator() {
+//        return identificator;
+//    }
+//
+//    public void setIdentificator(int identificator) {
+//        this.identificator = identificator;
+//    }
 
     public int getOriginAirport() {
         return originAirport;
@@ -84,7 +84,7 @@ public class Vuelo {
     
     /* Methods */
     public void print(){
-        System.out.println("Flight " + this.getIdentificator() + ": " +
+        System.out.println("Flight " + ": " +
                 String.valueOf(this.getOriginAirport()) +
                 " to " + String.valueOf(this.getDestinyAirport()) + " -> " +
                 String.valueOf(this.getOriginHour()) + ":" +

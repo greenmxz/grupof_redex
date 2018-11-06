@@ -1,8 +1,8 @@
 package Algoritmo;
 
 public class Paquete {
-    private static int count = 0;
-    private int identificator;
+//    private static int count = 0;
+//    private int identificator;
     private int originHour;
     private int originMin;
     private int originAirport;
@@ -10,21 +10,21 @@ public class Paquete {
     
     public Paquete(int originHour, int originMin, int originAirport,
             int destinyAirport){
-        this.identificator = count + 1;
+//        this.identificator = count + 1;
         this.originHour = originHour;
         this.originMin = originMin;
         this.originAirport = originAirport;
         this.destinyAirport = destinyAirport;
-        count++;
+//        count++;
     }
 
-    public int getIdentificator() {
-        return identificator;
-    }
-
-    public void setIdentificator(int identificator) {
-        this.identificator = identificator;
-    }
+//    public int getIdentificator() {
+//        return identificator;
+//    }
+//
+//    public void setIdentificator(int identificator) {
+//        this.identificator = identificator;
+//    }
 
     public int getOriginHour() {
         return originHour;
@@ -59,7 +59,7 @@ public class Paquete {
     }
     
     public void print(){
-        System.out.println("Pack " + this.getIdentificator() + " $ " +
+        System.out.println("Pack " + " $ " +
                 String.valueOf(this.getOriginHour()) + ":" +
                 String.valueOf(this.getOriginMin()) + " route " +
                 String.valueOf(this.getOriginAirport()) + " -> " +

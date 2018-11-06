@@ -1,0 +1,44 @@
+            OACI			
+       America del Sur.			
+01   SKBO   Bogota              Colombia        bogo 
+02   SEQM   Quito               Ecuador         quit
+03   SVMI   Caracas             Venezuela       cara
+04   SBBR   Brasilia            Brasil          bras
+05   SPIM   Lima                Perú            lima
+06   SLLP   La Paz              Bolivia         lapa
+07   SCEL   Santiago de Chile   Chile           sant
+08   SABE   Buenos Aires        Argentina       buen
+09   SGAS   Asunción            Paraguay        asun
+10   SUAA   Motenvideo          Uruguay         mont
+
+       Europa			
+11   LATI   Tirana              Albania         tira
+12   EDDI   Berlin              Alemania        berl
+13   LOWW   Viena               Austria         vien
+14   EBCI   Bruselas            Belgica         brus
+15   UMMS   Minsk               Bielorrusia     mins
+16   LBSF   Sofia               Bulgaria        sofi
+17   LKPR   Praga               Checa           prag
+18   LDZA   Zagreb              Croacia         zagr
+19   EKCH   Copenhague          Dinamarca       cope
+20   LZIB   Bratislava          Eslovaquia      brat
+21   LJLJ   Liubliana           Eslovenia       liub
+22   LEMD   Madrid              España          madr
+23   EETN   Tallin              Estonia         tall
+24   EFHK   Helsinki            Finlandia       hels
+25   LFPG   Paris               Francia         pari
+26   LGAV   Atenas              Grecia          aten
+27   EHAM   Amsterdam           Holanda         amst
+28   LHBP   Budapest            Hungría         buda
+29   EIDW   Dublin              Irlanda (Eire)  dubl
+30   BIKF   Reykjavik           Islandia        reyk
+31   LIRA   Roma                Italia          roma
+32   EVRA   Riga                Letonia         riga
+33   ELLX   Luxemburgo          Luxemburgo      luxe
+34   LMML   LaValletta          Malta           lava
+35   ENGM   Oslo                Noruega         oslo
+36   EPMO   Varsovia            Polonia         vars
+37   LPPT   Lisboa              Portugal        lisb
+38   EGLL   Londres             Reino Unido     lond
+39   ESKN   Estocolmo           Suecia          esto
+40   LSZB   Berna               Suiza           bern

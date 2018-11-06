@@ -238,13 +238,13 @@ public class frmMenuProvisional extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnSimulacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimulacionActionPerformed
-        //new CambiarPanel(panelPrincipal, new frmAdminSimulacion());
+        new CambiarPanel(panelPrincipal, new frmGerenteSimulacion());
         if(this.panelMenu.getX()>-1)
             Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu); 
     }//GEN-LAST:event_btnSimulacionActionPerformed
 
     private void btnDetermUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetermUnitActionPerformed
-        new CambiarPanel(panelPrincipal, new frmGeneracionRuta());
+        new CambiarPanel(panelPrincipal, new frmGeneracionRuta(this));
         if(this.panelMenu.getX()>-1)
             Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);   
     }//GEN-LAST:event_btnDetermUnitActionPerformed
