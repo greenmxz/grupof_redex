@@ -165,7 +165,7 @@ public class DataProcessing {
                 for(int j=0; j<listFlight.size();j++){
                     // Assign the relevant elements
                     if(listAirport.get(i).getIdentificator() == listFlight.get(j).getOriginAirport()){
-                        temp.add(listFlight.get(j).getIdentificator());
+                        temp.add(j+1);
                     }
                 }
                 flightMatrix.add(temp);
