@@ -5,8 +5,11 @@
  */
 package Vista;
 
+import com.bbn.openmap.Environment;
+import com.bbn.openmap.MapHandler;
 import com.bbn.openmap.PropertyHandler;
 import com.bbn.openmap.app.OpenMap;
+import com.bbn.openmap.gui.BasicMapPanel;
 import com.bbn.openmap.gui.OpenMapFrame;
 import com.bbn.openmap.layer.shape.ShapeLayer;
 import java.io.FileInputStream;
@@ -16,6 +19,8 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 /**
  *
@@ -29,40 +34,27 @@ public class frmAdminSimulacion extends OpenMapFrame {
     public frmAdminSimulacion() {
         super("Simple Map");
         initComponents();
-        initMap();
+        //initMap();
     }
 
-    private void initMap(){
+    /*private void initMap(){
         Properties shapeLayerProps = new Properties();
-        /*InputStream is = null;
+        PropertyHandler propertyHandler = null;
         try {
-           is = new FileInputStream("Properties.properties");
-           shapeLayerProps.load(is);
-        } catch (FileNotFoundException ex) {
-           Logger.getLogger(OpenMap.class.getName()).log(Level.SEVERE, null, ex);
+           propertyHandler = new PropertyHandler.Builder().setPropertiesFile("./openmap.properties").build();
         } catch (IOException ex) {
-           Logger.getLogger(OpenMap.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-           if (is != null) {
-              try {
-                 is.close();
-              } catch (IOException ex) {
-                Logger.getLogger(OpenMap.class.getName()).log(Level.SEVERE, null, ex);
-              }
-           }
-        }*/
-          shapeLayerProps.put("prettyName", "Political Solid");
-          shapeLayerProps.put("lineColor", "000000");
-          shapeLayerProps.put("fillColor", "BDDE83");
-          shapeLayerProps.put("shapeFile", "resources/map/shape/dcwpo-browse.shp");
-          shapeLayerProps.put("spatialIndex", "resources/map/shape/dcwpo-browse.ssx");
+            Logger.getLogger(frmAdminSimulacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ShapeLayer shapeLayer = new ShapeLayer();
+        if (propertyHandler != null) {
+           shapeLayer.setProperties(propertyHandler.getProperties());
+        }
 
-          ShapeLayer shapeLayer = new ShapeLayer();
-          shapeLayer.setProperties(shapeLayerProps);
-
-          // Add the political layer to the map
-          mapPanel.getMapBean().add(shapeLayer);
-    }
+        // Add the political layer to the map
+        mapPanel.getMapBean().add(shapeLayer);
+        
+    }*/
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -72,10 +64,9 @@ public class frmAdminSimulacion extends OpenMapFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        mapPanel = new com.bbn.openmap.gui.BasicMapPanel();
+        openMap1 = new Vista.OpenMap();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().add(mapPanel, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -89,22 +80,13 @@ public class frmAdminSimulacion extends OpenMapFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmAdminSimulacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmAdminSimulacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmAdminSimulacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmAdminSimulacion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        
+            
+            SwingUtilities.invokeLater(() -> {
+            Vista.OpenMap.create("./openmap.properties").showInFrame();
+        });
+            
+        
         //</editor-fold>
 
         /* Create and display the form */
@@ -113,9 +95,9 @@ public class frmAdminSimulacion extends OpenMapFrame {
                 new frmAdminSimulacion().setVisible(true);
             }
         });
+    
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.bbn.openmap.gui.BasicMapPanel mapPanel;
+    private Vista.OpenMap openMap1;
     // End of variables declaration//GEN-END:variables
 }
