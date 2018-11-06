@@ -16,6 +16,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -128,7 +129,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
 //                    System.out.println(" País: " + country);
                     aeropuerto airpt = new aeropuerto(Integer.parseInt(arr[0]), nameAir, arr[1],
                             continent, country, nameAir);
-                    airpt.print();
+                    //airpt.print();
                     aux.add(airpt);
                 }
             }
@@ -155,7 +156,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
                             Date.from(LocalTime.of(Integer.parseInt(arr[3].split(":")[0]),
                                     Integer.parseInt(arr[3].split(":")[1])).atDate(LocalDate.of(2018, 11, 2)).
                                         atZone(ZoneId.systemDefault()).toInstant()), arr[0], arr[1]);
-                    plannedFlg.print();
+                    //plannedFlg.print();
                     aux.add(plannedFlg);
                 }
             }
@@ -169,6 +170,9 @@ public class frmCargaDatos extends javax.swing.JPanel {
     
     public ArrayList<paquete> procesarPaquetes(String ruta){
         ArrayList<paquete> aux = new ArrayList<paquete>();
+        String backslash = "\\";
+        String identificator = ruta.split(Pattern.quote(backslash))[ruta.split(Pattern.quote(backslash)).length - 1]
+                .split("_")[2].substring(0, 4);
         try{
             BufferedReader reader = new BufferedReader(new FileReader(ruta));
             String line;
@@ -183,8 +187,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
                                         Integer.parseInt(arr[1].substring(0, 4)),
                                         Integer.parseInt(arr[1].substring(4, 6)),
                                         Integer.parseInt(arr[1].substring(6, 8)))).
-                                        atZone(ZoneId.systemDefault()).toInstant()), "SKBO", arr[3]);
-                    plannedPack.print();
+                                        atZone(ZoneId.systemDefault()).toInstant()), identificator, arr[3]);
                     aux.add(plannedPack);
                 }
             }
@@ -259,7 +262,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
         lblSelecArch.setText("Seleccione un archivo:");
         panelFondo.add(lblSelecArch, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, -1));
 
-        chkCargaMultiple.setText("¿Activar carga múltiple?");
+        chkCargaMultiple.setText("¿Obtener ruta?");
         panelFondo.add(chkCargaMultiple, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 50, -1, -1));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Detalle"));
@@ -324,11 +327,10 @@ public class frmCargaDatos extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArchivoActionPerformed
-        JFileChooser chooser = new JFileChooser("G:\\PUCP\\9no Ciclo\\DP1\\Sistema\\algoritmo\\tabuProvisional");
+        JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Archivos de texto (extensión TXT)", "txt");
         chooser.setFileFilter(filter);
-        chooser.setMultiSelectionEnabled(chkCargaMultiple.getModel().isSelected());
         boolean repetido = false;
         while(!repetido){
             int returnVal = chooser.showOpenDialog(null);
@@ -348,7 +350,10 @@ public class frmCargaDatos extends javax.swing.JPanel {
                     continue;
                 }
                 txtNombreArch.setText(chooser.getSelectedFile().getName());
-                txtPathArch.setText(chooser.getSelectedFile().getPath());
+                if(chkCargaMultiple.getModel().isSelected())
+//                    txtPathArch.setText(chooser.getSelectedFile().get());
+//                else
+                    txtPathArch.setText(chooser.getSelectedFile().getPath());
                 break;
             }
         }
@@ -378,13 +383,22 @@ public class frmCargaDatos extends javax.swing.JPanel {
             if(listFile.get(i).getTipo() == "Aeropuertos"){
                 aeropuertoBL procBL = new aeropuertoBL();
                 procBL.registrarAeropuertos(procesarAeropuertos(listFile.get(i).getUbicacion()));
+                JOptionPane.showMessageDialog(null,
+                "El proceso de registro de aeropuertos", "Término de proceso",
+                JOptionPane.INFORMATION_MESSAGE);
             }else if(listFile.get(i).getTipo() == "Vuelos"){
                 VueloBL procBL = new VueloBL();
                 procBL.registrarVuelos(procesarVuelos(listFile.get(i).getUbicacion()));
+                JOptionPane.showMessageDialog(null,
+                "El proceso de registro de vuelos", "Término de proceso",
+                JOptionPane.INFORMATION_MESSAGE);
             }else if(listFile.get(i).getTipo() == "Paquetes"){
                 PaqueteBL procBL = new PaqueteBL();
                 procesarPaquetes(listFile.get(i).getUbicacion());
                 procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion()));
+                JOptionPane.showMessageDialog(null,
+                "El proceso de registro de paquetes", "Término de proceso",
+                JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnProcesarActionPerformed

@@ -10,21 +10,12 @@ public class Paquete {
     
     public Paquete(int originHour, int originMin, int originAirport,
             int destinyAirport){
-//        this.identificator = count + 1;
         this.originHour = originHour;
         this.originMin = originMin;
         this.originAirport = originAirport;
         this.destinyAirport = destinyAirport;
-//        count++;
     }
 
-//    public int getIdentificator() {
-//        return identificator;
-//    }
-//
-//    public void setIdentificator(int identificator) {
-//        this.identificator = identificator;
-//    }
 
     public int getOriginHour() {
         return originHour;

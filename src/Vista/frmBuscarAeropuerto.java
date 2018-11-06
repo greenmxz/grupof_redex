@@ -138,7 +138,6 @@ public class frmBuscarAeropuerto extends javax.swing.JDialog {
             parametro = txtNombre.getText().toLowerCase() + String.valueOf(evt.getKeyChar()).toLowerCase();
         else
             parametro = txtNombre.getText() + String.valueOf(evt.getKeyChar());
-        System.out.println(parametro);
         DefaultTableModel model = (DefaultTableModel)tblAerop.getModel();
         while(tblAerop.getRowCount() > 0)
             model.removeRow(0);
@@ -166,7 +165,6 @@ public class frmBuscarAeropuerto extends javax.swing.JDialog {
             parametro = txtNombre.getText().toLowerCase();
         else
             parametro = txtNombre.getText();
-        System.out.println(parametro);
         DefaultTableModel model = (DefaultTableModel)tblAerop.getModel();
         while(tblAerop.getRowCount() > 0)
             model.removeRow(0);

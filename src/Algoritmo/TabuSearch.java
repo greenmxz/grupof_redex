@@ -1,15 +1,18 @@
 package Algoritmo;
 
+import Controlador.PaqueteBL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import Modelo.paquete;
+import java.time.LocalTime;
 
 public class TabuSearch {
     private ArrayList<Aeropuerto> listAirport;
     private ArrayList<Vuelo> listFlight;
-    private ArrayList<Paquete> listPack;
+    private ArrayList<Modelo.paquete> listPack;
     private ArrayList<ArrayList<Integer>> flightMatrix;
     DataProcessing inputProcess = new DataProcessing();
     private ArrayList<String> tabuString;
@@ -23,7 +26,9 @@ public class TabuSearch {
     private int hourBegin;
     private boolean finded = false;
     private ArrayList<String> asignedPacks;
-    private Date fecha;
+    private Date fechaInicio;
+    private LocalTime fechaSim;
+    private PaqueteBL paqueteBL;
     
     public ArrayList<Integer> getRouteOptimal(){
         return routeOptimal;
@@ -33,7 +38,8 @@ public class TabuSearch {
         inputProcess.inputData(nameAirport, nameFlight, namePack);
         listAirport = inputProcess.getAirportList();
         listFlight = inputProcess.getFlightList();
-        listPack = inputProcess.getPackList();
+        listPack = new ArrayList<Modelo.paquete>();
+        paqueteBL = new PaqueteBL();
         flightMatrix = inputProcess.getFlightMatrix();
         routeOptimal = new ArrayList<Integer>();
         numAirport = listAirport.size();
@@ -48,17 +54,17 @@ public class TabuSearch {
     }
     
     public String executeVCRPTabu(Date fecha){
-        this.fecha = fecha;
+        this.fechaInicio = fecha;
+        listPack = paqueteBL.obtenerPaquetesAsign(fecha);
         String dev = "";
         for(int iter=0; iter<listPack.size(); iter++){
-            String origin = listAirport.get(listPack.get(iter).getOriginAirport()-1).getIcaoCode();
-            String destiny = listAirport.get(listPack.get(iter).getDestinyAirport()-1).getIcaoCode();
+            String origin = listAirport.get(listPack.get(iter).getAeropuertoOrigenId()-1).getIcaoCode();
+            String destiny = listAirport.get(listPack.get(iter).getAeropuertoDestinoId()-1).getIcaoCode();
             if(validator(origin, destiny)){
-                String time = String.valueOf(listPack.get(iter).getOriginHour()) + ":" + 
-                        String.valueOf(listPack.get(iter).getOriginMin());
+                String time = String.valueOf(listPack.get(iter).getFechaSalida().getHours()) + ":" + 
+                        String.valueOf(listPack.get(iter).getFechaSalida().getMinutes());
                 tabuAlgorithm(origin, destiny, time);
                 ArrayList<Integer> solution = getRouteOptimal();
-                dev += String.valueOf(solution.size()) + "rutas\n";
                 for(int i : solution){
                     if(solution.get(0) == i)
                         dev += String.valueOf(listAirport.get(listFlight.get(i-1).getOriginAirport()-1).getIcaoCode());
@@ -76,6 +82,8 @@ public class TabuSearch {
     
     public String tabuAlgorithm(String codeOrigin, String codeDestiny, String hourBegin){
         String dev = "";
+        this.fechaSim = LocalTime.of(Integer.parseInt(hourBegin.split(":")[0]),
+                Integer.parseInt(hourBegin.split(":")[1]));
         this.originId = inputProcess.searchAirportId(codeOrigin);
         this.destinyId = inputProcess.searchAirportId(codeDestiny);
         tabuString = new ArrayList<String>();
@@ -240,15 +248,15 @@ public class TabuSearch {
     }
     
     public int isBanned(ArrayList<String> tabuString, int[] solution){
-        System.out.println("Solucion:");
-        printArray(solution);
+//        System.out.println("Solucion:");
+//        printArray(solution);
         String searchString = generateTabuString(solution);
-        System.out.println("Busq:" + searchString + "\nTabla:");
+//        System.out.println("Busq:" + searchString + "\nTabla:");
+//        for(int i=0; i<tabuString.size(); i++){
+//            System.out.println(tabuString.get(i));
+//        }
         for(int i=0; i<tabuString.size(); i++){
-            System.out.println(tabuString.get(i));
-        }
-        for(int i=0; i<tabuString.size(); i++){
-            System.out.println(searchString.equals(tabuString.get(i)));
+//            System.out.println(searchString.equals(tabuString.get(i)));
             if(searchString.equals(tabuString.get(i)))
 //                System.out.println("Está prohibido");
                 return 1;
@@ -305,8 +313,8 @@ public class TabuSearch {
             System.out.println("Error " + e.getMessage());
             return originalRoute;
         }
-        System.out.print("Llegué con ");
-        printArray(bestRoute);
+//        System.out.print("Llegué con ");
+//        printArray(bestRoute);
         /* Introduce best movement in tabu string*/
         String newTabu = generateTabuString(bestRoute);
         tabuString.add(newTabu);

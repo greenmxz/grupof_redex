@@ -31,7 +31,7 @@ public class VueloDA {
                 Statement sentencia = connect.getConnection().createStatement();
                 String query = "SELECT id FROM redexdb.aeropuerto WHERE codigo = '" +
                         aeropuertoOrigen + "'";
-                System.out.println(query);
+                //System.out.println(query);
                 ResultSet rs = sentencia.executeQuery(query);
                 if(rs.next()){
                     if(rs.getObject("id") != null)
@@ -44,7 +44,7 @@ public class VueloDA {
                 sentencia = connect.getConnection().createStatement();
                 query = "SELECT id FROM redexdb.aeropuerto WHERE codigo = '" +
                         aeropuertoDestino + "'";
-                System.out.println(query);
+//                System.out.println(query);
                 rs = sentencia.executeQuery(query);
                 if(rs.next()){
                     if(rs.getObject("id") != null)
@@ -52,7 +52,7 @@ public class VueloDA {
                 }else{
                     System.out.println("ËRROR DESTINO");
                 }
-                System.out.println(String.valueOf(idOrigen) + " -> " + String.valueOf(idDestino));
+//                System.out.println(String.valueOf(idOrigen) + " -> " + String.valueOf(idDestino));
                 
                 /* 3er paso: Registrar en vuelo */
                 //

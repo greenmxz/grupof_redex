@@ -117,7 +117,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="chkCargaMultiple">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&#xbf;Activar carga m&#xfa;ltiple?"/>
+            <Property name="text" type="java.lang.String" value="&#xbf;Obtener ruta?"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
