@@ -35,7 +35,8 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 
-import Modelo.PolRegresion;
+import Modelo.PolRegresionMinimosCuadrados;
+import Modelo.PolRegresionExponencial;
 /**
  *
  * @author Nowa
@@ -64,6 +65,8 @@ public class proyeccionData {
     
     private ArrayList<String> Archivos = new ArrayList<>();
     private ArrayList<coefCiudad> coeficientes = new ArrayList<>();
+    
+    private double e = Math.E;
         
     public proyeccionData(){
         
@@ -281,7 +284,11 @@ public class proyeccionData {
                         double[] c = coef.getCoef(); // coeficientes de del aeropuerto
                         int diaNuevo = coef.getCantidadFechas() + i + 1;
                         int numEnvio = coef.getCantidadDatosAnalizados();
+                        //y = a[0]*(e^(a[1]*x)) <- exponencial
+                        //y = a[0] + a[1]*x + a[2]*(x^2) <- polinomica
                         int cant = (int)(c[0] + c[1]*diaNuevo + c[2] * diaNuevo*diaNuevo); // cantidad de envios
+                        //int cant = (int)(c[0]*(Math.pow(this.e,(c[1]*diaNuevo))));
+                        
                         String fecha = generaFecha(coef.getUltimaFecha(),i+1);
                         //System.out.println(coef.getAeropuertoCod() + " dia "+ diaNuevo +" - Cant de envios a generar : " + cant);
                         for (int j = 0; j < cant; j++){
@@ -304,6 +311,8 @@ public class proyeccionData {
                 }
                 
                 // con cada string de envio generado se arma nuevo archivo
+                boolean makeDir = new File("resources\\pack_enviados_generados").mkdir();
+                
                 File archivo = new File("resources\\pack_enviados\\" + this.Archivos.get(numCiudad));
                 File archivoNuevo = new File("resources\\pack_enviados_generados\\" + this.Archivos.get(numCiudad));
                 
@@ -397,15 +406,17 @@ public class proyeccionData {
             
             ///Test de regresion polinomica 2do grado
             coefCiudad coefCiudad = new coefCiudad();
-            double[] x = new double[CodigoEnvio.size()];
-            double[] y = new double[CodigoEnvio.size()];
+            double[] x = new double[FechasTrabajadas.size()];
+            double[] y = new double[FechasTrabajadas.size()];
             
             for(int i = 0; i < FechasTrabajadas.size(); i++){ 
                 x[i] = i + 1;
                 y[i] = CantidadPedidosDia.get(i);
             }
             
-            PolRegresion PolRegresion = new PolRegresion(x,y,2);
+            PolRegresionMinimosCuadrados PolRegresion = new PolRegresionMinimosCuadrados(x,y,2);
+            //PolRegresionExponencial PolRegresion = new PolRegresionExponencial(x,y);
+
             PolRegresion.calculaPolinomio();
             double[] coef = PolRegresion.getA();
             coefCiudad.setAeropuertoCod(CodigoAeropuertoEmisor.get(0));
