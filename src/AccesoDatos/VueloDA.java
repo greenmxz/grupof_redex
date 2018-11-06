@@ -54,10 +54,10 @@ public class VueloDA {
                 }
 //                System.out.println(String.valueOf(idOrigen) + " -> " + String.valueOf(idDestino));
                 
-                /* 3er paso: Registrar en vuelo */
+                /* 3er paso: Registrar en avion */
                 //
                 sentencia = connect.getConnection().createStatement();
-                query = "SELECT MAX(id) AS id FROM redexdb.vuelo";
+                query = "SELECT MAX(id) AS id FROM redexdb.avion";
                 rs = sentencia.executeQuery(query);
                 rs.next();
                 if(rs.getObject("id") != null)
@@ -65,7 +65,7 @@ public class VueloDA {
                 else
                     idVuelo = 1;   
                 sentencia = connect.getConnection().createStatement();
-                query = "INSERT INTO redexdb.vuelo (id,descripcion)" +
+                query = "INSERT INTO redexdb.avion (id,descripcion)" +
                     "VALUES ('" + String.valueOf(idVuelo) + "','¡Hola! ¡Hola! ¡Hola!')";
                 sentencia.executeUpdate(query);
                 

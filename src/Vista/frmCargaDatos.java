@@ -10,6 +10,7 @@ import Modelo.Vuelo;
 import Modelo.aeropuerto;
 import Modelo.paquete;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -351,8 +352,8 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 }
                 txtNombreArch.setText(chooser.getSelectedFile().getName());
                 if(chkCargaMultiple.getModel().isSelected())
-//                    txtPathArch.setText(chooser.getSelectedFile().get());
-//                else
+                    txtPathArch.setText(chooser.getSelectedFile().getParent());
+                else
                     txtPathArch.setText(chooser.getSelectedFile().getPath());
                 break;
             }
@@ -393,12 +394,23 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 "El proceso de registro de vuelos", "Término de proceso",
                 JOptionPane.INFORMATION_MESSAGE);
             }else if(listFile.get(i).getTipo() == "Paquetes"){
-                PaqueteBL procBL = new PaqueteBL();
-                procesarPaquetes(listFile.get(i).getUbicacion());
-                procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion()));
-                JOptionPane.showMessageDialog(null,
-                "El proceso de registro de paquetes", "Término de proceso",
-                JOptionPane.INFORMATION_MESSAGE);
+                if(chkCargaMultiple.getModel().isSelected()){
+                    File f = new File(listFile.get(i).getUbicacion());
+                    String[] fileList = f.list();
+                    for(String str : fileList){
+                        PaqueteBL procBL = new PaqueteBL();
+                        procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion() + "\\" + str));
+                    }
+                    JOptionPane.showMessageDialog(null,
+                    "El proceso de registro de paquetes", "Término de proceso",
+                    JOptionPane.INFORMATION_MESSAGE);
+                }else{
+                    PaqueteBL procBL = new PaqueteBL();
+                    procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion()));
+                    JOptionPane.showMessageDialog(null,
+                    "El proceso de registro de paquetes", "Término de proceso",
+                    JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         }
     }//GEN-LAST:event_btnProcesarActionPerformed

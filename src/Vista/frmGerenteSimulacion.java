@@ -11,8 +11,11 @@ import java.util.Date;
 
 public class frmGerenteSimulacion extends javax.swing.JPanel {
     
+    TabuSearch ts;
+    
     public frmGerenteSimulacion() {
         initComponents();
+
         dtpLlegada.setDateTimePermissive(LocalDateTime.of(2018, 4, 17, 0, 0));
     }
 
@@ -89,7 +92,8 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
             String texto = "**************************************\nSIMULACIÓN UNITARIA INICIADA\n" + 
                     "**************************************\n\n";
             txtInforme.setText(texto);
-            TabuSearch ts = new TabuSearch();
+            TabuSearch ts;
+            ts = new TabuSearch();
             ts.inputData("resources\\aeropuertos.txt",
                 "resources\\planes_vuelo.txt",
                 "resources\\pack_enviados\\pack_enviado_SKBO.txt");

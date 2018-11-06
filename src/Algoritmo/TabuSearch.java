@@ -310,7 +310,7 @@ public class TabuSearch {
                 return voider;
             }
         }catch(Exception e){
-            System.out.println("Error " + e.getMessage());
+            System.out.println("Error abc" + e.getMessage());
             return originalRoute;
         }
 //        System.out.print("Llegué con ");

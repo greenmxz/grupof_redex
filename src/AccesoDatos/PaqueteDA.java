@@ -43,7 +43,7 @@ public class PaqueteDA {
                 sentencia = connect.getConnection().createStatement();
                 query = "SELECT id FROM redexdb.aeropuerto WHERE codigo = '" +
                         aeropuertoDestino + "'";
-                System.out.println(query);
+//                System.out.println(query);
                 rs = sentencia.executeQuery(query);
                 if(rs.next()){
                     if(rs.getObject("id") != null)
@@ -51,7 +51,7 @@ public class PaqueteDA {
                 }else{
                     System.out.println("ËRROR DESTINO");
                 }
-                System.out.println(String.valueOf(idOrigen) + " -> " + String.valueOf(idDestino));
+//                System.out.println(String.valueOf(idOrigen) + " -> " + String.valueOf(idDestino));
                 
                 /* 3er paso: Registrar en pedido */
                 //
@@ -71,7 +71,7 @@ public class PaqueteDA {
                         new SimpleDateFormat("yyyy-MM-dd, HH:mm:00").format(salida) + "','" +
                         String.valueOf(idOrigen) + "','" + String.valueOf(idDestino) + "','" +
                         clEmisor + "','" + clReceptor + "','1')";
-                System.out.println("Query: " + query);
+//                System.out.println("Query: " + query);
                 sentencia.executeUpdate(query); 
             }
             connect.getConnection().close();
