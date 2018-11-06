@@ -9,7 +9,7 @@ package Modelo;
  *
  * @author Nowa
  */
-public class PolRegresion {
+public class PolRegresionMinimosCuadrados {
     
     
   private double[] x;  //datos
@@ -20,7 +20,7 @@ public class PolRegresion {
   private  double[] a; //polinomio   a[0]+a[1]·x+a[2]·x2+...
   private int grado; //grado del polinomio
 
-  public PolRegresion(double[] x, double[] y, int grado) {
+  public PolRegresionMinimosCuadrados(double[] x, double[] y, int grado) {
     this.x=x;
     this.y=y;
     nDatos=x.length;
