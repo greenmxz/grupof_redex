@@ -56,25 +56,6 @@ public class AvionIcon extends JPanel implements ActionListener{
             velocityX[i]=dx;
             velocityY[i]=dy;
         }
-//        Ellipse2D elipse1=new Ellipse2D.Double(xIni1,yIni1,5,5);
-//        g2.fill(elipse1);
-//        Ellipse2D elipse2=new Ellipse2D.Double(xIni2,yIni2,5,5);
-//        g2.fill(elipse2);
-//        double dx1,dx2,dy1,dy2,length1,length2;
-//        dx1=xFin-xIni1;
-//        dx2=xFin2-xIni2;
-//        dy1=yFin-yIni1;
-//        dy2=yFin2-yIni2;
-//        length1=Math.sqrt(Math.pow(dx1, 2.0)+Math.pow(dy1, 2.0));
-//        length2=Math.sqrt(Math.pow(dx2, 2.0)+Math.pow(dy2, 2.0));
-//        dx1/=length1;
-//        dy1/=length1;
-//        dx2/=length2;
-//        dy2/=length2;
-//        this.velX1=dx1;  
-//        this.velY1=dy1;
-//        this.velX2=dx2;  
-//        this.velY2=dy2;
         t.start();
     }
     
@@ -85,12 +66,22 @@ public class AvionIcon extends JPanel implements ActionListener{
             double xFin=destiny.get(i).getX();
             double yIni=origin.get(i).getY();
             double yFin=destiny.get(i).getY();
+            //si se usa while, cabe la posibilidad de que no sean iguales por incertidumbre
             if(xIni< xFin && yIni<yFin){
+                origin.get(i).setX(xIni+velocityX[i]);
+                origin.get(i).setY(yIni+velocityY[i]);
+            }else if(xIni< xFin && yIni>yFin){
+                origin.get(i).setX(xIni+velocityX[i]);
+                origin.get(i).setY(yIni+velocityY[i]);
+            }else if(xIni> xFin && yIni<yFin){
+                origin.get(i).setX(xIni+velocityX[i]);
+                origin.get(i).setY(yIni+velocityY[i]);
+            }else if(xIni> xFin && yIni>yFin){
                 origin.get(i).setX(xIni+velocityX[i]);
                 origin.get(i).setY(yIni+velocityY[i]);
             }
         }
-        threadGraphic t1,t2;
+        
 //        t1=new threadGraphic(this.origin,this.destiny,this.velocityX,this.velocityY);
 //        t2=new threadGraphic(this.origin,this.destiny,this.velocityX,this.velocityY);
 //        try{
@@ -113,35 +104,7 @@ public class AvionIcon extends JPanel implements ActionListener{
         
     }
 
-    
-    private class threadGraphic extends Thread{
-        private ArrayList<CoordenadaDouble>origin;    
-        private ArrayList<CoordenadaDouble>destiny;
-        private double[]velocityX;
-        private double[]velocityY;
-        private int sizeList;
-
-        public threadGraphic(ArrayList<CoordenadaDouble>puntosOrigen,ArrayList<CoordenadaDouble>puntosDestino,double[]velocityX,double[]velocityY){
-            this.origin=(ArrayList<CoordenadaDouble>)puntosOrigen.clone();
-            this.destiny=(ArrayList<CoordenadaDouble>)puntosDestino.clone();
-            this.sizeList=this.destiny.size();
-            this.velocityX=velocityX.clone();
-            this.velocityY=velocityY.clone();
-        }
-        public void run(){
-            for(int i=0;i<this.sizeList;i++){
-                double xIni=origin.get(i).getX();
-                double xFin=destiny.get(i).getX();
-                double yIni=origin.get(i).getY();
-                double yFin=destiny.get(i).getY();
-                if(xIni< xFin && yIni<yFin){
-                    origin.get(i).setX(xIni+velocityX[i]);
-                    origin.get(i).setY(yIni+velocityY[i]);
-                }
-            }
-
-        }
-    }    
+   
 }
 
 

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Vista;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -11,8 +12,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +37,7 @@ public class MapWorkerTest {
     private final List<Coordinate> route = new ArrayList<>();
     private final ArrayList<CoordenadaDouble>origen=new ArrayList<>();
     private final ArrayList<CoordenadaDouble>destino=new ArrayList<>();
-    public void display() throws IOException {
+    void display() throws IOException {
         JFrame f = new JFrame("MapWorker");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -65,37 +68,71 @@ public class MapWorkerTest {
             BufferedReader reader = new BufferedReader(new FileReader("cities2.csv"));
             while( (line = reader.readLine()) != null){
                 String[] arr = line.split(",");
-                double num1 = Double.parseDouble(arr[4]);//longitud
-                double num2 = Double.parseDouble(arr[5]);//latitud
+                double lon = Double.parseDouble(arr[4]);//longitud
+                double lat = Double.parseDouble(arr[5]);//latitud
                 
-                map.addMapMarker(new MapMarkerDot(num2,num1));
-                origen.add(new CoordenadaDouble(0,0));
-                destino.add(new CoordenadaDouble(num2+78,num1+180));
+                int h=map.getPreferredSize().height;
+                int w=map.getPreferredSize().width;
+                
+                double x=(lon+180)*(w/360)*1.419;
+                double latRad = lat*Math.PI/180;
+                
+                
+                
+                double mercN = Math.log(Math.tan((Math.PI/4)+(latRad/2)));
+                double y     = (h/2)-(w*mercN/(2*Math.PI))-20;
+                //double x=Double.parseDouble(arr[6]);
+                //double y=Double.parseDouble(arr[7]);
+                System.out.println(arr[1]);
+                map.addMapMarker(new MapMarkerDot(lat,lon));                
+                origen.add(new CoordenadaDouble(x,y));
+                //destino.add(new CoordenadaDouble(0,0));
                 //puntosXY.add(map.getMapPosition(num2, num1));
                 
 
-            }
-//            BufferedReader reader2 = new BufferedReader(new FileReader("citiesPlus.csv"));
-//            while( (line = reader2.readLine()) != null){
-//                String[] arr = line.split(",");
-//                double num1 = Double.parseDouble(arr[4]);
-//                double num2 = Double.parseDouble(arr[5]);
-//                map.addMapMarker(new MapMarkerDot(num2,num1));
-//                origen.add(new CoordenadaDouble(0,0));
-//                destino.add(new CoordenadaDouble(num2*10,num1*10));
-//                //puntosXY.add(map.getMapPosition(num2, num1));
-//                
-//
-//            }
+            }            
         }catch (Exception ex){
             System.out.println("Error de lectura");
         }
+        
+        try{
+            String line;
+            BufferedReader reader = new BufferedReader(new FileReader("citiesXYDestino.csv"));
+            while( (line = reader.readLine()) != null){
+                String[] arr = line.split(",");
+                double x = Double.parseDouble(arr[0]);
+                double y = Double.parseDouble(arr[1]);                                            
+                
+                destino.add(new CoordenadaDouble(x,y));
+            }            
+        }catch (Exception ex){
+            System.out.println("Error de lectura");
+        }
+        
+//        try{
+//            String line;
+//            
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("citiesXY.csv"));
+//            int size=origen.size();
+//            
+//            for(int i=0;i<size;i++){
+//                String str;
+//                double x=origen.get(i).getX();
+//                double y=origen.get(i).getY();
+//                str = new String(String.valueOf(x)+","+String.valueOf(y));
+//                
+//                
+//                writer.write(str+"\n");
+//            }
+//            writer.close();
+//        }catch (Exception ex){
+//            System.out.println("Error de escritura");
+//        }
         map.setDisplayPosition(start, 2);
         AvionIcon avion=new AvionIcon(origen,destino);   
         avion.setVisible(true);
         avion.setSize(map.getPreferredSize());
         avion.setOpaque(false);
-        //avion.setBackground(new Color(0,0,0,30));
         avion.setLocation(map.getLocation());
         map.add(avion); 
         map.setZoomControlsVisible(false);
