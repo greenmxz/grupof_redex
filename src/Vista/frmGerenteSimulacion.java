@@ -11,8 +11,11 @@ import java.util.Date;
 
 public class frmGerenteSimulacion extends javax.swing.JPanel {
     
+    TabuSearch ts;
+    
     public frmGerenteSimulacion() {
         initComponents();
+
         dtpLlegada.setDateTimePermissive(LocalDateTime.of(2018, 4, 17, 0, 0));
     }
 
@@ -89,7 +92,8 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
             String texto = "**************************************\nSIMULACIÓN UNITARIA INICIADA\n" + 
                     "**************************************\n\n";
             txtInforme.setText(texto);
-            TabuSearch ts = new TabuSearch();
+            TabuSearch ts;
+            ts = new TabuSearch();
             ts.inputData("resources\\aeropuertos.txt",
                 "resources\\planes_vuelo.txt",
                 "resources\\pack_enviados\\pack_enviado_SKBO.txt");
@@ -97,7 +101,6 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
             LocalTime hora = dtpLlegada.getTimePicker().getTime();
             Date fecha = new Date(dia.getYear()-1900, dia.getMonthValue()-1, dia.getDayOfMonth(),
                         hora.getHour(), hora.getMinute());
-            String fechaStr = new SimpleDateFormat("HH:mm").format(fecha);
             long start = System.currentTimeMillis();
             texto = ts.executeVCRPTabu(fecha);
             long elapsedTime = System.currentTimeMillis() - start;
@@ -107,7 +110,7 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
             txtInforme.setText(texto);
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("There are a several problem with the testing data reading process! Check it!");
+            System.out.println("Error! " + e.getMessage());
         }
     }//GEN-LAST:event_btnGenerarActionPerformed
 

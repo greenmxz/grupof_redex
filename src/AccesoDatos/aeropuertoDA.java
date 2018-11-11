@@ -169,11 +169,11 @@ public class aeropuertoDA {
                 int idCiudad = 0, idAeropuerto = 0;
                 /* 1er paso: Registrar continente*/
                 // 
-                System.out.println("[" + continente + "," + pais + "," + ciudad + "," + codigo + "]");
+                //System.out.println("[" + continente + "," + pais + "," + ciudad + "," + codigo + "]");
                 Statement sentencia = connect.getConnection().createStatement();
                 String query = "SELECT id FROM redexdb.continente WHERE nombre = '" +
                         continente + "'";
-                System.out.println(query);
+                //System.out.println(query);
                 ResultSet rs = sentencia.executeQuery(query);
                 if(rs.next()){
                     if(rs.getObject("id") != null)

@@ -31,7 +31,6 @@ public class PaqueteDA {
                 Statement sentencia = connect.getConnection().createStatement();
                 String query = "SELECT id FROM redexdb.aeropuerto WHERE codigo = '" +
                         aeropuertoOrigen + "'";
-                System.out.println(query);
                 ResultSet rs = sentencia.executeQuery(query);
                 if(rs.next()){
                     if(rs.getObject("id") != null)
@@ -44,7 +43,7 @@ public class PaqueteDA {
                 sentencia = connect.getConnection().createStatement();
                 query = "SELECT id FROM redexdb.aeropuerto WHERE codigo = '" +
                         aeropuertoDestino + "'";
-                System.out.println(query);
+//                System.out.println(query);
                 rs = sentencia.executeQuery(query);
                 if(rs.next()){
                     if(rs.getObject("id") != null)
@@ -52,7 +51,7 @@ public class PaqueteDA {
                 }else{
                     System.out.println("ËRROR DESTINO");
                 }
-                System.out.println(String.valueOf(idOrigen) + " -> " + String.valueOf(idDestino));
+//                System.out.println(String.valueOf(idOrigen) + " -> " + String.valueOf(idDestino));
                 
                 /* 3er paso: Registrar en pedido */
                 //
@@ -72,12 +71,37 @@ public class PaqueteDA {
                         new SimpleDateFormat("yyyy-MM-dd, HH:mm:00").format(salida) + "','" +
                         String.valueOf(idOrigen) + "','" + String.valueOf(idDestino) + "','" +
                         clEmisor + "','" + clReceptor + "','1')";
-                System.out.println("Query: " + query);
+//                System.out.println("Query: " + query);
                 sentencia.executeUpdate(query); 
             }
             connect.getConnection().close();
         }catch(Exception e){
             System.out.println("ERROR registrarPaquetes "+e.getMessage());
         }
+    }
+    
+    public ArrayList<paquete> obtenerPaquetesAsign(Date fecha){
+        ArrayList<paquete> aux = new ArrayList<paquete>();
+        try{
+            database connect = new database();
+            Statement sentencia = connect.getConnection().createStatement();
+            String query = "SELECT * FROM redexdb.pedido WHERE fecha_pedido <= '" +
+                    new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(fecha) + 
+                    "' AND id_estado < '3' ORDER BY fecha_pedido";
+            System.out.println(query);
+            ResultSet rs = sentencia.executeQuery(query);
+            while(rs.next()){
+                Date nuevaFecha = new Date(rs.getDate("fecha_pedido").getYear(), rs.getDate("fecha_pedido").getMonth(),
+                            rs.getDate("fecha_pedido").getDay(), rs.getTime("fecha_pedido").getHours(),
+                            rs.getTime("fecha_pedido").getMinutes());
+                paquete newPaq = new paquete(rs.getString("codigo"), nuevaFecha,
+                    rs.getInt("id_aeropuerto_emisor"), rs.getInt("id_aeropuerto_receptor"));
+                aux.add(newPaq);
+            }
+            connect.getConnection().close();
+        }catch(Exception e){
+            System.out.println("ERROR obtenerPaquetesAsign "+e.getMessage());
+        }
+        return aux;
     }
 }
