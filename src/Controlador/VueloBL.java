@@ -12,4 +12,7 @@ public class VueloBL {
     public void registrarVuelos(ArrayList<Vuelo> lstVue){
         administrarVueloDA.registrarVuelos(lstVue);
     }
+    public ArrayList<Vuelo> listaVuelos(){
+        return administrarVueloDA.listaVuelos();
+    }
 }

@@ -12,6 +12,11 @@ public class Vuelo {
     private int capActual;
     private String estado;
     
+    public Vuelo(){
+        this.capMax = 200;
+        this.capActual = 0;
+    }
+    
     public Vuelo(String codigo, Date fechaSalida, Date fechaLlegada, 
             String aeropuertoOrigen, String aeropuertoDestino, int capMax, int capActual,
             String estado){
