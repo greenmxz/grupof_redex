@@ -6,6 +6,7 @@
 package Modelo;
 
 import Vista.CoordenadaDouble;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -16,13 +17,57 @@ import static java.lang.Math.abs;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import static javax.swing.text.html.CSS.Attribute.FONT_SIZE;
 
 /**
  *
  * @author JUAN
  */
-public class IlustradorAvionDot extends JPanel implements ActionListener{
 
+public class IlustradorAvionDot extends JPanel implements ActionListener{
+static final int PIXELS_PER_POINT = 4; // 4x
+
+// Image size in points
+static final int IMAGE_WIDTH = 150;
+static final int IMAGE_HEIGHT = 60;
+// Font size in points
+static final int FONT_SIZE = 11;
+
+    private Timer t;
+    static int  count = 0;
+    private ArrayList<avionDot> avionesDot;
+    static private double precision = 1;
+    static private double velocidad = 1;
+    private int horaMundial=0;
+    private int minutoMundial=0;
+    
+        /**
+     * @return the horaMundial
+     */
+    public int getHoraMundial() {
+        return horaMundial;
+    }
+
+    /**
+     * @param horaMundial the horaMundial to set
+     */
+    public void setHoraMundial(int horaMundial) {
+        this.horaMundial = horaMundial;
+    }
+
+    /**
+     * @return the minutoMundial
+     */
+    public int getMinutoMundial() {
+        return minutoMundial;
+    }
+
+    /**
+     * @param minutoMundial the minutoMundial to set
+     */
+    public void setMinutoMundial(int minutoMundial) {
+        this.minutoMundial = minutoMundial;
+    }
     /**
      * @return the t
      */
@@ -64,11 +109,7 @@ public class IlustradorAvionDot extends JPanel implements ActionListener{
     public static void setVelocidad(double aVelocidad) {
         velocidad = aVelocidad;
     }
-    private Timer t;
-    static int  count = 0;
-    private ArrayList<avionDot> avionesDot;
-    static private double precision = 1;
-    static private double velocidad = 1;
+
     
     
     public IlustradorAvionDot(ArrayList<avionDot> avionesDot){
@@ -77,10 +118,19 @@ public class IlustradorAvionDot extends JPanel implements ActionListener{
         
         
     }
+    static int toPixels(int value) {
+    return value * PIXELS_PER_POINT;
+}
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2=(Graphics2D)g;
         //int sizeList=destiny.size();
+         Font font = new Font("Arial", Font.PLAIN, toPixels(FONT_SIZE));
+         g2.setFont(font);
+        g2.drawString(String.valueOf(horaMundial), 700, 35);
+        g2.drawString(" :"+String.valueOf(minutoMundial), 732, 35);
+        
+        //g2.fill(new Shape("Holamundo"));
         ArrayList<Ellipse2D>arrayEllipse=new ArrayList<>();
         
         for(int i=0;i<this.avionesDot.size();i++){
@@ -107,6 +157,18 @@ public class IlustradorAvionDot extends JPanel implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent e){
+        if (this.minutoMundial<59){
+            this.minutoMundial++;
+        }else{
+            this.minutoMundial=0;
+            if (this.horaMundial <23)
+                this.horaMundial++;
+            else {
+                this.minutoMundial=0;
+                this.horaMundial=0;
+            }
+            
+            }
         
         for(int i=0;i<this.avionesDot.size();i++){
             

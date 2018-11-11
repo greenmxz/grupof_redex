@@ -381,6 +381,7 @@ public class MapWorkerTest {
         ilustradorAvion.add(button4);
         ilustradorAvion.add(label2);
         
+        
         ilustradorAvion.addMouseListener(new MouseListener() {//Disminuir velocidad
             
 
