@@ -26,14 +26,6 @@ public class Vuelo {
 //        count++;
     }
 
-//    public int getIdentificator() {
-//        return identificator;
-//    }
-//
-//    public void setIdentificator(int identificator) {
-//        this.identificator = identificator;
-//    }
-
     public int getOriginAirport() {
         return originAirport;
     }

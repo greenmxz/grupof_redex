@@ -6,7 +6,9 @@
 package Vista;
 
 import Controlador.excelExport;
+import Controlador.generalBL;
 import Modelo.Vuelo;
+import Modelo.continente;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -37,11 +39,14 @@ public class frmReporteVuelo extends javax.swing.JPanel {
                 new Date(118,9,22,12,40), "Europa", "Europa", 280, 150, "Estable")); 
         lstVuelo.add(new Vuelo("AAA03", new Date(118,9,22,00,10), 
                 new Date(118,9,2,19,50), "América", "América", 295, 295, "Lleno"));
+        generalBL gen = new generalBL();
+        ArrayList<continente> list = gen.obtenerContinentes();
         tablaDefault();
         DefaultListModel listModel = new DefaultListModel();
         listModel.clear();
-        listModel.add(0,"América");
-        listModel.add(1,"Europa");
+        for(int i=0; i<list.size();i++){
+            listModel.add(i,list.get(i).getNombre());  
+        }
         listContinenteO.setModel(listModel);
         listContinenteD.setModel(listModel);
         filter = lstVuelo;
@@ -184,7 +189,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         });
         jScrollPane3.setViewportView(listContinenteO);
 
-        panelContinenteO.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 140, 50));
+        panelContinenteO.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, 70));
 
         jPanel1.add(panelContinenteO, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 210, 110));
 
@@ -198,7 +203,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         });
         jScrollPane4.setViewportView(listContinenteD);
 
-        panelContinenteD.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 27, 114, 52));
+        panelContinenteD.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, 80));
 
         jPanel1.add(panelContinenteD, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 210, 110));
 

@@ -15,7 +15,6 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
     
     public frmGerenteSimulacion() {
         initComponents();
-
         dtpLlegada.setDateTimePermissive(LocalDateTime.of(2018, 4, 17, 0, 0));
     }
 
@@ -88,6 +87,32 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
+//        try{
+//            String texto = "**************************************\nSIMULACIÓN UNITARIA INICIADA\n" + 
+//                    "**************************************\n\n";
+//            txtInforme.setText(texto);
+//            TabuSearch ts;
+//            ts = new TabuSearch();
+//            ts.inputData("resources\\aeropuertos.txt",
+//                "resources\\planes_vuelo.txt",
+//                "resources\\pack_enviados\\pack_enviado_SKBO.txt");
+////            LocalDate dia = dtpLlegada.getDatePicker().getDate();
+////            LocalTime hora = dtpLlegada.getTimePicker().getTime();
+////            Date fecha = new Date(dia.getYear()-1900, dia.getMonthValue()-1, dia.getDayOfMonth(),
+////                        hora.getHour(), hora.getMinute());
+//            
+//            long start = System.currentTimeMillis();
+//            ts.executeVCRPTabu();
+//            long elapsedTime = System.currentTimeMillis() - start;
+//            texto += "\nTiempo empleado: " + String.valueOf(elapsedTime) + " mseg";
+//            texto += "\n\nSIMULACIÓN UNITARIA FINALIZADA\n" + 
+//                    "**************************************\n";
+//            txtInforme.setText(texto);
+//        }catch(Exception e){
+//            e.printStackTrace();
+//            System.out.println("Error! " + e.getMessage());
+//        }
+
         try{
             String texto = "**************************************\nSIMULACIÓN UNITARIA INICIADA\n" + 
                     "**************************************\n\n";
@@ -97,12 +122,14 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
             ts.inputData("resources\\aeropuertos.txt",
                 "resources\\planes_vuelo.txt",
                 "resources\\pack_enviados\\pack_enviado_SKBO.txt");
-            LocalDate dia = dtpLlegada.getDatePicker().getDate();
-            LocalTime hora = dtpLlegada.getTimePicker().getTime();
-            Date fecha = new Date(dia.getYear()-1900, dia.getMonthValue()-1, dia.getDayOfMonth(),
-                        hora.getHour(), hora.getMinute());
+//                "resources\\pack_enviados");
+//            LocalDate dia = dtpLlegada.getDatePicker().getDate();
+//            LocalTime hora = dtpLlegada.getTimePicker().getTime();
+//            Date fecha = new Date(dia.getYear()-1900, dia.getMonthValue()-1, dia.getDayOfMonth(),
+//                        hora.getHour(), hora.getMinute());
+            
             long start = System.currentTimeMillis();
-            texto = ts.executeVCRPTabu(fecha);
+            ts.executeVCRPTabu();
             long elapsedTime = System.currentTimeMillis() - start;
             texto += "\nTiempo empleado: " + String.valueOf(elapsedTime) + " mseg";
             texto += "\n\nSIMULACIÓN UNITARIA FINALIZADA\n" + 

@@ -16,4 +16,8 @@ public class PaqueteBL {
     public ArrayList<paquete> obtenerPaquetesAsign(Date fecha){
         return administrarPaqueteDA.obtenerPaquetesAsign(fecha);
     }
+    
+    public ArrayList<paquete> obtenerPaquetes(){
+        return administrarPaqueteDA.obtenerPaquetes();
+    }
 }
