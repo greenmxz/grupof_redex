@@ -198,6 +198,11 @@ public class Secretario_Crear_Cliente extends javax.swing.JDialog {
 
         btnRegistrar.setText("Registrar");
         btnRegistrar.setToolTipText("");
+        btnRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegistrarMouseClicked(evt);
+            }
+        });
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarActionPerformed(evt);
@@ -310,6 +315,10 @@ public class Secretario_Crear_Cliente extends javax.swing.JDialog {
 
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnRegistrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegistrarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegistrarMouseClicked
 
     /**
      * @param args the command line arguments

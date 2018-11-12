@@ -154,6 +154,7 @@ public class aeropuertoDA {
         }
     }
     
+    
     public void registrarAeropuertos(ArrayList<aeropuerto> lstAerop){
         try{
             database connect = new database();

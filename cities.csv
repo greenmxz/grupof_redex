@@ -1,0 +1,44 @@
+Tirane,Albania,210800,Y,19.83180428,41.33165359,565,240,LATI,Tirana,Albania,,01   SKBO   Bogota              Colombia        bogo 
+Buenos Aires,Argentina,10750000,Y,-58.40959167,-34.66540146,343,473,SABE,Buenos Aires,Argentina,,02   SEQM   Quito               Ecuador         quit
+Linz,Austria,335000,N,14.29390144,48.29759598,550,210,,,,,03   SVMI   Caracas             Venezuela       cara
+La Paz,Bolivia,992592,Y,-68.14624786,-16.49900627,315,414,SLLP,La Paz,Bolivia,,04   SBBR   Brasilia            Brasil          bras
+Brasilia,Brazil,1567709,Y,-47.89774704,-15.79210949,374,413,SBBR,Brasilia,Brazil,,05   SPIM   Lima                Perú            lima
+Sofiya,Bulgaria,1205000,Y,23.33187103,42.70726395,575,232,LBSF,Sofia,Bulgaria,,06   SLLP   La Paz              Bolivia         lapa
+Minsk,Byelarus,1650000,Y,27.57556725,53.89993668,587,186,UMMS,Minks,Bielorrusia,,07   SCEL   Santiago de Chile   Chile           sant
+Ottawa,Canada,819263,Y,-75.65074921,45.37421799,294,222,,,,,08   SABE   Buenos Aires        Argentina       buen
+Santiago,Chile,4100000,Y,-70.64751434,-33.47502518,308,469,SCEL,Santiago de Chile,Chile,,09   SGAS   Asunción            Paraguay        asun
+Bogota,Colombia,4260000,Y,-74.080513,4.630219936,299,354,SKBO,Bogota,Colombia,,10   SUAA   Motenvideo          Uruguay         mont
+Zagreb,Croatia,697925,Y,15.96438599,45.8070755,554,221,LDZA,Zagreb,Croacia,,
+Havana,Cuba,2125000,Y,-82.4164505,23.0489521,276,301,,,,,       Europa                   
+Praha,Czech Repub,1325000,Y,14.45652008,50.105896,550,204,LKPR,Praga,Checa,,11   LATI   Tirana              Albania         tira
+Quito,Ecuador,1050000,Y,-78.52428436,-0.229498133,286,369,SEQM,Quito,Ecuador,,12   EDDI   Berlin              Alemania        berl
+Tallinn,Estonia,482000,Y,24.75205612,59.27757263,579,158,EETN,Tallin,Estonia,,13   LOWW   Viena               Austria         vien
+Helsinki,Finland,900000,Y,24.97669983,60.19642258,581,150,EFHK,Helsinki,Estonia,,14   EBCI   Bruselas            Belgica         brus
+Paris,France,9775000,Y,2.432832718,48.88155365,516,209,LFPG,Paris,Francia,,15   UMMS   Minsk               Bielorrusia     mins
+Berlin,Germany,5061248,Y,13.32757282,52.5162735,547,193,EDDI,Berlin,Alemania,,16   LBSF   Sofia               Bulgaria        sofi
+Athinai,Greece,3027331,Y,23.65486336,38.1216011,576,251,LGAV,Atenas,Grecia,,17   LKPR   Praga               Checa           prag
+Budapest,Hungary,2565000,Y,19.09424973,47.51462555,563,215,LHBP,Hungria,Budapest,,18   LDZA   Zagreb              Croacia         zagr
+Reykjavik,Iceland,137941,Y,-21.3368206,64.31326294,448,127,BIKF,Reykjavik,Islandia,,19   EKCH   Copenhague          Dinamarca       cope
+Dublin,Ireland,1140000,Y,-6.25734663,53.34156036,492,188,EIDW,Dublin,Irlanda (Eire),,20   LZIB   Bratislava          Eslovaquia      brat
+Roma,Italy,3175000,Y,12.52000046,41.88000107,545,238,LIRA,Roma,Italia,,21   LJLJ   Liubliana           Eslovenia       liub
+Luxembourg,Luxembourg,133000,Y,6.273255825,49.74040604,527,205,ELLX,Luxemburgo,Luxemburgo,,22   LEMD   Madrid              España          madr
+Tombouctoo,Mali,31925,N,-3.00999999,16.76000023,500,320,,,,,23   EETN   Tallin              Estonia         tall
+Amsterdam,Netherlands,1860000,N,4.894833088,52.37304306,524,194,EHAM,Amsterdam,Holanda,,24   EFHK   Helsinki            Finlandia       hels
+Asuncion,Paraguay,700000,Y,-57.66999817,-25.21999931,346,442,SGAS,Asunción,Paraguay,,25   LFPG   Paris               Francia         pari
+Lima,Peru,4344000,Y,-76.82355499,-12.06799603,290,402,SPIM,Lima,Perú,,26   LGAV   Atenas              Grecia          aten
+Lisboa,Portugal,2250000,Y,-9.130000114,38.72999954,483,249,LPPT,Lisboa,Portugal,,27   EHAM   Amsterdam           Holanda         amst
+Bratislava,Slovakia,435499,Y,17.26980591,48.27450943,559,212,LZIB,Batislava,Eslovaquia,,28   LHBP   Budapest            Hungría         buda
+Ljubljana,Slovenia,233200,Y,14.6396122,46.06830215,551,221,LJLJ,Liubliana,Eslovenia,,29   EIDW   Dublin              Irlanda (Eire)  dubl
+Madrid,Spain,4650000,Y,-3.690969467,40.44221878,499,242,LEMD,Madrid,España,,30   BIKF   Reykjavik           Islandia        reyk
+Montevideo,Uruguay,1550000,Y,-56.16999817,-34.91999817,350,473,SUUA,Montevideo,Uruguay,,31   LIRA   Roma                Italia          roma
+Caracas,Venezuela,3600000,Y,-66.89828491,10.49604893,603,359,SVMI,Caracas,Venezuela,,32   EVRA   Riga                Letonia         riga
+Bern,Switzerland,298800,Y,7.445736408,46.94820786,530,217,LSZB,Berna,Suiza,,33   ELLX   Luxemburgo          Luxemburgo      luxe
+Estocolmo,Suecia,,,18.07062149,59.3252812,559,157,ESKN,Estocolmo,Suecia,,34   LMML   LaValletta          Malta           lava
+Bruselas,Belgica,,,4.351787456,50.8485484,520,200,EBCI,Bruselas,Belgica,,35   ENGM   Oslo                Noruega         oslo
+Riga ,Letonia,,,24.10125732,56.95096613,578,171,EVRA,Riga,Letonia,,36   EPMO   Varsovia            Polonia         vars
+Lavalletta,Malta,,,14.51791763,35.90226083,550,258,LMML,Lavalletta,Malta,,37   LPPT   Lisboa              Portugal        lisb
+Oslo,Noruega,,,10.71716309,59.91923685,540,154,ENGM,Oslo,Noruega,,38   EGLL   Londres             Reino Unido     lond
+Varsovia,Polonia,,,20.99487305,52.24125615,569,194,EPMO,Varsovia,Polonia,,39   ESKN   Estocolmo           Suecia          esto
+Londres,Reino Unido,,,-0.129089355,51.51557978,509,197,EGLL,Londres,Reino Unido,,40   LSZB   Berna               Suiza           bern
+Viena,Austria,,,16.35864258,48.21735291,557,212,LOWW,Viena,Austria,,
+Copenague,Dinamarca,,,12.55737305,55.69616389,544,176,EKCH,Copenhague,Dinamarca,,

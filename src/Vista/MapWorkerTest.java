@@ -5,6 +5,8 @@
  */
 package Vista;
 
+import Modelo.IlustradorAvionDot;
+import Modelo.avionDot;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -28,15 +30,68 @@ import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
 import org.openstreetmap.josm.data.projection.Projection;
+
+import Modelo.aeropuerto;
+import Controlador.aeropuertoBL;
+import Controlador.VueloBL;
+import Modelo.Vuelo;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.Timer;
+
 /**
  *
  * @author JUAN
  */
 public class MapWorkerTest {
-   
+    
+    
+    private aeropuertoBL controladorAeropuerto = new aeropuertoBL();
+    private ArrayList<aeropuerto> listaAeropuertos = new ArrayList<>();
+    
+    private VueloBL controladorVuelo = new VueloBL();
+    private ArrayList<Vuelo> listaVuelos = new ArrayList<>();
+    
     private final List<Coordinate> route = new ArrayList<>();
+    
+    
+    
     private final ArrayList<CoordenadaDouble>origen=new ArrayList<>();
     private final ArrayList<CoordenadaDouble>destino=new ArrayList<>();
+    
+    
+    
+    
+    private ArrayList<avionDot> avionesDot = new ArrayList<>();
+    
+    
+    public int buscaAeropuerto( ArrayList<aeropuerto> listaAe, String codigo){
+        try{
+            int index = 0;
+            
+            for (aeropuerto ae : listaAe){
+                
+                if (ae.getCodigo().equals(codigo))
+                    return index;
+                
+                index += 1;
+            }
+            
+            return -1;
+        }catch (Exception ex){
+            System.out.println("Error en buscaAeropuerto " + ex.getMessage());
+            return -1;
+        }
+        
+        
+        
+    }
+    
     void display() throws IOException {
         JFrame f = new JFrame("MapWorker");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,38 +118,98 @@ public class MapWorkerTest {
         poly.setColor(Color.blue);
         map.addMapPolygon(poly);
         
+        
+        // Lectura de Aeropuertos
+        
+        this.listaAeropuertos = controladorAeropuerto.listaAeropuertos();
+            
+        // Lectura de coordenadas de Aeropuertos
         try{
             String line;
-            BufferedReader reader = new BufferedReader(new FileReader("cities2.csv"));
+            BufferedReader reader = new BufferedReader(new FileReader("citiesf5.csv"));
+            int c = 0;
             while( (line = reader.readLine()) != null){
+
                 String[] arr = line.split(",");
                 double lon = Double.parseDouble(arr[4]);//longitud
                 double lat = Double.parseDouble(arr[5]);//latitud
+                double coordX = Double.parseDouble(arr[6]); // coordenada x
+                double coordY = Double.parseDouble(arr[7]); // coordenada y
+
+                String codigoAe = arr[8];//codigo
+                String ciudadAe = arr[9];//ciudad
+                String paisAe = arr[10];//pais
+                
                 
                 int h=map.getPreferredSize().height;
                 int w=map.getPreferredSize().width;
-                
+               
+                /*
                 double x=(lon+180)*(w/360)*1.419;
                 double latRad = lat*Math.PI/180;
-                
-                
-                
+
                 double mercN = Math.log(Math.tan((Math.PI/4)+(latRad/2)));
-                double y     = (h/2)-(w*mercN/(2*Math.PI))-20;
+                double y     = (h/2)-(w*mercN/(2*Math.PI))-20;*/
+                
                 //double x=Double.parseDouble(arr[6]);
                 //double y=Double.parseDouble(arr[7]);
-                System.out.println(arr[1]);
-                map.addMapMarker(new MapMarkerDot(lat,lon));                
-                origen.add(new CoordenadaDouble(x,y));
+                
+                int index = buscaAeropuerto(this.listaAeropuertos,codigoAe);
+                
+                if (index != -1){
+                    //  si existe aeropuerto en data del profe se asigna coordenadas y pinta puntito
+                    map.addMapMarker(new MapMarkerDot(lat,lon)); // pinta puntito amarillo
+                    this.listaAeropuertos.get(index).setCoordX(coordX);
+                    this.listaAeropuertos.get(index).setCoordY(coordY);
+                }
+                //origen.add(new CoordenadaDouble(coordX,coordY));
+                
                 //destino.add(new CoordenadaDouble(0,0));
                 //puntosXY.add(map.getMapPosition(num2, num1));
-                
-
+                c++;
             }            
         }catch (Exception ex){
-            System.out.println("Error de lectura");
+            System.out.println("Error de lectura Coordenadas " + ex.getMessage());
         }
         
+        
+        // Se lee planes de vuelo para llenar los AvionesDot
+        
+        this.listaVuelos = controladorVuelo.listaVuelos();
+        int i = 0;
+        for(Vuelo v : this.listaVuelos){
+            // crea AvionDot por vuelo
+            avionDot dot = new avionDot();
+            
+            dot.setVisible(true);
+            
+            String codAeOrigen = v.getAeropuertoOrigen();
+            String codAeDestino = v.getAeropuertoDestino();
+            
+            int indexAeOrigen = buscaAeropuerto(this.listaAeropuertos,codAeOrigen);
+            int indexAeDestino = buscaAeropuerto(this.listaAeropuertos,codAeDestino);
+            
+            
+            if (indexAeOrigen != -1){
+                double x = this.listaAeropuertos.get(indexAeOrigen).getCoordX();
+                double y = this.listaAeropuertos.get(indexAeOrigen).getCoordY();
+               if (x == 0 || y == 0) 
+                    continue;
+                dot.setOrigen(new CoordenadaDouble(x,y));
+                dot.setActual(new CoordenadaDouble(x,y));
+            }
+            if (indexAeDestino != -1){
+                double x = this.listaAeropuertos.get(indexAeDestino).getCoordX();
+                double y = this.listaAeropuertos.get(indexAeDestino).getCoordY();
+                if (x == 0 || y == 0) 
+                    continue;
+                dot.setDestino(new CoordenadaDouble(x,y));
+            }
+            this.avionesDot.add(dot);
+        }
+        
+        
+        /*
         try{
             String line;
             BufferedReader reader = new BufferedReader(new FileReader("citiesXYDestino.csv"));
@@ -107,7 +222,8 @@ public class MapWorkerTest {
             }            
         }catch (Exception ex){
             System.out.println("Error de lectura");
-        }
+        }*/
+        
         
 //        try{
 //            String line;
@@ -128,18 +244,227 @@ public class MapWorkerTest {
 //        }catch (Exception ex){
 //            System.out.println("Error de escritura");
 //        }
+
+
+        
+        
+
+
         map.setDisplayPosition(start, 2);
-        AvionIcon avion=new AvionIcon(origen,destino);   
-        avion.setVisible(true);
-        avion.setSize(map.getPreferredSize());
-        avion.setOpaque(false);
-        avion.setLocation(map.getLocation());
-        map.add(avion); 
+        IlustradorAvionDot ilustradorAvion = new IlustradorAvionDot(this.avionesDot);   
+        ilustradorAvion.setVisible(true);
+        ilustradorAvion.setSize(map.getPreferredSize());
+        ilustradorAvion.setOpaque(false);
+        JButton button1 = new JButton();
+        button1.setLocation(900,900);
+        button1.setText("<<");
+        
+        
+        JButton button3 = new JButton();
+        button3.setLocation(900,900);
+        button3.setText("Pausa");
+        
+        
+        JButton button4 = new JButton();
+        button4.setLocation(900,900);
+        button4.setText("Reanudar");
+        
+        
+        JLabel label = new JLabel();
+        label.setText("Velocidad");
+        
+        
+        JLabel label2 = new JLabel();
+        label.setText(String.valueOf(ilustradorAvion.getT().getDelay()));
+        
+        
+        
+        JButton button2 = new JButton();
+        button2.setLocation(850,850);
+        button2.setText(">>");
+        
+         button2.addActionListener(new ActionListener() {//Aumentar velocidad
+            
+            private void button2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+                // BUCAR AEROPUERTO ORIGEN
+                //ilustradorAvion.setT(ilustradorAvion.getT()*2);
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (ilustradorAvion.getT().getDelay() >1){
+                 ilustradorAvion.getT().setDelay(  (ilustradorAvion.getT().getDelay()/2) );
+                 label.setText(String.valueOf(ilustradorAvion.getT().getDelay()));
+                }else{
+                
+                   }
+                  System.out.println("Delay-> "+ilustradorAvion.getT().getDelay());
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+
+        });
+         
+          button3.addActionListener(new ActionListener() {//Pausar
+            
+            private void button2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+                // BUCAR AEROPUERTO ORIGEN
+                ilustradorAvion.setVelocidad(ilustradorAvion.getVelocidad()*0);
+                label.setText(String.valueOf(ilustradorAvion.getT().getDelay()));
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ilustradorAvion.getT().setDelay(  4096 );
+                 System.out.println("Delay-> "+ilustradorAvion.getT().getDelay());
+                 label.setText(String.valueOf("PAUSADO"));
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+
+        });
+        
+        
+        button4.addActionListener(new ActionListener() {//Reaundar
+            
+            private void button2ActionPerformed(java.awt.event.ActionEvent evt) {  
+                
+                // BUCAR AEROPUERTO ORIGEN
+                ilustradorAvion.setVelocidad(ilustradorAvion.getVelocidad()+1);
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (ilustradorAvion.getT().getDelay()>=2048){
+                     System.out.println("Delay-> "+ilustradorAvion.getT().getDelay());
+                     
+                     ilustradorAvion.getT().setDelay(  1 );
+                     label.setText(String.valueOf(ilustradorAvion.getT().getDelay()));
+                }
+                
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+
+        });
+        
+        button1.addActionListener(new ActionListener() {//Disminuir velocidad
+            
+            private void button1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+                // BUCAR AEROPUERTO ORIGEN
+                ilustradorAvion.setVelocidad(ilustradorAvion.getVelocidad()/2);
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                   System.out.println("Delay-> "+ilustradorAvion.getT().getDelay());
+                   if (ilustradorAvion.getT().getDelay()<=64){
+                       ilustradorAvion.getT().setDelay(  (ilustradorAvion.getT().getDelay()*2) );
+                       label.setText(String.valueOf(ilustradorAvion.getT().getDelay()));
+                   }
+                  
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+
+        });
+        
+        /*
+                System.out.println("AQUI AQUI");
+        velocidad*=2;*/
+        
+        
+        ilustradorAvion.add(button1);
+        ilustradorAvion.add(button2);
+        ilustradorAvion.add(label);
+        ilustradorAvion.add(button3);
+        ilustradorAvion.add(button4);
+        ilustradorAvion.add(label2);
+        
+        
+        ilustradorAvion.addMouseListener(new MouseListener() {//Disminuir velocidad
+            
+
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+
+        });
+
+        ilustradorAvion.addMouseListener(new MouseListener() {//Disminuir velocidad
+            
+
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+
+        });
+        
+        ilustradorAvion.addMouseWheelListener(new MouseWheelListener() {//Disminuir velocidad
+            
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+               // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+
+        });
+        ilustradorAvion.setLocation(map.getLocation());
+        map.add(ilustradorAvion); 
         map.setZoomControlsVisible(false);
        
         f.add(map);
-        
-         
+        //f.setResizable(false);
+        Dimension d = new Dimension(1040,780);
+        f.setMaximumSize( d);
+        f.setResizable(false);
+        System.out.println( "MI SIZE: " + f.getMaximumSize( ));
         f.pack();
         f.setSize(map.getPreferredSize());
         f.setLocationRelativeTo(null);

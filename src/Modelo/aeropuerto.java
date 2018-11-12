@@ -18,6 +18,8 @@ public class aeropuerto {
     private String continente;
     private String pais;
     private String ciudad;
+    private double coordX;
+    private double coordY;
 
     public aeropuerto(){
         
@@ -99,6 +101,24 @@ public class aeropuerto {
         this.ciudad = ciudad;
     }
 
+    public double getCoordX() {
+        return coordX;
+    }
+
+    public void setCoordX(double coordX) {
+        this.coordX = coordX;
+    }
+
+    public double getCoordY() {
+        return coordY;
+    }
+
+    public void setCoordY(double coordY) {
+        this.coordY = coordY;
+    }
+
+    
+    
     public void print(){
         System.out.println("Airport " + String.valueOf(this.getNombre()) +
                 " (" + this.getCodigo() + ") - [" +
