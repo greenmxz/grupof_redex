@@ -107,16 +107,20 @@ public class VueloDA {
             System.out.println("query => " + query);
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
+            int i=1;
             while (rs.next( )){
                 Vuelo vuelo = new Vuelo();
-                vuelo.setCodigo(rs.getString("codigo"));
+                vuelo.setCodigo(String.valueOf(i));
                 vuelo.setEstado("Estable");
-                vuelo.setFechaSalida(rs.getDate("fecha_salida"));
-                vuelo.setFechaLlegada(rs.getDate("fecha_llegada"));
+                vuelo.setFechaSalida(new SimpleDateFormat("yyyy-MM-dd HH:mm").
+                        parse(rs.getString("fecha_salida").substring(0, rs.getString("fecha_salida").length()-5)));
+                vuelo.setFechaLlegada(new SimpleDateFormat("yyyy-MM-dd HH:mm").
+                        parse(rs.getString("fecha_llegada").substring(0, rs.getString("fecha_llegada").length()-5)));
                 vuelo.setAeropuertoOrigen(rs.getString("aeOrigenCod"));
                 vuelo.setAeropuertoDestino(rs.getString("aeDestinoCod"));
                 
                 lVuelo.add(vuelo);
+                i++;
             }
             connect.closeConnection(); 
             System.out.println("Cantidad de resultados = " + lVuelo.size());

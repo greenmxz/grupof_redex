@@ -283,7 +283,47 @@ public class generalDA {
         }
     }
     
+    public ArrayList<String> obtenerContinenteSalida(){
+        ArrayList<String> aux = new ArrayList<String>();
+        try{
+            database connection = new database();
+            String query = "SELECT n.nombre AS continente\n" +
+                "FROM redexdb.aeropuerto AS a, redexdb.ciudad AS c,\n" +
+                "redexdb.pais AS p, redexdb.continente AS n,\n" +
+                "redexdb.plan_vuelo as v\n" +
+                "WHERE a.id_ciudad = c.id AND c.id_pais = p.id AND\n" +
+                "p.id_continente = n.id AND v.id_aeropuerto_salida = a.id\n" +
+                "ORDER BY v.id";
+            Statement sentencia= connection.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while(rs.next()){
+                aux.add(rs.getString("continente"));
+            }
+        }catch(Exception ex){
+            return null;
+        }
+        return aux;
+    }
     
-    
-    
+    public ArrayList<String> obtenerContinenteLlegada(){
+        ArrayList<String> aux = new ArrayList<String>();
+        try{
+            database connection = new database();
+            String query = "SELECT n.nombre AS continente\n" +
+                "FROM redexdb.aeropuerto AS a, redexdb.ciudad AS c,\n" +
+                "redexdb.pais AS p, redexdb.continente AS n,\n" +
+                "redexdb.plan_vuelo as v\n" +
+                "WHERE a.id_ciudad = c.id AND c.id_pais = p.id AND\n" +
+                "p.id_continente = n.id AND v.id_aeropuerto_llegada = a.id\n" +
+                "ORDER BY v.id";
+            Statement sentencia= connection.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while(rs.next()){
+                aux.add(rs.getString("continente"));
+            }
+        }catch(Exception ex){
+            return null;
+        }
+        return aux;
+    }
 }

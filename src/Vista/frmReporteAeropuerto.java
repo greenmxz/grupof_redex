@@ -1,7 +1,10 @@
 package Vista;
 
+import Controlador.aeropuertoBL;
 import Controlador.excelExport;
-import Modelo.aeropuertov2;
+import Controlador.generalBL;
+import Modelo.aeropuerto;
+import Modelo.continente;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
@@ -11,23 +14,28 @@ import javax.swing.table.DefaultTableModel;
 public class frmReporteAeropuerto extends javax.swing.JPanel {
 
     /* ATRIBUTOS */
-    private ArrayList<aeropuertov2> lstAeropuerto = new ArrayList<aeropuertov2>();
-    private ArrayList<aeropuertov2> filter = new ArrayList<aeropuertov2>();
+    private ArrayList<aeropuerto> lstAeropuerto = new ArrayList<aeropuerto>();
+    private ArrayList<aeropuerto> filter = new ArrayList<aeropuerto>();
     
     
     public frmReporteAeropuerto() {
         initComponents();
-        lstAeropuerto.add(new aeropuertov2("AAA01", "Aeropuerto Internacional Jorge Chávez", 
-                "América", "Lima", "Perú", 750, 720, "Saturado"));
-        lstAeropuerto.add(new aeropuertov2("AAA02", "Aeropuerto Internacional Ministro Pistarini", 
-                "América", "Argentina", "Buenos Aires", 950, 789, "Estable")); 
-        lstAeropuerto.add(new aeropuertov2("AAA03", "Aeropuerto Internacional El Alto", 
-                "América", "Bolivia", "La Paz", 920, 920, "Lleno")); 
+//        lstAeropuerto.add(new aeropuertov2("AAA01", "Aeropuerto Internacional Jorge Chávez", 
+//                "América", "Lima", "Perú", 750, 720, "Saturado"));
+//        lstAeropuerto.add(new aeropuertov2("AAA02", "Aeropuerto Internacional Ministro Pistarini", 
+//                "América", "Argentina", "Buenos Aires", 950, 789, "Estable")); 
+//        lstAeropuerto.add(new aeropuertov2("AAA03", "Aeropuerto Internacional El Alto", 
+//                "América", "Bolivia", "La Paz", 920, 920, "Lleno")); 
+        aeropuertoBL paqueteBL = new aeropuertoBL();
+        lstAeropuerto = paqueteBL.listaAeropuertos();
+        generalBL gen = new generalBL();
+        ArrayList<continente> list = gen.obtenerContinentes();
         tablaDefault();
         DefaultListModel listModel = new DefaultListModel();
         listModel.clear();
-        listModel.add(0,"América");
-        listModel.add(1,"Europa");
+        for(int i=0; i<list.size();i++){
+            listModel.add(i,list.get(i).getNombre());  
+        }
         listContinente.setModel(listModel);
         filter = lstAeropuerto;
     }
@@ -190,7 +198,7 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
         }
         Object[] obj = new Object[8];
         for(int i = 0; i < lstAeropuerto.size(); i++){
-            aeropuertov2 u = lstAeropuerto.get(i);
+            aeropuerto u = lstAeropuerto.get(i);
             obj[0] = u.getCodigo();
             obj[1] = u.getNombre();
             obj[2] = u.getContinente();
@@ -221,7 +229,7 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
         return 0;
     }
     
-    public boolean filtroEstado(aeropuertov2 ae){
+    public boolean filtroEstado(aeropuerto ae){
         boolean chk1 = chkEstadoEstable.isSelected();
         boolean chk2 = chkEstadoSaturado.isSelected();
         boolean chk3 = chkEstadoLleno.isSelected();
@@ -239,19 +247,19 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
         return true;
     }
     
-    public boolean filtroContinente(aeropuertov2 ae){
+    public boolean filtroContinente(aeropuerto ae){
         if(listContinente.getSelectedIndex() > -1){
             if((listContinente.getSelectedIndex() == 0) &&
                     (ae.getContinente().equals("Europa")))
                 return false;
             if((listContinente.getSelectedIndex() == 1) &&
-                    (ae.getContinente().equals("América")))
+                    (ae.getContinente().equals("America del Sur")))
                 return false;
         }
         return true;
     }
     
-    public boolean filtroCapacidad(aeropuertov2 ae){
+    public boolean filtroCapacidad(aeropuerto ae){
         // Si no se indica alguno, se infiere que no habrá filtro
         if(!(txtCapMax.getText().equals("")) && 
                 (ae.getCapActual() > Integer.parseInt(txtCapMax.getText())))
@@ -296,7 +304,7 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         // Primero se tendrá que validar el filtro
-        filter = new ArrayList<aeropuertov2>();
+        filter = new ArrayList<aeropuerto>();
         if(fitroValido() == 0){
             for(int i=0; i<lstAeropuerto.size(); i++){
                 if(filtroEstado(lstAeropuerto.get(i)) &&
@@ -312,7 +320,7 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
             }
             Object[] obj = new Object[8];
             for(int i = 0; i < filter.size(); i++){
-                aeropuertov2 u = filter.get(i);
+                aeropuerto u = filter.get(i);
                 obj[0] = u.getCodigo();
                 obj[1] = u.getNombre();
                 obj[2] = u.getContinente();
