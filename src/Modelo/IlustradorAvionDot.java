@@ -25,7 +25,7 @@ import static javax.swing.text.html.CSS.Attribute.FONT_SIZE;
  */
 
 public class IlustradorAvionDot extends JPanel implements ActionListener{
-static final int PIXELS_PER_POINT = 4; // 4x
+    static final int PIXELS_PER_POINT = 4; // 4x
 
 // Image size in points
 static final int IMAGE_WIDTH = 150;
@@ -40,6 +40,7 @@ static final int FONT_SIZE = 11;
     static private double velocidad = 1;
     private int horaMundial=0;
     private int minutoMundial=0;
+    private int timeMS=8;
     
         /**
      * @return the horaMundial
@@ -113,7 +114,7 @@ static final int FONT_SIZE = 11;
     
     
     public IlustradorAvionDot(ArrayList<avionDot> avionesDot){
-        t= new Timer(8,this);
+        t= new Timer(timeMS,this);
         this.avionesDot = avionesDot;
         
         
@@ -144,17 +145,17 @@ static final int FONT_SIZE = 11;
             double xFin=this.avionesDot.get(i).getDestino().getX();
             double yFin=this.avionesDot.get(i).getDestino().getY();
             
-            double dx,dy,length;
+            double dx,dy;
             
             arrayEllipse.add(new Ellipse2D.Double(xIni,yIni,5,5));
             g2.fill(arrayEllipse.get(i));
             dx=xFin-xIni;
             dy=yFin-yIni;
-            length=Math.sqrt(Math.pow(dx, 2.0)+Math.pow(dy, 2.0));
+            //length=Math.sqrt(Math.pow(dx, 2.0)+Math.pow(dy, 2.0));
             //dx/=length;
             //dy/=length;
-            dx=(dx/length);
-            dy=(dy/length);
+            dx=(dx/t_min);
+            dy=(dy/t_min);
             this.avionesDot.get(i).setvX(dx*getVelocidad());
             this.avionesDot.get(i).setvY(dy*getVelocidad());
         }
@@ -166,12 +167,53 @@ static final int FONT_SIZE = 11;
         
         // verificar shora salida
         if (v.getEstado_mov() == 0){
-            if (this.horaMundial*60 + this.minutoMundial > v.getHora_salida()*60 + v.getMin_salida()){
+            if (this.horaMundial*60 + this.minutoMundial == v.getHora_salida()*60 + v.getMin_salida()){
                 v.setEstado_mov(1);// en transito
             }
         }
     }
     
+    
+    public void mueveAvion(avionDot v){
+        
+        double xIni = v.getActual().getX();
+        double xFin = v.getDestino().getX();
+
+        double yIni = v.getActual().getY();
+        double yFin = v.getDestino().getY();
+        
+        if (xIni != xFin || yIni != yFin){
+        
+            if (xIni != xFin)
+                v.getActual().setX(xIni+v.getvX());
+            
+            if (yIni != yFin)
+                v.getActual().setY(yIni+v.getvY());
+             
+        }
+        
+        double xOrig = v.getOrigen().getX();
+        double yOrig = v.getOrigen().getY();
+        double xDest = v.getDestino().getX();
+        double yDest = v.getDestino().getY();
+        double xAct = v.getActual().getX();
+        double yAct = v.getActual().getY();
+
+        if ((abs(xAct) - abs(xDest)) <= getPrecision() && (abs(yAct) - abs(yDest)) <= getPrecision()) {
+
+            v.getActual().setX(v.getOrigen().getX());
+            v.getActual().setY(v.getOrigen().getY());
+            v.setEstado_mov(0); // se para
+        }
+        
+        //hasta ajustar velocidad
+        if (this.horaMundial*60 + this.minutoMundial == v.getHora_llegada()*60 + v.getMin_llegada()){
+            v.getActual().setX(v.getOrigen().getX());
+            v.getActual().setY(v.getOrigen().getY());
+            v.setEstado_mov(0); // se para
+        }
+        
+    }
     
     public void actionPerformed(ActionEvent e){
         if (this.minutoMundial<59){
@@ -183,136 +225,22 @@ static final int FONT_SIZE = 11;
             else {
                 this.minutoMundial=0;
                 this.horaMundial=0;
-            }
-            
-            }
+            }    
+        }
         
         
         for(int i=0;i<this.avionesDot.size();i++){
             
+            //if (i == 1) break;
+            
             cambiaEstadoMov(this.avionesDot.get(i));
             
             if (this.avionesDot.get(i).getEstado_mov() == 1){
-                double xIni=this.avionesDot.get(i).getActual().getX();
-                double xFin=this.avionesDot.get(i).getDestino().getX();
-
-                double yIni=this.avionesDot.get(i).getActual().getY();
-                double yFin=this.avionesDot.get(i).getDestino().getY();
                 
-              
-
-                //si se usa while, cabe la posibilidad de que no sean iguales por incertidumbre
-                if(xIni< xFin && yIni<yFin){
-                    double xOrig =  this.avionesDot.get(i).getOrigen().getX();
-                    double yOrig =  this.avionesDot.get(i).getOrigen().getY();
-                    double xDest =  this.avionesDot.get(i).getDestino().getX();
-                    double yDest =  this.avionesDot.get(i).getDestino().getY();
-                    double xAct =  this.avionesDot.get(i).getActual().getX();
-                    double yAct =  this.avionesDot.get(i).getActual().getY();
-                    this.avionesDot.get(i).getActual().setX(xIni+this.avionesDot.get(i).getvX());
-                    this.avionesDot.get(i).getActual().setY(yIni+this.avionesDot.get(i).getvY());
-                    if((abs(xAct)- abs(xDest) )<=getPrecision() &&(abs(yAct)- abs(yDest) )<=getPrecision()){
-                        this.avionesDot.get(i).getActual().setX(this.avionesDot.get(i).getOrigen().getX());
-                        this.avionesDot.get(i).getActual().setY(this.avionesDot.get(i).getOrigen().getY());
-                        this.avionesDot.get(i).setEstado_mov(0); // se para
-                    }
-                }else if(xIni< xFin && yIni>yFin){
-                    double xOrig =  this.avionesDot.get(i).getOrigen().getX();
-                    double yOrig =  this.avionesDot.get(i).getOrigen().getY();
-                    double xDest =  this.avionesDot.get(i).getDestino().getX();
-                    double yDest =  this.avionesDot.get(i).getDestino().getY();
-                    double xAct =  this.avionesDot.get(i).getActual().getX();
-                    double yAct =  this.avionesDot.get(i).getActual().getY();
-                    this.avionesDot.get(i).getActual().setX(xIni+this.avionesDot.get(i).getvX());
-                    this.avionesDot.get(i).getActual().setY(yIni+this.avionesDot.get(i).getvY());
-                    if((abs(xAct)- abs(xDest) )<=getPrecision() &&(abs(yAct)- abs(yDest) )<=getPrecision()){
-                        this.avionesDot.get(i).getActual().setX(this.avionesDot.get(i).getOrigen().getX());
-                        this.avionesDot.get(i).getActual().setY(this.avionesDot.get(i).getOrigen().getY());
-                        this.avionesDot.get(i).setEstado_mov(0); // se para
-                    }
-                }else if(xIni> xFin && yIni<yFin){
-                    double xOrig =  this.avionesDot.get(i).getOrigen().getX();
-                    double yOrig =  this.avionesDot.get(i).getOrigen().getY();
-                    double xDest =  this.avionesDot.get(i).getDestino().getX();
-                    double yDest =  this.avionesDot.get(i).getDestino().getY();
-                    double xAct =  this.avionesDot.get(i).getActual().getX();
-                    double yAct =  this.avionesDot.get(i).getActual().getY();
-                    this.avionesDot.get(i).getActual().setX(xIni+this.avionesDot.get(i).getvX());
-                    this.avionesDot.get(i).getActual().setY(yIni+this.avionesDot.get(i).getvY());
-                    if((abs(xAct)- abs(xDest) )<=getPrecision() &&(abs(yAct)- abs(yDest) )<=getPrecision()){
-                        this.avionesDot.get(i).getActual().setX(this.avionesDot.get(i).getOrigen().getX());
-                        this.avionesDot.get(i).getActual().setY(this.avionesDot.get(i).getOrigen().getY());
-                        this.avionesDot.get(i).setEstado_mov(0); // se para
-                    }
-                }else if(xIni> xFin && yIni>yFin){
-                    double xOrig =  this.avionesDot.get(i).getOrigen().getX();
-                    double yOrig =  this.avionesDot.get(i).getOrigen().getY();
-                    double xDest =  this.avionesDot.get(i).getDestino().getX();
-                    double yDest =  this.avionesDot.get(i).getDestino().getY();
-                    double xAct =  this.avionesDot.get(i).getActual().getX();
-                    double yAct =  this.avionesDot.get(i).getActual().getY();
-                    this.avionesDot.get(i).getActual().setX(xIni+this.avionesDot.get(i).getvX());
-                    this.avionesDot.get(i).getActual().setY(yIni+this.avionesDot.get(i).getvY());
-                    if((abs(xAct)- abs(xDest) )<=getPrecision() &&(abs(yAct)- abs(yDest) )<=getPrecision()){
-                        this.avionesDot.get(i).getActual().setX(this.avionesDot.get(i).getOrigen().getX());
-                        this.avionesDot.get(i).getActual().setY(this.avionesDot.get(i).getOrigen().getY());
-                        this.avionesDot.get(i).setEstado_mov(0); // se para
-                    }
-                }else{
-                    /*
-                    this.avionesDot.get(i).getActual().setX(this.avionesDot.get(i).getOrigen().getX());
-                    this.avionesDot.get(i).getActual().setY(this.avionesDot.get(i).getOrigen().getY());
-                    */
-                    double xOrig =  this.avionesDot.get(i).getOrigen().getX();
-                    double yOrig =  this.avionesDot.get(i).getOrigen().getY();
-                    double xDest =  this.avionesDot.get(i).getDestino().getX();
-                    double yDest =  this.avionesDot.get(i).getDestino().getY();
-                    double xAct =  this.avionesDot.get(i).getActual().getX();
-                    double yAct =  this.avionesDot.get(i).getActual().getY();
-
-
-                    count++;
-                   // System.out.println(i + " ( "+  xAct +" , "+yAct+"  ) -> ( "+xDest +" , " +yDest +") ");
-
-                    if ( i==0) {
-
-
-                    //System.out.println( "( "+  xAct +" , "+yAct+"  ) -> ( "+xDest +" , " +yDest +") ");
-                    if ( (abs(xAct)- abs(xDest) )<=getPrecision() &&(abs(yAct)- abs(yDest) )<=getPrecision()){
-
-                       // System.out.println("Llego aqui!! ee "+count);
-    //                   this.avionesDot.get(i).getActual().setX(0);
-    //                    this.avionesDot.get(i).getActual().setY(0);
-                        this.avionesDot.get(i).getActual().setX(this.avionesDot.get(i).getOrigen().getX());
-                        this.avionesDot.get(i).getActual().setY(this.avionesDot.get(i).getOrigen().getY());
-                        this.avionesDot.get(i).setEstado_mov(0); // se para
-                    }
-
-                    //continue;
-
-                     }
-                }
+                mueveAvion(this.avionesDot.get(i));
+            
             }
         }
-        
-//        t1=new threadGraphic(this.origin,this.destiny,this.velocityX,this.velocityY);
-//        t2=new threadGraphic(this.origin,this.destiny,this.velocityX,this.velocityY);
-//        try{
-//            t1.start();
-//            Thread.sleep(10);
-//            t2.start();
-//        }catch(Exception exp){
-//            System.out.println("error");
-//        }
-//        if(xIni1<= xFin && yIni1<=yFin){
-//            xIni1+=velX1;
-//            yIni1+=velY1;
-//            
-//        }if(xIni2<= xFin2 && yIni2<=yFin2){
-//            xIni2+=velX2;
-//            yIni2+=velY2;
-//            
-//        }
 
         repaint();
         

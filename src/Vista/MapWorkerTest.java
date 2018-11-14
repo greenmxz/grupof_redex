@@ -190,11 +190,11 @@ public class MapWorkerTest {
             Date fl =v.getFechaLlegada();
             
             
-            dot.setHora_salida(2);
+            dot.setHora_salida(0);
             dot.setMin_salida(30);
             
             dot.setHora_llegada(23);
-            dot.setMin_llegada(0);
+            dot.setMin_llegada(40);
             
             String codAeOrigen = v.getAeropuertoOrigen();
             String codAeDestino = v.getAeropuertoDestino();
