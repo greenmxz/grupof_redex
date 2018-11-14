@@ -198,7 +198,8 @@ static final int FONT_SIZE = 11;
 
                 double yIni=this.avionesDot.get(i).getActual().getY();
                 double yFin=this.avionesDot.get(i).getDestino().getY();
-
+                
+              
 
                 //si se usa while, cabe la posibilidad de que no sean iguales por incertidumbre
                 if(xIni< xFin && yIni<yFin){
