@@ -43,7 +43,7 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.Timer;
-
+import java.util.Date;
 /**
  *
  * @author JUAN
@@ -182,6 +182,19 @@ public class MapWorkerTest {
             avionDot dot = new avionDot();
             
             dot.setVisible(true);
+            dot.setEstado_almacen(0);
+            dot.setEstado_mov(0);
+            
+            //hora de salida
+            Date fs = v.getFechaSalida();
+            Date fl =v.getFechaLlegada();
+            
+            
+            dot.setHora_salida(2);
+            dot.setMin_salida(30);
+            
+            dot.setHora_llegada(23);
+            dot.setMin_llegada(0);
             
             String codAeOrigen = v.getAeropuertoOrigen();
             String codAeDestino = v.getAeropuertoDestino();

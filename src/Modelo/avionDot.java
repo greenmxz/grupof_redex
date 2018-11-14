@@ -21,6 +21,12 @@ public class avionDot {
     private boolean visible;
     private Double vX;
     private Double vY;
+    private int hora_salida;
+    private int min_salida;
+    private int hora_llegada;
+    private int min_llegada;
+    private int estado_almacen;//0 : disponible / 1: lleno
+    private int estado_mov;//0: en espera 1: en transito
 
     public CoordenadaDouble getOrigen() {
         return origen;
@@ -84,6 +90,54 @@ public class avionDot {
 
     public void setvY(Double vY) {
         this.vY = vY;
+    }
+
+    public int getHora_salida() {
+        return hora_salida;
+    }
+
+    public void setHora_salida(int hora_salida) {
+        this.hora_salida = hora_salida;
+    }
+
+    public int getMin_salida() {
+        return min_salida;
+    }
+
+    public void setMin_salida(int min_salida) {
+        this.min_salida = min_salida;
+    }
+
+    public int getHora_llegada() {
+        return hora_llegada;
+    }
+
+    public void setHora_llegada(int hora_llegada) {
+        this.hora_llegada = hora_llegada;
+    }
+
+    public int getMin_llegada() {
+        return min_llegada;
+    }
+
+    public void setMin_llegada(int min_llegada) {
+        this.min_llegada = min_llegada;
+    }
+
+    public int getEstado_almacen() {
+        return estado_almacen;
+    }
+
+    public void setEstado_almacen(int estado_almacen) {
+        this.estado_almacen = estado_almacen;
+    }
+
+    public int getEstado_mov() {
+        return estado_mov;
+    }
+
+    public void setEstado_mov(int estado_mov) {
+        this.estado_mov = estado_mov;
     }
     
     
