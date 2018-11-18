@@ -24,10 +24,6 @@ public class TabuSearch {
     private int limit; // 2880 = intercontinental, 1440 = no
     private int hourBegin;
     private boolean finded = false;
-    private ArrayList<String> asignedPacks;
-    private Date fechaInicio;
-    private LocalTime fechaSim;
-    private PaqueteBL paqueteBL;
     private int timeToCmp;
     
     public ArrayList<Integer> getRouteOptimal(){
@@ -40,13 +36,11 @@ public class TabuSearch {
         listFlight = inputProcess.getFlightList();
         //listPack = new ArrayList<Paquete>();
         listPack = inputProcess.getPackList();
-        paqueteBL = new PaqueteBL();
         flightMatrix = inputProcess.getFlightMatrix();
         routeOptimal = new ArrayList<Integer>();
         numAirport = listAirport.size();
         numFlight = listFlight.size();
         tabuString = new ArrayList<String>();
-        asignedPacks = new ArrayList<String>();
     }
     
     public boolean validator(String codeOrigin, String codeDestiny){
@@ -72,13 +66,26 @@ public class TabuSearch {
                     ii++;
                 }
                 aux.add(sol);
-//                ArrayList<String> stringSol = getAirportsRouteICAO();
-//                for(String i : stringSol){
-//                    if(!stringSol.get(0).equals(i))
-//                        System.out.print(" ->");
-//                    System.out.print(i);
-//                }
-//                System.out.println(" \n");
+            }else{
+                System.out.println("Some airport doesn't exist!");
+            }
+        }
+        return aux;
+    }
+    
+    public ArrayList<String> executeVCRPTabu(ArrayList<Paquete> paquetesAct){
+        ArrayList<String> aux = new ArrayList<String>();
+        listPack = paquetesAct;
+        for(int iter=0; iter<listPack.size(); iter++){
+            String origin = listAirport.get(listPack.get(iter).getOriginAirport()-1).getIcaoCode();
+            String destiny = listAirport.get(listPack.get(iter).getDestinyAirport()-1).getIcaoCode();
+            listPack.get(iter).print();
+            if(validator(origin, destiny)){
+                String time = String.valueOf(listPack.get(iter).getOriginHour()) + ":" + 
+                        String.valueOf(listPack.get(iter).getOriginMin());
+                tabuAlgorithm(origin, destiny, time);
+                String solution = generateTabuString(getRouteOptimal());
+                aux.add(solution);
             }else{
                 System.out.println("Some airport doesn't exist!");
             }
@@ -262,9 +269,18 @@ public class TabuSearch {
         for(int i=0; i<solution.length; i++){
             if(solution[i] == -1) break;
             if(i>0)
-                resultado += "-" + String.valueOf(solution[i]);
-            else
-                resultado += String.valueOf(solution[i]);
+                resultado += "-";
+            resultado += String.valueOf(solution[i]);
+        }
+        return resultado;
+    }
+    
+    public String generateTabuString(ArrayList<Integer> solution){
+        String resultado = "";
+        for(int i=0; i<solution.size(); i++){
+            if(i>0)
+                resultado += "-";
+            resultado += String.valueOf(solution.get(i));
         }
         return resultado;
     }
