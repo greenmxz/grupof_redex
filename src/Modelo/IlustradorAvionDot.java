@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import static javax.swing.text.html.CSS.Attribute.FONT_SIZE;
+import java.awt.Color;
+import javafx.scene.Group;
+import java.awt.Shape;
+import java.awt.geom.Area;
+
 
 /**
  *
@@ -126,13 +131,13 @@ static final int FONT_SIZE = 11;
         super.paintComponent(g);
         Graphics2D g2=(Graphics2D)g;
         //int sizeList=destiny.size();
-         Font font = new Font("Arial", Font.PLAIN, toPixels(FONT_SIZE));
-         g2.setFont(font);
+        Font font = new Font("Arial", Font.PLAIN, toPixels(FONT_SIZE));
+        g2.setFont(font);
         g2.drawString(String.valueOf(horaMundial), 700, 35);
         g2.drawString(" :"+String.valueOf(minutoMundial), 732, 35);
         
         //g2.fill(new Shape("Holamundo"));
-        ArrayList<Ellipse2D>arrayEllipse=new ArrayList<>();
+        ArrayList<Shape>arrayEllipse=new ArrayList<>();
         
         for(int i=0;i<this.avionesDot.size();i++){
             
@@ -145,10 +150,31 @@ static final int FONT_SIZE = 11;
             double xFin=this.avionesDot.get(i).getDestino().getX();
             double yFin=this.avionesDot.get(i).getDestino().getY();
             
+            String color = this.avionesDot.get(i).getColor();
+            
+            switch (color){
+                    case "rojo":
+                        g2.setPaint(new Color (238, 54, 63));
+                        break;
+                    case "amarillo":
+                        g2.setPaint(new Color (234, 203, 29));
+                        break;
+                    case "verde":
+                        g2.setPaint(new Color (106, 203, 29));
+                        break;
+            }
+            
             double dx,dy;
             
-            arrayEllipse.add(new Ellipse2D.Double(xIni,yIni,5,5));
-            g2.fill(arrayEllipse.get(i));
+
+           
+                  
+            Shape avion = new Ellipse2D.Double(xIni,yIni,4,4);
+            g2.fill(avion); //pinta avion
+             
+            arrayEllipse.add(avion);
+            
+            g2.fill(arrayEllipse.get(i)); // dibuja puntito
             dx=xFin-xIni;
             dy=yFin-yIni;
             //length=Math.sqrt(Math.pow(dx, 2.0)+Math.pow(dy, 2.0));
@@ -206,11 +232,11 @@ static final int FONT_SIZE = 11;
             v.setEstado_mov(0); // se para
         }
         
-        //hasta ajustar velocidad
+        //si ya es la hora de llegada se situa en el destino
         if (this.horaMundial*60 + this.minutoMundial == v.getHora_llegada()*60 + v.getMin_llegada()){
-            v.getActual().setX(v.getOrigen().getX());
-            v.getActual().setY(v.getOrigen().getY());
-            v.setEstado_mov(0); // se para
+            v.getActual().setX(v.getDestino().getX());
+            v.getActual().setY(v.getDestino().getY());
+
         }
         
     }

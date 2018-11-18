@@ -111,8 +111,8 @@ public class VueloDA {
                 Vuelo vuelo = new Vuelo();
                 vuelo.setCodigo(rs.getString("codigo"));
                 vuelo.setEstado("Estable");
-                vuelo.setFechaSalida(rs.getDate("fecha_salida"));
-                vuelo.setFechaLlegada(rs.getDate("fecha_llegada"));
+                vuelo.setFechaSalida(rs.getTimestamp("fecha_salida"));
+                vuelo.setFechaLlegada(rs.getTimestamp("fecha_llegada"));
                 vuelo.setAeropuertoOrigen(rs.getString("aeOrigenCod"));
                 vuelo.setAeropuertoDestino(rs.getString("aeDestinoCod"));
                 

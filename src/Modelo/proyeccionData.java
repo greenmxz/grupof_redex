@@ -320,9 +320,11 @@ public class proyeccionData {
                 cleanFile("resources\\pack_enviados_generados\\" + this.Archivos.get(numCiudad));
                 
                 //copia archivos
-                copyFile(archivo,archivoNuevo);
+                //copyFile(archivo,archivoNuevo);
                 //agrega data nueva
                 appendEnvios("resources\\pack_enviados_generados\\" + this.Archivos.get(numCiudad),enviosGen);
+                
+                
                 
                 enviosGen = new ArrayList<>();// se reinicia
                 numCiudad += 1;

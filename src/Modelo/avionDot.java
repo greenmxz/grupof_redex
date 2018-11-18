@@ -17,7 +17,7 @@ public class avionDot {
     private CoordenadaDouble destino;
     private CoordenadaDouble actual;
     private ArrayList<CoordenadaDouble>ruta;
-    private String color;
+    private String color; // verde -> amarillo -> rojo
     private boolean visible;
     private Double vX;
     private Double vY;
@@ -25,8 +25,9 @@ public class avionDot {
     private int min_salida;
     private int hora_llegada;
     private int min_llegada;
-    private int estado_almacen;//0 : disponible / 1: lleno
-    private int estado_mov;//0: en espera 1: en transito
+    private int estado_almacen;//0 : bajo / 1: medio/ 2: alto
+    private int estado_mov;//0: en espera 1: en transito 2: llego a destino
+    private int almacen;
 
     public CoordenadaDouble getOrigen() {
         return origen;
@@ -138,6 +139,14 @@ public class avionDot {
 
     public void setEstado_mov(int estado_mov) {
         this.estado_mov = estado_mov;
+    }
+
+    public int getAlmacen() {
+        return almacen;
+    }
+
+    public void setAlmacen(int almacen) {
+        this.almacen = almacen;
     }
     
     
