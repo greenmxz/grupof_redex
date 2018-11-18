@@ -5,7 +5,10 @@
  */
 package Vista;
 
+import Controlador.PaqueteBL;
 import Controlador.excelExport;
+import Controlador.generalBL;
+import Modelo.continente;
 import Modelo.paquete;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -26,28 +29,40 @@ public class frmReportePaquete extends javax.swing.JPanel {
     /* ATRIBUTOS */
     private ArrayList<paquete> lstPaq = new ArrayList<paquete>();
     private ArrayList<paquete> filter = new ArrayList<paquete>();
+    private javax.swing.JFrame x;
+    private generalBL gen;
+    private ArrayList<String> contSalida;
+    private ArrayList<String> contLlegada;
     
-    public frmReportePaquete() {
+    public frmReportePaquete(javax.swing.JFrame x) {
         initComponents();
-        lstPaq.add(new paquete("AAA01", new Date(118,9,21,15,30), 
-                new Date(118,10,22,00,25), "SPBO", "América",
-                "Lima", "SKBO", "América", "Buenos Aires", "Juan Pérez", "María García", "Entregado"));
-        lstPaq.add(new paquete("AAA02", new Date(118,9,21,15,30), 
-                new Date(118,9,22,00,25), "SPBO", "América",
-                "Lima", "EEMM", "Europa", "París", "Francois Guillard", "María García", "En camino"));
-        lstPaq.add(new paquete("AAA02", new Date(118,9,21,15,30), 
-                new Date(118,9,22,00,25), "SVMM", "América",
-                "La Paz", "EKML", "Europa", "Bratislava", "Guillermo Farfán", "Ján Čierny", "Entregado"));
+//        lstPaq.add(new paquete("AAA01", new Date(118,9,21,15,30), "SPBO",  "SKBO", "Juan Pérez", "María García", "Entregado"));
+//        lstPaq.add(new paquete("AAA02", new Date(118,9,21,15,30), "SPBO", "EEMM","Francois Guillard", "María García", "En camino"));
+//        lstPaq.add(new paquete("AAA02", new Date(118,9,21,15,30), "SVMM", "EKML","Guillermo Farfán", "Ján Čierny", "Entregado"));
+        PaqueteBL paqueteBL = new PaqueteBL();
+        lstPaq = paqueteBL.obtenerPaquetes();
+        gen = new generalBL();
+        ArrayList<continente> list = gen.obtenerContinentes();
         tablaDefault();
         DefaultListModel listModel = new DefaultListModel();
         listModel.clear();
-        listModel.add(0,"América");
-        listModel.add(1,"Europa");
+        for(int i=0; i<list.size();i++){
+            listModel.add(i,list.get(i).getNombre());  
+        }
         listContinenteO.setModel(listModel);
         listContinenteD.setModel(listModel);
         filter = lstPaq;
+        this.x = x;
     }
 
+    public void setOrigen(String codigo){
+        txtOrigen.setText(codigo);
+    }
+    
+    public void setDestino(String codigo){
+        txtDestino.setText(codigo);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -70,10 +85,16 @@ public class frmReportePaquete extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         listContinenteD = new javax.swing.JList<>();
         panelFecha = new javax.swing.JPanel();
-        label1 = new java.awt.Label();
-        label2 = new java.awt.Label();
         dtpSalida = new com.github.lgooddatepicker.components.DateTimePicker();
-        dtpLlegada = new com.github.lgooddatepicker.components.DateTimePicker();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        txtDestino = new javax.swing.JTextField();
+        txtOrigen = new javax.swing.JTextField();
+        btnBuscarOrigen = new javax.swing.JButton();
+        btnBuscarDestino = new javax.swing.JButton();
+        chkAerop = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
 
         btnExcel.setText("Exportar a hoja de cálculo");
@@ -110,12 +131,12 @@ public class frmReportePaquete extends javax.swing.JPanel {
         panelEstado.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         chkEstadoEntregado.setText("Entregado");
-        panelEstado.add(chkEstadoEntregado, new org.netbeans.lib.awtextra.AbsoluteConstraints(28, 26, -1, -1));
+        panelEstado.add(chkEstadoEntregado, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
         chkEstadoEnCamino.setText("En camino");
-        panelEstado.add(chkEstadoEnCamino, new org.netbeans.lib.awtextra.AbsoluteConstraints(121, 26, -1, -1));
+        panelEstado.add(chkEstadoEnCamino, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, -1));
 
-        panelFiltrado.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, 326, 70));
+        panelFiltrado.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, 190, 60));
 
         btnLimpiarFlitro.setText("Limpiar filtro");
         btnLimpiarFlitro.addActionListener(new java.awt.event.ActionListener() {
@@ -123,7 +144,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 btnLimpiarFlitroActionPerformed(evt);
             }
         });
-        panelFiltrado.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 110, 107, -1));
+        panelFiltrado.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 130, 107, -1));
 
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -131,9 +152,9 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 btnFiltrarActionPerformed(evt);
             }
         });
-        panelFiltrado.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 150, 107, -1));
+        panelFiltrado.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 160, 107, -1));
 
-        panelContinenteO.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Continente origen"));
+        panelContinenteO.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Continente origen"));
         panelContinenteO.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         listContinenteO.setModel(new javax.swing.AbstractListModel<String>() {
@@ -143,7 +164,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
         });
         jScrollPane3.setViewportView(listContinenteO);
 
-        panelContinenteO.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, 63));
+        panelContinenteO.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, 60));
 
         panelFiltrado.add(panelContinenteO, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 32, 210, 90));
 
@@ -157,27 +178,62 @@ public class frmReportePaquete extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(listContinenteD);
 
-        panelContinenteD.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 16, 183, 50));
+        panelContinenteD.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, 60));
 
-        panelFiltrado.add(panelContinenteD, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 142, 210, 84));
+        panelFiltrado.add(panelContinenteD, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, 210, 90));
 
         panelFecha.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rango temporal"));
         panelFecha.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panelFecha.add(dtpSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, -1, -1));
 
-        label1.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        label1.setText("Llegada");
-        panelFecha.add(label1, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 70, -1, -1));
+        jLabel1.setText("Fecha de entrada");
+        panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
-        label2.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        label2.setText("Salida");
-        panelFecha.add(label2, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 42, -1, -1));
-        panelFecha.add(dtpSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(67, 37, -1, -1));
-        panelFecha.add(dtpLlegada, new org.netbeans.lib.awtextra.AbsoluteConstraints(67, 70, -1, -1));
+        panelFiltrado.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 380, 60));
 
-        panelFiltrado.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 32, 330, 100));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Aeropuerto"));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setText("Destino");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 25, -1, -1));
+
+        jLabel10.setText("Origen");
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, -1, -1));
+
+        txtDestino.setEnabled(false);
+        jPanel2.add(txtDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 25, 50, -1));
+
+        txtOrigen.setEnabled(false);
+        jPanel2.add(txtOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 25, 40, 20));
+
+        btnBuscarOrigen.setEnabled(false);
+        btnBuscarOrigen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarOrigenActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnBuscarOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 25, 30, 20));
+
+        btnBuscarDestino.setEnabled(false);
+        btnBuscarDestino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarDestinoActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnBuscarDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 25, 30, 20));
+
+        chkAerop.setText("Buscar por aeropuerto");
+        chkAerop.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chkAeropMouseClicked(evt);
+            }
+        });
+        jPanel2.add(chkAerop, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, -1, -1));
+
+        panelFiltrado.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 30, 280, 90));
+
         jLabel3.setText("REPORTE DE PAQUETES");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
 
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
@@ -209,9 +265,9 @@ public class frmReportePaquete extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addGap(11, 11, 11)
-                .addComponent(panelFiltrado, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(panelFiltrado, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -308,10 +364,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
          */
         LocalDate fechaSalida = LocalDate.parse("01/10/2018",
                     DateTimeFormatter.ofPattern("dd/MM/yyyy"));;
-        LocalDate fechaLlegada = LocalDate.parse("01/10/2018",
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));;
         LocalTime horaSalida = LocalTime.of(0,0,0);
-        LocalTime horaLlegada = LocalTime.of(0,0,0);
         /* Fecha de salida */
         if(dtpSalida.getDatePicker().toString().equals("") &&
                dtpSalida.getTimePicker().toString().equals("") ){
@@ -328,39 +381,6 @@ public class frmReportePaquete extends javax.swing.JPanel {
                !dtpSalida.getTimePicker().toString().equals("")){
             return 12;
         }
-        /* Fecha de llegada */
-        if(dtpLlegada.getDatePicker().toString().equals("") &&
-               dtpLlegada.getTimePicker().toString().equals("") ){
-            fechaLlegada = LocalDate.now();
-            horaLlegada = LocalTime.now();
-        }
-        if(!dtpLlegada.getDatePicker().toString().equals("") &&
-               dtpLlegada.getTimePicker().toString().equals("")){
-            fechaLlegada = dtpLlegada.getDatePicker().getDate();
-            horaLlegada = LocalTime.of(0,0,0);
-        }
-        if(dtpLlegada.getDatePicker().toString().equals("") &&
-               !dtpLlegada.getTimePicker().toString().equals("")){
-            return 13;
-        }
-        if(!dtpLlegada.getDatePicker().toString().equals("") &&
-               !dtpLlegada.getTimePicker().toString().equals("")){
-            fechaSalida = dtpSalida.getDatePicker().getDate();
-            horaSalida = dtpSalida.getTimePicker().getTime();
-        }
-            
-        if(!dtpSalida.getDatePicker().toString().equals("") &&
-               !dtpSalida.getTimePicker().toString().equals("")){
-            fechaLlegada = dtpLlegada.getDatePicker().getDate();
-            horaLlegada = dtpLlegada.getTimePicker().getTime();
-        }
-        if(((cmpDate(fechaSalida, fechaLlegada) == 0)) && 
-                ((cmpHour(horaSalida, horaLlegada) == 0)))
-            return 10;
-        if((cmpDate(fechaSalida, fechaLlegada) == -1) ||
-                ((cmpDate(fechaSalida, fechaLlegada) == 0)) && 
-                ((cmpHour(horaSalida, horaLlegada) == -1)))
-            return 11;
         return 0;
     }
     
@@ -384,7 +404,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
                     (ae.getContinenteOrigen().equals("Europa")))
                 return false;
             if((listContinenteO.getSelectedIndex() == 1) &&
-                    (ae.getContinenteOrigen().equals("América")))
+                    (ae.getContinenteOrigen().equals("America del Sur")))
                 return false;
         }
         if(listContinenteD.getSelectedIndex() > -1){
@@ -392,19 +412,14 @@ public class frmReportePaquete extends javax.swing.JPanel {
                     (ae.getContinenteDestino().equals("Europa")))
                 return false;
             if((listContinenteD.getSelectedIndex() == 1) &&
-                    (ae.getContinenteDestino().equals("América")))
+                    (ae.getContinenteDestino().equals("America del Sur")))
                 return false;
         }
         return true;
     }
     
     public boolean filtroFechas(paquete ae){
-        Date fechaLlegada = ae.getFechaLlegada();
         Date fechaSalida = ae.getFechaSalida();
-        LocalDate dateLlegada = fechaLlegada.toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalTime timeLlegada = fechaLlegada.toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalTime();
         LocalDate dateSalida = fechaSalida.toInstant()
                 .atZone(ZoneId.systemDefault()).toLocalDate();
         LocalTime timeSalida = fechaSalida.toInstant()
@@ -427,34 +442,9 @@ public class frmReportePaquete extends javax.swing.JPanel {
             filtroFechaSalida = dtpSalida.getDatePicker().getDate();
             filtroHoraSalida = LocalTime.of(0,0,0);
         }
-        /* Fecha de llegada */
-        if(dtpLlegada.getDatePicker().toString().equals("") &&
-               dtpLlegada.getTimePicker().toString().equals("") ){
-            filtroFechaLlegada = LocalDate.now();
-            filtroHoraLlegada = LocalTime.now();
-        }
-        if(!dtpLlegada.getDatePicker().toString().equals("") &&
-               dtpLlegada.getTimePicker().toString().equals("")){
-            filtroFechaLlegada = dtpLlegada.getDatePicker().getDate();
-            filtroHoraLlegada = LocalTime.of(0,0,0);
-        }
-        if(!dtpLlegada.getDatePicker().toString().equals("") &&
-               !dtpLlegada.getTimePicker().toString().equals("")){
-            filtroFechaSalida = dtpSalida.getDatePicker().getDate();
-            filtroHoraSalida = dtpSalida.getTimePicker().getTime();
-        }
-        if(!dtpSalida.getDatePicker().toString().equals("") &&
-               !dtpSalida.getTimePicker().toString().equals("")){
-            filtroFechaLlegada = dtpLlegada.getDatePicker().getDate();
-            filtroHoraLlegada = dtpLlegada.getTimePicker().getTime();
-        }
         if((cmpDate(dateSalida, filtroFechaSalida) == 1) ||
                 ((cmpDate(dateSalida, filtroFechaSalida) == 0) &&
                 (cmpHour(timeSalida, filtroHoraSalida) == 1)))
-            return false;
-        if((cmpDate(dateLlegada, filtroFechaLlegada) == -1) ||
-                ((cmpDate(dateLlegada, filtroFechaLlegada) == 0) &&
-                (cmpHour(timeLlegada, filtroHoraLlegada) == -1)))
             return false;
         return true;
     }
@@ -469,7 +459,6 @@ public class frmReportePaquete extends javax.swing.JPanel {
         chkEstadoEntregado.setSelected(false);
         chkEstadoEnCamino.setSelected(false);
         dtpSalida.clear();
-        dtpLlegada.clear();
         listContinenteO.clearSelection();
         listContinenteD.clearSelection();
         tablaDefault();
@@ -531,22 +520,52 @@ public class frmReportePaquete extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnFiltrarActionPerformed
 
+    private void btnBuscarOrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarOrigenActionPerformed
+        new Vista.frmBuscarAeropuerto(x,true,this,0).setVisible(true);
+    }//GEN-LAST:event_btnBuscarOrigenActionPerformed
+
+    private void btnBuscarDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarDestinoActionPerformed
+        new Vista.frmBuscarAeropuerto(x,true,this,1).setVisible(true);
+    }//GEN-LAST:event_btnBuscarDestinoActionPerformed
+
+    private void chkAeropMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkAeropMouseClicked
+        if(chkAerop.getModel().isSelected()){
+            listContinenteO.clearSelection();
+            listContinenteO.setEnabled(false);
+            listContinenteD.clearSelection();
+            listContinenteD.setEnabled(false);
+            btnBuscarOrigen.setEnabled(true);
+            btnBuscarDestino.setEnabled(true);
+        }else{
+            listContinenteO.setEnabled(true);
+            listContinenteD.setEnabled(true);
+            btnBuscarOrigen.setEnabled(false);
+            btnBuscarOrigen.setText("");
+            btnBuscarDestino.setEnabled(false);
+            btnBuscarDestino.setText("");
+        }
+    }//GEN-LAST:event_chkAeropMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscarDestino;
+    private javax.swing.JButton btnBuscarOrigen;
     private javax.swing.JButton btnExcel;
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnLimpiarFlitro;
+    private javax.swing.JCheckBox chkAerop;
     private javax.swing.JCheckBox chkEstadoEnCamino;
     private javax.swing.JCheckBox chkEstadoEntregado;
-    private com.github.lgooddatepicker.components.DateTimePicker dtpLlegada;
     private com.github.lgooddatepicker.components.DateTimePicker dtpSalida;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private java.awt.Label label1;
-    private java.awt.Label label2;
     private javax.swing.JList<String> listContinenteD;
     private javax.swing.JList<String> listContinenteO;
     private javax.swing.JPanel panelContinenteD;
@@ -556,5 +575,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
     private javax.swing.JPanel panelFiltrado;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JTable tblAirports;
+    private javax.swing.JTextField txtDestino;
+    private javax.swing.JTextField txtOrigen;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,19 +1,19 @@
 package Algoritmo;
 
 public class Vuelo {
-//    private static int count = 0;
-//    private int identificator;
+
     private int originAirport;
     private int originHour;
     private int originMin;
     private int destinyAirport;
     private int destinyHour;
     private int destinyMin;
+    private int capMax;
+    private int capActual;
     
     public Vuelo(int originAirport, int originHour, 
             int originMin, int destinyAirport, int destinyHour, 
             int destinyMin){
-//        this.identificator = count + 1;
         this.originAirport = originAirport;
         this.originHour = originHour;
         this.originMin = originMin;
@@ -23,16 +23,9 @@ public class Vuelo {
         if((originHour*60 + originMin)>(destinyHour*60 + destinyMin)){
             this.destinyHour += 24;
         }
-//        count++;
+        capMax = 300;
+        capActual = 0;
     }
-
-//    public int getIdentificator() {
-//        return identificator;
-//    }
-//
-//    public void setIdentificator(int identificator) {
-//        this.identificator = identificator;
-//    }
 
     public int getOriginAirport() {
         return originAirport;
@@ -80,6 +73,22 @@ public class Vuelo {
 
     public void setDestinyMin(int destinyMin) {
         this.destinyMin = destinyMin;
+    }
+    
+    public int getCapMax() {
+        return capMax;
+    }
+
+    public void setCapMax(int capMax) {
+        this.capMax = capMax;
+    }
+
+    public int getCapActual() {
+        return capActual;
+    }
+
+    public void setCapActual(int capActual) {
+        this.capActual = capActual;
     }
     
     /* Methods */

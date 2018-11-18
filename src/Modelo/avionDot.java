@@ -32,7 +32,6 @@ public class avionDot {
     private int capacidadActual;
     private int capacidadMax;
 
-    
 
     public CoordenadaDouble getOrigen() {
         return origen;
@@ -144,7 +143,7 @@ public class avionDot {
 
     public void setEstado_mov(int estado_mov) {
         this.estado_mov = estado_mov;
-    }
+    }    
 
     public int getCapacidadActual() {
         return capacidadActual;
@@ -161,7 +160,9 @@ public class avionDot {
     public void setCapacidadMax(int capacidadMax) {
         this.capacidadMax = capacidadMax;
     }
-  
+
     
+
+  
     
 }

@@ -1,12 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Vista;
 
+import Controlador.VueloBL;
 import Controlador.excelExport;
+import Controlador.generalBL;
 import Modelo.Vuelo;
+import Modelo.continente;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -15,38 +13,50 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author alulab14
- */
 public class frmReporteVuelo extends javax.swing.JPanel {
     
     /* ATRIBUTOS */
     private ArrayList<Vuelo> lstVuelo = new ArrayList<Vuelo>();
     private ArrayList<Vuelo> filter = new ArrayList<Vuelo>();
+    private ArrayList<continente> list = new ArrayList<continente>();
+    private generalBL gen;
+    private ArrayList<String> contSalida;
+    private ArrayList<String> contLlegada;
+    private javax.swing.JFrame x;
     
-    public frmReporteVuelo() {
+    public frmReporteVuelo(javax.swing.JFrame x) {
         initComponents();
-        lstVuelo.add(new Vuelo("AAA01", new Date(118,9,21,15,30), 
-                new Date(118,9,22,00,25), "América", "Europa", 250, 240, "Saturado"));
-        lstVuelo.add(new Vuelo("AAA02", new Date(118,9,21,19,30), 
-                new Date(118,9,22,12,40), "Europa", "Europa", 280, 150, "Estable")); 
-        lstVuelo.add(new Vuelo("AAA03", new Date(118,9,22,00,10), 
-                new Date(118,9,2,19,50), "América", "América", 295, 295, "Lleno"));
+        VueloBL vuelos = new VueloBL();
+        lstVuelo = vuelos.listaVuelos();
+        gen = new generalBL();
+        list = gen.obtenerContinentes();
         tablaDefault();
         DefaultListModel listModel = new DefaultListModel();
         listModel.clear();
-        listModel.add(0,"América");
-        listModel.add(1,"Europa");
+        for(int i=0; i<list.size();i++){
+            listModel.add(i,list.get(i).getNombre());  
+        }
+        contSalida = gen.obtenerContinenteSalida();
+        contLlegada = gen.obtenerContinenteLlegada();
         listContinenteO.setModel(listModel);
         listContinenteD.setModel(listModel);
         filter = lstVuelo;
+        this.x = x;
     }
 
+    public void setOrigen(String codigo){
+        txtOrigen.setText(codigo);
+    }
+    
+    public void setDestino(String codigo){
+        txtDestino.setText(codigo);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -77,11 +87,21 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         jScrollPane4 = new javax.swing.JScrollPane();
         listContinenteD = new javax.swing.JList<>();
         panelFecha = new javax.swing.JPanel();
-        label1 = new java.awt.Label();
-        label2 = new java.awt.Label();
-        dtpSalida = new com.github.lgooddatepicker.components.DateTimePicker();
-        dtpLlegada = new com.github.lgooddatepicker.components.DateTimePicker();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        dtpSalida = new com.lavantech.gui.comp.TimePanel();
+        dtpLlegada = new com.lavantech.gui.comp.TimePanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        txtDestino = new javax.swing.JTextField();
+        txtOrigen = new javax.swing.JTextField();
+        btnBuscarOrigen = new javax.swing.JButton();
+        btnBuscarDestino = new javax.swing.JButton();
+        chkAerop = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
+
+        panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnExcel.setText("Exportar a hoja de cálculo");
         btnExcel.addActionListener(new java.awt.event.ActionListener() {
@@ -89,6 +109,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
                 btnExcelActionPerformed(evt);
             }
         });
+        panelFondo.add(btnExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 470, 172, -1));
 
         tblAirports.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -108,7 +129,10 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblAirports);
 
+        panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 758, 150));
+
         jLabel2.setText("Resultado de consulta");
+        panelFondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, -1, -1));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Opciones de filtrado"));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -117,46 +141,46 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         panelEstado.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         chkEstadoEstable.setText("Estable");
-        panelEstado.add(chkEstadoEstable, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 23, -1, -1));
+        panelEstado.add(chkEstadoEstable, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 18, -1, -1));
 
         chkEstadoSaturado.setText("Saturado");
-        panelEstado.add(chkEstadoSaturado, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 49, -1, -1));
+        panelEstado.add(chkEstadoSaturado, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 43, -1, -1));
 
         chkEstadoLleno.setText("Lleno");
-        panelEstado.add(chkEstadoLleno, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 75, -1, -1));
+        panelEstado.add(chkEstadoLleno, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 68, -1, -1));
 
-        jPanel1.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 20, 107, 110));
+        jPanel1.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 20, 107, 100));
 
         panelCap.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rango de capacidades"));
         panelCap.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel6.setText("Capacidad mínima");
-        panelCap.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+        panelCap.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
         jLabel7.setText("Capacidad máxima");
-        panelCap.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
+        panelCap.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
 
         txtCapMin.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCapMinKeyTyped(evt);
             }
         });
-        panelCap.add(txtCapMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, 100, -1));
+        panelCap.add(txtCapMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 100, -1));
 
         txtCapMax.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCapMaxKeyTyped(evt);
             }
         });
-        panelCap.add(txtCapMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, 100, -1));
+        panelCap.add(txtCapMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 100, -1));
 
         jLabel8.setText("paquetes");
-        panelCap.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 30, -1, -1));
+        panelCap.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, -1, -1));
 
         jLabel9.setText("paquetes");
-        panelCap.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 60, -1, -1));
+        panelCap.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 50, -1, -1));
 
-        jPanel1.add(panelCap, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, 360, 110));
+        jPanel1.add(panelCap, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 290, 90));
 
         btnLimpiarFlitro.setText("Limpiar filtro");
         btnLimpiarFlitro.addActionListener(new java.awt.event.ActionListener() {
@@ -164,7 +188,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
                 btnLimpiarFlitroActionPerformed(evt);
             }
         });
-        jPanel1.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 160, 107, -1));
+        jPanel1.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 150, 107, -1));
 
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -172,7 +196,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
                 btnFiltrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 190, 107, -1));
+        jPanel1.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 180, 107, -1));
 
         panelContinenteO.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Continente origen"));
         panelContinenteO.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -184,9 +208,9 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         });
         jScrollPane3.setViewportView(listContinenteO);
 
-        panelContinenteO.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 140, 50));
+        panelContinenteO.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, 70));
 
-        jPanel1.add(panelContinenteO, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 210, 110));
+        jPanel1.add(panelContinenteO, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 210, 100));
 
         panelContinenteD.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Continente destino"));
         panelContinenteD.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -198,73 +222,91 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         });
         jScrollPane4.setViewportView(listContinenteD);
 
-        panelContinenteD.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 27, 114, 52));
+        panelContinenteD.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, 70));
 
-        jPanel1.add(panelContinenteD, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 210, 110));
+        jPanel1.add(panelContinenteD, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 210, 100));
 
         panelFecha.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rango temporal"));
         panelFecha.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        label1.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        label1.setText("Llegada");
-        panelFecha.add(label1, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 70, -1, -1));
+        jLabel1.setText("Llegada");
+        panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, -1));
 
-        label2.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        label2.setText("Salida");
-        panelFecha.add(label2, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 42, -1, -1));
-        panelFecha.add(dtpSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(67, 37, -1, -1));
-        panelFecha.add(dtpLlegada, new org.netbeans.lib.awtextra.AbsoluteConstraints(67, 70, -1, -1));
+        jLabel4.setText("Salida");
+        panelFecha.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
-        jPanel1.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 360, 110));
+        dtpSalida.setCalendar(new java.util.GregorianCalendar(2018, 10, 12, 0, 0, 0));
+        dtpSalida.setDisplayAnalog(false);
+        dtpSalida.setSecDisplayed(false);
+        panelFecha.add(dtpSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, 50));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        dtpLlegada.setCalendar(new java.util.GregorianCalendar(2018, 10, 12, 23, 59, 0));
+        dtpLlegada.setDisplayAnalog(false);
+        dtpLlegada.setSecDisplayed(false);
+        panelFecha.add(dtpLlegada, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, 50));
+
+        jPanel1.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 290, 90));
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Aeropuerto"));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel5.setText("Destino");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 45, -1, -1));
+
+        jLabel10.setText("Origen");
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
+
+        txtDestino.setEnabled(false);
+        jPanel2.add(txtDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 45, 50, -1));
+
+        txtOrigen.setEnabled(false);
+        jPanel2.add(txtOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 50, 20));
+
+        btnBuscarOrigen.setEnabled(false);
+        btnBuscarOrigen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarOrigenActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnBuscarOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, 30, 20));
+
+        btnBuscarDestino.setEnabled(false);
+        btnBuscarDestino.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarDestinoActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnBuscarDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 45, 30, 20));
+
+        chkAerop.setText("Buscar por aeropuerto");
+        chkAerop.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chkAeropMouseClicked(evt);
+            }
+        });
+        jPanel2.add(chkAerop, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 20, 150, 100));
+
+        panelFondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 32, 758, 240));
+
         jLabel3.setText("REPORTE DE VUELOS");
-
-        javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
-        panelFondo.setLayout(panelFondoLayout);
-        panelFondoLayout.setHorizontalGroup(
-            panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(308, 308, 308)
-                        .addComponent(jLabel3))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 758, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 758, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(313, 313, 313)
-                        .addComponent(btnExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
-        panelFondoLayout.setVerticalGroup(
-            panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnExcel)
-                .addContainerGap())
-        );
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        panelFondo.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(308, 11, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelFondo, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelFondo, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -279,8 +321,8 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         for(int i = 0; i < lstVuelo.size(); i++){
             Vuelo u = lstVuelo.get(i);
             obj[0] = u.getCodigo();
-            obj[1] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaSalida());
-            obj[2] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaLlegada());
+            obj[1] = new SimpleDateFormat("HH:mm").format(u.getFechaSalida());
+            obj[2] = new SimpleDateFormat("HH:mm").format(u.getFechaLlegada());
             obj[3] = u.getAeropuertoOrigen();
             obj[4] = u.getAeropuertoDestino();
             obj[5] = u.getCapMax();
@@ -288,51 +330,6 @@ public class frmReporteVuelo extends javax.swing.JPanel {
             obj[7] = u.getEstado();
             modelo.addRow(obj);
         }
-    }
-    
-    public int cmpDate(LocalDate fecha1, LocalDate fecha2){
-        /* Resultado:
-         * -1: La primera fecha es más reciente que la segunda.
-         * 0 : Ambas fechas son iguales
-         * 1 : La primera fecha es más antigua que la segunda.  
-         */
-        if (fecha1.getYear() > fecha2.getYear())
-            return -1;
-        else if (fecha1.getYear() == fecha2.getYear()){
-            if (fecha1.getMonthValue() > fecha2.getMonthValue())
-                return -1;
-            else if (fecha1.getMonthValue() == fecha2.getMonthValue()){
-                if (fecha1.getDayOfMonth() > fecha2.getDayOfMonth())
-                    return -1;
-                if (fecha1.getDayOfMonth() < fecha2.getDayOfMonth())
-                    return 1;
-                return 0;
-            }
-        }
-        return 1;
-    }
-    
-    public int cmpHour(LocalTime hora1, LocalTime hora2){
-        /* Resultado:
-         * -1: La primera hora es más reciente que la segunda.
-         * 0 : Ambas horas son iguales
-         * 1 : La primera hora es más antigua que la segunda.  
-         */
-        if (hora1.getHour() > hora2.getHour())
-            return -1;
-        else if (hora1.getHour() == hora2.getHour()){
-            if (hora1.getMinute() > hora2.getMinute())
-                return -1;
-            else if (hora1.getMinute() == hora2.getMinute()){
-                if (hora1.getSecond() > hora2.getSecond())
-                    return -1;
-                if (hora1.getSecond() < hora2.getSecond())
-                    return 1;
-                return 0;
-            }
-            return 1;
-        }
-        return 1;
     }
     
     public int fitroValido(){
@@ -351,67 +348,9 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         }
         if(capMax < capMin)
             return 12;
-        /* Filtro de rango temporal */
-        
-        /* En caso que la fecha de salida esté vacía, por defecto se selecciona
-         * 01/10/18 00:00.
-         * En caso que la fecha de llegada esté vacía, por defecto se selecciona
-         * el momento actual.
-         */
-        LocalDate fechaSalida = LocalDate.parse("01/10/2018",
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));;
-        LocalDate fechaLlegada = LocalDate.parse("01/10/2018",
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));;
-        LocalTime horaSalida = LocalTime.of(0,0,0);
-        LocalTime horaLlegada = LocalTime.of(0,0,0);
-        /* Fecha de salida */
-        if(dtpSalida.getDatePicker().toString().equals("") &&
-               dtpSalida.getTimePicker().toString().equals("") ){
-            fechaSalida = LocalDate.parse("01/10/2018",
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            horaSalida = LocalTime.of(0,0,0);
-        }
-        if(!dtpSalida.getDatePicker().toString().equals("") &&
-               dtpSalida.getTimePicker().toString().equals("")){
-            fechaSalida = dtpSalida.getDatePicker().getDate();
-            horaSalida = LocalTime.of(0,0,0);
-        }
-        if(dtpSalida.getDatePicker().toString().equals("") &&
-               !dtpSalida.getTimePicker().toString().equals("")){
-            return 22;
-        }
-        /* Fecha de llegada */
-        if(dtpLlegada.getDatePicker().toString().equals("") &&
-               dtpLlegada.getTimePicker().toString().equals("") ){
-            fechaLlegada = LocalDate.now();
-            horaLlegada = LocalTime.now();
-        }
-        if(!dtpLlegada.getDatePicker().toString().equals("") &&
-               dtpLlegada.getTimePicker().toString().equals("")){
-            fechaLlegada = dtpLlegada.getDatePicker().getDate();
-            horaLlegada = LocalTime.of(0,0,0);
-        }
-        if(dtpLlegada.getDatePicker().toString().equals("") &&
-               !dtpLlegada.getTimePicker().toString().equals("")){
-            return 23;
-        }
-        if(!dtpLlegada.getDatePicker().toString().equals("") &&
-               !dtpLlegada.getTimePicker().toString().equals("")){
-            fechaSalida = dtpSalida.getDatePicker().getDate();
-            horaSalida = dtpSalida.getTimePicker().getTime();
-        }
-        if(!dtpSalida.getDatePicker().toString().equals("") &&
-               !dtpSalida.getTimePicker().toString().equals("")){
-            fechaLlegada = dtpLlegada.getDatePicker().getDate();
-            horaLlegada = dtpLlegada.getTimePicker().getTime();
-        }
-        if(((cmpDate(fechaSalida, fechaLlegada) == 0)) && 
-                ((cmpHour(horaSalida, horaLlegada) == 0)))
-            return 20;
-        if((cmpDate(fechaSalida, fechaLlegada) == -1) ||
-                ((cmpDate(fechaSalida, fechaLlegada) == 0)) && 
-                ((cmpHour(horaSalida, horaLlegada) == -1)))
-            return 21;
+        Date salida = dtpSalida.getCalendar().getTime();
+        Date llegada = dtpLlegada.getCalendar().getTime();
+        /* Las listas deben estar en un rango de 24 horas */
         return 0;
     }
     
@@ -433,22 +372,22 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         return true;
     }
     
-    public boolean filtroContinente(Vuelo ae){
+    public boolean filtroContinente(int ident){
+        String contOrigen = contSalida.get(ident);
+        String contDestino= contLlegada.get(ident);
         if(listContinenteO.getSelectedIndex() > -1){
-            if((listContinenteO.getSelectedIndex() == 0) &&
-                    (ae.getAeropuertoOrigen().equals("Europa")))
-                return false;
-            if((listContinenteO.getSelectedIndex() == 1) &&
-                    (ae.getAeropuertoOrigen().equals("América")))
-                return false;
+            for(int i=0; i<list.size(); i++){
+                if(listContinenteO.getSelectedIndex() == i &&
+                        !(contOrigen.equals(list.get(i).getNombre())))
+                    return false;
+            }
         }
         if(listContinenteD.getSelectedIndex() > -1){
-            if((listContinenteD.getSelectedIndex() == 0) &&
-                    (ae.getAeropuertoDestino().equals("Europa")))
-                return false;
-            if((listContinenteD.getSelectedIndex() == 1) &&
-                    (ae.getAeropuertoDestino().equals("América")))
-                return false;
+            for(int i=0; i<list.size(); i++){
+                if(listContinenteD.getSelectedIndex() == i &&
+                        !(contDestino.equals(list.get(i).getNombre())))
+                    return false;
+            }
         }
         return true;
     }
@@ -467,63 +406,45 @@ public class frmReporteVuelo extends javax.swing.JPanel {
     public boolean filtroFechas(Vuelo ae){
         Date fechaLlegada = ae.getFechaLlegada();
         Date fechaSalida = ae.getFechaSalida();
-        LocalDate dateLlegada = fechaLlegada.toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalTime timeLlegada = fechaLlegada.toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalTime();
-        LocalDate dateSalida = fechaSalida.toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalTime timeSalida = fechaSalida.toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalTime();
-        LocalDate filtroFechaSalida = LocalDate.parse("01/10/2018",
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));;
-        LocalDate filtroFechaLlegada = LocalDate.parse("01/10/2018",
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));;
-        LocalTime filtroHoraSalida = LocalTime.of(0,0,0);
-        LocalTime filtroHoraLlegada = LocalTime.of(0,0,0);
-        
-        /* Fecha de salida */
-        if(dtpSalida.getDatePicker().toString().equals("") &&
-               dtpSalida.getTimePicker().toString().equals("") ){
-            filtroFechaSalida = LocalDate.parse("01/10/2018",
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            filtroHoraSalida = LocalTime.of(0,0,0);
-        }
-        if(!dtpSalida.getDatePicker().toString().equals("") &&
-               dtpSalida.getTimePicker().toString().equals("")){
-            filtroFechaSalida = dtpSalida.getDatePicker().getDate();
-            filtroHoraSalida = LocalTime.of(0,0,0);
-        }
-        /* Fecha de llegada */
-        if(dtpLlegada.getDatePicker().toString().equals("") &&
-               dtpLlegada.getTimePicker().toString().equals("") ){
-            filtroFechaLlegada = LocalDate.now();
-            filtroHoraLlegada = LocalTime.now();
-        }
-        if(!dtpLlegada.getDatePicker().toString().equals("") &&
-               dtpLlegada.getTimePicker().toString().equals("")){
-            filtroFechaLlegada = dtpLlegada.getDatePicker().getDate();
-            filtroHoraLlegada = LocalTime.of(0,0,0);
-        }
-        if(!dtpLlegada.getDatePicker().toString().equals("") &&
-               !dtpLlegada.getTimePicker().toString().equals("")){
-            filtroFechaSalida = dtpSalida.getDatePicker().getDate();
-            filtroHoraSalida = dtpSalida.getTimePicker().getTime();
-        }
-        if(!dtpSalida.getDatePicker().toString().equals("") &&
-               !dtpSalida.getTimePicker().toString().equals("")){
-            filtroFechaLlegada = dtpLlegada.getDatePicker().getDate();
-            filtroHoraLlegada = dtpLlegada.getTimePicker().getTime();
-        }
-        if((cmpDate(dateSalida, filtroFechaSalida) == 1) ||
-                ((cmpDate(dateSalida, filtroFechaSalida) == 0) &&
-                (cmpHour(timeSalida, filtroHoraSalida) == 1)))
+        GregorianCalendar gcSal = dtpSalida.getCalendar();
+        GregorianCalendar gcLle = dtpLlegada.getCalendar();
+        /* Si la fecha de salida es menor a la del respectivo gc
+        no se toma en cuenta */
+        if(fechaSalida.getHours() < gcSal.getTime().getHours())
             return false;
-        if((cmpDate(dateLlegada, filtroFechaLlegada) == -1) ||
-                ((cmpDate(dateLlegada, filtroFechaLlegada) == 0) &&
-                (cmpHour(timeLlegada, filtroHoraLlegada) == -1)))
+        else if(fechaSalida.getHours() == gcSal.getTime().getHours())
+            if(fechaSalida.getMinutes() < gcSal.getTime().getMinutes())
+                return false;
+        /* Si la fecha de llegada es mayor a la del respectivo gc
+        no se toma en cuenta */
+        if(fechaLlegada.getHours() < fechaSalida.getHours())
             return false;
+        if(fechaLlegada.getHours() > gcLle.getTime().getHours())
+            return false;
+        else if(fechaLlegada.getHours() == gcLle.getTime().getHours())
+            if(fechaLlegada.getMinutes() > gcLle.getTime().getMinutes())
+                return false;
         return true;
+    }
+    
+    public boolean filtroOrigen(Vuelo ae){
+        if(txtOrigen.getText().equals(""))
+            return true;
+        else
+            if(ae.getAeropuertoOrigen().equals(txtOrigen.getText()))
+                return true;
+        return false;
+            
+    }
+    
+    public boolean filtroDestino(Vuelo ae){
+        if(txtDestino.getText().equals(""))
+            return true;
+        else
+            if(ae.getAeropuertoDestino().equals(txtDestino.getText()))
+                return true;
+        return false;
+            
     }
     
     private void btnExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActionPerformed
@@ -551,12 +472,12 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         chkEstadoEstable.setSelected(false);
         chkEstadoSaturado.setSelected(false);
         chkEstadoLleno.setSelected(false);
-        dtpSalida.clear();
-        dtpLlegada.clear();
         txtCapMin.setText("");
         txtCapMax.setText("");
         listContinenteO.clearSelection();
         listContinenteD.clearSelection();
+        btnBuscarOrigen.setText("");
+        btnBuscarDestino.setText("");
         tablaDefault();
     }//GEN-LAST:event_btnLimpiarFlitroActionPerformed
 
@@ -566,9 +487,11 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         if(fitroValido() == 0){
             for(int i=0; i<lstVuelo.size(); i++){
                 if(filtroEstado(lstVuelo.get(i)) &&
-                    filtroContinente(lstVuelo.get(i)) &&
-                    filtroCapacidad(lstVuelo.get(i)) &&
-                    filtroFechas(lstVuelo.get(i))){
+                        filtroContinente(i) &&
+                        filtroCapacidad(lstVuelo.get(i)) &&
+                        filtroFechas(lstVuelo.get(i)) &&
+                        filtroOrigen(lstVuelo.get(i)) &&
+                        filtroDestino(lstVuelo.get(i)) ){
                     filter.add(lstVuelo.get(i));
                 }
             }
@@ -581,8 +504,8 @@ public class frmReporteVuelo extends javax.swing.JPanel {
                 Object[] obj = new Object[8];
                 Vuelo u = filter.get(i);
                 obj[0] = u.getCodigo();
-                obj[1] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaSalida());
-                obj[2] = new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(u.getFechaLlegada());
+                obj[1] = new SimpleDateFormat("HH:mm").format(u.getFechaSalida());
+                obj[2] = new SimpleDateFormat("HH:mm").format(u.getFechaLlegada());
                 obj[3] = u.getAeropuertoOrigen();
                 obj[4] = u.getAeropuertoDestino();
                 obj[5] = u.getCapMax();
@@ -613,54 +536,64 @@ public class frmReporteVuelo extends javax.swing.JPanel {
                     + " máxima", "Mensaje de error",
                     JOptionPane.INFORMATION_MESSAGE);
                 break;
-                case 20:
-                JOptionPane.showMessageDialog(null,
-                    "Las fechas de salida y llegada no pueden ser iguales",
-                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
-                break;
-                case 21:
-                JOptionPane.showMessageDialog(null,
-                    "La fecha de salida no puede ser más reciente que la"
-                    + " fecha de llegada",
-                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
-                break;
-                case 22:
-                JOptionPane.showMessageDialog(null,
-                    "La fecha de salida proporcionada es inválida",
-                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
-                break;
-                case 23:
-                JOptionPane.showMessageDialog(null,
-                    "La fecha de llegada proporcionada es inválida",
-                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
-                break;
-
             }
         }
     }//GEN-LAST:event_btnFiltrarActionPerformed
 
+    private void btnBuscarOrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarOrigenActionPerformed
+        new Vista.frmBuscarAeropuerto(x,true,this,0).setVisible(true);
+    }//GEN-LAST:event_btnBuscarOrigenActionPerformed
+
+    private void btnBuscarDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarDestinoActionPerformed
+        new Vista.frmBuscarAeropuerto(x,true,this,1).setVisible(true);
+    }//GEN-LAST:event_btnBuscarDestinoActionPerformed
+
+    private void chkAeropMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkAeropMouseClicked
+        if(chkAerop.getModel().isSelected()){
+            listContinenteO.clearSelection();
+            listContinenteO.setEnabled(false);
+            listContinenteD.clearSelection();
+            listContinenteD.setEnabled(false);
+            btnBuscarOrigen.setEnabled(true);
+            btnBuscarDestino.setEnabled(true);
+        }else{
+            listContinenteO.setEnabled(true);
+            listContinenteD.setEnabled(true);
+            btnBuscarOrigen.setEnabled(false);
+            btnBuscarOrigen.setText("");
+            btnBuscarDestino.setEnabled(false);
+            btnBuscarDestino.setText("");
+        }
+    }//GEN-LAST:event_chkAeropMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscarDestino;
+    private javax.swing.JButton btnBuscarOrigen;
     private javax.swing.JButton btnExcel;
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnLimpiarFlitro;
+    private javax.swing.JCheckBox chkAerop;
     private javax.swing.JCheckBox chkEstadoEstable;
     private javax.swing.JCheckBox chkEstadoLleno;
     private javax.swing.JCheckBox chkEstadoSaturado;
-    private com.github.lgooddatepicker.components.DateTimePicker dtpLlegada;
-    private com.github.lgooddatepicker.components.DateTimePicker dtpSalida;
+    private com.lavantech.gui.comp.TimePanel dtpLlegada;
+    private com.lavantech.gui.comp.TimePanel dtpSalida;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private java.awt.Label label1;
-    private java.awt.Label label2;
     private javax.swing.JList<String> listContinenteD;
     private javax.swing.JList<String> listContinenteO;
     private javax.swing.JPanel panelCap;
@@ -672,5 +605,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
     private javax.swing.JTable tblAirports;
     private javax.swing.JTextField txtCapMax;
     private javax.swing.JTextField txtCapMin;
+    private javax.swing.JTextField txtDestino;
+    private javax.swing.JTextField txtOrigen;
     // End of variables declaration//GEN-END:variables
 }

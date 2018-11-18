@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class frmGerenteSimulacion extends javax.swing.JPanel {
@@ -15,7 +16,6 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
     
     public frmGerenteSimulacion() {
         initComponents();
-
         dtpLlegada.setDateTimePermissive(LocalDateTime.of(2018, 4, 17, 0, 0));
     }
 
@@ -97,13 +97,24 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
             ts.inputData("resources\\aeropuertos.txt",
                 "resources\\planes_vuelo.txt",
                 "resources\\pack_enviados\\pack_enviado_SKBO.txt");
-            LocalDate dia = dtpLlegada.getDatePicker().getDate();
-            LocalTime hora = dtpLlegada.getTimePicker().getTime();
-            Date fecha = new Date(dia.getYear()-1900, dia.getMonthValue()-1, dia.getDayOfMonth(),
-                        hora.getHour(), hora.getMinute());
+//                "resources\\pack_enviados");
+//            LocalDate dia = dtpLlegada.getDatePicker().getDate();
+//            LocalTime hora = dtpLlegada.getTimePicker().getTime();
+//            Date fecha = new Date(dia.getYear()-1900, dia.getMonthValue()-1, dia.getDayOfMonth(),
+//                        hora.getHour(), hora.getMinute());
+            
             long start = System.currentTimeMillis();
-            texto = ts.executeVCRPTabu(fecha);
+            ArrayList<int[]> solution = ts.executeVCRPTabu();
             long elapsedTime = System.currentTimeMillis() - start;
+            for(int i=0; i<solution.size(); i++){
+                for(int j=0; j<solution.get(i).length; j++){
+                    if(j>0)
+                        System.out.print(" to ");
+                    System.out.print(solution.get(i)[j]);
+                }
+                System.out.println(" (longitud: " + String.valueOf(ts.getRouteLenght(solution.get(i))) +
+                        ") ");
+            }
             texto += "\nTiempo empleado: " + String.valueOf(elapsedTime) + " mseg";
             texto += "\n\nSIMULACIÓN UNITARIA FINALIZADA\n" + 
                     "**************************************\n";

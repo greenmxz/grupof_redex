@@ -1,12 +1,16 @@
 package Algoritmo;
 
 public class Paquete {
+
 //    private static int count = 0;
 //    private int identificator;
     private int originHour;
     private int originMin;
     private int originAirport;
     private int destinyAirport;
+    private int originDay;
+    private int originMonth;
+    private int originYear;
     
     public Paquete(int originHour, int originMin, int originAirport,
             int destinyAirport){
@@ -16,7 +20,18 @@ public class Paquete {
         this.destinyAirport = destinyAirport;
     }
 
-
+    public Paquete(int originHour, int originMin, int originAirport,
+            int destinyAirport, int originDay, int originMonth,
+            int originYear){
+        this.originHour = originHour;
+        this.originMin = originMin;
+        this.originAirport = originAirport;
+        this.destinyAirport = destinyAirport;
+        this.originDay = originDay;
+        this.originMonth = originMonth;
+        this.originYear = originYear;
+    }
+    
     public int getOriginHour() {
         return originHour;
     }
@@ -47,6 +62,30 @@ public class Paquete {
 
     public void setOriginAirport(int originAirport) {
         this.originAirport = originAirport;
+    }
+    
+    public int getOriginDay() {
+        return originDay;
+    }
+
+    public void setOriginDay(int originDay) {
+        this.originDay = originDay;
+    }
+
+    public int getOriginMonth() {
+        return originMonth;
+    }
+
+    public void setOriginMonth(int originMonth) {
+        this.originMonth = originMonth;
+    }
+
+    public int getOriginYear() {
+        return originYear;
+    }
+
+    public void setOriginYear(int originYear) {
+        this.originYear = originYear;
     }
     
     public void print(){
