@@ -13,6 +13,7 @@ import java.util.ArrayList;
  * @author Nowa
  */
 public class avionDot {
+    private String codigo;
     private CoordenadaDouble origen;
     private CoordenadaDouble destino;
     private CoordenadaDouble actual;
@@ -27,10 +28,18 @@ public class avionDot {
     private int min_llegada;
     private int estado_almacen;//0 : bajo / 1: medio/ 2: alto
     private int estado_mov;//0: en espera 1: en transito 2: llego a destino
-    private int capacidadActual;
-    private int capacidadMax;
- 
+    private int capacidadActual = 0;
+    private int capacidadMax = 300;
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+ 
+    
     public CoordenadaDouble getOrigen() {
         return origen;
     }

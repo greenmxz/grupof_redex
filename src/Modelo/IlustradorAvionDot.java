@@ -24,7 +24,7 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 import java.util.Calendar;
 import java.util.Date;
-
+import Algoritmo.Paquete;
 
 /**
  *
@@ -210,7 +210,17 @@ static final int FONT_SIZE = 11;
         // verificar shora salida
         if (v.getEstado_mov() == 0){
             if (this.horaMundial*60 + this.minutoMundial == v.getHora_salida()*60 + v.getMin_salida()){
+                //PARTIDA
                 v.setEstado_mov(1);// en transito
+                
+                if (v.getHora_salida()*60 + v.getMin_salida() == 12*60){
+                    
+                    if (v.getCodigo().equals("")){
+                        
+                    }
+                    
+                }
+                
             }
         }
     }
@@ -252,7 +262,7 @@ static final int FONT_SIZE = 11;
         if (this.horaMundial*60 + this.minutoMundial == v.getHora_llegada()*60 + v.getMin_llegada()){
             v.getActual().setX(v.getDestino().getX());
             v.getActual().setY(v.getDestino().getY());
-
+            // LLEGA
         }
         
     }
