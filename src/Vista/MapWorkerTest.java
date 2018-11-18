@@ -40,10 +40,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.Timer;
-
+import java.util.Date;
+import java.util.*;
 /**
  *
  * @author JUAN
@@ -182,6 +184,35 @@ public class MapWorkerTest {
             avionDot dot = new avionDot();
             
             dot.setVisible(true);
+            dot.setEstado_almacen(0);
+            dot.setEstado_mov(0);
+            dot.setColor("verde");
+            
+            //hora de salida
+            Date fs = v.getFechaSalida();
+            Date fl =v.getFechaLlegada();
+            
+            //System.out.println("fs : " + fs);
+            //System.out.println("fl : " + fl);
+              
+            
+            /*
+            dot.setHora_salida(0);
+            dot.setMin_salida(30);
+            
+            dot.setHora_llegada(23);
+            dot.setMin_llegada(40);
+            */
+            
+         
+            dot.setHora_salida(fs.getHours());
+            dot.setMin_salida(fs.getMinutes());
+            
+            dot.setHora_llegada(fl.getHours());
+            dot.setMin_llegada(fl.getMinutes());
+            
+            //System.out.println("salida : "+ dot.getHora_salida() + " " + dot.getMin_salida());
+            //System.out.println("llegada : "+ dot.getHora_llegada() + " " + dot.getMin_llegada());
             
             String codAeOrigen = v.getAeropuertoOrigen();
             String codAeDestino = v.getAeropuertoDestino();

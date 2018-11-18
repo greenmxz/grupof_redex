@@ -31,19 +31,6 @@ public class AdministrarPedidoDA {
     private aeropuertoDA controlador_aeropuerto= new aeropuertoDA();
     private generalBL general = new generalBL();
     
-    public java.sql.Date manejo_fechas(String s){
-        //manejo de fechas;
-            try {
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                java.util.Date fd =   formatter.parse(s);
-                java.sql.Date sqlDate = new java.sql.Date(fd.getTime());
-                return sqlDate;
-            }catch(Exception e){
-                System.out.println("ERROR "+e.getMessage());
-            return null;
-        }
-    }
-    
     
     public pedido obtenerPedido(int id_pedido){
 
