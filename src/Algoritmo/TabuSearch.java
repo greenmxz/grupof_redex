@@ -54,7 +54,8 @@ public class TabuSearch {
                 (inputProcess.searchAirportId(codeDestiny) != -1));
     }
     
-    public void executeVCRPTabu(){
+    public ArrayList<int[]> executeVCRPTabu(){
+        ArrayList<int[]> aux = new ArrayList<int[]>();
         for(int iter=0; iter<listPack.size(); iter++){
             String origin = listAirport.get(listPack.get(iter).getOriginAirport()-1).getIcaoCode();
             String destiny = listAirport.get(listPack.get(iter).getDestinyAirport()-1).getIcaoCode();
@@ -64,25 +65,25 @@ public class TabuSearch {
                         String.valueOf(listPack.get(iter).getOriginMin());
                 tabuAlgorithm(origin, destiny, time);
                 ArrayList<Integer> solution = getRouteOptimal();
-                
+                int[] sol = new int[solution.size()];
+                int ii=0;
                 for(int i : solution){
-                    if(solution.get(0) != i)
-                        System.out.print(" to ");
-                    System.out.print(i);
+                    sol[ii] = i;
+                    ii++;
                 }
-                System.out.print(" (longitud: " + String.valueOf(getRouteLenght(solution)) +
-                        ") ");
-                ArrayList<String> stringSol = getAirportsRouteICAO();
-                for(String i : stringSol){
-                    if(!stringSol.get(0).equals(i))
-                        System.out.print(" ->");
-                    System.out.print(i);
-                }
-                System.out.println(" \n");
+                aux.add(sol);
+//                ArrayList<String> stringSol = getAirportsRouteICAO();
+//                for(String i : stringSol){
+//                    if(!stringSol.get(0).equals(i))
+//                        System.out.print(" ->");
+//                    System.out.print(i);
+//                }
+//                System.out.println(" \n");
             }else{
                 System.out.println("Some airport doesn't exist!");
             }
         }
+        return aux;
     }
     
     public void tabuAlgorithm(String codeOrigin, String codeDestiny, String hourBegin){
@@ -94,7 +95,7 @@ public class TabuSearch {
                 listAirport.get(destinyId-1).getContinent()){
             this.limit = 1440;
         } else this.limit = 2880;
-        System.out.println("Límite "+String.valueOf(this.limit));
+//        System.out.println("Límite "+String.valueOf(this.limit));
         this.hourBegin = inputProcess.getFormatHour(Integer.valueOf(hourBegin.split(":")[0]),
                 Integer.valueOf(hourBegin.split(":")[1]));
         int[] solution = solve();
