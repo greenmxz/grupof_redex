@@ -22,6 +22,8 @@ import java.awt.Color;
 import javafx.scene.Group;
 import java.awt.Shape;
 import java.awt.geom.Area;
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -46,6 +48,7 @@ static final int FONT_SIZE = 11;
     private int horaMundial=0;
     private int minutoMundial=0;
     private int timeMS=8;
+    private int cantDays = 0;
     
         /**
      * @return the horaMundial
@@ -133,8 +136,18 @@ static final int FONT_SIZE = 11;
         //int sizeList=destiny.size();
         Font font = new Font("Arial", Font.PLAIN, toPixels(FONT_SIZE));
         g2.setFont(font);
-        g2.drawString(String.valueOf(horaMundial), 700, 35);
-        g2.drawString(" :"+String.valueOf(minutoMundial), 732, 35);
+        g2.drawString(String.valueOf(horaMundial), 700, 80);
+        g2.drawString(" :"+String.valueOf(minutoMundial), 732, 80);
+        
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE,this.cantDays);
+        Date diaNuevo = calendar.getTime();
+        
+        String newYear = Integer.toString(diaNuevo.getYear() + 1900);
+        String newMonth = Integer.toString(diaNuevo.getMonth());
+        String newDay = Integer.toString(diaNuevo.getDate());
+        
+        g2.drawString(" " + newDay + "/" + newMonth + "/" +newYear,700,35);
         
         //g2.fill(new Shape("Holamundo"));
         ArrayList<Shape>arrayEllipse=new ArrayList<>();
@@ -251,6 +264,7 @@ static final int FONT_SIZE = 11;
             else {
                 this.minutoMundial=0;
                 this.horaMundial=0;
+                this.cantDays++;
             }    
         }
         
