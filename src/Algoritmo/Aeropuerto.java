@@ -12,7 +12,7 @@ public class Aeropuerto {
     private int capActual;
     
     public Aeropuerto(int identificator, String icaoCode, String officialName, 
-            String country, String cityId, int continent){
+        String country, String cityId, int continent){
         this.identificator = identificator;
         this.icaoCode = icaoCode;
         this.officialName = officialName;

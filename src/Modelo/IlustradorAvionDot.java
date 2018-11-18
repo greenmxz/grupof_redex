@@ -34,11 +34,11 @@ import Algoritmo.Paquete;
 public class IlustradorAvionDot extends JPanel implements ActionListener{
     static final int PIXELS_PER_POINT = 4; // 4x
 
-// Image size in points
-static final int IMAGE_WIDTH = 150;
-static final int IMAGE_HEIGHT = 60;
-// Font size in points
-static final int FONT_SIZE = 11;
+    // Image size in points
+    static final int IMAGE_WIDTH = 150;
+    static final int IMAGE_HEIGHT = 60;
+    // Font size in points
+    static final int FONT_SIZE = 11;
 
     private Timer t;
     static int  count = 0;
@@ -169,22 +169,22 @@ static final int FONT_SIZE = 11;
             String color = this.avionesDot.get(i).getColor();
             
             switch (color){
-                    case "rojo":
-                        g2.setPaint(new Color (238, 54, 63));
-                        break;
-                    case "amarillo":
-                        g2.setPaint(new Color (234, 203, 29));
-                        break;
-                    case "verde":
-                        g2.setPaint(new Color (106, 203, 29));
-                        break;
+                case "negro":
+                    g2.setPaint(new Color(0,0,0));
+                    break;
+                case "rojo":
+                    g2.setPaint(new Color (238, 54, 63));
+                    break;
+                case "amarillo":
+                    g2.setPaint(new Color (234, 203, 29));
+                    break;
+                case "verde":
+                    g2.setPaint(new Color (106, 203, 29));
+                    break;
             }
             
             double dx,dy;
-            
-
-           
-                  
+                                        
             Shape avion = new Ellipse2D.Double(xIni,yIni,4,4);
             g2.fill(avion); //pinta avion
              
@@ -213,19 +213,30 @@ static final int FONT_SIZE = 11;
                 //PARTIDA
                 v.setEstado_mov(1);// en transito
                 
-                if (v.getHora_salida()*60 + v.getMin_salida() == 12*60){
-                    
-                    if (v.getCodigo().equals("")){
-                        
-                    }
-                    
-                }
-                
-            }
+
+                //nueva capacidad
+                v.setCapacidadActual(v.getCapacidadActual()+10);
+            }                       
+
         }
     }
     
-    
+    public void cambiaColorAlmacen(avionDot v){
+        int capActual=v.getCapacidadActual();
+        int capMax=v.getCapacidadMax();
+        
+        if(capActual>capMax){
+            v.setColor("negro");
+            velocidad=0;
+            t.stop();
+        }
+        else if(capActual>(capMax*2/3))
+            v.setColor("rojo");
+        else if(capActual>(capMax/3))
+            v.setColor("amarillo");
+        else
+            v.setColor("verde");
+    }
     public void mueveAvion(avionDot v){
         
         double xIni = v.getActual().getX();
@@ -280,8 +291,7 @@ static final int FONT_SIZE = 11;
                 this.cantDays++;
             }    
         }
-        
-        
+                
         for(int i=0;i<this.avionesDot.size();i++){
             
             //if (i == 1) break;
@@ -289,8 +299,12 @@ static final int FONT_SIZE = 11;
             cambiaEstadoMov(this.avionesDot.get(i));
             
             if (this.avionesDot.get(i).getEstado_mov() == 1){
-                
-                mueveAvion(this.avionesDot.get(i));
+                cambiaColorAlmacen(this.avionesDot.get(i));
+                if(this.avionesDot.get(i).getColor().equals("negro")){
+                    System.out.println("ERROR: avión lleno");
+                    
+                }
+                mueveAvion(this.avionesDot.get(i));                
             
             }
         }
