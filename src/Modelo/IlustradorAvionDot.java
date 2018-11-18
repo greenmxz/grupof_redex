@@ -51,7 +51,7 @@ public class IlustradorAvionDot extends JPanel implements ActionListener{
     private int cantDays = 0;
     
     
-    private ArrayList<paquete> listaPaquetes = new ArrayList();
+    private ArrayList<Paquete> listaPaquetes = new ArrayList();
     
         /**
      * @return the horaMundial
