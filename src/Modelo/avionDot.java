@@ -27,7 +27,9 @@ public class avionDot {
     private int min_llegada;
     private int estado_almacen;//0 : bajo / 1: medio/ 2: alto
     private int estado_mov;//0: en espera 1: en transito 2: llego a destino
-    private int almacen;
+    private int capacidadActual;
+    private int capacidadMax;
+ 
 
     public CoordenadaDouble getOrigen() {
         return origen;
@@ -139,17 +141,23 @@ public class avionDot {
 
     public void setEstado_mov(int estado_mov) {
         this.estado_mov = estado_mov;
+    }    
+
+    public int getCapacidadActual() {
+        return capacidadActual;
     }
 
-    public int getAlmacen() {
-        return almacen;
+    public void setCapacidadActual(int capacidadActual) {
+        this.capacidadActual = capacidadActual;
     }
 
-    public void setAlmacen(int almacen) {
-        this.almacen = almacen;
+    public int getCapacidadMax() {
+        return capacidadMax;
     }
-    
-    
+
+    public void setCapacidadMax(int capacidadMax) {
+        this.capacidadMax = capacidadMax;
+    }
     
     
 }

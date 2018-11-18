@@ -50,6 +50,9 @@ static final int FONT_SIZE = 11;
     private int timeMS=8;
     private int cantDays = 0;
     
+    
+    private ArrayList<paquete> listaPaquetes = new ArrayList();
+    
         /**
      * @return the horaMundial
      */
