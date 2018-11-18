@@ -21,11 +21,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import Modelo.*;
 import java.text.SimpleDateFormat;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import Modelo.aeropuertov2;
+import Modelo.aeropuerto;
 import javax.swing.JOptionPane;
 
 public class excelExport {
-    public void excelExportAeropuertos(ArrayList<aeropuertov2> lstAeropuertos){
+    public void excelExportAeropuertos(ArrayList<aeropuerto> lstAeropuertos){
         // Creamos el archivo donde almacenaremos la hoja
         // de calculo, recuerde usar la extension correcta,
         // en este caso .xlsx
@@ -67,7 +67,7 @@ public class excelExport {
         for(int i=0; i<lstAeropuertos.size(); i++){
             // Ahora creamos una fila en la posicion 1
             fila = pagina.createRow(i+1);
-            aeropuertov2 ae = lstAeropuertos.get(i);
+            aeropuerto ae = lstAeropuertos.get(i);
             fila.createCell(0).setCellValue(ae.getCodigo());
             fila.createCell(1).setCellValue(ae.getNombre());
             fila.createCell(2).setCellValue(ae.getContinente());

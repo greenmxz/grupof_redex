@@ -22,19 +22,14 @@ public class paquete {
     private String clienteReceptor;
     private String estado;
     
-    public paquete(String codigo, Date fechaSalida, Date fechaLlegada, 
-            String aeropuertoOrigen, String continenteOrigen, String ciudadOrigen, String aeropuertoDestino,
-            String continenteDestino, String ciudadDestino, String clienteEmisor, String clienteReceptor,
+    public paquete(String codigo, Date fechaSalida, 
+            String aeropuertoOrigen, String aeropuertoDestino,
+            String clienteEmisor, String clienteReceptor,
             String estado){
         this.codigo = codigo;
         this.fechaSalida = fechaSalida;
-        this.fechaLlegada = fechaLlegada;
         this.aeropuertoOrigen = aeropuertoOrigen;
-        this.continenteOrigen = continenteOrigen;
-        this.ciudadOrigen = ciudadOrigen;
         this.aeropuertoDestino = aeropuertoDestino;
-        this.continenteDestino = continenteDestino;
-        this.ciudadDestino = ciudadDestino;
         this.clienteEmisor = clienteEmisor;
         this.clienteReceptor = clienteReceptor;
         this.estado = estado;
