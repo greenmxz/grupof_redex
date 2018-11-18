@@ -13,6 +13,8 @@ import java.util.ArrayList;
  * @author Nowa
  */
 public class avionDot {
+
+   
     private CoordenadaDouble origen;
     private CoordenadaDouble destino;
     private CoordenadaDouble actual;
@@ -27,7 +29,10 @@ public class avionDot {
     private int min_llegada;
     private int estado_almacen;//0 : bajo / 1: medio/ 2: alto
     private int estado_mov;//0: en espera 1: en transito 2: llego a destino
-    private int almacen;
+    private int capacidadActual;
+    private int capacidadMax;
+
+    
 
     public CoordenadaDouble getOrigen() {
         return origen;
@@ -141,15 +146,22 @@ public class avionDot {
         this.estado_mov = estado_mov;
     }
 
-    public int getAlmacen() {
-        return almacen;
+    public int getCapacidadActual() {
+        return capacidadActual;
     }
 
-    public void setAlmacen(int almacen) {
-        this.almacen = almacen;
+    public void setCapacidadActual(int capacidadActual) {
+        this.capacidadActual = capacidadActual;
     }
-    
-    
+
+    public int getCapacidadMax() {
+        return capacidadMax;
+    }
+
+    public void setCapacidadMax(int capacidadMax) {
+        this.capacidadMax = capacidadMax;
+    }
+  
     
     
 }

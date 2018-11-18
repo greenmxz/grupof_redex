@@ -187,7 +187,8 @@ public class MapWorkerTest {
             dot.setEstado_almacen(0);
             dot.setEstado_mov(0);
             dot.setColor("verde");
-            
+            dot.setCapacidadActual(0);
+            dot.setCapacidadMax(100);
             //hora de salida
             Date fs = v.getFechaSalida();
             Date fl =v.getFechaLlegada();
