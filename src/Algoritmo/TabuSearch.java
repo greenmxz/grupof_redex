@@ -69,10 +69,13 @@ public class TabuSearch {
     
     public void inputData(String nameAirport, String nameFlight, String namePack){
         inputProcess.inputData(nameAirport, nameFlight, namePack);
-        setListAirport(inputProcess.getAirportList());
-        setListFlight(inputProcess.getFlightList());
-        //listPack = new ArrayList<Paquete>();
-        listPack = inputProcess.getPackList();
+//        setListAirport(inputProcess.getAirportList());
+//        setListFlight(inputProcess.getFlightList());
+    //new
+        listAirport = inputProcess.getAirportList();
+        listFlight = inputProcess.getFlightList();
+    ///new
+        setListPack(inputProcess.getPackList());
         routeOptimal = new ArrayList<Integer>();
         numAirport = getListAirport().size();
         numFlight = getListFlight().size();
@@ -111,16 +114,15 @@ public class TabuSearch {
     public ArrayList<String> executeVCRPTabu(ArrayList<Paquete> paquetesAct){
         ArrayList<String> aux = new ArrayList<String>();
         numAirport = getListAirport().size();
-        listPack = paquetesAct;
+        setListPack(paquetesAct);
         generateFlightMatrix();
-        for(int iter=0; iter<listPack.size(); iter++){
-//        for(int iter=11130; iter<11131; iter++){
-            int origin = listPack.get(iter).getOriginAirport();
-            int destiny = listPack.get(iter).getDestinyAirport();
-            listPack.get(iter).print();
+        for(int iter=0; iter<getListPack().size(); iter++){
+            int origin = getListPack().get(iter).getOriginAirport();
+            int destiny = getListPack().get(iter).getDestinyAirport();
+            getListPack().get(iter).print();
             if(validator(origin, destiny)){
-                String time = String.valueOf(listPack.get(iter).getOriginHour()) + ":" + 
-                        String.valueOf(listPack.get(iter).getOriginMin());
+                String time = String.valueOf(getListPack().get(iter).getOriginHour()) + ":" + 
+                        String.valueOf(getListPack().get(iter).getOriginMin());
                 tabuAlgorithm(origin, destiny, time);
                 String solution = generateTabuString(getRouteOptimal());
                 System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
@@ -522,5 +524,19 @@ public class TabuSearch {
             aux.add(getListAirport().get(getListFlight().get(i-1).getDestinyAirport()-1).getIcaoCode());
         }
         return aux;
+    }
+
+    /**
+     * @return the listPack
+     */
+    public ArrayList<Paquete> getListPack() {
+        return listPack;
+    }
+
+    /**
+     * @param listPack the listPack to set
+     */
+    public void setListPack(ArrayList<Paquete> listPack) {
+        this.listPack = listPack;
     }
 }

@@ -56,7 +56,14 @@ public class DataProcessing {
         try{
             processAirport(nameAirport);
             processFlight(nameFlight);
-            processPack(namePack);
+//            processPack(namePack);
+            //new
+            File f = new File(namePack);
+            String[] fileList = f.list();
+            for(String str : fileList){
+                processPackNew(namePack + "\\" + str);
+            }
+            ///new
             generateFlightMatrix();
             //printFlightMatrix();
         }catch(Exception e){
@@ -127,7 +134,7 @@ public class DataProcessing {
                             Integer.parseInt(arr[2].split(":")[1]),
                             searchAirportId(arr[1]), Integer.parseInt(arr[3].split(":")[0]),
                             Integer.parseInt(arr[3].split(":")[1]));
-                    plannedFlg.print();
+//                    plannedFlg.print();
                     listFlight.add(plannedFlg);
                 }
             }
@@ -208,9 +215,7 @@ public class DataProcessing {
             System.out.println("There are a several problem with the flights' reading process! Check it!");
         }
     }
-    
- 
- 
+
  
   public void processPackNew(String namePack){
 
@@ -270,90 +275,12 @@ public class DataProcessing {
                 }
             }
             });
-
 //            System.out.println("Packs' reading process successful!");
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("There are a several problem with the flights' reading process! Check it!");
         }
     }
- 
- 
- 
-// public void processPack(String namePack){
-//        ArrayList<Paquete> aux = new ArrayList<Paquete>();
-//        String backslash = "\\";
-//        File f = new File(namePack);
-//        String[] fileList = f.list();
-//        try{
-//            for(String str : fileList){
-//                BufferedReader reader = new BufferedReader(new FileReader(namePack+"\\"+str));
-//                String line;
-//                System.out.println(namePack+"\\"+str);
-//                String identificator = (namePack+"\\"+str).split(Pattern.quote(backslash))
-//                        [(namePack+"\\"+str).split(Pattern.quote(backslash)).length - 1]
-//                        .split("_")[2].substring(0, 4);
-//                while( (line = reader.readLine()) != null){
-//                    String[] arr = line.split("-");
-//                    if(arr[1].equals("20180418"))
-//                        break;
-//                    if(arr.length == 4){
-//                        Paquete plannedPack = new Paquete(Integer.parseInt(arr[2].split(":")[0]),
-//                                Integer.parseInt(arr[2].split(":")[1]),
-//                                searchAirportId(identificator), searchAirportId(arr[3]),
-//                                Integer.valueOf(arr[1].substring(6, 8)),
-//                                Integer.valueOf(arr[1].substring(4, 6)),
-//                                Integer.valueOf(arr[1].substring(0, 4)));
-//                        //plannedPack.print();
-//                        listPack.add(plannedPack);
-//                    }
-//                }
-//            }
-//            Collections.sort(listPack, new Comparator<Paquete>() {
-//            @Override
-//            public int compare(Paquete pk1, Paquete pk2)
-//            {
-//                if(pk1.getOriginYear() > pk2.getOriginYear())
-//                    return 1;
-//                else if (pk1.getOriginYear() < pk2.getOriginYear())
-//                    return -1;
-//                else{
-//                    if(pk1.getOriginMonth() > pk2.getOriginMonth())
-//                        return 1;
-//                    else if(pk1.getOriginMonth() < pk2.getOriginMonth())
-//                        return -1;
-//                    else{
-//                        if(pk1.getOriginDay() > pk2.getOriginDay())
-//                            return 1;
-//                        else if(pk1.getOriginDay() < pk2.getOriginDay())
-//                            return -1;
-//                        else{
-//                            if(pk1.getOriginHour() > pk2.getOriginHour())
-//                                return 1;
-//                            else if(pk1.getOriginHour() < pk2.getOriginHour())
-//                                return -1;
-//                            else{
-//                                if(pk1.getOriginMin() > pk2.getOriginMin())
-//                                    return 1;
-//                                else if(pk1.getOriginMin() < pk2.getOriginMin())
-//                                    return -1;
-//                                else return 0;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            });
-//            System.out.println("Mrgmr");
-//            for(int i=0; i<listPack.size();i++){
-//                listPack.get(i).print();
-//            }
-//            System.out.println("Packs' reading process successful!");
-//        }catch(Exception e){
-//            e.printStackTrace();
-//            System.out.println("There are a several problem with the flights' reading process! Check it!");
-//        }
-//    }
     
     public int searchAirportId(String icaoCode){
         for(int i=0; i<listAirport.size(); i++){
