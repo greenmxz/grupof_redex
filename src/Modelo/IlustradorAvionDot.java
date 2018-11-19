@@ -225,7 +225,7 @@ public class IlustradorAvionDot extends JPanel implements ActionListener{
         if(capActual>capMax){
             v.setColor("negro");
             velocidad=0;
-            t.stop();
+            t.setDelay(10000);
         }
         else if(capActual>(capMax*2/3))
             v.setColor("rojo");
