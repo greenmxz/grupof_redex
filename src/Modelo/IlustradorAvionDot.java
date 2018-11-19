@@ -22,9 +22,10 @@ import java.awt.Color;
 import javafx.scene.Group;
 import java.awt.Shape;
 import java.awt.geom.Area;
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
-
+import Algoritmo.*;
 
 /**
  *
@@ -49,10 +50,15 @@ static final int FONT_SIZE = 11;
     private int minutoMundial=0;
     private int timeMS=8;
     private int cantDays = 0;
-    
+    private int inicio = 0;
+    private ArrayList<String> Archivos = new ArrayList<>();
     
     private ArrayList<paquete> listaPaquetes = new ArrayList();
+    private ArrayList<String> rutasPaquetes = new ArrayList();
     
+    private ArrayList<Aeropuerto> listaAeropuertos = new ArrayList<>();
+    private ArrayList<Algoritmo.Vuelo> listaVuelos = new ArrayList<>();
+
         /**
      * @return the horaMundial
      */
@@ -124,11 +130,11 @@ static final int FONT_SIZE = 11;
 
     
     
-    public IlustradorAvionDot(ArrayList<avionDot> avionesDot){
+    public IlustradorAvionDot(ArrayList<avionDot> avionesDot,ArrayList<Aeropuerto> aero,ArrayList<Algoritmo.Vuelo> vuelo){
         t= new Timer(timeMS,this);
         this.avionesDot = avionesDot;
-        
-        
+        this.listaVuelos = vuelo;
+        this.listaAeropuertos = aero;
     }
     static int toPixels(int value) {
     return value * PIXELS_PER_POINT;
@@ -257,6 +263,59 @@ static final int FONT_SIZE = 11;
         
     }
     
+    public void listFilesForFolder(final File folder) {
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                listFilesForFolder(fileEntry);
+            } else {
+                Archivos.add(fileEntry.getName());
+                
+            }
+        }
+    }
+    
+    
+    
+    void lecturaData(){
+        
+        if (this.inicio == 0){
+            
+            
+            DataProcessing dp = new DataProcessing();
+            TabuSearch tabu = new TabuSearch();
+            
+            final File folder = new File("resources\\pack_enviados");
+            listFilesForFolder(folder);
+            
+
+            
+            tabu.setListAirport(this.listaAeropuertos);
+            tabu.setListFlight(this.listaVuelos);
+            
+            dp.setListAirport(this.listaAeropuertos);
+
+            tabu.setInputProcess(dp);
+            for (String a : this.Archivos){
+                dp.processPackNew("resources\\pack_enviados\\" + a);
+            }
+            
+            System.out.println("cant - " + dp.getPackList().size());
+            
+            //algoritmo en list pack
+            
+            this.rutasPaquetes = tabu.executeVCRPTabu(dp.getPackList());
+            
+            for (String p : rutasPaquetes){
+                System.out.println(p);
+            }
+            
+            this.inicio = 1;
+        }
+        
+        
+    }
+    
+    
     public void actionPerformed(ActionEvent e){
         if (this.minutoMundial<59){
             this.minutoMundial++;
@@ -271,6 +330,8 @@ static final int FONT_SIZE = 11;
             }    
         }
         
+        
+        lecturaData();
         
         for(int i=0;i<this.avionesDot.size();i++){
             

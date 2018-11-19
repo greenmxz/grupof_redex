@@ -94,6 +94,8 @@ public class VueloDA {
             ArrayList<Vuelo> lVuelo = new ArrayList();
             database connect = new database();
             String query = "SELECT \n" +
+                        "    aeOrigen.id as aeOrigenId, "+
+                        "    aeDestino.id as aeDestinoId, "+
                         "    aeOrigen.codigo as aeOrigenCod,\n" +
                         "    plan_vuelo.fecha_salida,\n" +
                         "    aeDestino.codigo as aeDestinoCod,\n" +
@@ -115,6 +117,9 @@ public class VueloDA {
 
                 vuelo.setFechaSalida(rs.getTimestamp("fecha_salida"));
                 vuelo.setFechaLlegada(rs.getTimestamp("fecha_llegada"));
+                
+                 vuelo.setIdAeropuertoDestino(rs.getInt("aeOrigenId"));
+                vuelo.setIdAeropuertoOrigen(rs.getInt("aeDestinoId"));
 
         /*
                 vuelo.setFechaSalida(new SimpleDateFormat("yyyy-MM-dd HH:mm").

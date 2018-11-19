@@ -11,19 +11,7 @@ package Modelo;
  */
 public class aeropuerto {
 
-    /**
-     * @return the estado
-     */
-    public String getEstado() {
-        return estado;
-    }
 
-    /**
-     * @param estado the estado to set
-     */
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
     private int id;
     private String nombre;
     private String codigo;
@@ -39,7 +27,19 @@ public class aeropuerto {
     public aeropuerto(){
         this.estado = "Estable";
     }
-    
+        /**
+     * @return the estado
+     */
+    public String getEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
     public aeropuerto(int id, String nombre, String codigo, String continente,
             String pais, String ciudad){
         this.id = id;

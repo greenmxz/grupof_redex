@@ -1,5 +1,6 @@
 package Algoritmo;
 
+import Modelo.*;
 import Modelo.paquete;
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,7 +13,19 @@ import java.util.regex.Pattern;
 
 public class DataProcessing {
     private ArrayList<Aeropuerto> listAirport;
+
+    public ArrayList<Aeropuerto> getListAirport() {
+        return listAirport;
+    }
+
+    public void setListAirport(ArrayList<Aeropuerto> listAirport) {
+        this.listAirport = listAirport;
+    }
     private ArrayList<Vuelo> listFlight;
+    
+    private ArrayList<aeropuerto> listAirportSimu;
+    private ArrayList<avionDot> listFlightSimu;
+    
     private ArrayList<Paquete> listPack;
     private ArrayList<ArrayList<Integer>> flightMatrix = new ArrayList<ArrayList<Integer>>();
     private ArrayList<Vuelo> listFlightSorted;
@@ -196,6 +209,77 @@ public class DataProcessing {
         }
     }
     
+ 
+ 
+ 
+  public void processPackNew(String namePack){
+
+        String backslash = "\\";
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(namePack));
+            String line;
+            String identificator = namePack.split(Pattern.quote(backslash))
+                    [namePack.split(Pattern.quote(backslash)).length - 1]
+                    .split("_")[2].substring(0, 4);
+            while( (line = reader.readLine()) != null){
+                String[] arr = line.split("-");
+
+                if(arr.length == 4){
+                    Paquete plannedPack = new Paquete(Integer.parseInt(arr[2].split(":")[0]),
+                            Integer.parseInt(arr[2].split(":")[1]),
+                            searchAirportId(identificator), searchAirportId(arr[3]),
+                            Integer.valueOf(arr[1].substring(6, 8)),
+                            Integer.valueOf(arr[1].substring(4, 6)),
+                            Integer.valueOf(arr[1].substring(0, 4)));
+                    //plannedPack.print();
+                    listPack.add(plannedPack);
+                }
+            }
+            Collections.sort(listPack, new Comparator<Paquete>() {
+            @Override
+            public int compare(Paquete pk1, Paquete pk2)
+            {
+                if(pk1.getOriginYear() > pk2.getOriginYear())
+                    return 1;
+                else if (pk1.getOriginYear() < pk2.getOriginYear())
+                    return -1;
+                else{
+                    if(pk1.getOriginMonth() > pk2.getOriginMonth())
+                        return 1;
+                    else if(pk1.getOriginMonth() < pk2.getOriginMonth())
+                        return -1;
+                    else{
+                        if(pk1.getOriginDay() > pk2.getOriginDay())
+                            return 1;
+                        else if(pk1.getOriginDay() < pk2.getOriginDay())
+                            return -1;
+                        else{
+                            if(pk1.getOriginHour() > pk2.getOriginHour())
+                                return 1;
+                            else if(pk1.getOriginHour() < pk2.getOriginHour())
+                                return -1;
+                            else{
+                                if(pk1.getOriginMin() > pk2.getOriginMin())
+                                    return 1;
+                                else if(pk1.getOriginMin() < pk2.getOriginMin())
+                                    return -1;
+                                else return 0;
+                            }
+                        }
+                    }
+                }
+            }
+            });
+
+            System.out.println("Packs' reading process successful!");
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("There are a several problem with the flights' reading process! Check it!");
+        }
+    }
+ 
+ 
+ 
 // public void processPack(String namePack){
 //        ArrayList<Paquete> aux = new ArrayList<Paquete>();
 //        String backslash = "\\";

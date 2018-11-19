@@ -5,6 +5,7 @@
  */
 package Vista;
 
+import Algoritmo.Aeropuerto;
 import Modelo.IlustradorAvionDot;
 import Modelo.avionDot;
 import java.awt.Color;
@@ -34,33 +35,39 @@ import org.openstreetmap.josm.data.projection.Projection;
 import Modelo.aeropuerto;
 import Controlador.aeropuertoBL;
 import Controlador.VueloBL;
+import Controlador.generalBL;
 import Modelo.Vuelo;
+import Modelo.continente;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.io.File;
 import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 import java.util.Date;
 import java.util.*;
+
 /**
  *
  * @author JUAN
  */
 public class MapWorkerTest {
     
-    
+    private ArrayList<continente> continentes = new ArrayList<continente>();
+    private ArrayList<Vuelo> vuelosNew = new ArrayList<Vuelo>();
+    private generalBL general = new generalBL();
+    private VueloBL vueloBL = new VueloBL();
     private aeropuertoBL controladorAeropuerto = new aeropuertoBL();
     private ArrayList<aeropuerto> listaAeropuertos = new ArrayList<>();
-    
+     private ArrayList<Algoritmo.Aeropuerto> listaAeropuertosNew = new ArrayList<>();
     private VueloBL controladorVuelo = new VueloBL();
     private ArrayList<Vuelo> listaVuelos = new ArrayList<>();
-    
+    private ArrayList<Algoritmo.Vuelo> listaVuelosNew = new ArrayList<>();
     private final List<Coordinate> route = new ArrayList<>();
-    
     
     
     private final ArrayList<CoordenadaDouble>origen=new ArrayList<>();
@@ -70,6 +77,11 @@ public class MapWorkerTest {
     
     
     private ArrayList<avionDot> avionesDot = new ArrayList<>();
+    
+    
+    
+    
+    
     
     
     public int buscaAeropuerto( ArrayList<aeropuerto> listaAe, String codigo){
@@ -282,7 +294,36 @@ public class MapWorkerTest {
 
 
         map.setDisplayPosition(start, 2);
-        IlustradorAvionDot ilustradorAvion = new IlustradorAvionDot(this.avionesDot);   
+
+        this.continentes = general.obtenerContinentes();
+
+        for (aeropuerto a : this.listaAeropuertos){
+            Aeropuerto newAero = new Aeropuerto();
+            
+            newAero.setIdentificator(a.getId());
+            newAero.setIcaoCode(a.getCodigo());
+            newAero.setCityId(a.getCiudad());
+            int idCont = buscarContinente(a.getContinente());
+            newAero.setContinent(idCont);
+           newAero.setCountry(a.getPais());
+            newAero.setCapMax(a.getCapMax());
+           newAero.setCapActual(a.getCapActual());
+            this.listaAeropuertosNew.add(newAero);
+            
+ 
+        }
+
+
+        for (Modelo.Vuelo a : this.listaVuelos){
+
+            Algoritmo.Vuelo v = new Algoritmo.Vuelo(a.getIdAeropuertoOrigen(),a.getFechaSalida().getHours(),a.getFechaSalida().getMinutes(),
+            a.getIdAeropuertoDestino(),a.getFechaLlegada().getHours(),a.getFechaLlegada().getMinutes()
+            );
+            this.listaVuelosNew.add(v);
+
+        }
+        
+        IlustradorAvionDot ilustradorAvion = new IlustradorAvionDot(this.avionesDot,this.listaAeropuertosNew,this.listaVuelosNew);   
         ilustradorAvion.setVisible(true);
         ilustradorAvion.setSize(map.getPreferredSize());
         ilustradorAvion.setOpaque(false);
@@ -306,7 +347,7 @@ public class MapWorkerTest {
         
         
         JLabel label2 = new JLabel();
-        label.setText(String.valueOf(ilustradorAvion.getT().getDelay()));
+        label.setText("X"+String.valueOf(ilustradorAvion.getT().getDelay()));
         
         
         
@@ -503,7 +544,14 @@ public class MapWorkerTest {
         
         //new MapWorker(map, start).execute();
     }
-
+    private int buscarContinente(String c){
+        for (continente cont :this.continentes){
+            if (cont.getNombre().equals(c)){
+                return cont.getId();
+            }
+        }
+        return -1;
+    }
     private class MapWorker extends SwingWorker<Void, Coordinate> {
 
         private final JMapViewer map;

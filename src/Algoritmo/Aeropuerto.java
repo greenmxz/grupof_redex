@@ -11,6 +11,10 @@ public class Aeropuerto {
     private int capMax;
     private int capActual;
     
+     public Aeropuerto(){
+                 capMax = 600;
+        capActual = 0;
+    }
     public Aeropuerto(int identificator, String icaoCode, String officialName, 
             String country, String cityId, int continent){
         this.identificator = identificator;
