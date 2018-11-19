@@ -24,7 +24,7 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 import java.util.Calendar;
 import java.util.Date;
-
+import Algoritmo.Paquete;
 
 /**
  *
@@ -51,7 +51,7 @@ public class IlustradorAvionDot extends JPanel implements ActionListener{
     private int cantDays = 0;
     
     
-    private ArrayList<paquete> listaPaquetes = new ArrayList();
+    private ArrayList<Paquete> listaPaquetes = new ArrayList();
     
         /**
      * @return the horaMundial
@@ -210,11 +210,14 @@ public class IlustradorAvionDot extends JPanel implements ActionListener{
         // verificar shora salida
         if (v.getEstado_mov() == 0){
             if (this.horaMundial*60 + this.minutoMundial == v.getHora_salida()*60 + v.getMin_salida()){
+                //PARTIDA
                 v.setEstado_mov(1);// en transito
                 
+
                 //nueva capacidad
                 v.setCapacidadActual(v.getCapacidadActual()+10);
             }                       
+
         }
     }
     
@@ -270,7 +273,7 @@ public class IlustradorAvionDot extends JPanel implements ActionListener{
         if (this.horaMundial*60 + this.minutoMundial == v.getHora_llegada()*60 + v.getMin_llegada()){
             v.getActual().setX(v.getDestino().getX());
             v.getActual().setY(v.getDestino().getY());
-
+            // LLEGA
         }
         
     }

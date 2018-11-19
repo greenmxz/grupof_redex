@@ -50,6 +50,8 @@ import java.util.*;
  *
  * @author JUAN
  */
+
+
 public class MapWorkerTest {
     
     
@@ -182,13 +184,15 @@ public class MapWorkerTest {
         for(Vuelo v : this.listaVuelos){
             // crea AvionDot por vuelo
             avionDot dot = new avionDot();
-            
+            dot.setCodigo(v.getCodigo());
             dot.setVisible(true);
             dot.setEstado_almacen(0);
             dot.setEstado_mov(0);
             dot.setColor("verde");
+
             dot.setCapacidadActual(0);
             dot.setCapacidadMax(100);
+
             //hora de salida
             Date fs = v.getFechaSalida();
             Date fl =v.getFechaLlegada();
