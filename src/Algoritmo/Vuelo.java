@@ -20,9 +20,9 @@ public class Vuelo {
         this.destinyAirport = destinyAirport;
         this.destinyHour = destinyHour;
         this.destinyMin = destinyMin;
-        if((originHour*60 + originMin)>(destinyHour*60 + destinyMin)){
-            this.destinyHour += 24;
-        }
+//        if((originHour*60 + originMin)>(destinyHour*60 + destinyMin)){
+//            this.destinyHour += 24;
+//        }
         capMax = 300;
         capActual = 0;
     }

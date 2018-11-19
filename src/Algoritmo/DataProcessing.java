@@ -127,7 +127,7 @@ public class DataProcessing {
                             Integer.parseInt(arr[2].split(":")[1]),
                             searchAirportId(arr[1]), Integer.parseInt(arr[3].split(":")[0]),
                             Integer.parseInt(arr[3].split(":")[1]));
-                    //plannedFlg.print();
+                    plannedFlg.print();
                     listFlight.add(plannedFlg);
                 }
             }

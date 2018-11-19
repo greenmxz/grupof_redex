@@ -114,6 +114,7 @@ public class TabuSearch {
         listPack = paquetesAct;
         generateFlightMatrix();
         for(int iter=0; iter<listPack.size(); iter++){
+//        for(int iter=11130; iter<11131; iter++){
             int origin = listPack.get(iter).getOriginAirport();
             int destiny = listPack.get(iter).getDestinyAirport();
             listPack.get(iter).print();
@@ -153,6 +154,7 @@ public class TabuSearch {
     public void tabuAlgorithm(int codeOrigin, int codeDestiny, String hourBegin){
         this.originId = codeOrigin;
         this.destinyId = codeDestiny;
+        this.finded = false;
         tabuString = new ArrayList<String>();
         routeOptimal = new ArrayList<Integer>();
         if(getListAirport().get(originId-1).getContinent() ==
@@ -287,7 +289,7 @@ public class TabuSearch {
             /* Destiny */
             timeToCmp = obtainStandardHour(getListFlight().get(route[getLastMinusOne(route)-1]-1),'L');
         }
-        int iSup = 0, iInf = 0;
+        int iSup = 0, iInf = 0, iTop = 0;
         for(int i=0; i<listNeighbor.length; i++){
             /* Origin */
             cmpTime = obtainStandardHour(getListFlight().get(listNeighborAL.get(i)-1),'P');
@@ -305,21 +307,18 @@ public class TabuSearch {
         }
         int iGen = 0;
 //        System.out.println("INICIO");
+        
         for(int i=0; i<listSuperior.length; i++){
+            
             if(listSuperior[i] == -1) break;
             listNeighbor[iGen] = listSuperior[i];
             iGen++;
-//            System.out.println(String.valueOf(listFlight.get(listSuperior[i]-1).getOriginHour()) +
-//                    ":" + listFlight.get(listSuperior[i]-1).getOriginMin());
         }
         for(int i=0; i<listInferior.length; i++){
             if(listInferior[i] == -1) break;
             listNeighbor[iGen] = listInferior[i];
             iGen++;
-//            System.out.println(String.valueOf(listFlight.get(listInferior[i]-1).getOriginHour()) +
-//                    ":" + listFlight.get(listInferior[i]-1).getOriginMin());
         }
-//        System.out.println("FIN");
         return listNeighbor;
     }
     
