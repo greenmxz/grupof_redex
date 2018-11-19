@@ -88,41 +88,36 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
-        try{
-            String texto = "**************************************\nSIMULACIÓN UNITARIA INICIADA\n" + 
-                    "**************************************\n\n";
-            txtInforme.setText(texto);
-            TabuSearch ts;
-            ts = new TabuSearch();
-            ts.inputData("resources\\aeropuertos.txt",
-                "resources\\planes_vuelo.txt",
-                "resources\\pack_enviados\\pack_enviado_SKBO.txt");
-//                "resources\\pack_enviados");
-//            LocalDate dia = dtpLlegada.getDatePicker().getDate();
-//            LocalTime hora = dtpLlegada.getTimePicker().getTime();
-//            Date fecha = new Date(dia.getYear()-1900, dia.getMonthValue()-1, dia.getDayOfMonth(),
-//                        hora.getHour(), hora.getMinute());
-            
-            long start = System.currentTimeMillis();
-            ArrayList<int[]> solution = ts.executeVCRPTabu();
-            long elapsedTime = System.currentTimeMillis() - start;
-            for(int i=0; i<solution.size(); i++){
-                for(int j=0; j<solution.get(i).length; j++){
-                    if(j>0)
-                        System.out.print(" to ");
-                    System.out.print(solution.get(i)[j]);
-                }
-                System.out.println(" (longitud: " + String.valueOf(ts.getRouteLenght(solution.get(i))) +
-                        ") ");
-            }
-            texto += "\nTiempo empleado: " + String.valueOf(elapsedTime) + " mseg";
-            texto += "\n\nSIMULACIÓN UNITARIA FINALIZADA\n" + 
-                    "**************************************\n";
-            txtInforme.setText(texto);
-        }catch(Exception e){
-            e.printStackTrace();
-            System.out.println("Error! " + e.getMessage());
-        }
+//        try{
+//            String texto = "**************************************\nSIMULACIÓN UNITARIA INICIADA\n" + 
+//                    "**************************************\n\n";
+//            txtInforme.setText(texto);
+//            TabuSearch ts;
+//            ts = new TabuSearch();
+//            ts.inputData("resources\\aeropuertos.txt",
+//                "resources\\planes_vuelo.txt",
+//                "resources\\pack_enviados\\pack_enviado_SKBO.txt");
+//            
+//            long start = System.currentTimeMillis();
+//            ArrayList<String> solution = ts.executeVCRPTabu();
+//            long elapsedTime = System.currentTimeMillis() - start;
+//            for(int i=0; i<solution.size(); i++){
+//                for(int j=0; j<solution.get(i).length; j++){
+//                    if(j>0)
+//                        System.out.print(" to ");
+//                    System.out.print(solution.get(i)[j]);
+//                }
+//                System.out.println(" (longitud: " + String.valueOf(ts.getRouteLenght(solution.get(i))) +
+//                        ") ");
+//            }
+//            texto += "\nTiempo empleado: " + String.valueOf(elapsedTime) + " mseg";
+//            texto += "\n\nSIMULACIÓN UNITARIA FINALIZADA\n" + 
+//                    "**************************************\n";
+//            txtInforme.setText(texto);
+//        }catch(Exception e){
+//            e.printStackTrace();
+//            System.out.println("Error! " + e.getMessage());
+//        }
     }//GEN-LAST:event_btnGenerarActionPerformed
 
 

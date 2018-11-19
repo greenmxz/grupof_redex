@@ -202,7 +202,7 @@ public class DataProcessing {
 //            for(int i=0; i<listPack.size();i++){
 //                listPack.get(i).print();
 //            }
-            System.out.println("Packs' reading process successful!");
+//            System.out.println("Packs' reading process successful!");
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("There are a several problem with the flights' reading process! Check it!");
@@ -271,7 +271,7 @@ public class DataProcessing {
             }
             });
 
-            System.out.println("Packs' reading process successful!");
+//            System.out.println("Packs' reading process successful!");
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("There are a several problem with the flights' reading process! Check it!");
