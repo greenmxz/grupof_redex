@@ -119,17 +119,17 @@ public class TabuSearch {
 //        for(int i=0; i<listFlight.size(); i++){
 //            listFlight.get(i).print();
 //        }
-        for(int iter=0; iter<listPack.size(); iter++){
+        for(int iter=0; iter<100000; iter++){
         //for(int iter=449; iter<450; iter++){              
             int origin = getListPack().get(iter).getOriginAirport();
             int destiny = getListPack().get(iter).getDestinyAirport();
-            getListPack().get(iter).print();
+//            getListPack().get(iter).print();
             if(validator(origin, destiny)){
                 String time = String.valueOf(getListPack().get(iter).getOriginHour()) + ":" + 
                         String.valueOf(getListPack().get(iter).getOriginMin());
                 tabuAlgorithm(origin, destiny, time);
                 String solution = generateTabuString(getRouteOptimal());
-                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
+//                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
                 aux.add(solution);
             }else{
                 System.out.println("Some airport doesn't exist!");
