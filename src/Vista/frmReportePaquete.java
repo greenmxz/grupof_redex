@@ -63,6 +63,10 @@ public class frmReportePaquete extends javax.swing.JPanel {
         txtDestino.setText(codigo);
     }
     
+    public void setCodigo(String codigo){
+        txtCodigo.setText(codigo);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -87,15 +91,24 @@ public class frmReportePaquete extends javax.swing.JPanel {
         panelFecha = new javax.swing.JPanel();
         dtpSalida = new com.github.lgooddatepicker.components.DateTimePicker();
         jLabel1 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        panelAeropuerto = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         txtDestino = new javax.swing.JTextField();
         txtOrigen = new javax.swing.JTextField();
         btnBuscarOrigen = new javax.swing.JButton();
         btnBuscarDestino = new javax.swing.JButton();
+        panelCodigo = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        txtCodigo = new javax.swing.JTextField();
+        btnBuscarPaq = new javax.swing.JButton();
+        panelFiltro = new javax.swing.JPanel();
         chkAerop = new javax.swing.JCheckBox();
+        chkPaq = new javax.swing.JCheckBox();
+        chkFechas = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
+
+        panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnExcel.setText("Exportar a hoja de cálculo");
         btnExcel.addActionListener(new java.awt.event.ActionListener() {
@@ -103,6 +116,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 btnExcelActionPerformed(evt);
             }
         });
+        panelFondo.add(btnExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 466, 172, -1));
 
         tblAirports.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -122,7 +136,10 @@ public class frmReportePaquete extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblAirports);
 
+        panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 328, 750, 127));
+
         jLabel2.setText("Resultado de consulta");
+        panelFondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
 
         panelFiltrado.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Opciones de filtrado"));
         panelFiltrado.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -136,7 +153,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
         chkEstadoEnCamino.setText("En camino");
         panelEstado.add(chkEstadoEnCamino, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, -1));
 
-        panelFiltrado.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, 190, 60));
+        panelFiltrado.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 190, 60));
 
         btnLimpiarFlitro.setText("Limpiar filtro");
         btnLimpiarFlitro.addActionListener(new java.awt.event.ActionListener() {
@@ -144,7 +161,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 btnLimpiarFlitroActionPerformed(evt);
             }
         });
-        panelFiltrado.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 130, 107, -1));
+        panelFiltrado.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 180, 107, -1));
 
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -152,7 +169,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 btnFiltrarActionPerformed(evt);
             }
         });
-        panelFiltrado.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 160, 107, -1));
+        panelFiltrado.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 210, 107, -1));
 
         panelContinenteO.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Continente origen"));
         panelContinenteO.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -166,7 +183,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
 
         panelContinenteO.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, 60));
 
-        panelFiltrado.add(panelContinenteO, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 32, 210, 90));
+        panelFiltrado.add(panelContinenteO, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 82, 210, 90));
 
         panelContinenteD.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Continente destino"));
         panelContinenteD.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -180,7 +197,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
 
         panelContinenteD.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, 60));
 
-        panelFiltrado.add(panelContinenteD, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, 210, 90));
+        panelFiltrado.add(panelContinenteD, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 82, 210, 90));
 
         panelFecha.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rango temporal"));
         panelFecha.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -189,22 +206,22 @@ public class frmReportePaquete extends javax.swing.JPanel {
         jLabel1.setText("Fecha de entrada");
         panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
-        panelFiltrado.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 380, 60));
+        panelFiltrado.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 380, 60));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Aeropuerto"));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panelAeropuerto.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Aeropuerto"));
+        panelAeropuerto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel5.setText("Destino");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 25, -1, -1));
+        panelAeropuerto.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 25, -1, -1));
 
         jLabel10.setText("Origen");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, -1, -1));
+        panelAeropuerto.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, -1, -1));
 
         txtDestino.setEnabled(false);
-        jPanel2.add(txtDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 25, 50, -1));
+        panelAeropuerto.add(txtDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 25, 50, -1));
 
         txtOrigen.setEnabled(false);
-        jPanel2.add(txtOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 25, 40, 20));
+        panelAeropuerto.add(txtOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 25, 40, 20));
 
         btnBuscarOrigen.setEnabled(false);
         btnBuscarOrigen.addActionListener(new java.awt.event.ActionListener() {
@@ -212,7 +229,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 btnBuscarOrigenActionPerformed(evt);
             }
         });
-        jPanel2.add(btnBuscarOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 25, 30, 20));
+        panelAeropuerto.add(btnBuscarOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 25, 30, 20));
 
         btnBuscarDestino.setEnabled(false);
         btnBuscarDestino.addActionListener(new java.awt.event.ActionListener() {
@@ -220,7 +237,31 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 btnBuscarDestinoActionPerformed(evt);
             }
         });
-        jPanel2.add(btnBuscarDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 25, 30, 20));
+        panelAeropuerto.add(btnBuscarDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 25, 30, 20));
+
+        panelFiltrado.add(panelAeropuerto, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 112, 280, 60));
+
+        panelCodigo.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Código de paquete"));
+        panelCodigo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel4.setText("Código");
+        panelCodigo.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        txtCodigo.setEnabled(false);
+        panelCodigo.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 260, -1));
+
+        btnBuscarPaq.setText("Buscar");
+        btnBuscarPaq.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarPaqActionPerformed(evt);
+            }
+        });
+        panelCodigo.add(btnBuscarPaq, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 20, -1, -1));
+
+        panelFiltrado.add(panelCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 18, 430, 60));
+
+        panelFiltro.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Habilitar/deshabilitar"));
+        panelFiltro.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         chkAerop.setText("Buscar por aeropuerto");
         chkAerop.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -228,53 +269,31 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 chkAeropMouseClicked(evt);
             }
         });
-        jPanel2.add(chkAerop, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, -1, -1));
+        panelFiltro.add(chkAerop, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
 
-        panelFiltrado.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 30, 280, 90));
+        chkPaq.setText("Activar los filtros personalizados");
+        chkPaq.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chkPaqMouseClicked(evt);
+            }
+        });
+        panelFiltro.add(chkPaq, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
+
+        chkFechas.setText("Activar fechas");
+        chkFechas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chkFechasMouseClicked(evt);
+            }
+        });
+        panelFiltro.add(chkFechas, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, -1, -1));
+
+        panelFiltrado.add(panelFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 280, 80));
+
+        panelFondo.add(panelFiltrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 37, 751, 250));
 
         jLabel3.setText("REPORTE DE PAQUETES");
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-
-        javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
-        panelFondo.setLayout(panelFondoLayout);
-        panelFondoLayout.setHorizontalGroup(
-            panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addComponent(panelFiltrado, javax.swing.GroupLayout.PREFERRED_SIZE, 751, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(29, Short.MAX_VALUE))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 751, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                        .addComponent(btnExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(305, 305, 305))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(308, 308, 308))))
-        );
-        panelFondoLayout.setVerticalGroup(
-            panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addComponent(panelFiltrado, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnExcel)
-                .addContainerGap())
-        );
+        panelFondo.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(349, 11, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -419,34 +438,36 @@ public class frmReportePaquete extends javax.swing.JPanel {
     }
     
     public boolean filtroFechas(paquete ae){
-        Date fechaSalida = ae.getFechaSalida();
-        LocalDate dateSalida = fechaSalida.toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalTime timeSalida = fechaSalida.toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalTime();
-        LocalDate filtroFechaSalida = LocalDate.parse("01/10/2018",
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        LocalDate filtroFechaLlegada = LocalDate.now();
-        LocalTime filtroHoraSalida = LocalTime.of(0,0,0);
-        LocalTime filtroHoraLlegada = LocalTime.now();
-        
-        /* Fecha de salida */
-        if(dtpSalida.getDatePicker().toString().equals("") &&
-               dtpSalida.getTimePicker().toString().equals("") ){
-            filtroFechaSalida = LocalDate.parse("01/10/2018",
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            filtroHoraSalida = LocalTime.of(0,0,0);
-        }
-        if(!dtpSalida.getDatePicker().toString().equals("") &&
-               dtpSalida.getTimePicker().toString().equals("")){
-            filtroFechaSalida = dtpSalida.getDatePicker().getDate();
-            filtroHoraSalida = LocalTime.of(0,0,0);
-        }
-        if((cmpDate(dateSalida, filtroFechaSalida) == 1) ||
-                ((cmpDate(dateSalida, filtroFechaSalida) == 0) &&
-                (cmpHour(timeSalida, filtroHoraSalida) == 1)))
-            return false;
-        return true;
+        if(chkFechas.getModel().isSelected()){
+            Date fechaSalida = ae.getFechaSalida();
+            LocalDate dateSalida = fechaSalida.toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalTime timeSalida = fechaSalida.toInstant()
+                    .atZone(ZoneId.systemDefault()).toLocalTime();
+            LocalDate filtroFechaSalida = LocalDate.parse("01/10/2018",
+                        DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            LocalDate filtroFechaLlegada = LocalDate.now();
+            LocalTime filtroHoraSalida = LocalTime.of(0,0,0);
+            LocalTime filtroHoraLlegada = LocalTime.now();
+
+            /* Fecha de salida */
+            if(dtpSalida.getDatePicker().toString().equals("") &&
+                   dtpSalida.getTimePicker().toString().equals("") ){
+                filtroFechaSalida = LocalDate.parse("01/10/2018",
+                        DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                filtroHoraSalida = LocalTime.of(0,0,0);
+            }
+            if(!dtpSalida.getDatePicker().toString().equals("") &&
+                   dtpSalida.getTimePicker().toString().equals("")){
+                filtroFechaSalida = dtpSalida.getDatePicker().getDate();
+                filtroHoraSalida = LocalTime.of(0,0,0);
+            }
+            if((cmpDate(dateSalida, filtroFechaSalida) == 1) ||
+                    ((cmpDate(dateSalida, filtroFechaSalida) == 0) &&
+                    (cmpHour(timeSalida, filtroHoraSalida) == 1)))
+                return false;
+            return true;
+        }else return true;
     }
     
     
@@ -546,35 +567,54 @@ public class frmReportePaquete extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_chkAeropMouseClicked
 
+    private void btnBuscarPaqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPaqActionPerformed
+        new Vista.frmBuscarPaquete(x,true,this).setVisible(true);
+    }//GEN-LAST:event_btnBuscarPaqActionPerformed
+
+    private void chkFechasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkFechasMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkFechasMouseClicked
+
+    private void chkPaqMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkPaqMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkPaqMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarDestino;
     private javax.swing.JButton btnBuscarOrigen;
+    private javax.swing.JButton btnBuscarPaq;
     private javax.swing.JButton btnExcel;
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnLimpiarFlitro;
     private javax.swing.JCheckBox chkAerop;
     private javax.swing.JCheckBox chkEstadoEnCamino;
     private javax.swing.JCheckBox chkEstadoEntregado;
+    private javax.swing.JCheckBox chkFechas;
+    private javax.swing.JCheckBox chkPaq;
     private com.github.lgooddatepicker.components.DateTimePicker dtpSalida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList<String> listContinenteD;
     private javax.swing.JList<String> listContinenteO;
+    private javax.swing.JPanel panelAeropuerto;
+    private javax.swing.JPanel panelCodigo;
     private javax.swing.JPanel panelContinenteD;
     private javax.swing.JPanel panelContinenteO;
     private javax.swing.JPanel panelEstado;
     private javax.swing.JPanel panelFecha;
     private javax.swing.JPanel panelFiltrado;
+    private javax.swing.JPanel panelFiltro;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JTable tblAirports;
+    private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtDestino;
     private javax.swing.JTextField txtOrigen;
     // End of variables declaration//GEN-END:variables
