@@ -116,16 +116,19 @@ public class TabuSearch {
         numAirport = getListAirport().size();
         setListPack(paquetesAct);
         generateFlightMatrix();
-        for(int iter=0; iter<paquetesAct.size(); iter++){
+//        for(int i=0; i<listFlight.size(); i++){
+//            listFlight.get(i).print();
+//        }
+        for(int iter=449; iter<450; iter++){              
             int origin = getListPack().get(iter).getOriginAirport();
             int destiny = getListPack().get(iter).getDestinyAirport();
-//            getListPack().get(iter).print();
+            getListPack().get(iter).print();
             if(validator(origin, destiny)){
                 String time = String.valueOf(getListPack().get(iter).getOriginHour()) + ":" + 
                         String.valueOf(getListPack().get(iter).getOriginMin());
                 tabuAlgorithm(origin, destiny, time);
                 String solution = generateTabuString(getRouteOptimal());
-//                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
+                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
                 aux.add(solution);
             }else{
                 System.out.println("Some airport doesn't exist!");
@@ -321,6 +324,12 @@ public class TabuSearch {
             listNeighbor[iGen] = listInferior[i];
             iGen++;
         }
+//        System.out.print(currentElement);
+//        System.out.print(" ");
+//        if(currentElement > -1)
+//            System.out.print(route[currentElement]);
+//        System.out.print(" ");
+//        printArray(listNeighbor);
         return listNeighbor;
     }
     
@@ -435,8 +444,13 @@ public class TabuSearch {
             if(getLastMinusOne(auxNeighborList) == 0){
                 String newTabu = generateTabuString(auxRoute);
                 tabuString.add(newTabu);
-                return generateInitialRoute();
+                if((isSolution(auxRoute) == 1) && (overload(auxRoute) == 0)){
+                    this.finded = true;
+                    return auxRoute;
+                }
+                else return generateInitialRoute();
             }
+            System.out.print(currentLevel);
             for(int i=0; i<getLastMinusOne(auxNeighborList); i++){
                 auxRoute[currentLevel-1] = auxNeighborList[i];
 //                printArray(auxRoute);
@@ -445,6 +459,9 @@ public class TabuSearch {
                 if(overload(auxRoute) == 1){
                     auxRoute[currentLevel-1] = -1;
                     continue;
+                }
+                if(currentLevel == -1){
+                    System.out.println(" " + String.valueOf(auxRoute[currentLevel-1]));
                 }
                 auxRoute = dfs(auxRoute, auxNeighborList, currentLevel+1, tabuString);
                 if(auxRoute[0] == -1){
