@@ -20,7 +20,7 @@ public class TabuSearch {
     private ArrayList<Integer> routeOptimal;
     private int numAirport;
     private int numFlight;
-    private int numInt = 1000;
+    private int numInt = 3;
     private int originId;
     private int destinyId;
     private int limit; // 2880 = intercontinental, 1440 = no
@@ -116,16 +116,16 @@ public class TabuSearch {
         numAirport = getListAirport().size();
         setListPack(paquetesAct);
         generateFlightMatrix();
-        for(int iter=0; iter<getListPack().size(); iter++){
+        for(int iter=0; iter<100000; iter++){              
             int origin = getListPack().get(iter).getOriginAirport();
             int destiny = getListPack().get(iter).getDestinyAirport();
-            getListPack().get(iter).print();
+//            getListPack().get(iter).print();
             if(validator(origin, destiny)){
                 String time = String.valueOf(getListPack().get(iter).getOriginHour()) + ":" + 
                         String.valueOf(getListPack().get(iter).getOriginMin());
                 tabuAlgorithm(origin, destiny, time);
                 String solution = generateTabuString(getRouteOptimal());
-                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
+//                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
                 aux.add(solution);
             }else{
                 System.out.println("Some airport doesn't exist!");
