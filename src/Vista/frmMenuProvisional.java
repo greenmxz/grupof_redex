@@ -1,5 +1,6 @@
 package Vista;
 
+import Modelo.usuario;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -9,8 +10,12 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class frmMenuProvisional extends javax.swing.JFrame {
-    public frmMenuProvisional() {
+    private static usuario usuarioLog;
+
+
+    public frmMenuProvisional(usuario usuarioLog ) {
         initComponents();
+        this.jLabel1.setText("Bienvenido, "+usuarioLog.getPersona().getNombre()+ " "+usuarioLog.getPersona().getApellidoPaterno() + " - "+ usuarioLog.getPersona().getNumeroDocumentoIdentidad()+" - "+ usuarioLog.getPersona().getCiudad()+ " (GERENTE)");
         this.setTitle("Sistema de distribución de paquetes para RedEx");
         setLocationRelativeTo(null);
         cerrar();
@@ -18,7 +23,13 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         panelMenu.setBounds(-150, 50, size.width, size.height);
         new CambiarPanel(panelPrincipal, new frmReporteAeropuerto());
     }
+        public usuario getUsuarioLog() {
+        return usuarioLog;
+    }
 
+    public void setUsuarioLog(usuario usuarioLog) {
+        this.usuarioLog = usuarioLog;
+    }
     public void cerrar(){
         try{
             this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -298,7 +309,8 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmMenuProvisional().setVisible(true);
+
+                new frmMenuProvisional(usuarioLog);
             }
         });
     }

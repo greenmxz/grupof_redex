@@ -84,8 +84,7 @@ public class menuTest extends javax.swing.JFrame {
         //MenuSecretario
         
 //        this.dispose();
-        frmMenuSecretary secretario_menu = new frmMenuSecretary();
-        secretario_menu.setVisible(true);
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
