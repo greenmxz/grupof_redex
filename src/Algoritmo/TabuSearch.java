@@ -116,7 +116,7 @@ public class TabuSearch {
         numAirport = getListAirport().size();
         setListPack(paquetesAct);
         generateFlightMatrix();
-        for(int iter=0; iter<100000; iter++){              
+        for(int iter=0; iter<paquetesAct.size(); iter++){
             int origin = getListPack().get(iter).getOriginAirport();
             int destiny = getListPack().get(iter).getDestinyAirport();
 //            getListPack().get(iter).print();

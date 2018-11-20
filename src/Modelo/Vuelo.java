@@ -3,6 +3,7 @@ package Modelo;
 import java.util.Date;
 
 public class Vuelo {
+    private int id;
     private String codigo;
     private Date fechaSalida;
     private Date fechaLlegada;
@@ -10,6 +11,14 @@ public class Vuelo {
     private int idAeropuertoOrigen;
     private String aeropuertoDestino;
     private int idAeropuertoDestino;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getIdAeropuertoOrigen() {
         return idAeropuertoOrigen;

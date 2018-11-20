@@ -194,12 +194,13 @@ public class MapWorkerTest {
         for(Vuelo v : this.listaVuelos){
             // crea AvionDot por vuelo
             avionDot dot = new avionDot();
-            
+            dot.setId(v.getId());
             dot.setVisible(true);
             dot.setEstado_almacen(0);
             dot.setEstado_mov(0);
             dot.setColor("verde");
-            
+            dot.setIcaoOrigen(v.getAeropuertoOrigen());
+            dot.setIcaoDestino(v.getAeropuertoDestino());
             //hora de salida
             Date fs = v.getFechaSalida();
             Date fl =v.getFechaLlegada();
