@@ -119,7 +119,8 @@ public class TabuSearch {
 //        for(int i=0; i<listFlight.size(); i++){
 //            listFlight.get(i).print();
 //        }
-        for(int iter=449; iter<450; iter++){              
+        for(int iter=0; iter<listPack.size(); iter++){
+        //for(int iter=449; iter<450; iter++){              
             int origin = getListPack().get(iter).getOriginAirport();
             int destiny = getListPack().get(iter).getDestinyAirport();
             getListPack().get(iter).print();
@@ -450,7 +451,7 @@ public class TabuSearch {
                 }
                 else return generateInitialRoute();
             }
-            System.out.print(currentLevel);
+//            System.out.print(currentLevel);
             for(int i=0; i<getLastMinusOne(auxNeighborList); i++){
                 auxRoute[currentLevel-1] = auxNeighborList[i];
 //                printArray(auxRoute);
