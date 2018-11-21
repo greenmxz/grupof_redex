@@ -174,6 +174,7 @@ public class generalDA {
     
     }
     
+    
     public ArrayList<rol> obtenerRoles(){
         try{
             database connection = new database();

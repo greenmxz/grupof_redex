@@ -96,25 +96,10 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
             ts = new TabuSearch();
             ts.inputData("resources\\aeropuertos.txt",
                 "resources\\planes_vuelo.txt",
-                "resources\\pack_enviados\\pack_enviado_SKBO.txt");
-//                "resources\\pack_enviados");
-//            LocalDate dia = dtpLlegada.getDatePicker().getDate();
-//            LocalTime hora = dtpLlegada.getTimePicker().getTime();
-//            Date fecha = new Date(dia.getYear()-1900, dia.getMonthValue()-1, dia.getDayOfMonth(),
-//                        hora.getHour(), hora.getMinute());
-            
+                "resources\\pack_enviados");
             long start = System.currentTimeMillis();
-            ArrayList<int[]> solution = ts.executeVCRPTabu();
+            ArrayList<String> solution = ts.executeVCRPTabu(ts.getListPack());
             long elapsedTime = System.currentTimeMillis() - start;
-            for(int i=0; i<solution.size(); i++){
-                for(int j=0; j<solution.get(i).length; j++){
-                    if(j>0)
-                        System.out.print(" to ");
-                    System.out.print(solution.get(i)[j]);
-                }
-                System.out.println(" (longitud: " + String.valueOf(ts.getRouteLenght(solution.get(i))) +
-                        ") ");
-            }
             texto += "\nTiempo empleado: " + String.valueOf(elapsedTime) + " mseg";
             texto += "\n\nSIMULACIÓN UNITARIA FINALIZADA\n" + 
                     "**************************************\n";

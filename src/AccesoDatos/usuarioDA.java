@@ -9,6 +9,8 @@ import java.sql.*;
 import Modelo.database;
 import Modelo.persona;
 import Modelo.usuario;
+import Modelo.*;
+import static Modelo.Hashing.MD5Hash;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -22,14 +24,17 @@ import java.util.ArrayList;
  * @author Moises
  */
 public class usuarioDA {
-    public usuario obtenerUsuario(String nombreUsuario, String contraseña){ 
+    public usuario obtenerUsuario(String nombreUsuario, String contraseña){
+        
         try {
+            String hashPw = MD5Hash(contraseña);
+            
             database connect = new database();
             String query = "{CALL obtenerUsuario(?,?)}";
 
             CallableStatement stmt = connect.getConnection().prepareCall(query);
             stmt.setString(1, nombreUsuario);
-            stmt.setString(2, contraseña);
+            stmt.setString(2, hashPw);//     contraseña
             
             ResultSet rs = stmt.executeQuery();
             while (rs.next( )){
@@ -39,9 +44,10 @@ public class usuarioDA {
                     persona persona= new persona();
 
                     System.out.println(rs.getInt("id")+ " "+rs.getString("codigo")+ " "+rs.getString("password"));
+                    
                     usuario.setId(rs.getInt("id_usuario"));
                     usuario.setCodigo(nombreUsuario);
-                    usuario.setPassword(contraseña);
+                    usuario.setPassword(hashPw); //     contraseña
                     
                     usuario.setNumeroIntentos(rs.getInt("numero_intentos"));
                     usuario.setTiempoRestanteBaneado(rs.getInt("tiempo_restante"));
@@ -84,6 +90,7 @@ public class usuarioDA {
     }
      public boolean registrarUsuario(usuario usuario){
          try {
+            String hashPw = MD5Hash(usuario.getPassword()); // Hasheamos la contraseña a registrar.
             database connect = new database();
             String queryPersona="insert into persona (nombre,apellido_paterno,apellido_materno,"
                     + "numero_documento_identidad,direccion,fecha_nacimiento,id_ciudad,id_tipo_documento,correo)"
@@ -129,7 +136,7 @@ public class usuarioDA {
                     + "values (?,?,(select id from rol where nombre=? ),?,now())"; 
             PreparedStatement stmt2 = connect.getConnection().prepareStatement(queryUsuario);
             stmt2.setString(1,usuario.getCodigo());
-            stmt2.setString(2,usuario.getPassword());
+            stmt2.setString(2,hashPw);//usuario.getPassword()
             stmt2.setString(3,usuario.getRol());
             stmt2.setLong(4,id);
             stmt2.executeUpdate();

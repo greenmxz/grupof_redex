@@ -29,8 +29,37 @@ public class avionDot {
     private int estado_mov;//0: en espera 1: en transito 2: llego a destino
     private int capacidadActual;
     private int capacidadMax;
- 
+    private int id;
+    private String icaoOrigen;
+    private String icaoDestino;
 
+    public String getIcaoOrigen() {
+        return icaoOrigen;
+    }
+
+    public void setIcaoOrigen(String icaoOrigen) {
+        this.icaoOrigen = icaoOrigen;
+    }
+
+    public String getIcaoDestino() {
+        return icaoDestino;
+    }
+
+    public void setIcaoDestino(String icaoDestino) {
+        this.icaoDestino = icaoDestino;
+    }
+    
+    
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    
     public CoordenadaDouble getOrigen() {
         return origen;
     }

@@ -3,11 +3,38 @@ package Modelo;
 import java.util.Date;
 
 public class Vuelo {
+    private int id;
     private String codigo;
     private Date fechaSalida;
     private Date fechaLlegada;
     private String aeropuertoOrigen;
+    private int idAeropuertoOrigen;
     private String aeropuertoDestino;
+    private int idAeropuertoDestino;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIdAeropuertoOrigen() {
+        return idAeropuertoOrigen;
+    }
+
+    public void setIdAeropuertoOrigen(int idAeropuertoOrigen) {
+        this.idAeropuertoOrigen = idAeropuertoOrigen;
+    }
+
+    public int getIdAeropuertoDestino() {
+        return idAeropuertoDestino;
+    }
+
+    public void setIdAeropuertoDestino(int idAeropuertoDestino) {
+        this.idAeropuertoDestino = idAeropuertoDestino;
+    }
     private int capMax;
     private int capActual;
     private String estado;

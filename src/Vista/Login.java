@@ -139,13 +139,19 @@ public class Login extends javax.swing.JFrame {
                     System.out.println("ÜSUARIO "+ usuarioLogin.getRol());
                      
                     if (usuarioLogin.getRol().equals("gerente")){
-                        frmMenuProvisional menuGerente = new frmMenuProvisional();
+                        frmMenuProvisional menuGerente = new frmMenuProvisional(usuarioLogin);
+                      
+                        menuGerente.setVisible(true);
                     }
                     if (usuarioLogin.getRol().equals("secretario")){
-                        frmMenuSecretary menuSecre= new frmMenuSecretary();
+                        frmMenuSecretary menuSecre= new frmMenuSecretary(usuarioLogin);
+
+                        menuSecre.setVisible(true);
                     }
                     if (usuarioLogin.getRol().equals("administrador")){
-                        frmMenuAdmin menuAdmin = new frmMenuAdmin();
+                        frmMenuAdmin menuAdmin = new frmMenuAdmin(usuarioLogin);
+
+                        menuAdmin.setVisible(true);
                     }
                 }
                 else {
