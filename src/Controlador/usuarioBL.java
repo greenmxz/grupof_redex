@@ -21,7 +21,10 @@ public class usuarioBL {
     public usuario obtenerUsuario(String nombreUsuario , String contraseña){
         return usuarioDA.obtenerUsuario(nombreUsuario,contraseña);
     }
-    
+    public usuario obtenerUsuarioRecuperar(String nombreUsuario){
+        return usuarioDA.obtenerUsuarioRecuperar(nombreUsuario);
+    }
+   
     public boolean crearUsuario(usuario usuario){
         return usuarioDA.registrarUsuario(usuario);
     }

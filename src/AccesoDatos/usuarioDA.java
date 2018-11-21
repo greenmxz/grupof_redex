@@ -24,10 +24,13 @@ import java.util.ArrayList;
  * @author Moises
  */
 public class usuarioDA {
+    private Encriptar td ;
     public usuario obtenerUsuario(String nombreUsuario, String contraseña){
         
         try {
-            String hashPw = MD5Hash(contraseña);
+            td = new Encriptar();
+            //String hashPw = MD5Hash(contraseña);
+            String hashPw = td.encrypt(contraseña);
             
             database connect = new database();
             String query = "{CALL obtenerUsuario(?,?)}";
@@ -88,9 +91,39 @@ public class usuarioDA {
             return null;
         }
     }
+    public usuario obtenerUsuarioRecuperar(String nombreUsuario){
+        try{
+            
+            database connection = new database();
+             String query="select * from usuario as u "+
+                 " inner join persona as p on p.id = u.id_persona "+
+                "where u.codigo = '" + nombreUsuario + "';" ;
+        //PreparedStatement stmt = connection.getConnection().prepareStatement(query);
+//          Statement stmt = connection.getConnection().createStatement();
+//            ResultSet rs = stmt.executeQuery(query);
+            
+           Statement sentencia= connection.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query); 
+            while (rs.next()){
+                usuario usuarioNuevo= new usuario();
+                
+                usuarioNuevo.setCodigo(nombreUsuario);
+                usuarioNuevo.setPassword(rs.getString("password"));
+                usuarioNuevo.getPersona().setCorreo("correo");
+                 return usuarioNuevo;
+            }
+           return null;
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+            return null;
+        }
+        
+    }
      public boolean registrarUsuario(usuario usuario){
          try {
-            String hashPw = MD5Hash(usuario.getPassword()); // Hasheamos la contraseña a registrar.
+             td = new Encriptar();
+            //String hashPw = MD5Hash(usuario.getPassword()); // Hasheamos la contraseña a registrar.
+            String hashPw = td.encrypt(usuario.getPassword());
             database connect = new database();
             String queryPersona="insert into persona (nombre,apellido_paterno,apellido_materno,"
                     + "numero_documento_identidad,direccion,fecha_nacimiento,id_ciudad,id_tipo_documento,correo)"

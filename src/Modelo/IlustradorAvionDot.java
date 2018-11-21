@@ -189,15 +189,18 @@ static final int FONT_SIZE = 11;
             String color = this.avionesDot.get(i).getColor();
             
             switch (color){
-                    case "rojo":
-                        g2.setPaint(new Color (238, 54, 63));
-                        break;
-                    case "amarillo":
-                        g2.setPaint(new Color (234, 203, 29));
-                        break;
-                    case "verde":
-                        g2.setPaint(new Color (106, 203, 29));
-                        break;
+                case "negro":
+                    g2.setPaint(new Color (1,1,1));
+                    break;
+                case "rojo":
+                    g2.setPaint(new Color (238, 54, 63));
+                    break;
+                case "amarillo":
+                    g2.setPaint(new Color (234, 203, 29));
+                    break;
+                case "verde":
+                    g2.setPaint(new Color (106, 203, 29));
+                    break;
             }
             
             double dx,dy;
@@ -272,6 +275,21 @@ static final int FONT_SIZE = 11;
         }
     }
     
+    public void cambiaEstadoAlmacen(avionDot v){
+        if(v.getCapacidadActual()>v.getCapacidadMax()){
+            v.setColor("negro");
+            v.setEstado_almacen(3);
+        }else if(v.getCapacidadActual()>(2*v.getCapacidadMax()/3)){
+            v.setColor("rojo");
+            v.setEstado_almacen(2);
+        }else if(v.getCapacidadActual()>(v.getCapacidadMax()/3)){
+            v.setColor("amarillo");
+            v.setEstado_almacen(1);
+        }else{
+            v.setColor("verde");
+            v.setEstado_almacen(0);
+        }
+    }
     
     public void mueveAvion(avionDot v){
         
@@ -385,6 +403,7 @@ static final int FONT_SIZE = 11;
             
             this.tabu.setListAirport(this.listaAeropuertos);
             this.tabu.setListFlight(this.listaVuelos);
+            this.tabu.generateFlightMatrix();
             
             this.dp.setListAirport(this.listaAeropuertos);
 
@@ -461,7 +480,7 @@ static final int FONT_SIZE = 11;
             cambiaEstadoMov(this.avionesDot.get(i));
             
             if (this.avionesDot.get(i).getEstado_mov() == 1){
-                
+                cambiaEstadoAlmacen(this.avionesDot.get(i));
                 mueveAvion(this.avionesDot.get(i));
             
             }

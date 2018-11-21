@@ -2,6 +2,9 @@ package Vista;
 
 import AccesoDatos.usuarioDA;
 import Controlador.usuarioBL;
+import Modelo.Encriptar;
+import Modelo.Hashing;
+import static Modelo.Hashing.MD5Hash;
 import Modelo.usuario;
 import java.awt.Color;
 import java.awt.Font;
@@ -17,9 +20,9 @@ import javax.swing.JPanel;
 public class Login extends javax.swing.JFrame {
     private usuarioBL usuarioBL ;
     private usuario usuarioLogin;
-
+    private Encriptar td ;
     public Login() {
-        
+       
         initComponents();
         inicializar();
         usuarioBL = new usuarioBL();
@@ -253,20 +256,38 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_lblRecoverPasswordMouseExited
 
     private void lblRecoverPasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRecoverPasswordMouseClicked
-        usuarioLogin = usuarioBL.obtenerUsuario(this.userName.getText(),this.password.getText());
-        if(usuarioLogin==null){
-            JOptionPane.showMessageDialog(null, "Por favor, ingrese su usuario.");
+        //usuarioLogin = usuarioBL.obtenerUsuario(this.userName.getText(),this.password.getText());
+        try {
+            usuario userRecuperar = usuarioBL.obtenerUsuarioRecuperar(this.userName.getText());
+            if(userRecuperar==null){
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese su usuario.");
+                return;
+            }//Xuq6t7Fr/Dg=
+            td= new Encriptar();
+           String hashPwA = td.encrypt("123");
+            String hashPwB = td.decrypt(hashPwA);
+            
+            System.out.println("ANTES DE ENCRIPTAR: "+hashPwA);
+            System.out.println("DESPUES DE ENCRIPTAR: "+hashPwB);
+            //String hashPw = MD5Hash(userRecuperar.getPassword());
+            String hashPw = td.decrypt(userRecuperar.getPassword());
+            MailWorkerTest notificadorEmail=new MailWorkerTest(userRecuperar.getPersona().getCorreo(),"sdfdf");
+            String asunto="Sistema RedEx - Recuperación de contraseña";        
+            String cuerpo="Estimado usuario, "
+                    + "antes de revisar su contraseña en este correo, le recomendamos estar en una zona privada "
+                    + "y ,apenas identifique su contraseña en el mensaje, lo elimine inmediatamente por motivos "
+                    + "de seguridad. Habiéndole informado, procedemos con la recuperación de su contraseña de su cuenta."
+                    + "Su contraseña es" + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n "
+                    + hashPw;
+            notificadorEmail.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+            JOptionPane.showMessageDialog(null, "El correo fue enviado satisfactoriamente");
+            return ;
+            
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
             return;
         }
-        MailWorkerTest notificadorEmail=new MailWorkerTest(usuarioLogin.getPersona().getCorreo(),"sdfdf");
-        String asunto="Sistema RedEx - Recuperación de contraseña";        
-        String cuerpo="Estimado usuario, "
-                + "antes de revisar su contraseña en este correo, le recomendamos estar en una zona privada "
-                + "y ,apenas identifique su contraseña en el mensaje, lo elimine inmediatamente por motivos "
-                + "de seguridad. Habiéndole informado, procedemos con la recuperación de su contraseña de su cuenta."
-                + "Su contraseña es" + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n "
-                + usuarioLogin.getPassword();
-        notificadorEmail.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+        
         
     }//GEN-LAST:event_lblRecoverPasswordMouseClicked
 
