@@ -97,10 +97,11 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
             ts.inputData("resources\\aeropuertos.txt",
                 "resources\\planes_vuelo.txt",
                 "resources\\pack_enviados");
+            ts.generateFlightMatrix();
             long start = System.currentTimeMillis();
             ArrayList<String> solution = ts.executeVCRPTabu(ts.getListPack());
             long elapsedTime = System.currentTimeMillis() - start;
-            texto += "\nTiempo empleado: " + String.valueOf(elapsedTime) + " mseg";
+            texto += "\nTiempo empleado: " + String.valueOf(elapsedTime/1000.00) + " seg";
             texto += "\n\nSIMULACIÓN UNITARIA FINALIZADA\n" + 
                     "**************************************\n";
             txtInforme.setText(texto);

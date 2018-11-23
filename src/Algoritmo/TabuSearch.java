@@ -20,7 +20,7 @@ public class TabuSearch {
     private ArrayList<Integer> routeOptimal;
     private int numAirport;
     private int numFlight;
-    private int numInt = 3;
+    private int numInt = 5;
     private int originId;
     private int destinyId;
     private int limit; // 2880 = intercontinental, 1440 = no
@@ -115,11 +115,13 @@ public class TabuSearch {
         ArrayList<String> aux = new ArrayList<String>();
         numAirport = getListAirport().size();
         setListPack(paquetesAct);
-        generateFlightMatrix();
+//        generateFlightMatrix();
 //        for(int i=0; i<listFlight.size(); i++){
 //            listFlight.get(i).print();
 //        }
-        for(int iter=0; iter<100000; iter++){
+        int ggwp = 0;
+        System.out.println(listPack.size());
+        for(int iter=0; iter<listPack.size(); iter++){
         //for(int iter=449; iter<450; iter++){              
             int origin = getListPack().get(iter).getOriginAirport();
             int destiny = getListPack().get(iter).getDestinyAirport();
@@ -129,12 +131,14 @@ public class TabuSearch {
                         String.valueOf(getListPack().get(iter).getOriginMin());
                 tabuAlgorithm(origin, destiny, time);
                 String solution = generateTabuString(getRouteOptimal());
+                if(solution.equals("")) ggwp++;
 //                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
                 aux.add(solution);
             }else{
                 System.out.println("Some airport doesn't exist!");
             }
         }
+        System.out.println("Vacíos: " + String.valueOf(ggwp));
         return aux;
     }
     
@@ -272,17 +276,17 @@ public class TabuSearch {
         ArrayList<Integer> listNeighborAL = new ArrayList<Integer>();
         listNeighborAL =
                 (ArrayList<Integer>) flightMatrix.get(actualNode).clone();
-        Collections.sort(listNeighborAL, new Comparator<Integer>() {
-            @Override
-            public int compare(Integer flight1, Integer flight2)
-            {
-                Integer comp1 = getListFlight().get(flight1-1).getOriginHour()*60 +
-                        getListFlight().get(flight1-1).getOriginMin();
-                Integer comp2 = getListFlight().get(flight2-1).getOriginHour()*60 +
-                        getListFlight().get(flight2-1).getOriginMin();
-                return comp1.compareTo(comp2);
-            }
-        });
+//        Collections.sort(listNeighborAL, new Comparator<Integer>() {
+//            @Override
+//            public int compare(Integer flight1, Integer flight2)
+//            {
+//                Integer comp1 = getListFlight().get(flight1-1).getOriginHour()*60 +
+//                        getListFlight().get(flight1-1).getOriginMin();
+//                Integer comp2 = getListFlight().get(flight2-1).getOriginHour()*60 +
+//                        getListFlight().get(flight2-1).getOriginMin();
+//                return comp1.compareTo(comp2);
+//            }
+//        });
         int[] listNeighbor = new int[listNeighborAL.size()];
         int[] listInferior = new int[listNeighborAL.size()];
         int[] listSuperior = new int[listNeighborAL.size()];

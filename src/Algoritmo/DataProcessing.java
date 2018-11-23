@@ -228,7 +228,8 @@ public class DataProcessing {
                     .split("_")[2].substring(0, 4);
             while( (line = reader.readLine()) != null){
                 String[] arr = line.split("-");
-
+                if(arr[1].equals("20180418"))
+                    break;
                 if(arr.length == 4){
                     Paquete plannedPack = new Paquete(Integer.parseInt(arr[2].split(":")[0]),
                             Integer.parseInt(arr[2].split(":")[1]),
