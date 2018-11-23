@@ -6,6 +6,7 @@
 package Modelo;
 
 import Vista.CoordenadaDouble;
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 
 /**
@@ -32,7 +33,25 @@ public class avionDot {
     private int id;
     private String icaoOrigen;
     private String icaoDestino;
+    private double t_llegada;
+    private double t_restante;
 
+    public double getT_llegada() {
+        return abs((this.hora_llegada*60 + this.min_llegada) -(this.hora_salida*60 + this.min_salida));
+    }
+
+    public void setT_llegada(double t_llegada) {
+        this.t_llegada = t_llegada;
+    }
+
+    public double getT_restante() {
+        return t_restante;
+    }
+
+    public void setT_restante(double t_restante) {
+        this.t_restante = t_restante;
+    }
+    
     public String getIcaoOrigen() {
         return icaoOrigen;
     }
@@ -188,5 +207,6 @@ public class avionDot {
         this.capacidadMax = capacidadMax;
     }
     
+  
     
 }

@@ -44,6 +44,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
+import static java.lang.Math.abs;
 import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -226,6 +227,8 @@ public class MapWorkerTest {
             dot.setHora_llegada(fl.getHours());
             dot.setMin_llegada(fl.getMinutes());
             
+            dot.setT_llegada(abs((dot.getHora_llegada()*60 + dot.getMin_llegada()) -(dot.getHora_salida()*60 + dot.getMin_salida())));
+            dot.setT_restante(dot.getT_llegada());
             //System.out.println("salida : "+ dot.getHora_salida() + " " + dot.getMin_salida());
             //System.out.println("llegada : "+ dot.getHora_llegada() + " " + dot.getMin_llegada());
             
