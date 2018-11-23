@@ -18,9 +18,10 @@ public class TabuSearch {
     DataProcessing inputProcess = new DataProcessing();
     private ArrayList<String> tabuString;
     private ArrayList<Integer> routeOptimal;
+    private ArrayList<Integer> capVuelos;
     private int numAirport;
     private int numFlight;
-    private int numInt = 5;
+    private int numInt = 1;
     private int originId;
     private int destinyId;
     private int limit; // 2880 = intercontinental, 1440 = no
@@ -114,31 +115,36 @@ public class TabuSearch {
     public ArrayList<String> executeVCRPTabu(ArrayList<Paquete> paquetesAct){
         ArrayList<String> aux = new ArrayList<String>();
         numAirport = getListAirport().size();
+        capVuelos = new ArrayList<Integer>();
+        for(int i=0; i<listFlight.size(); i++)
+            capVuelos.add(0);
         setListPack(paquetesAct);
-//        generateFlightMatrix();
-//        for(int i=0; i<listFlight.size(); i++){
-//            listFlight.get(i).print();
-//        }
-        int ggwp = 0;
-        System.out.println(listPack.size());
-        for(int iter=0; iter<listPack.size(); iter++){
-        //for(int iter=449; iter<450; iter++){              
+        int noAsign = 0;
+//        for(int iter=0; iter<listPack.size(); iter++){
+        for(int iter=508; iter<509; iter++){              
             int origin = getListPack().get(iter).getOriginAirport();
             int destiny = getListPack().get(iter).getDestinyAirport();
-//            getListPack().get(iter).print();
+            getListPack().get(iter).print();
             if(validator(origin, destiny)){
                 String time = String.valueOf(getListPack().get(iter).getOriginHour()) + ":" + 
                         String.valueOf(getListPack().get(iter).getOriginMin());
                 tabuAlgorithm(origin, destiny, time);
-                String solution = generateTabuString(getRouteOptimal());
-                if(solution.equals("")) ggwp++;
+                ArrayList<Integer> optimal = getRouteOptimal();
+                for(int i : optimal)
+                    capVuelos.set(i-1, capVuelos.get(i-1)+1);
+                String solution = generateTabuString(optimal);
 //                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
+                if(solution.equals("")) noAsign++;
+//                if(solution.equals("")) System.out.println(iter);
                 aux.add(solution);
             }else{
                 System.out.println("Some airport doesn't exist!");
             }
         }
-        System.out.println("Vacíos: " + String.valueOf(ggwp));
+        System.out.println("Vacíos: " + String.valueOf(noAsign));
+//        System.out.println("Estado: ");
+//        for(int i=0; i<capVuelos.size(); i++)
+//            System.out.println(String.valueOf(i+1) + " : " + capVuelos.get(i));
         return aux;
     }
     
@@ -305,7 +311,8 @@ public class TabuSearch {
             cmpTime = obtainStandardHour(getListFlight().get(listNeighborAL.get(i)-1),'P');
             int[] provisional = route.clone();
             provisional[getLastMinusOne(route)] = listNeighborAL.get(i);
-            if(getRouteLenght(provisional) > this.limit)
+            if((getRouteLenght(provisional) > this.limit) ||
+                    (capVuelos.get(listNeighborAL.get(i)-1) > 750))
                 continue;
             if(cmpTime > timeToCmp){
                 listSuperior[iSup] = listNeighborAL.get(i);
@@ -329,12 +336,12 @@ public class TabuSearch {
             listNeighbor[iGen] = listInferior[i];
             iGen++;
         }
-//        System.out.print(currentElement);
-//        System.out.print(" ");
-//        if(currentElement > -1)
-//            System.out.print(route[currentElement]);
-//        System.out.print(" ");
-//        printArray(listNeighbor);
+        System.out.print(currentElement);
+        System.out.print(" ");
+        if(currentElement > -1)
+            System.out.print(route[currentElement]);
+        System.out.print(" ");
+        printArray(listNeighbor);
         return listNeighbor;
     }
     

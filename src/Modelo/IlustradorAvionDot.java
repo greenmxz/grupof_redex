@@ -385,7 +385,7 @@ static final int FONT_SIZE = 11;
             
             this.tabu.setListAirport(this.listaAeropuertos);
             this.tabu.setListFlight(this.listaVuelos);
-            
+            this.tabu.generateFlightMatrix();
             this.dp.setListAirport(this.listaAeropuertos);
 
             this.tabu.setInputProcess(this.dp);
