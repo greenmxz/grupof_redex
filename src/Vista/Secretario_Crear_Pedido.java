@@ -367,13 +367,28 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // BUSCAR CLIENTE RECEPTOR
-        int dni_receptor = Integer.parseInt(jTextField4.getText());
-        cliente cliente_receptor = controlador_cliente.obtenerClienteDNI(dni_receptor);
-        String nombre = cliente_receptor.getPersona().getNombre() + " "
-        + cliente_receptor.getPersona().getApellidoPaterno() + " "
-        + cliente_receptor.getPersona().getApellidoMaterno();
-        jTextField5.setText(nombre);
-        this.cliente_receptor = cliente_receptor;
+//        int dni_receptor = Integer.parseInt(jTextField4.getText());
+//        cliente cliente_receptor = controlador_cliente.obtenerClienteDNI(dni_receptor);
+//        String nombre = cliente_receptor.getPersona().getNombre() + " "
+//        + cliente_receptor.getPersona().getApellidoPaterno() + " "
+//        + cliente_receptor.getPersona().getApellidoMaterno();
+//        jTextField5.setText(nombre);
+//        this.cliente_receptor = cliente_receptor;
+//        
+        
+        frmBuscarCliente frm = new frmBuscarCliente(this,true);
+        frm.setVisible(true);
+        System.out.println("AQUI");
+        cliente c = frm.getClienteSeleccionado();
+        //int dni_emisor = Integer.parseInt(jTextField1.getText());
+        if (c!= null){
+            String nombre = c.getPersona().getNombre() + " "
+            + c.getPersona().getApellidoPaterno() + " "
+            + c.getPersona().getApellidoMaterno();
+            jTextField2.setText(nombre);
+            jTextField1.setText( String.valueOf(c.getPersona().getNumeroDocumentoIdentidad()) );
+            this.cliente_receptor = c;
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
@@ -489,13 +504,21 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // BUSCAR CLIENTE_EMI POR DNI
-        int dni_emisor = Integer.parseInt(jTextField1.getText());
-        cliente cliente_emisor = controlador_cliente.obtenerClienteDNI(dni_emisor);
-        String nombre = cliente_emisor.getPersona().getNombre() + " "
-        + cliente_emisor.getPersona().getApellidoPaterno() + " "
-        + cliente_emisor.getPersona().getApellidoMaterno();
-        jTextField2.setText(nombre);
-        this.cliente_emisor = cliente_emisor;
+        frmBuscarCliente frm = new frmBuscarCliente(this,true);
+        frm.setVisible(true);
+        System.out.println("AQUI");
+        cliente c = frm.getClienteSeleccionado();
+        //int dni_emisor = Integer.parseInt(jTextField1.getText());
+        if (c!= null){
+            String nombre = c.getPersona().getNombre() + " "
+            + c.getPersona().getApellidoPaterno() + " "
+            + c.getPersona().getApellidoMaterno();
+            jTextField2.setText(nombre);
+            jTextField1.setText( String.valueOf(c.getPersona().getNumeroDocumentoIdentidad()) );
+            this.cliente_emisor = c;
+        }
+        //cliente cliente_emisor = controlador_cliente.obtenerClienteDNI(dni_emisor);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
