@@ -385,8 +385,8 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
             String nombre = c.getPersona().getNombre() + " "
             + c.getPersona().getApellidoPaterno() + " "
             + c.getPersona().getApellidoMaterno();
-            jTextField2.setText(nombre);
-            jTextField1.setText( String.valueOf(c.getPersona().getNumeroDocumentoIdentidad()) );
+            jTextField4.setText(nombre);
+            jTextField5.setText( String.valueOf(c.getPersona().getNumeroDocumentoIdentidad()) );
             this.cliente_receptor = c;
         }
     }//GEN-LAST:event_jButton2ActionPerformed
