@@ -215,7 +215,7 @@ public class personaDA {
             ResultSet rs = stmt.executeQuery();
             */
             database connect = new database();
-            String query = "select * from persona where numero_documento_identidad = " + dni + ";";
+            String query = "select * from persona where numero_documento_identidad like '%" + dni + "%';";
             System.out.println("query => "+ query);
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);

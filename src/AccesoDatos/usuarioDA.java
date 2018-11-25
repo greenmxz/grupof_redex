@@ -28,10 +28,16 @@ public class usuarioDA {
     public usuario obtenerUsuario(String nombreUsuario, String contraseña){
         
         try {
+
             td = new Encriptar();
             //String hashPw = MD5Hash(contraseña);
-            String hashPw = td.encrypt(contraseña);
+            //String hashPw = td.encrypt(contraseña);
+
+          
+            Encriptador enc = new Encriptador();
             
+            String hashPw = enc.encrypt(contraseña);
+            System.out.println( " Antes de encriptar :" + contraseña + "\n Despus de encr: "+ hashPw);
             database connect = new database();
             String query = "{CALL obtenerUsuario(?,?)}";
 
@@ -121,9 +127,12 @@ public class usuarioDA {
     }
      public boolean registrarUsuario(usuario usuario){
          try {
-             td = new Encriptar();
+
+            Encriptador enc = new Encriptador();
             //String hashPw = MD5Hash(usuario.getPassword()); // Hasheamos la contraseña a registrar.
-            String hashPw = td.encrypt(usuario.getPassword());
+            String hashPw = enc.encrypt(usuario.getPassword());
+            System.out.println( " Antes de encriptar :" + usuario.getPassword() + "\n Despus de encr: "+ hashPw);
+
             database connect = new database();
             String queryPersona="insert into persona (nombre,apellido_paterno,apellido_materno,"
                     + "numero_documento_identidad,direccion,fecha_nacimiento,id_ciudad,id_tipo_documento,correo)"
