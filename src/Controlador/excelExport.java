@@ -210,7 +210,7 @@ public class excelExport {
         style.setFillForegroundColor(IndexedColors.AQUA.getIndex());
         
         String[] titulos = {"Código", "Fecha de salida", "Ciudad origen", "Aeropuerto origen", 
-                "Cliente emisor", "Fecha de llegada", "Ciudad destino", "Aeropuerto destino",
+                "Cliente emisor", "Ciudad destino", "Aeropuerto destino",
                 "Cliente receptor", "Estado"};      
         
         // Creamos una fila en la hoja en la posicion 0
@@ -239,11 +239,11 @@ public class excelExport {
             fila.createCell(2).setCellValue(ae.getCiudadOrigen());
             fila.createCell(3).setCellValue(ae.getAeropuertoOrigen());
             fila.createCell(4).setCellValue(ae.getClienteEmisor());
-            fila.createCell(5).setCellValue(new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(ae.getFechaLlegada()));
-            fila.createCell(6).setCellValue(ae.getCiudadDestino());
-            fila.createCell(7).setCellValue(ae.getAeropuertoDestino());
-            fila.createCell(8).setCellValue(ae.getClienteReceptor());
-            fila.createCell(9).setCellValue(ae.getEstado());
+//            fila.createCell(5).setCellValue(new SimpleDateFormat("yyyy-MM-dd, HH:mm").format(ae.getFechaLlegada()));
+            fila.createCell(5).setCellValue(ae.getCiudadDestino());
+            fila.createCell(6).setCellValue(ae.getAeropuertoDestino());
+            fila.createCell(7).setCellValue(ae.getClienteReceptor());
+            fila.createCell(8).setCellValue(ae.getEstado());
         }
         
         // Ahora guardaremos el archivo

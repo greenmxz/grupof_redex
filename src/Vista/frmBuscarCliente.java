@@ -1,78 +1,71 @@
 package Vista;
 
+import Controlador.AdministrarClienteBL;
 import Controlador.aeropuertoBL;
 import Modelo.aeropuerto;
+import Modelo.cliente;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class frmBuscarAeropuerto extends javax.swing.JDialog {
+public class frmBuscarCliente extends javax.swing.JDialog {
+    private cliente clienteSeleccionado;
 
-    private ArrayList<aeropuerto> lstAerop = new ArrayList<aeropuerto>();
-    private ArrayList<aeropuerto> filter = new ArrayList<aeropuerto>();
-    private aeropuertoBL controlador = new aeropuertoBL();
+
+    private ArrayList<cliente> lstAerop = new ArrayList<cliente>();
+    private ArrayList<cliente> filter = new ArrayList<cliente>();
+    private AdministrarClienteBL controlador = new AdministrarClienteBL();
     private frmGeneracionRuta panel = null;
     private frmReporteVuelo panelVuelo = null;
     private frmReportePaquete panelPaq = null;
     private int definer;
     
-    public frmBuscarAeropuerto(java.awt.Frame parent, boolean modal) {
+    public cliente getClienteSeleccionado() {
+        return clienteSeleccionado;
+    }
+
+    public void setClienteSeleccionado(cliente clienteSeleccionado) {
+        this.clienteSeleccionado = clienteSeleccionado;
+    }
+    public frmBuscarCliente(java.awt.Dialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
+        lstAerop = controlador.listarClientes("","","","");
+        DefaultTableModel model = (DefaultTableModel)tblAerop.getModel();
+        for(int i=0; i<lstAerop.size(); i++){
+            Object[] obj = new Object[4];
+            obj[0] = lstAerop.get(i).getPersona().getNumeroDocumentoIdentidad();
+            obj[1] = lstAerop.get(i).getPersona().getNombre();
+            obj[2] = lstAerop.get(i).getPersona().getApellidoPaterno();
+            obj[3] = lstAerop.get(i).getPersona().getApellidoMaterno();
+            model.addRow(obj);
+        }
+        filter = lstAerop;
         this.setResizable(false);
     }
     
-    public frmBuscarAeropuerto(java.awt.Frame parent, boolean modal, frmGeneracionRuta panel, int definer) {
+    public frmBuscarCliente(java.awt.Dialog parent, boolean modal, frmGeneracionRuta panel, int definer) {
         super(parent, modal);
         initComponents();
         this.panel = panel;
         this.definer = definer;
-        lstAerop = controlador.listaAeropuertos();
+        lstAerop = controlador.listarClientes("","","","");
         DefaultTableModel model = (DefaultTableModel)tblAerop.getModel();
         for(int i=0; i<lstAerop.size(); i++){
-            Object[] obj = new Object[3];
-            obj[0] = lstAerop.get(i).getCodigo();
-            obj[1] = lstAerop.get(i).getNombre();
-            obj[2] = lstAerop.get(i).getCiudad();
+            Object[] obj = new Object[4];
+            obj[0] = lstAerop.get(i).getPersona().getNumeroDocumentoIdentidad();
+            obj[1] = lstAerop.get(i).getPersona().getNombre();
+            obj[2] = lstAerop.get(i).getPersona().getApellidoPaterno();
+            obj[3] = lstAerop.get(i).getPersona().getApellidoMaterno();
             model.addRow(obj);
         }
         filter = lstAerop;
     }
 
-    public frmBuscarAeropuerto(java.awt.Frame parent, boolean modal, frmReporteVuelo panel, int definer) {
-        super(parent, modal);
-        initComponents();
-        this.panelVuelo = panel;
-        this.definer = definer;
-        lstAerop = controlador.listaAeropuertos();
-        DefaultTableModel model = (DefaultTableModel)tblAerop.getModel();
-        for(int i=0; i<lstAerop.size(); i++){
-            Object[] obj = new Object[3];
-            obj[0] = lstAerop.get(i).getCodigo();
-            obj[1] = lstAerop.get(i).getNombre();
-            obj[2] = lstAerop.get(i).getCiudad();
-            model.addRow(obj);
-        }
-        filter = lstAerop;
-    }
+
     
-    public frmBuscarAeropuerto(java.awt.Frame parent, boolean modal, frmReportePaquete panel, int definer) {
-        super(parent, modal);
-        initComponents();
-        this.panelPaq = panel;
-        this.definer = definer;
-        lstAerop = controlador.listaAeropuertos();
-        DefaultTableModel model = (DefaultTableModel)tblAerop.getModel();
-        for(int i=0; i<lstAerop.size(); i++){
-            Object[] obj = new Object[3];
-            obj[0] = lstAerop.get(i).getCodigo();
-            obj[1] = lstAerop.get(i).getNombre();
-            obj[2] = lstAerop.get(i).getCiudad();
-            model.addRow(obj);
-        }
-        filter = lstAerop;
-    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -95,7 +88,7 @@ public class frmBuscarAeropuerto extends javax.swing.JDialog {
         panelFondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("BUSCAR AEROPUERTO");
+        jLabel2.setText("BUSCAR CLIENTE");
         panelFondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, -1, -1));
 
         txtNombre.addActionListener(new java.awt.event.ActionListener() {
@@ -123,11 +116,11 @@ public class frmBuscarAeropuerto extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Código", "Nombre", "Ubicación"
+                "Código", "Nombre", "Apellido Paterno", "Apellido Materno"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -161,28 +154,12 @@ public class frmBuscarAeropuerto extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSelecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelecActionPerformed
-        if(tblAerop.getSelectedRow() == -1)
-            JOptionPane.showMessageDialog(null,
-                "Debe seleccionar un aeropuerto de la tabla primero",
-                "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
-        else{
-            if(definer == 0){
-                if(panel != null)
-                    panel.setOrigen(filter.get(tblAerop.getSelectedRow()).getCodigo());
-                else if(panelVuelo != null)
-                    panelVuelo.setOrigen(filter.get(tblAerop.getSelectedRow()).getCodigo());
-                else if(panelPaq != null)
-                    panelPaq.setOrigen(filter.get(tblAerop.getSelectedRow()).getCodigo());
-            }
-            else{
-                if(panel != null)
-                    panel.setDestino(filter.get(tblAerop.getSelectedRow()).getCodigo());
-                else if(panelVuelo != null)
-                    panelVuelo.setDestino(filter.get(tblAerop.getSelectedRow()).getCodigo());
-                else if(panelPaq != null)
-                    panelPaq.setDestino(filter.get(tblAerop.getSelectedRow()).getCodigo());
-            }
+        try{
+            int index = this.tblAerop.getSelectedRow();
+            this.clienteSeleccionado =lstAerop.get(index);
             this.dispose();
+        }catch(Exception ex ){
+            JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista");
         }
     }//GEN-LAST:event_btnSelecActionPerformed
 
@@ -195,20 +172,23 @@ public class frmBuscarAeropuerto extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel)tblAerop.getModel();
         while(tblAerop.getRowCount() > 0)
             model.removeRow(0);
-        filter = new ArrayList<aeropuerto>();
+        filter = new ArrayList<cliente>();
         if(!(((txtNombre.getText().length() == 1) || (txtNombre.getText().length() == 0)) &&
                 ((evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) || (evt.getKeyChar() == KeyEvent.VK_DELETE)))){
             for(int i=0; i<lstAerop.size(); i++){
-                if(lstAerop.get(i).getNombre().toLowerCase().contains(parametro))
+                if(lstAerop.get(i).getPersona().getNombre().toLowerCase().contains(parametro))
                     filter.add(lstAerop.get(i));
             }
         }
         else filter = lstAerop;
         for(int i=0; i<filter.size(); i++){
-            Object[] obj = new Object[3];
-            obj[0] = filter.get(i).getCodigo();
-            obj[1] = filter.get(i).getNombre();
-            obj[2] = filter.get(i).getCiudad();
+            Object[] obj = new Object[4];
+           
+            
+            obj[0] = filter.get(i).getPersona().getNumeroDocumentoIdentidad();
+            obj[1] = filter.get(i).getPersona().getNombre();
+            obj[2] = filter.get(i).getPersona().getApellidoPaterno();
+            obj[3] = filter.get(i).getPersona().getApellidoMaterno();
             model.addRow(obj);
         } 
     }//GEN-LAST:event_txtNombreKeyTyped
@@ -224,16 +204,17 @@ public class frmBuscarAeropuerto extends javax.swing.JDialog {
             model.removeRow(0);
         if(!(txtNombre.getText().length() == 0)){
             for(int i=0; i<lstAerop.size(); i++){
-                if(lstAerop.get(i).getNombre().toLowerCase().contains(parametro))
+                if(lstAerop.get(i).getPersona().getNombre().toLowerCase().contains(parametro))
                     filter.add(lstAerop.get(i));
             }
         }
         else filter = lstAerop;
         for(int i=0; i<filter.size(); i++){
-            Object[] obj = new Object[3];
-            obj[0] = filter.get(i).getCodigo();
-            obj[1] = filter.get(i).getNombre();
-            obj[2] = filter.get(i).getCiudad();
+            Object[] obj = new Object[4];
+            obj[0] = filter.get(i).getPersona().getNumeroDocumentoIdentidad();
+            obj[1] = filter.get(i).getPersona().getNombre();
+            obj[2] = filter.get(i).getPersona().getApellidoPaterno();
+            obj[3] = filter.get(i).getPersona().getApellidoMaterno();
             model.addRow(obj);
         } 
     }//GEN-LAST:event_chkSensitiveMouseClicked
@@ -256,20 +237,21 @@ public class frmBuscarAeropuerto extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmBuscarAeropuerto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmBuscarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmBuscarAeropuerto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmBuscarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmBuscarAeropuerto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmBuscarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmBuscarAeropuerto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmBuscarCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                frmBuscarAeropuerto dialog = new frmBuscarAeropuerto(new javax.swing.JFrame(), true);
+                frmBuscarCliente dialog = new frmBuscarCliente(new javax.swing.JDialog(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

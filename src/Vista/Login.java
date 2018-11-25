@@ -2,10 +2,16 @@ package Vista;
 
 import AccesoDatos.usuarioDA;
 import Controlador.usuarioBL;
+import Modelo.Encriptar;
+import Modelo.Hashing;
+import static Modelo.Hashing.MD5Hash;
 import Modelo.usuario;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.awt.font.TextAttribute;
+import java.util.Map;
 import javafx.scene.Cursor;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -14,9 +20,9 @@ import javax.swing.JPanel;
 public class Login extends javax.swing.JFrame {
     private usuarioBL usuarioBL ;
     private usuario usuarioLogin;
-
+    private Encriptar td ;
     public Login() {
-        
+       
         initComponents();
         inicializar();
         usuarioBL = new usuarioBL();
@@ -53,6 +59,7 @@ public class Login extends javax.swing.JFrame {
         password = new javax.swing.JPasswordField();
         jPanel2 = new javax.swing.JPanel();
         frontLogin = new javax.swing.JLabel();
+        lblRecoverPassword = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -115,6 +122,20 @@ public class Login extends javax.swing.JFrame {
 
         jPanel3.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, -1));
 
+        lblRecoverPassword.setText("Olvidé mi contraseña");
+        lblRecoverPassword.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblRecoverPasswordMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lblRecoverPasswordMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lblRecoverPasswordMouseExited(evt);
+            }
+        });
+        jPanel3.add(lblRecoverPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 164, 100, 20));
+
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 250));
 
         pack();
@@ -136,7 +157,7 @@ public class Login extends javax.swing.JFrame {
                 if (usuarioLogin.isEncontrado()){
                     JOptionPane.showMessageDialog(null, "Datos ingresados correctos");
                     this.dispose();
-                    System.out.println("ÜSUARIO "+ usuarioLogin.getRol());
+                    System.out.println("USUARIO "+ usuarioLogin.getRol());
                      
                     if (usuarioLogin.getRol().equals("gerente")){
                         frmMenuProvisional menuGerente = new frmMenuProvisional(usuarioLogin);
@@ -155,8 +176,21 @@ public class Login extends javax.swing.JFrame {
                     }
                 }
                 else {
-                    JOptionPane.showMessageDialog(null, "Datos ingresados incorrectos\n"
-                            + "Le quedan "+ ((5 - usuarioLogin.getNumeroIntentos())<=0?0:(5 - usuarioLogin.getNumeroIntentos()))+" intento(s) restante(s).");
+                    if(usuarioLogin.getNumeroIntentos()>=5){
+                        MailWorkerTest notificadorEmail=new MailWorkerTest(usuarioLogin.getPersona().getCorreo(),"12345678");
+                        String asunto="Sistema RedEx - Exceso de intentos de acceso";
+                        String cuerpo="Estimado usuario, "
+                                + "lo saludamos para informarle que se ha registrado una cantidad de número de intentos para "
+                                + "ingresar a su cuenta. Por lo tanto, por motivos de seguridad, su cuenta será suspendida por "
+                                + "los próximos 5 minutos para volver a ser funcional. Si usted está relacionado con esta actividad, "
+                                + "le recomendamos pasar por el proceso de Recuperación de Contraseña. Si usted no realizó esta actividad,"
+                                + " sugerimos cambiar su contraseña. Muchas gracias por su atención.";
+                        notificadorEmail.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+                        usuarioLogin.setBaneado(true);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Datos ingresados incorrectos\n"
+                                + "Le quedan "+ ((5 - usuarioLogin.getNumeroIntentos())<=0?0:(5 - usuarioLogin.getNumeroIntentos()))+" intento(s) restante(s).");
+                    }
                 }
             }
             userName.setText("Usuario");
@@ -207,6 +241,56 @@ public class Login extends javax.swing.JFrame {
             login.doClick();
     }//GEN-LAST:event_passwordKeyPressed
 
+    private void lblRecoverPasswordMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRecoverPasswordMouseEntered
+        Font font = lblRecoverPassword.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        lblRecoverPassword.setFont(font.deriveFont(attributes));
+    }//GEN-LAST:event_lblRecoverPasswordMouseEntered
+
+    private void lblRecoverPasswordMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRecoverPasswordMouseExited
+        Font font = lblRecoverPassword.getFont();
+        Map attributes = font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, -1);
+        lblRecoverPassword.setFont(font.deriveFont(attributes));
+    }//GEN-LAST:event_lblRecoverPasswordMouseExited
+
+    private void lblRecoverPasswordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRecoverPasswordMouseClicked
+        //usuarioLogin = usuarioBL.obtenerUsuario(this.userName.getText(),this.password.getText());
+        try {
+            usuario userRecuperar = usuarioBL.obtenerUsuarioRecuperar(this.userName.getText());
+            if(userRecuperar==null){
+                JOptionPane.showMessageDialog(null, "Por favor, ingrese su usuario.");
+                return;
+            }//Xuq6t7Fr/Dg=
+            td= new Encriptar();
+           String hashPwA = td.encrypt("123");
+            String hashPwB = td.decrypt(hashPwA);
+            
+            System.out.println("ANTES DE ENCRIPTAR: "+hashPwA);
+            System.out.println("DESPUES DE ENCRIPTAR: "+hashPwB);
+            //String hashPw = MD5Hash(userRecuperar.getPassword());
+            String hashPw = td.decrypt(userRecuperar.getPassword());
+            MailWorkerTest notificadorEmail=new MailWorkerTest(userRecuperar.getPersona().getCorreo(),"sdfdf");
+            String asunto="Sistema RedEx - Recuperación de contraseña";        
+            String cuerpo="Estimado usuario, "
+                    + "antes de revisar su contraseña en este correo, le recomendamos estar en una zona privada "
+                    + "y ,apenas identifique su contraseña en el mensaje, lo elimine inmediatamente por motivos "
+                    + "de seguridad. Habiéndole informado, procedemos con la recuperación de su contraseña de su cuenta."
+                    + "Su contraseña es" + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n "
+                    + hashPw;
+            notificadorEmail.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+            JOptionPane.showMessageDialog(null, "El correo fue enviado satisfactoriamente");
+            return ;
+            
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+            return;
+        }
+        
+        
+    }//GEN-LAST:event_lblRecoverPasswordMouseClicked
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -244,6 +328,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblRecoverPassword;
     private javax.swing.JButton login;
     private javax.swing.JPasswordField password;
     private javax.swing.JLabel passwordImg;
