@@ -156,11 +156,11 @@ public class TabuSearch {
                 System.out.println("Some airport doesn't exist!");
             }
         }
-        System.out.println("Vacíos: " + String.valueOf(noAsign));
+//        System.out.println("Vacíos: " + String.valueOf(noAsign));
 //        System.out.println("Estado: ");
 //        for(int i=0; i<capVuelos.size(); i++)
 //            if(capVuelos.get(i) > 0)
-//                System.out.println(String.valueOf(i+1) + " : " + capVuelos.get(i));
+//                System.out.println("Tabu: "+String.valueOf(i+1) + " : " + capVuelos.get(i));
         return aux;
     }
     

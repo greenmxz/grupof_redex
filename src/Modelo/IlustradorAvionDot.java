@@ -55,10 +55,10 @@ static final int FONT_SIZE = 11;
     private int cantDays = 0;
     private int cantTics = 0;
     private int inicio = 0;
-    private int algoritmoDelayMinutes = 30;
+    private int algoritmoDelayMinutes = 60*5;
     private ArrayList<String> Archivos = new ArrayList<>();
     
-    private ArrayList<paquete> listaPaquetes = new ArrayList();
+   
     private ArrayList<String> rutasPaquetes = new ArrayList();
     
     private ArrayList<Aeropuerto> listaAeropuertos = new ArrayList<>();
@@ -471,7 +471,7 @@ static final int FONT_SIZE = 11;
 
             this.tabu.setInputProcess(this.dp);
             for (String a : this.Archivos){
-                dp.processPackNew("resources\\pack_enviados_generados\\" + a);
+                dp.processPackNew("resources\\pack_enviados\\" + a);
             }
             
             System.out.println("cant total de paquetes - " + this.dp.getPackList().size());
@@ -534,7 +534,7 @@ static final int FONT_SIZE = 11;
         }
         //aplica algoritmo al inicio del dia y luego cada cantidad de tics
         if (this.cantTics == this.algoritmoDelayMinutes || this.horaMundial*60 + this.minutoMundial == 0){
-            TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.listaPaquetes,this.rutasPaquetes,this.listPack); 
+            TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.rutasPaquetes,this.listPack); 
             simulador.start();
             rutasPaquetes=simulador.rutasPaquetes;
             listaAeropuertos=simulador.listaAeropuertos;

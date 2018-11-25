@@ -27,7 +27,7 @@ public class TabuSimulator extends Thread{
     private Date fechaActual;
     private TabuSearch tabu;
     private ArrayList<TabuSearch>eliminenlo;
-    private ArrayList<paquete> listaPaquetes = new ArrayList();
+    
     public ArrayList<String> rutasPaquetes = new ArrayList();
     
     public ArrayList<Aeropuerto> listaAeropuertos = new ArrayList<>();
@@ -37,14 +37,14 @@ public class TabuSimulator extends Thread{
     private ArrayList<Algoritmo.Paquete> listPackAlgo = new ArrayList<>();
     
     public TabuSimulator(int hora,int min,Date fecha,TabuSearch tabu,ArrayList<Aeropuerto> listaAeropuertos,ArrayList<Algoritmo.Vuelo> listaVuelos,
-            ArrayList<paquete> listaPaquetes,ArrayList<String> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack){
+            ArrayList<String> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack){
         this.horaMundial=hora;
         this.minutoMundial=min;
         this.fechaActual=fecha;
         this.tabu=tabu;
         this.listaAeropuertos=listaAeropuertos;
         this.listaVuelos=listaVuelos;
-        this.listaPaquetes=listaPaquetes;
+        
         this.rutasPaquetes=rutasPaquetes;
         this.listPack=listPack;
     }
