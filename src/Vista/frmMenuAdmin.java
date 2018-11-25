@@ -1,5 +1,6 @@
 package Vista;
 
+import Controlador.usuarioBL;
 import Modelo.usuario;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
@@ -12,8 +13,13 @@ import javax.swing.JOptionPane;
 public class frmMenuAdmin extends javax.swing.JFrame {
     private static usuario usuarioLog;
     
+    private int id ;
+    private usuarioBL usuarioBL;
     public frmMenuAdmin(usuario usuarioLog) {
+        usuarioBL = new usuarioBL();
+         id = usuarioLog.getId();
         initComponents();
+        id = usuarioLog.getId();
         this.jLabel1.setText("Bienvenido, "+usuarioLog.getPersona().getNombre()+
                 " "+usuarioLog.getPersona().getApellidoPaterno() + " - "+ usuarioLog.getPersona().getNumeroDocumentoIdentidad()+" - "+ usuarioLog.getPersona().getCiudad() +" (ADMINISTRADOR)");
        
@@ -31,6 +37,7 @@ public class frmMenuAdmin extends javax.swing.JFrame {
     public void setUsuarioLog(usuario usuarioLog) {
         this.usuarioLog = usuarioLog;
     }
+
     public void cerrar(){
         try{
             this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -50,6 +57,7 @@ public class frmMenuAdmin extends javax.swing.JFrame {
                 ", ¿está seguro de cerrar?", "Advertencia", 
                 JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
         if(valor==JOptionPane.YES_OPTION){
+            usuarioBL.cerrarSesion(id );
             String hora = "";
             if(LocalTime.now().getHour() >= 18 || LocalTime.now().getHour() < 4)
                 hora = "Buenas noches.";
@@ -174,6 +182,7 @@ public class frmMenuAdmin extends javax.swing.JFrame {
             hora = "Buenos días.";
         else
             hora = "Buenas tardes.";
+        usuarioBL.cerrarSesion(id );
         JOptionPane.showMessageDialog(null,"Gracias por su visita.\n"+
                 hora,"Gracias",
                 JOptionPane.INFORMATION_MESSAGE);

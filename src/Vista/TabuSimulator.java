@@ -13,12 +13,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.Semaphore;
 
 /**
  *
  * @author JUAN
  */
 public class TabuSimulator extends Thread{
+    private static Semaphore mutex = new Semaphore(1);
     private int horaMundial=0;
     private int minutoMundial=0;
     private int algoritmoDelayMinutes = 60*5;
@@ -76,30 +78,42 @@ public class TabuSimulator extends Thread{
         }
         
     }
-    public void run(){    
-        //aplica algoritmo a un set de paquetes cada cierto delay en minutos de simulacion
-        //if (this.cantTics == this.algoritmoDelayMinutes){
-        seleccionPacksAlgo();
-        System.out.println("cant de paquetes que aplicaran tabu - " + this.listPackAlgo.size());
-        if (this.listPackAlgo.size() > 0){
-            //se van agregando las rutas segun se aplique el algoritmo
-            ArrayList<String> rutasPacksTrabajados = this.tabu.executeVCRPTabu(this.listPackAlgo);
-            if (rutasPacksTrabajados.size() > 0){
-                this.rutasPaquetes.addAll(rutasPacksTrabajados);
-                //se llenan los almacenes con los paquetes nuevos
-                for (String ruta : rutasPacksTrabajados){
-                    String[] ids = ruta.split("-");
-                    if(!ruta.equals("")){
-                        int idVuelo = Integer.parseInt(ids[0]);
+    public void run(){   
+        try{
+            //aplica algoritmo a un set de paquetes cada cierto delay en minutos de simulacion
+            //if (this.cantTics == this.algoritmoDelayMinutes){
+            seleccionPacksAlgo();
+            System.out.println("cant de paquetes que aplicaran tabu - " + this.listPackAlgo.size());
+            if (this.listPackAlgo.size() > 0){
+                //se van agregando las rutas segun se aplique el algoritmo
+                //MUTEX
+                mutex.acquire();
+                System.out.println("ENTRO AL HILO");
+                ArrayList<String> rutasPacksTrabajados = this.tabu.executeVCRPTabu(this.listPackAlgo);
 
-                        int idAero = this.listaVuelos.get(idVuelo-1).getOriginAirport();
+                if (rutasPacksTrabajados.size() > 0){
+                    this.rutasPaquetes.addAll(rutasPacksTrabajados);
+                    //se llenan los almacenes con los paquetes nuevos
+                    for (String ruta : rutasPacksTrabajados){
+                        String[] ids = ruta.split("-");
+                        if(!ruta.equals("")){
+                            int idVuelo = Integer.parseInt(ids[0]);
 
-                        this.listaAeropuertos.get(idAero-1).setCapActual(this.listaAeropuertos.get(idAero-1).getCapActual() + 1);
+                            int idAero = this.listaVuelos.get(idVuelo-1).getOriginAirport();
+
+                            this.listaAeropuertos.get(idAero-1).setCapActual(this.listaAeropuertos.get(idAero-1).getCapActual() + 1);
+                        }
+
                     }
-
                 }
+                mutex.release();
+                //MUTEX OFF
             }
         }
+        catch(Exception ex ){
+            System.out.println("HILOS ERROR: "+ex.getMessage());
+        }
+        
 
             
         
