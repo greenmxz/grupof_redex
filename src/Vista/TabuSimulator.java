@@ -24,7 +24,7 @@ public class TabuSimulator extends Thread{
     private int algoritmoDelayMinutes = 60*5;
     private Date fechaActual;
     private TabuSearch tabu;
-    
+    private ArrayList<TabuSearch>eliminenlo;
     private ArrayList<paquete> listaPaquetes = new ArrayList();
     public ArrayList<String> rutasPaquetes = new ArrayList();
     
