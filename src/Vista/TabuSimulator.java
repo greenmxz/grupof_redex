@@ -20,7 +20,7 @@ import java.util.concurrent.Semaphore;
  * @author JUAN
  */
 public class TabuSimulator extends Thread{
-    private Semaphore mutex = new Semaphore(1);
+    private static Semaphore mutex = new Semaphore(1);
     private int horaMundial=0;
     private int minutoMundial=0;
     private int algoritmoDelayMinutes = 60*5;
