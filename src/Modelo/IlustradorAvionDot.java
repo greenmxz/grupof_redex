@@ -271,13 +271,15 @@ static final int FONT_SIZE = 11;
                                 }
                             }
                             
-                            if (ids.length == 1){
-                                ruta.equals(""); // se quita el paso dado
+                            if (ids.length == 1){// es su ultimo paradero
+                                this.rutasPaquetes.remove(i); // se quita el paso dado
+                                v.setPack_finales(v.getPack_finales() + 1);
                             }else{
                                 ruta = ruta.substring(ruta.indexOf("-", 0)+1,ruta.length()); // se quita el paso dado
+                                this.rutasPaquetes.set(i, ruta);
                             }
                             
-                            this.rutasPaquetes.set(i, ruta);
+                            
                         }
                     }
 
@@ -352,6 +354,8 @@ static final int FONT_SIZE = 11;
                         System.out.println("------------------------->COLAPSO<-----------------------");
                         
                     }
+                    aero.setCapActual(aero.getCapActual() - v.getPack_finales());//cliente recoge sus packs
+                    v.setPack_finales(0); // se queda sin pack finales
                     break;
                 }
             }
@@ -484,7 +488,8 @@ static final int FONT_SIZE = 11;
             this.calendar.add(this.calendar.DATE,1);
             this.cantDays++;
         }
-        if (this.cantTics == this.algoritmoDelayMinutes){
+        //aplica algoritmo al inicio del dia y luego cada cantidad de tics
+        if (this.cantTics == this.algoritmoDelayMinutes || this.horaMundial*60 + this.minutoMundial == 0){
             TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.listaPaquetes,this.rutasPaquetes,this.listPack); 
             simulador.start();
             rutasPaquetes=simulador.rutasPaquetes;

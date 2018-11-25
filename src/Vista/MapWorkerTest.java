@@ -203,6 +203,7 @@ public class MapWorkerTest {
             dot.setColor("verde");
             dot.setIcaoOrigen(v.getAeropuertoOrigen());
             dot.setIcaoDestino(v.getAeropuertoDestino());
+            dot.setPack_finales(0);
             //hora de salida
             Date fs = v.getFechaSalida();
             Date fl =v.getFechaLlegada();
