@@ -121,7 +121,9 @@ public class TabuSearch {
         setListPack(paquetesAct);
         int noAsign = 0;
         for(int iter=0; iter<listPack.size(); iter++){
-//        for(int iter=508; iter<509; iter++){              
+//        for(int iter=508; iter<509; iter++){
+            if(iter>listPack.size()) 
+                System.out.println(iter);
             int origin = getListPack().get(iter).getOriginAirport();
             int destiny = getListPack().get(iter).getDestinyAirport();
 //            getListPack().get(iter).print();
@@ -133,9 +135,9 @@ public class TabuSearch {
                 for(int i : optimal)
                     capVuelos.set(i-1, capVuelos.get(i-1)+1);
                 String solution = generateTabuString(optimal);
-//                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
+                //System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
                 if(solution.equals("")) noAsign++;
-//                if(solution.equals("")) System.out.println(iter);
+                //if(solution.equals("")) System.out.println(iter);
                 aux.add(solution);
             }else{
                 System.out.println("Some airport doesn't exist!");

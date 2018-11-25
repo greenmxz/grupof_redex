@@ -293,6 +293,7 @@ static final int FONT_SIZE = 11;
         if(v.getCapacidadActual()>v.getCapacidadMax()){
             v.setColor("negro");
             v.setEstado_almacen(3);
+            
         }else if(v.getCapacidadActual()>(2*v.getCapacidadMax()/3)){
             v.setColor("rojo");
             v.setEstado_almacen(2);
@@ -303,6 +304,8 @@ static final int FONT_SIZE = 11;
             v.setColor("verde");
             v.setEstado_almacen(0);
         }
+//        if(v.getCapacidadActual()!=0)
+//            System.out.println(v.getId()+" -> " + v.getCapacidadActual());
     }
     
     public void mueveAvion(avionDot v){
