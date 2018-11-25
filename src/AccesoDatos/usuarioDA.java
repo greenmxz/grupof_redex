@@ -47,9 +47,10 @@ public class usuarioDA {
             
             ResultSet rs = stmt.executeQuery();
             while (rs.next( )){
-                System.out.println("Äqui"+ rs.getInt("id"));
+               
                usuario usuario= new usuario();
-               if (rs.getBoolean("encontrado")){                     
+               if (rs.getBoolean("encontrado")){  
+                    System.out.println("Äqui"+ rs.getInt("id"));
                     persona persona= new persona();
 
                     System.out.println(rs.getInt("id")+ " "+rs.getString("codigo")+ " "+rs.getString("password"));
