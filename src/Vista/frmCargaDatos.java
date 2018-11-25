@@ -29,28 +29,28 @@ public class frmCargaDatos extends javax.swing.JPanel {
     
     public frmCargaDatos() {
         initComponents();
-//        cargarHusos();
+        cargarHusos();
     }
     
-//    public void cargarHusos(){
-//        try{
-//            BufferedReader reader = new BufferedReader(new FileReader("resources\\husos.txt"));
-//            String line;
-//            String continent = "";
-//            while( (line = reader.readLine()) != null){
-//                String[] arr = line.split("\\s+");
-//                listAerop.add(arr[0]);
-//                listHusos.add(Integer.parseInt(arr[1]));
-//            } 
-////            for(int i=0; i<listAerop.size(); i++){
-////                System.out.println("Aerop: " + listAerop.get(i) + " GMT" + 
-////                        String.valueOf(-listHusos.get(i)));
-////            }
-//        }catch(Exception e){
-//            e.printStackTrace();
-//            System.out.println("ERRORR!");
-//        }
-//    }
+    public void cargarHusos(){
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader("resources\\husos.txt"));
+            String line;
+            String continent = "";
+            while( (line = reader.readLine()) != null){
+                String[] arr = line.split("\\s+");
+                listAerop.add(arr[0]);
+                listHusos.add(Integer.parseInt(arr[1]));
+            } 
+//            for(int i=0; i<listAerop.size(); i++){
+//                System.out.println("Aerop: " + listAerop.get(i) + " GMT" + 
+//                        String.valueOf(-listHusos.get(i)));
+//            }
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("ERRORR!");
+        }
+    }
     
     public void actualizarTabla(){
         DefaultTableModel modelTable = (DefaultTableModel) tblArchivos.getModel();
@@ -175,37 +175,37 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 int indexO = listAerop.indexOf(arr[0]);
                 int indexD = listAerop.indexOf(arr[1]);
                 if(arr.length == 4){
-                    Vuelo plannedFlg = new Vuelo("1",
-                            Date.from(LocalTime.of(Integer.parseInt(arr[2].split(":")[0]),
-                                    Integer.parseInt(arr[2].split(":")[1])).atDate(LocalDate.of(2018, 11, 2)).
-                                            atZone(ZoneId.systemDefault()).toInstant()),
-                            Date.from(LocalTime.of(Integer.parseInt(arr[3].split(":")[0]),
-                                    Integer.parseInt(arr[3].split(":")[1])).atDate(LocalDate.of(2018, 11, 2)).
-                                        atZone(ZoneId.systemDefault()).toInstant()), arr[0], arr[1]);
-                    
-//                    int horaO = Integer.parseInt(arr[2].split(":")[0]);
-//                    int horaD = Integer.parseInt(arr[3].split(":")[0]);
-//                    int aumentoO = listHusos.get(indexO);
-//                    int aumentoD = listHusos.get(indexD);
-//                    if((horaO + aumentoO) >= 24)
-//                        horaO += aumentoO - 24;
-//                    else if(horaO + aumentoO < 0)
-//                        horaO += aumentoO + 24;
-//                    else
-//                        horaO += aumentoO;
-//                    if((horaD + aumentoD) >= 24)
-//                        horaD += aumentoD - 24;
-//                    else if(horaD + aumentoD < 0)
-//                        horaD += aumentoD + 24;
-//                    else
-//                        horaD += aumentoD;
 //                    Vuelo plannedFlg = new Vuelo("1",
-//                            Date.from(LocalTime.of(horaO, Integer.parseInt(arr[2].split(":")[1]))
-//                                    .atDate(LocalDate.of(2018, 11, 2))
-//                                    .atZone(ZoneId.systemDefault()).toInstant()),
-//                            Date.from(LocalTime.of(horaD, Integer.parseInt(arr[3].split(":")[1]))
-//                                    .atDate(LocalDate.of(2018, 11, 2))
-//                                    .atZone(ZoneId.systemDefault()).toInstant()), arr[0], arr[1]);
+//                            Date.from(LocalTime.of(Integer.parseInt(arr[2].split(":")[0]),
+//                                    Integer.parseInt(arr[2].split(":")[1])).atDate(LocalDate.of(2018, 11, 2)).
+//                                            atZone(ZoneId.systemDefault()).toInstant()),
+//                            Date.from(LocalTime.of(Integer.parseInt(arr[3].split(":")[0]),
+//                                    Integer.parseInt(arr[3].split(":")[1])).atDate(LocalDate.of(2018, 11, 2)).
+//                                        atZone(ZoneId.systemDefault()).toInstant()), arr[0], arr[1]);
+                    
+                    int horaO = Integer.parseInt(arr[2].split(":")[0]);
+                    int horaD = Integer.parseInt(arr[3].split(":")[0]);
+                    int aumentoO = listHusos.get(indexO);
+                    int aumentoD = listHusos.get(indexD);
+                    if((horaO + aumentoO) >= 24)
+                        horaO += aumentoO - 24;
+                    else if(horaO + aumentoO < 0)
+                        horaO += aumentoO + 24;
+                    else
+                        horaO += aumentoO;
+                    if((horaD + aumentoD) >= 24)
+                        horaD += aumentoD - 24;
+                    else if(horaD + aumentoD < 0)
+                        horaD += aumentoD + 24;
+                    else
+                        horaD += aumentoD;
+                    Vuelo plannedFlg = new Vuelo("1",
+                            Date.from(LocalTime.of(horaO, Integer.parseInt(arr[2].split(":")[1]))
+                                    .atDate(LocalDate.of(2018, 11, 2))
+                                    .atZone(ZoneId.systemDefault()).toInstant()),
+                            Date.from(LocalTime.of(horaD, Integer.parseInt(arr[3].split(":")[1]))
+                                    .atDate(LocalDate.of(2018, 11, 2))
+                                    .atZone(ZoneId.systemDefault()).toInstant()), arr[0], arr[1]);
 
                     //plannedFlg.print();
                     aux.add(plannedFlg);
@@ -232,30 +232,30 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 if(arr[1].equals("20180418")) // Se debe comentar para el final
                     break;
                 if(arr.length == 4){
-                    paquete plannedPack = new paquete(arr[0],
-                            Date.from(LocalTime.of(Integer.parseInt(arr[2].split(":")[0]),
-                                   Integer.parseInt(arr[2].split(":")[1])).atDate(LocalDate.of(
-                                        Integer.parseInt(arr[1].substring(0, 4)),
-                                        Integer.parseInt(arr[1].substring(4, 6)),
-                                        Integer.parseInt(arr[1].substring(6, 8)))).
-                                        atZone(ZoneId.systemDefault()).toInstant()), identificator, arr[3]);
-
-//                    int indexO = listAerop.indexOf(arr[3]);
-//                    int horaO = Integer.parseInt(arr[2].split(":")[0]);
-//                    int aumentoO = listHusos.get(indexO);
-//                    if((horaO + aumentoO) >= 24)
-//                        horaO += aumentoO - 24;
-//                    else if(horaO + aumentoO < 0)
-//                        horaO += aumentoO + 24;
-//                    else
-//                        horaO += aumentoO;
 //                    paquete plannedPack = new paquete(arr[0],
-//                            Date.from(LocalTime.of(horaO, Integer.parseInt(arr[2].split(":")[1]))
-//                                    .atDate(LocalDate.of(
-//                                    Integer.parseInt(arr[1].substring(0, 4)),
-//                                    Integer.parseInt(arr[1].substring(4, 6)),
-//                                    Integer.parseInt(arr[1].substring(6, 8)))).
-//                                    atZone(ZoneId.systemDefault()).toInstant()), identificator, arr[3]);
+//                            Date.from(LocalTime.of(Integer.parseInt(arr[2].split(":")[0]),
+//                                   Integer.parseInt(arr[2].split(":")[1])).atDate(LocalDate.of(
+//                                        Integer.parseInt(arr[1].substring(0, 4)),
+//                                        Integer.parseInt(arr[1].substring(4, 6)),
+//                                        Integer.parseInt(arr[1].substring(6, 8)))).
+//                                        atZone(ZoneId.systemDefault()).toInstant()), identificator, arr[3]);
+
+                    int indexO = listAerop.indexOf(arr[3]);
+                    int horaO = Integer.parseInt(arr[2].split(":")[0]);
+                    int aumentoO = listHusos.get(indexO);
+                    if((horaO + aumentoO) >= 24)
+                        horaO += aumentoO - 24;
+                    else if(horaO + aumentoO < 0)
+                        horaO += aumentoO + 24;
+                    else
+                        horaO += aumentoO;
+                    paquete plannedPack = new paquete(arr[0],
+                            Date.from(LocalTime.of(horaO, Integer.parseInt(arr[2].split(":")[1]))
+                                    .atDate(LocalDate.of(
+                                    Integer.parseInt(arr[1].substring(0, 4)),
+                                    Integer.parseInt(arr[1].substring(4, 6)),
+                                    Integer.parseInt(arr[1].substring(6, 8)))).
+                                    atZone(ZoneId.systemDefault()).toInstant()), identificator, arr[3]);
                     
                     aux.add(plannedPack);
                 }

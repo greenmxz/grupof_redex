@@ -91,6 +91,8 @@ public class frmReportePaquete extends javax.swing.JPanel {
         panelFecha = new javax.swing.JPanel();
         dtpSalida = new com.github.lgooddatepicker.components.DateTimePicker();
         jLabel1 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        dtpSalida1 = new com.github.lgooddatepicker.components.DateTimePicker();
         panelAeropuerto = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -116,7 +118,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 btnExcelActionPerformed(evt);
             }
         });
-        panelFondo.add(btnExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 466, 172, -1));
+        panelFondo.add(btnExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 450, 172, -1));
 
         tblAirports.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -136,7 +138,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblAirports);
 
-        panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 328, 750, 127));
+        panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 740, 120));
 
         jLabel2.setText("Resultado de consulta");
         panelFondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
@@ -148,12 +150,12 @@ public class frmReportePaquete extends javax.swing.JPanel {
         panelEstado.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         chkEstadoEntregado.setText("Entregado");
-        panelEstado.add(chkEstadoEntregado, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
+        panelEstado.add(chkEstadoEntregado, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, -1, -1));
 
         chkEstadoEnCamino.setText("En camino");
-        panelEstado.add(chkEstadoEnCamino, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, -1));
+        panelEstado.add(chkEstadoEnCamino, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 25, -1, -1));
 
-        panelFiltrado.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 190, 60));
+        panelFiltrado.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 190, 70));
 
         btnLimpiarFlitro.setText("Limpiar filtro");
         btnLimpiarFlitro.addActionListener(new java.awt.event.ActionListener() {
@@ -201,12 +203,16 @@ public class frmReportePaquete extends javax.swing.JPanel {
 
         panelFecha.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rango temporal"));
         panelFecha.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        panelFecha.add(dtpSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, -1, -1));
+        panelFecha.add(dtpSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 15, -1, 22));
 
-        jLabel1.setText("Fecha de entrada");
-        panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
+        jLabel1.setText("Hasta");
+        panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 42, -1, -1));
 
-        panelFiltrado.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 380, 60));
+        jLabel6.setText("Desde");
+        panelFecha.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
+        panelFecha.add(dtpSalida1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 42, -1, 22));
+
+        panelFiltrado.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 380, 70));
 
         panelAeropuerto.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Aeropuerto"));
         panelAeropuerto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -289,7 +295,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
 
         panelFiltrado.add(panelFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 280, 80));
 
-        panelFondo.add(panelFiltrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 37, 751, 250));
+        panelFondo.add(panelFiltrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 740, 260));
 
         jLabel3.setText("REPORTE DE PAQUETES");
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -593,12 +599,14 @@ public class frmReportePaquete extends javax.swing.JPanel {
     private javax.swing.JCheckBox chkFechas;
     private javax.swing.JCheckBox chkPaq;
     private com.github.lgooddatepicker.components.DateTimePicker dtpSalida;
+    private com.github.lgooddatepicker.components.DateTimePicker dtpSalida1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

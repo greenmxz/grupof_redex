@@ -97,6 +97,7 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
             ts.inputData("resources\\aeropuertos.txt",
                 "resources\\planes_vuelo.txt",
                 "resources\\pack_enviados");
+            ts.generateFlightMatrix();
             long start = System.currentTimeMillis();
             ArrayList<String> solution = ts.executeVCRPTabu(ts.getListPack());
             long elapsedTime = System.currentTimeMillis() - start;
