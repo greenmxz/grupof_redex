@@ -134,7 +134,6 @@ public class TabuSearch {
                         String.valueOf(getListPack().get(iter).getOriginMin());
                 tabuAlgorithm(origin, destiny, time);
                 ArrayList<Integer> optimal = getRouteOptimal();
-<<<<<<< HEAD
                 if(optimal.size() > 0)
                     for(int i : optimal)
                         capVuelos.set(i-1, capVuelos.get(i-1)+1);
@@ -144,13 +143,6 @@ public class TabuSearch {
                     noAsign++;
                     System.out.println(iter);
                 }
-=======
-                for(int i : optimal)
-                    capVuelos.set(i-1, capVuelos.get(i-1)+1);
-                String solution = generateTabuString(optimal);
-//                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
-                if(solution.equals("")) noAsign++;
->>>>>>> dev
 //                if(solution.equals("")) System.out.println(iter);
                 aux.add(solution);
             }else{
