@@ -21,12 +21,12 @@ import static javax.swing.text.html.CSS.Attribute.FONT_SIZE;
 import java.awt.Color;
 import javafx.scene.Group;
 import java.awt.Shape;
-import java.awt.geom.Area;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import Algoritmo.*;
 import Vista.TabuSimulator;
+import java.awt.geom.Rectangle2D;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -55,7 +55,7 @@ static final int FONT_SIZE = 11;
     private int cantDays = 0;
     private int cantTics = 0;
     private int inicio = 0;
-    private int algoritmoDelayMinutes = 60*5;
+    private int algoritmoDelayMinutes = 30;
     private ArrayList<String> Archivos = new ArrayList<>();
     
     private ArrayList<paquete> listaPaquetes = new ArrayList();
@@ -185,6 +185,30 @@ static final int FONT_SIZE = 11;
         //g2.fill(new Shape("Holamundo"));
         ArrayList<Shape>arrayEllipse=new ArrayList<>();
         
+        for(int i=0;i<this.listaAeropuertos.size();i++){
+            double x=this.listaAeropuertos.get(i).getCoordX();
+            double y=this.listaAeropuertos.get(i).getCoordY();
+            Rectangle2D aeropuerto = new Rectangle2D.Double(x,y,7,7);
+            
+            String color = this.listaAeropuertos.get(i).getColor();
+            
+            switch (color){
+                case "negro":
+                    g2.setPaint(new Color (1,1,1));
+                    break;
+                case "rojo":
+                    g2.setPaint(new Color (238, 54, 63));
+                    break;
+                case "amarillo":
+                    g2.setPaint(new Color (234, 203, 29));
+                    break;
+                case "verde":
+                    g2.setPaint(new Color (106, 203, 29));
+                    break;
+            }
+            g2.fill(aeropuerto);
+        }
+        
         for(int i=0;i<this.avionesDot.size();i++){
             
             double t_min = abs((this.avionesDot.get(i).getHora_llegada()*60 + this.avionesDot.get(i).getMin_llegada()) -
@@ -290,6 +314,22 @@ static final int FONT_SIZE = 11;
             }
         }
     }
+    public void cambiaColorAeropuerto(Aeropuerto aero){
+        if(aero.getCapActual()>aero.getCapMax()){
+            aero.setColor("negro");
+           
+        }else if(aero.getCapActual()>(2*aero.getCapMax()/3)){
+            aero.setColor("rojo");
+            
+        }else if(aero.getCapActual()>(aero.getCapMax()/3)){
+            aero.setColor("amarillo");
+            
+        }else{
+            aero.setColor("verde");
+            
+        }
+        
+    }
     
     public void cambiaEstadoAlmacen(avionDot v){
         if(v.getCapacidadActual()>v.getCapacidadMax()){
@@ -306,8 +346,8 @@ static final int FONT_SIZE = 11;
             v.setColor("verde");
             v.setEstado_almacen(0);
         }
-        if(v.getCapacidadActual()!=0)
-            System.out.println(v.getId()+" -> " + v.getCapacidadActual());
+//        if(v.getCapacidadActual()!=0)
+//            System.out.println(v.getId()+" -> " + v.getCapacidadActual());
     }
     
     public void mueveAvion(avionDot v){
@@ -350,7 +390,7 @@ static final int FONT_SIZE = 11;
             for(Aeropuerto aero : this.listaAeropuertos){
                 if(aero.getIcaoCode().equals(v.getIcaoDestino())){
                     aero.setCapActual(aero.getCapActual() + v.getCapacidadActual());
-                    
+                    cambiaColorAeropuerto(aero);
                     //VERIFICAR COLAPSO POR FALTA DE ESPACIO EN ALMACEN DE AEROPUERTO
                     if (aero.getCapActual() > aero.getCapMax()){
                         // SISTEMA COLAPSA
@@ -367,6 +407,7 @@ static final int FONT_SIZE = 11;
         }
         
     }
+    
     
     public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
@@ -430,7 +471,7 @@ static final int FONT_SIZE = 11;
 
             this.tabu.setInputProcess(this.dp);
             for (String a : this.Archivos){
-                dp.processPackNew("resources\\pack_enviados\\" + a);
+                dp.processPackNew("resources\\pack_enviados_generados\\" + a);
             }
             
             System.out.println("cant total de paquetes - " + this.dp.getPackList().size());

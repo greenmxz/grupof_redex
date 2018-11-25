@@ -87,7 +87,8 @@ public class TabuSimulator extends Thread{
             if (this.listPackAlgo.size() > 0){
                 //se van agregando las rutas segun se aplique el algoritmo
                 //MUTEX
-                mutex.wait();
+                mutex.acquire();
+                System.out.println("ENTRO AL HILO");
                 ArrayList<String> rutasPacksTrabajados = this.tabu.executeVCRPTabu(this.listPackAlgo);
 
                 if (rutasPacksTrabajados.size() > 0){
@@ -105,7 +106,7 @@ public class TabuSimulator extends Thread{
 
                     }
                 }
-                mutex.acquire();
+                mutex.release();
                 //MUTEX OFF
             }
         }

@@ -10,6 +10,9 @@ public class Aeropuerto {
     private int continent;
     private int capMax;
     private int capActual;
+    private double coordX;
+    private double coordY;
+    private String color;
     
      public Aeropuerto(){
                  capMax = 600;
@@ -91,6 +94,30 @@ public class Aeropuerto {
     public void setCapActual(int capActual) {
         this.capActual = capActual;
     }
+
+    public double getCoordX() {
+        return coordX;
+    }
+
+    public void setCoordX(double coordX) {
+        this.coordX = coordX;
+    }
+
+    public double getCoordY() {
+        return coordY;
+    }
+
+    public void setCoordY(double coordY) {
+        this.coordY = coordY;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }    
     
     /* Methods */
     public void print(){

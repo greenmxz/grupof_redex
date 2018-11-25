@@ -315,6 +315,9 @@ public class MapWorkerTest {
            newAero.setCountry(a.getPais());
             newAero.setCapMax(a.getCapMax());
            newAero.setCapActual(a.getCapActual());
+           newAero.setCoordX(a.getCoordX());
+           newAero.setCoordY(a.getCoordY());
+           newAero.setColor("verde");
             this.listaAeropuertosNew.add(newAero);
             
  

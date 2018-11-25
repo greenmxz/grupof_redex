@@ -121,9 +121,11 @@ public class TabuSearch {
         setListPack(paquetesAct);
 
         int noAsign = 0;
+
         for(int iter=0; iter<listPack.size(); iter++){
 //        for(int iter=508; iter<509; iter++){
            
+
 
 //        generateFlightMatrix();
 //        for(int i=0; i<listFlight.size(); i++){
@@ -131,6 +133,9 @@ public class TabuSearch {
 //        }
         
         //for(int iter=449; iter<450; iter++){
+
+            if (iter > paquetesAct.size()) break;
+
 
             int origin = getListPack().get(iter).getOriginAirport();
             int destiny = getListPack().get(iter).getDestinyAirport();
