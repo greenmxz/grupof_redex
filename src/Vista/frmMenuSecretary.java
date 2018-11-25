@@ -1,5 +1,6 @@
 package Vista;
 
+import Controlador.usuarioBL;
 import Modelo.usuario;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
@@ -10,8 +11,12 @@ import javax.swing.JOptionPane;
 
 public class frmMenuSecretary extends javax.swing.JFrame {
    private static usuario usuarioLog;
+   private usuarioBL usuarioBL ;
+   private int idLog;
     public frmMenuSecretary(usuario usuarioLog) {
+         usuarioBL = new usuarioBL();
         initComponents();
+        this.idLog=usuarioLog.getId();
         this.jLabel1.setText("Bienvenido, "+usuarioLog.getPersona().getNombre()+
                 " "+usuarioLog.getPersona().getApellidoPaterno() + " - "+ usuarioLog.getPersona().getNumeroDocumentoIdentidad()+" - "+ usuarioLog.getPersona().getCiudad()+ " (Secretario)");
        
@@ -29,6 +34,8 @@ public class frmMenuSecretary extends javax.swing.JFrame {
     public void setUsuarioLog(usuario usuarioLog) {
         this.usuarioLog = usuarioLog;
     }
+
+    
     public void cerrar(){
         try{
             this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -48,6 +55,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
                 ", ¿estás seguro de cerrar?", "Advertencia", 
                 JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
         if(valor==JOptionPane.YES_OPTION){
+            usuarioBL.cerrarSesion(idLog);
             String hora = "";
             if(LocalTime.now().getHour() >= 18 || LocalTime.now().getHour() < 4)
                 hora = "Buenas noches.";
@@ -74,7 +82,8 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         btnMenu = new javax.swing.JButton();
         panelMenu = new javax.swing.JPanel();
         btnPedidos = new Especial.RSButtonMetro();
-        btnClientes = new Especial.RSButtonMetro();
+        Vuelo = new Especial.RSButtonMetro();
+        btnClientes1 = new Especial.RSButtonMetro();
         panelPrincipal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -130,14 +139,23 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         });
         panelMenu.add(btnPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 140, 30));
 
-        btnClientes.setText("Clientes");
-        btnClientes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnClientes.addActionListener(new java.awt.event.ActionListener() {
+        Vuelo.setText("Vuelo");
+        Vuelo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        Vuelo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClientesActionPerformed(evt);
+                VueloActionPerformed(evt);
             }
         });
-        panelMenu.add(btnClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 35, 140, 30));
+        panelMenu.add(Vuelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 140, 30));
+
+        btnClientes1.setText("Clientes");
+        btnClientes1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnClientes1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClientes1ActionPerformed(evt);
+            }
+        });
+        panelMenu.add(btnClientes1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 35, 140, 30));
 
         panelFondo.add(panelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 150, 500));
 
@@ -164,12 +182,6 @@ public class frmMenuSecretary extends javax.swing.JFrame {
             Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);   
     }//GEN-LAST:event_btnPedidosActionPerformed
 
-    private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
-        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Cliente(this));
-        if(this.panelMenu.getX()>-1)
-            Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);   
-    }//GEN-LAST:event_btnClientesActionPerformed
-
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         String hora = "";
         if(LocalTime.now().getHour() >= 18 || LocalTime.now().getHour() < 4)
@@ -178,9 +190,11 @@ public class frmMenuSecretary extends javax.swing.JFrame {
             hora = "Buenos días.";
         else
             hora = "Buenas tardes.";
+        usuarioBL.cerrarSesion(idLog );
         JOptionPane.showMessageDialog(null,"Gracias por su visita.\n"+
                 hora,"Gracias",
                 JOptionPane.INFORMATION_MESSAGE);
+
         new Login().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
@@ -193,6 +207,16 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         else
             Animacion.Animacion.mover_derecha(-150, 0, 2, 2, panelMenu);
     }//GEN-LAST:event_btnMenuActionPerformed
+
+    private void btnClientes1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientes1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnClientes1ActionPerformed
+
+    private void VueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VueloActionPerformed
+        new CambiarPanel(panelPrincipal, new frmAdministrarVuelo(this));
+        if(this.panelMenu.getX()>-1)
+        Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);
+    }//GEN-LAST:event_VueloActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -230,8 +254,9 @@ public class frmMenuSecretary extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private Especial.RSButtonMetro Vuelo;
     private Especial.RSButtonMetro btnCerrarSesion;
-    private Especial.RSButtonMetro btnClientes;
+    private Especial.RSButtonMetro btnClientes1;
     private javax.swing.JButton btnMenu;
     private Especial.RSButtonMetro btnPedidos;
     private javax.swing.JLabel jLabel1;

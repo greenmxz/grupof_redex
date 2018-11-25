@@ -47,9 +47,10 @@ public class usuarioDA {
             
             ResultSet rs = stmt.executeQuery();
             while (rs.next( )){
-                System.out.println("Äqui"+ rs.getInt("id"));
+               
                usuario usuario= new usuario();
-               if (rs.getBoolean("encontrado")){                     
+               if (rs.getBoolean("encontrado")){  
+                    System.out.println("Äqui"+ rs.getInt("id"));
                     persona persona= new persona();
 
                     System.out.println(rs.getInt("id")+ " "+rs.getString("codigo")+ " "+rs.getString("password"));
@@ -76,6 +77,8 @@ public class usuarioDA {
                     persona.setTipoDocumento(rs.getString("tipo_documento"));
                     
                     usuario.setPersona(persona);
+                    
+
                     return usuario;
                 }else{
                    if (rs.getBoolean("castigar")){
@@ -95,6 +98,58 @@ public class usuarioDA {
         }catch(Exception e){
             System.out.println("ERROR "+e.getMessage());
             return null;
+        }
+    }
+    public boolean iniciarSesion(int idUsuario){
+        try{
+            database connect = new database();
+            String query = "{CALL iniciarSesion(?)}";
+
+            CallableStatement stmt = connect.getConnection().prepareCall(query);
+            stmt.setInt(1, idUsuario);
+
+            
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next( )){
+                boolean rpta = rs.getBoolean("respuesta");
+                System.out.println("RPTA: "+rpta);
+                if (rpta==true );
+                    return rpta;
+                
+                
+            }
+            return false;
+            
+            
+            
+        }catch(Exception ex){
+            System.out.println("ERROR INICIO " +ex.getMessage());
+            return false;
+        }
+    }
+    public boolean cerrarSesion(int idUsuario){
+        try{
+            database connect = new database();
+            String query = "{CALL cerrarSesion(?)}";
+
+            CallableStatement stmt = connect.getConnection().prepareCall(query);
+            stmt.setInt(1, idUsuario);
+
+            
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next( )){
+                boolean rpta = rs.getBoolean("respuesta");
+                if (rpta==true );
+                    return rpta;
+                
+                
+            }
+             return false;
+            
+            
+        }catch(Exception ex){
+            System.out.println("ERROR INICIO " +ex.getMessage());
+            return false;
         }
     }
     public usuario obtenerUsuarioRecuperar(String nombreUsuario){
@@ -125,6 +180,7 @@ public class usuarioDA {
         }
         
     }
+
      public boolean registrarUsuario(usuario usuario){
          try {
 

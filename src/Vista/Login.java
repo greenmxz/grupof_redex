@@ -29,7 +29,10 @@ public class Login extends javax.swing.JFrame {
         userName.setForeground(new Color(133,133,133));
         password.setForeground(new Color(133,133,133));
         password.setEchoChar((char)0);
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
     }
+
     private void inicializar(){
         ImageIcon imgUsername = new ImageIcon(getClass().getResource("/Resource/username.png"));
         ImageIcon iconUsername = new ImageIcon (imgUsername.getImage().getScaledInstance(userImg.getWidth(), userImg.getHeight(), Image.SCALE_DEFAULT));
@@ -155,25 +158,33 @@ public class Login extends javax.swing.JFrame {
                         + "Debe de esperar "+usuarioLogin.getTiempoRestanteBaneado()+ " segundos.");
             }else{
                 if (usuarioLogin.isEncontrado()){
-                    JOptionPane.showMessageDialog(null, "Datos ingresados correctos");
-                    this.dispose();
-                    System.out.println("USUARIO "+ usuarioLogin.getRol());
-                     
-                    if (usuarioLogin.getRol().equals("gerente")){
-                        frmMenuProvisional menuGerente = new frmMenuProvisional(usuarioLogin);
-                      
-                        menuGerente.setVisible(true);
-                    }
-                    if (usuarioLogin.getRol().equals("secretario")){
-                        frmMenuSecretary menuSecre= new frmMenuSecretary(usuarioLogin);
+                    
+                    
+                    boolean respuesta = usuarioBL.iniciarSesion(usuarioLogin.getId());
+                    if (respuesta==true){
+                        JOptionPane.showMessageDialog(null, "Bienvenido");
+                        this.dispose();
+                        System.out.println("USUARIO "+ usuarioLogin.getRol());
 
-                        menuSecre.setVisible(true);
-                    }
-                    if (usuarioLogin.getRol().equals("administrador")){
-                        frmMenuAdmin menuAdmin = new frmMenuAdmin(usuarioLogin);
+                        if (usuarioLogin.getRol().equals("gerente")){
+                            frmMenuProvisional menuGerente = new frmMenuProvisional(usuarioLogin);
 
-                        menuAdmin.setVisible(true);
+                            menuGerente.setVisible(true);
+                        }
+                        if (usuarioLogin.getRol().equals("secretario")){
+                            frmMenuSecretary menuSecre= new frmMenuSecretary(usuarioLogin);
+
+                            menuSecre.setVisible(true);
+                        }
+                        if (usuarioLogin.getRol().equals("administrador")){
+                            frmMenuAdmin menuAdmin = new frmMenuAdmin(usuarioLogin);
+
+                            menuAdmin.setVisible(true);
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(null, "ERROR: El usuario ya se encuentra logueado en otra instancia.");
                     }
+                    
                 }
                 else {
                     if(usuarioLogin.getNumeroIntentos()>=5){

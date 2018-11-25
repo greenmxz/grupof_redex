@@ -6,6 +6,7 @@
 package Controlador;
 
 import AccesoDatos.usuarioDA;
+import Modelo.Avion;
 import Modelo.usuario;
 import java.util.ArrayList;
 
@@ -40,4 +41,12 @@ public class usuarioBL {
     public boolean borrarUsuario(int i){
         return usuarioDA.borrarUsuario( i);
     }
+    public boolean iniciarSesion(int i){
+        return usuarioDA.iniciarSesion( i);
+    }
+    public boolean cerrarSesion(int i){
+        return usuarioDA.cerrarSesion( i);
+    }
+    
+
 }
