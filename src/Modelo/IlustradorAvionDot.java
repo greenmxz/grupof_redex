@@ -187,11 +187,11 @@ static final int FONT_SIZE = 11;
         
         for(int i=0;i<this.avionesDot.size();i++){
             
-            //double t_min = abs((this.avionesDot.get(i).getHora_llegada()*60 + this.avionesDot.get(i).getMin_llegada()) -
-              //         (this.avionesDot.get(i).getHora_salida()*60 + this.avionesDot.get(i).getMin_salida()));
+            double t_min = abs((this.avionesDot.get(i).getHora_llegada()*60 + this.avionesDot.get(i).getMin_llegada()) -
+                       (this.avionesDot.get(i).getHora_salida()*60 + this.avionesDot.get(i).getMin_salida()));
             
               
-            double t_min=this.avionesDot.get(i).getT_restante();
+            //double t_min=this.avionesDot.get(i).getT_restante();
             
             double xIni=this.avionesDot.get(i).getActual().getX();
             double yIni=this.avionesDot.get(i).getActual().getY();
@@ -236,7 +236,7 @@ static final int FONT_SIZE = 11;
             dy=(dy/t_min);
             this.avionesDot.get(i).setvX(dx*getVelocidad());
             this.avionesDot.get(i).setvY(dy*getVelocidad());
-            this.avionesDot.get(i).setT_restante(t_min-1);
+            //this.avionesDot.get(i).setT_restante(t_min-1);
         }
         getT().start();
     }
