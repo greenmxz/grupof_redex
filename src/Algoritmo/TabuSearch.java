@@ -120,7 +120,8 @@ public class TabuSearch {
 //            listFlight.get(i).print();
 //        }
         for(int iter=0; iter<paquetesAct.size(); iter++){
-        //for(int iter=449; iter<450; iter++){              
+        //for(int iter=449; iter<450; iter++){
+            if (iter > paquetesAct.size()) break;
             int origin = getListPack().get(iter).getOriginAirport();
             int destiny = getListPack().get(iter).getDestinyAirport();
 //            getListPack().get(iter).print();
