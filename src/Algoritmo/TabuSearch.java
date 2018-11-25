@@ -141,7 +141,7 @@ public class TabuSearch {
 //                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
                 if(solution.equals("")){
                     noAsign++;
-                    System.out.println(iter);
+//                    System.out.println(iter);
                 }
 //                if(solution.equals("")) System.out.println(iter);
                 aux.add(solution);
@@ -150,10 +150,10 @@ public class TabuSearch {
             }
         }
         System.out.println("Vacíos: " + String.valueOf(noAsign));
-//        System.out.println("Estado: ");
-//        for(int i=0; i<capVuelos.size(); i++)
-//            if(capVuelos.get(i) > 0)
-//                System.out.println(String.valueOf(i+1) + " : " + capVuelos.get(i));
+        System.out.println("Estado: ");
+        for(int i=0; i<capVuelos.size(); i++)
+            if(capVuelos.get(i) > 0)
+                System.out.println(String.valueOf(i+1) + " : " + capVuelos.get(i));
         return aux;
     }
     
@@ -324,7 +324,7 @@ public class TabuSearch {
             int[] provisional = route.clone();
             provisional[getLastMinusOne(route)] = listNeighborAL.get(i);
             if((getRouteLenght(provisional) > this.limit) ||
-                    (capVuelos.get(listNeighborAL.get(i)-1) > 200))
+                    (capVuelos.get(listNeighborAL.get(i)-1) > 195))
                 continue;
             if(cmpTime > timeToCmp){
                 listSuperior[iSup] = listNeighborAL.get(i);
