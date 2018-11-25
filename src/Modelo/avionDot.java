@@ -17,7 +17,7 @@ public class avionDot {
     private CoordenadaDouble origen;
     private CoordenadaDouble destino;
     private CoordenadaDouble actual;
-    private ArrayList<CoordenadaDouble>ruta;
+    private String ruta;
     private String color; // verde -> amarillo -> rojo
     private boolean visible;
     private Double vX;
@@ -35,6 +35,7 @@ public class avionDot {
     private String icaoDestino;
     private double t_llegada;
     private double t_restante;
+    private int pack_finales;
 
     public double getT_llegada() {
         return abs((this.hora_llegada*60 + this.min_llegada) -(this.hora_salida*60 + this.min_salida));
@@ -103,13 +104,15 @@ public class avionDot {
         this.actual = actual;
     }
 
-    public ArrayList<CoordenadaDouble> getRuta() {
+    public String getRuta() {
         return ruta;
     }
 
-    public void setRuta(ArrayList<CoordenadaDouble> ruta) {
+    public void setRuta(String ruta) {
         this.ruta = ruta;
     }
+
+
 
     public String getColor() {
         return color;
@@ -205,6 +208,14 @@ public class avionDot {
 
     public void setCapacidadMax(int capacidadMax) {
         this.capacidadMax = capacidadMax;
+    }
+
+    public int getPack_finales() {
+        return pack_finales;
+    }
+
+    public void setPack_finales(int pack_finales) {
+        this.pack_finales = pack_finales;
     }
     
   
