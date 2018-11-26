@@ -57,6 +57,7 @@ static final int FONT_SIZE = 11;
     private int inicio = 0;
     private int inicioAlgo = 1;
     private int algoritmoDelayMinutes = 60*5;
+    private int tiempoAlgoMM = 0;
     private ArrayList<String> Archivos = new ArrayList<>();
     
     private ArrayList<paquete> listaPaquetes = new ArrayList();
@@ -480,15 +481,21 @@ static final int FONT_SIZE = 11;
     
     public void calculoInicial(int n){
        try{ 
+           
+        for(int i = 0; i < n ; i++){   
+           
             if (this.inicioAlgo == 1){
-                TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.listaPaquetes, this.rutasPaquetes, this.listPack);
+                TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.listaPaquetes, this.rutasPaquetes, this.listPack,this.inicioAlgo);
                 long startTime = System.nanoTime();
                 simulador.start();
                 simulador.join();
                 long endTime = System.nanoTime();
                 long totalTime = endTime - startTime;
+                this.inicioAlgo = simulador.getTiempoAlgo();
             }
             this.inicioAlgo = 0;
+            
+        }    
        }catch(Exception ex){
            System.out.println("error " + ex.getLocalizedMessage());
        }
@@ -515,14 +522,14 @@ static final int FONT_SIZE = 11;
             
             //si esta al inicio de todo, calcular n cantidad de lotes para evitar descuadre
             
-            //calculoInicial(4);
+            calculoInicial(4);
             
             
             
             
             //aplica algoritmo al inicio del dia y luego cada cantidad de tics
             if (this.cantTics == this.algoritmoDelayMinutes || this.horaMundial*60 + this.minutoMundial == 0){
-                TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.listaPaquetes,this.rutasPaquetes,this.listPack); 
+                TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.listaPaquetes,this.rutasPaquetes,this.listPack,this.inicioAlgo); 
                 long startTime = System.nanoTime();
                 simulador.start();
                 simulador.join();
@@ -531,7 +538,7 @@ static final int FONT_SIZE = 11;
                 System.out.println("Tiempo -> " + totalTime);
                 rutasPaquetes=simulador.rutasPaquetes;
                 listaAeropuertos=simulador.listaAeropuertos;
-
+                this.inicioAlgo = simulador.getTiempoAlgo();
                 System.out.println("------>cantidad de rutas  " +  rutasPaquetes.size());
                 //generateRoutes();
                 this.cantTics=0;
