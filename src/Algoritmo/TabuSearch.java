@@ -123,15 +123,15 @@ public class TabuSearch {
         setListPack(paquetesAct);
         int noAsign = 0;
 //        for(int iter=0; iter<1500; iter++){
-        for(int iter=0; iter<listPack.size(); iter++){
+        for(int iter=0; iter<paquetesAct.size(); iter++){
 //        for(int iter=1744; iter<1745; iter++){
 //        for(int iter=1449; iter<1450; iter++){              
-            int origin = getListPack().get(iter).getOriginAirport();
-            int destiny = getListPack().get(iter).getDestinyAirport();
+            int origin = paquetesAct.get(iter).getOriginAirport();
+            int destiny = paquetesAct.get(iter).getDestinyAirport();
 //            getListPack().get(iter).print();
             if(validator(origin, destiny)){
-                String time = String.valueOf(getListPack().get(iter).getOriginHour()) + ":" + 
-                        String.valueOf(getListPack().get(iter).getOriginMin());
+                String time = String.valueOf(paquetesAct.get(iter).getOriginHour()) + ":" + 
+                        String.valueOf(paquetesAct.get(iter).getOriginMin());
                 tabuAlgorithm(origin, destiny, time);
                 ArrayList<Integer> optimal = getRouteOptimal();
                 if(optimal.size() > 0)

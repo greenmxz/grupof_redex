@@ -94,7 +94,8 @@ public class TabuSimulator extends Thread{
             
             
         }
-        System.out.println("cant listPack f = " + this.listPackAlgo.size());
+        System.out.println("cant listPackAlgo f = " + this.listPackAlgo.size());
+        System.out.println("cant listPack f = " + this.listPack.size());
         System.out.println("tiempo ALGO = " + this.tiempoAlgo);
         
         
