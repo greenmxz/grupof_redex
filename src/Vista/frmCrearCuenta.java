@@ -122,18 +122,62 @@ public class frmCrearCuenta extends javax.swing.JDialog {
             }
         }
     }
+    private boolean aceptarPatronContrasena(){
+        int size=contraseña.getText().length();
+        boolean hasNum=false;
+        boolean hasNoChar=false;
+        if(size>=8){
+            for(int i=0;i<size;i++){
+                char car=contraseña.getText().charAt(i);
+                if(car>='0' && car<='9') hasNum=true;
+                else if(car<'A' || car>'z'){                    
+                    hasNoChar=true;
+                    break;
+                }
+            }
+            if(hasNum && !hasNoChar){
+                return true;
+            }
+        }
+        JOptionPane.showMessageDialog(null,"Su contraseña debe componer como mínimo 8 caracteres, "
+                + "incluir mínimo un dígito y que sus letras pertenezcan a caracteres alfabéticos.",
+                "Error de contraseña", JOptionPane.INFORMATION_MESSAGE);
+        return false;
+    }
+  
     private boolean validarDatos(){
         if(this.nombrePersona.getText().length()>0 && this.apellidoPaterno.getText().length()>0 && 
            this.apellidoMaterno.getText().length()>0 && this.fechaNac.getDate()!= null &&
-           this.tipoDocumento.getSelectedItem()!=null && this.numeroDocumento!=null&&
-           this.nombreUsuario.getText().length()>0 && this.contraseña.getText().length()>0&&
-           this.contraseñaRepetir.getText().length()>0 &&
+           this.tipoDocumento.getSelectedItem()!=null && this.numeroDocumento!=null &&
+           this.nombreUsuario.getText().length()>0 && this.contraseña.getText().length()>0 &&
+           this.contraseñaRepetir.getText().length()>0  &&
            this.rol.getSelectedItem()!=null && this.ciudad.getSelectedItem()!=null &&
                 this.direccion.getText().length()>0){
-            return true;
+            if(this.contraseña.getText().equals(this.contraseñaRepetir.getText())==false){
+                JOptionPane.showMessageDialog(null,"Su contraseña debe ser igual a la contraseña repetida."
+                    ,"Error de contraseña",JOptionPane.INFORMATION_MESSAGE);
+                return false;
+               
+            }if(usuarioBL.existeNumDoc(Integer.valueOf(this.numeroDocumento.getText()))){
+                JOptionPane.showMessageDialog(null,"El número de documento ingresado ya existe."
+                    ,"Error de documento",JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }if(usuarioBL.existeUsuario(this.nombreUsuario.getText())){
+                JOptionPane.showMessageDialog(null,"El usuario ingresado ya existe."
+                    ,"Error de usuario",JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+            if(aceptarPatronContrasena()){
+                return true;
+            }
+            
         }else{
-            return false;
+           JOptionPane.showMessageDialog(null,"Por favor, complete todos sus datos."
+                    ,"Error de datos",JOptionPane.INFORMATION_MESSAGE);
+                return false; 
         }
+        return false;
+        
         
     }
     private boolean validarContraseña(){
@@ -529,7 +573,7 @@ public class frmCrearCuenta extends javax.swing.JDialog {
         if (validarDatos()){
             //JOptionPane.showMessageDialog(this, "Todos los datos fueron digitados");
             System.out.println("acaaaa "+ fechaNac.getDate() + " " + fechaNac.getText());
-            if (validarContraseña()){
+            //if (validarContraseña()){
                 usuario usuarioNuevo = new usuario();
                 persona personaNueva = new persona();
                 usuarioNuevo.setCodigo(this.nombreUsuario.getText());
@@ -591,15 +635,15 @@ LocalDate localD = date.toLocalDate();
                 }
                 
 
-            }else{
-                JOptionPane.showMessageDialog(this, "Contraseñas diferentes error");
-            }
+            //}else{
+              //  JOptionPane.showMessageDialog(this, "Contraseñas diferentes error");
+            //}
 
         }else{
             System.out.println("cbo "+this.rol.getSelectedItem());
             Date d = new Date(this.fechaNac.getText());
             System.out.println("date "+d);
-            JOptionPane.showMessageDialog(this, "Debe de llenar todos los datos");
+            //JOptionPane.showMessageDialog(this, "Debe de llenar todos los datos");
         }
         }catch(Exception ex){
             System.out.println("Error " + ex.getMessage());

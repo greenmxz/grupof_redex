@@ -6,6 +6,7 @@
 package Controlador;
 
 import AccesoDatos.usuarioDA;
+import Modelo.Avion;
 import Modelo.usuario;
 import java.util.ArrayList;
 
@@ -46,4 +47,12 @@ public class usuarioBL {
     public boolean cerrarSesion(int i){
         return usuarioDA.cerrarSesion( i);
     }
+    public boolean existeNumDoc(int i){
+        return usuarioDA.existeNumDoc(i);
+    }
+    public boolean existeUsuario(String usuario){
+        return usuarioDA.existeUsuario(usuario);
+    }
+    
+
 }
