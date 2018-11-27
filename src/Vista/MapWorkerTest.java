@@ -73,18 +73,9 @@ public class MapWorkerTest {
     
     private final ArrayList<CoordenadaDouble>origen=new ArrayList<>();
     private final ArrayList<CoordenadaDouble>destino=new ArrayList<>();
-    
-    
-    
-    
+      
     private ArrayList<avionDot> avionesDot = new ArrayList<>();
-    
-    
-    
-    
-    
-    
-    
+
     public int buscaAeropuerto( ArrayList<aeropuerto> listaAe, String codigo){
         try{
             int index = 0;
@@ -159,15 +150,6 @@ public class MapWorkerTest {
                 int h=map.getPreferredSize().height;
                 int w=map.getPreferredSize().width;
                
-                /*
-                double x=(lon+180)*(w/360)*1.419;
-                double latRad = lat*Math.PI/180;
-
-                double mercN = Math.log(Math.tan((Math.PI/4)+(latRad/2)));
-                double y     = (h/2)-(w*mercN/(2*Math.PI))-20;*/
-                
-                //double x=Double.parseDouble(arr[6]);
-                //double y=Double.parseDouble(arr[7]);
                 
                 int index = buscaAeropuerto(this.listaAeropuertos,codigoAe);
                 
@@ -178,10 +160,7 @@ public class MapWorkerTest {
                     this.listaAeropuertos.get(index).setCoordX(coordX);
                     this.listaAeropuertos.get(index).setCoordY(coordY);
                 }
-                //origen.add(new CoordenadaDouble(coordX,coordY));
-                
-                //destino.add(new CoordenadaDouble(0,0));
-                //puntosXY.add(map.getMapPosition(num2, num1));
+
                 c++;
             }            
         }catch (Exception ex){
@@ -208,20 +187,8 @@ public class MapWorkerTest {
             Date fs = v.getFechaSalida();
             Date fl =v.getFechaLlegada();
             dot.setCapacidadActual(0);
-            dot.setCapacidadMax(300);
-            //System.out.println("fs : " + fs);
-            //System.out.println("fl : " + fl);
-              
-            
-            /*
-            dot.setHora_salida(0);
-            dot.setMin_salida(30);
-            
-            dot.setHora_llegada(23);
-            dot.setMin_llegada(40);
-            */
-            
-         
+            dot.setCapacidadMax(300); // verificar si debe setear aca
+                     
             dot.setHora_salida(fs.getHours());
             dot.setMin_salida(fs.getMinutes());
             
@@ -230,8 +197,6 @@ public class MapWorkerTest {
             
             dot.setT_llegada(abs((dot.getHora_llegada()*60 + dot.getMin_llegada()) -(dot.getHora_salida()*60 + dot.getMin_salida())));
             dot.setT_restante(dot.getT_llegada());
-            //System.out.println("salida : "+ dot.getHora_salida() + " " + dot.getMin_salida());
-            //System.out.println("llegada : "+ dot.getHora_llegada() + " " + dot.getMin_llegada());
             
             String codAeOrigen = v.getAeropuertoOrigen();
             String codAeDestino = v.getAeropuertoDestino();
@@ -259,47 +224,6 @@ public class MapWorkerTest {
         }
         
         
-        /*
-        try{
-            String line;
-            BufferedReader reader = new BufferedReader(new FileReader("citiesXYDestino.csv"));
-            while( (line = reader.readLine()) != null){
-                String[] arr = line.split(",");
-                double x = Double.parseDouble(arr[0]);
-                double y = Double.parseDouble(arr[1]);                                            
-                
-                destino.add(new CoordenadaDouble(x,y));
-            }            
-        }catch (Exception ex){
-            System.out.println("Error de lectura");
-        }*/
-        
-        
-//        try{
-//            String line;
-//            
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("citiesXY.csv"));
-//            int size=origen.size();
-//            
-//            for(int i=0;i<size;i++){
-//                String str;
-//                double x=origen.get(i).getX();
-//                double y=origen.get(i).getY();
-//                str = new String(String.valueOf(x)+","+String.valueOf(y));
-//                
-//                
-//                writer.write(str+"\n");
-//            }
-//            writer.close();
-//        }catch (Exception ex){
-//            System.out.println("Error de escritura");
-//        }
-
-
-        
-        
-
-
         map.setDisplayPosition(start, 2);
 
         this.continentes = general.obtenerContinentes();
@@ -312,9 +236,9 @@ public class MapWorkerTest {
             newAero.setCityId(a.getCiudad());
             int idCont = buscarContinente(a.getContinente());
             newAero.setContinent(idCont);
-           newAero.setCountry(a.getPais());
+            newAero.setCountry(a.getPais());
             newAero.setCapMax(a.getCapMax());
-           newAero.setCapActual(a.getCapActual());
+            newAero.setCapActual(a.getCapActual());
             this.listaAeropuertosNew.add(newAero);
             
  
