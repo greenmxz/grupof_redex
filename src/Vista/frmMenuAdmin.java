@@ -84,7 +84,7 @@ public class frmMenuAdmin extends javax.swing.JFrame {
         btnMenu = new javax.swing.JButton();
         panelMenu = new javax.swing.JPanel();
         btnCuentas = new Especial.RSButtonMetro();
-        btnCargaMasiva = new Especial.RSButtonMetro();
+        btnCargaMasiva1 = new Especial.RSButtonMetro();
         panelPrincipal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -140,14 +140,14 @@ public class frmMenuAdmin extends javax.swing.JFrame {
         });
         panelMenu.add(btnCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 140, 30));
 
-        btnCargaMasiva.setText("Carga de datos");
-        btnCargaMasiva.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnCargaMasiva.addActionListener(new java.awt.event.ActionListener() {
+        btnCargaMasiva1.setText("Carga de datos");
+        btnCargaMasiva1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCargaMasiva1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCargaMasivaActionPerformed(evt);
+                btnCargaMasiva1ActionPerformed(evt);
             }
         });
-        panelMenu.add(btnCargaMasiva, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 35, 140, 30));
+        panelMenu.add(btnCargaMasiva1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 35, 140, 30));
 
         panelFondo.add(panelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 150, 500));
 
@@ -197,11 +197,9 @@ public class frmMenuAdmin extends javax.swing.JFrame {
             Animacion.Animacion.mover_derecha(-150, 0, 2, 2, panelMenu);
     }//GEN-LAST:event_btnMenuActionPerformed
 
-    private void btnCargaMasivaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargaMasivaActionPerformed
-        new CambiarPanel(panelPrincipal, new frmCargaDatos());
-        if(this.panelMenu.getX()>-1)
-            Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu); 
-    }//GEN-LAST:event_btnCargaMasivaActionPerformed
+    private void btnCargaMasiva1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargaMasiva1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCargaMasiva1ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -237,7 +235,7 @@ public class frmMenuAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Especial.RSButtonMetro btnCargaMasiva;
+    private Especial.RSButtonMetro btnCargaMasiva1;
     private Especial.RSButtonMetro btnCerrarSesion;
     private Especial.RSButtonMetro btnCuentas;
     private javax.swing.JButton btnMenu;
