@@ -180,6 +180,7 @@ public class usuarioDA {
         }
         
     }
+
      public boolean registrarUsuario(usuario usuario){
          try {
 

@@ -2,8 +2,11 @@ package AccesoDatos;
 
 import Controlador.generalBL;
 import Controlador.aeropuertoBL;
+import Modelo.Avion;
 import Modelo.Vuelo;
 import Modelo.database;
+import Modelo.usuario;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -87,7 +90,35 @@ public class VueloDA {
         }
     }
     
-    
+    public boolean registrarVuelo(Avion a){
+        try{
+            database connect = new database();
+            String query = "insert into avion (codigo,capacidad_maxima,descripcion) values"
+                    + "(?,?,?)";
+            PreparedStatement stmt = connect.getConnection().prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            //manejo de fechas;
+            stmt.setString(1,a.getCodigo());
+            stmt.setInt(2,a.getCapacidadMaxima());
+            stmt.setString(3,a.getDescripcion());
+
+
+            int count = stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            long id = 0 ;
+            while(rs.next()){
+                id = rs.getLong(1);
+                System.out.println("count-> "+id);
+                //Creamos el usuario
+                return true;
+            //stmt.setString(5, usuario.getPersona());
+            }
+            return false;
+        }catch(Exception ex){
+            System.out.println("Error "+ex.getMessage());
+            return true;
+            
+        }
+    }
     public ArrayList<Vuelo> listaVuelos(){
         try{
             
@@ -146,6 +177,122 @@ public class VueloDA {
         
     }
     
+    public ArrayList<Avion> listaAvion(){
+        try{
+            
+            ArrayList<Avion> lVuelo = new ArrayList();
+            database connect = new database();
+            String query = "select * from avion";
+            System.out.println("query => " + query);
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            int i=1;
+            while (rs.next( )){
+                Avion avion = new Avion();
+                avion.setId(rs.getInt("id"));
+                avion.setCodigo(rs.getString("codigo"));
+                avion.setDescripcion(rs.getString("descripcion"));
+                avion.setCapacidadMaxima(rs.getInt("capacidad_maxima"));
+
+                
+                lVuelo.add(avion);
+                i++;
+            }
+            connect.closeConnection(); 
+            System.out.println("Cantidad de resultados = " + lVuelo.size());
+            
+            return lVuelo;
+        }catch(Exception e){
+            System.out.println("ERROR listaVuelos "+e.getMessage());
+            return null;
+        }
+        
+    }
+    
+    public boolean borrarVuelo(int i){
+        try {
+            database connect = new database();
+            String queryUsuario="delete from avion where id = ?"; 
+            PreparedStatement stmt2 = connect.getConnection().prepareStatement(queryUsuario);
+            stmt2.setInt(1,i);
+            stmt2.executeUpdate();
+            System.out.println("Se regristro el usuario correctamente");
+            System.out.println("Se registro el usuario");
+            return true;
+            
+
+            
+         }catch(Exception ex){
+             System.out.println("ERROR "+ex.getMessage());
+             return false;
+         }
+    }
+    
+            
+    public Avion obtenerInfoVuelo(int id){
+        try{
+            System.out.println("AQUI EMT "+id);
+            database connection = new database();
+             String query="select * from avion where id = ?;";
+            //Statement stmt = connection.getConnection().createStatement();
+            PreparedStatement stmt = connection.getConnection().prepareStatement(query);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            //ArrayList<usuario> lista = new ArrayList<>();
+            Avion avion = new Avion();
+            while (rs.next( )){
+                
+                
+                avion.setId(rs.getInt("id"));
+                avion.setCodigo(rs.getString("codigo"));
+                avion.setDescripcion(rs.getString("descripcion"));
+                avion.setCapacidadMaxima(rs.getInt("capacidad_maxima"));
+
+                //lista.add(usuario);
+            }
+
+            connection.getConnection().close();
+            return avion;
+        }catch(Exception ex){
+            System.out.println("Error: "+ex.getMessage());
+            return null;
+        }
+    }
+    
+    public boolean modificarVuelo(Avion v){
+         try {
+            database connect = new database();
+            String queryPersona="update avion   set capacidad_maxima = ? , codigo = ?, "
+                    + " descripcion= ? "
+                    + "where id = ?";
+
+            
+            //Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            PreparedStatement stmt = connect.getConnection().prepareStatement(queryPersona);
+            
+            //manejo de fechas;
+            
+           
+             //stmt.registerOutParameter("id",java.sql.Types.INTEGER );
+            stmt.setInt(1,v.getCapacidadMaxima());
+            stmt.setString(2,v.getCodigo());
+            stmt.setString(3,v.getDescripcion());
+            stmt.setInt(4,v.getId());
+            int count = stmt.executeUpdate();
+            
+
+           
+            
+            return true;
+            
+
+            
+         }catch(Exception ex){
+             System.out.println(ex.getMessage());
+             return false;
+         }
+         
+     }
     
     
 }
