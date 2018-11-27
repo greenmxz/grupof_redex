@@ -165,14 +165,14 @@ static final int FONT_SIZE = 11;
         //int sizeList=destiny.size();
         Font font = new Font("Arial", Font.PLAIN, toPixels(FONT_SIZE));
         g2.setFont(font);
-        if(horaMundial>0 && horaMundial<10)
-            g2.drawString("0"+String.valueOf(horaMundial), 700, 80);
+        if(horaMundial>=0 && horaMundial<10)
+            g2.drawString("0"+String.valueOf(horaMundial), 800, 80);
         else
-            g2.drawString(String.valueOf(horaMundial), 700, 80);
-        if(minutoMundial>0 && minutoMundial<10)
-            g2.drawString(" :0"+String.valueOf(minutoMundial), 732, 80);
+            g2.drawString(String.valueOf(horaMundial), 800, 80);
+        if(minutoMundial>=0 && minutoMundial<10)
+            g2.drawString(" : 0"+String.valueOf(minutoMundial), 832, 80);
         else
-            g2.drawString(" :"+String.valueOf(minutoMundial), 732, 80);
+            g2.drawString(" : "+String.valueOf(minutoMundial), 832, 80);
         
         
         //this.calendar.add(this.calendar.DATE,1);
@@ -182,7 +182,7 @@ static final int FONT_SIZE = 11;
         String newMonth = Integer.toString(diaNuevo.getMonth());
         String newDay = Integer.toString(diaNuevo.getDate());
         
-        g2.drawString(" " + newDay + "/" + newMonth + "/" +newYear,700,35);
+        g2.drawString(" " + newDay + "/" + newMonth + "/" +newYear,780,35);
         
         //g2.fill(new Shape("Holamundo"));
         ArrayList<Shape>arrayEllipse=new ArrayList<>();
