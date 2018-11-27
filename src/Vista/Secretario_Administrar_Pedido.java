@@ -2,8 +2,10 @@ package Vista;
 
 import Controlador.AdministrarClienteBL;
 import Controlador.AdministrarPedidoBL;
+import Controlador.VueloBL;
 import Controlador.aeropuertoBL;
 import Controlador.generalBL;
+import Modelo.Vuelo;
 import Modelo.aeropuerto;
 import Modelo.cliente;
 import Modelo.estado;
@@ -19,8 +21,10 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     private AdministrarPedidoBL controlador_pedido = new AdministrarPedidoBL();
     private aeropuertoBL controlador_aeropuerto = new aeropuertoBL();
     private AdministrarClienteBL controlador_cliente = new AdministrarClienteBL();
+    private VueloBL controlador_vuelo=new VueloBL();
     ArrayList<aeropuerto> listAero;
     ArrayList<estado> listEstado;
+    ArrayList<Vuelo> listVuelos;
     private javax.swing.JFrame parent;
     
     public Secretario_Administrar_Pedido(javax.swing.JFrame parent) {
@@ -34,6 +38,7 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
         String [] rol = {"Secre"};
         ArrayList<aeropuerto> listAero = controlador_aeropuerto.listaAeropuertos();
         ArrayList<estado> listEstado = general.listaEstados("estado_pedido");
+        ArrayList<Vuelo> listVuelos = controlador_vuelo.listaVuelos();
         this.listAero = listAero;
         this.listEstado = listEstado;
         ArrayList<pedido> lista_pedidos = controlador_pedido.listarPedidos("","","","","","","","");
@@ -125,6 +130,8 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
         label4 = new java.awt.Label();
         dateLlegada = new com.toedter.calendar.JDateChooser();
         btnLimpiar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtVuelo = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
         panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -187,7 +194,7 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
         label2.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label2.setText("Codigo :");
         panelFiltrado.add(label2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, -1));
-        panelFiltrado.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 30, 100, -1));
+        panelFiltrado.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 110, -1));
 
         label3.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label3.setText("Fecha de pedido entre:");
@@ -199,14 +206,14 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
         panelFiltrado.add(label5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, -1, -1));
 
         cboOrigen.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        panelFiltrado.add(cboOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 130, -1));
+        panelFiltrado.add(cboOrigen, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 130, -1));
 
         label10.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label10.setText("Aeropuerto Destino :");
         panelFiltrado.add(label10, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 60, -1, -1));
 
         cboDestino.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        panelFiltrado.add(cboDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 60, 130, -1));
+        panelFiltrado.add(cboDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 60, 130, -1));
 
         label11.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label11.setText("No doc. identidad Emisor :");
@@ -216,14 +223,14 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
         label12.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label12.setText("No doc. identidad Receptor :");
         panelFiltrado.add(label12, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 90, -1, -1));
-        panelFiltrado.add(txtDniReceptor, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, 110, -1));
+        panelFiltrado.add(txtDniReceptor, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 90, 110, -1));
 
         label13.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label13.setText("Estado : ");
         panelFiltrado.add(label13, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, -1));
 
         cboEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        panelFiltrado.add(cboEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 110, -1));
+        panelFiltrado.add(cboEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, 110, -1));
 
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -246,6 +253,10 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
         });
         panelFiltrado.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 170, 160, -1));
 
+        jLabel3.setText("ID Vuelo:");
+        panelFiltrado.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, -1, -1));
+        panelFiltrado.add(txtVuelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 120, 110, -1));
+
         panelFondo.add(panelFiltrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 722, 210));
 
         jLabel1.setText("Resultado de filtrado");
@@ -266,7 +277,7 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         try{
            String codigo= "", id_aeropuerto_origen= "", id_aeropuerto_destino= "", id_cliente_emisor= "", id_cliente_receptor= "", id_estado= "", fecha_i= "", fecha_f = "";
-
+           String id_vuelo= "";
            cliente cliente_emisor = null, cliente_receptor = null;
            
            if (!txtCodigo.getText().equals("")){
@@ -313,6 +324,8 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
             //DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) jComboBox3.getModel();           
             id_estado = Integer.toString(this.listEstado.get(index).getId_tabla_general());
             
+            id_vuelo = controlador_vuelo.obtenerInfoVuelo(Integer.valueOf(txtVuelo.getText())).getCodigo();
+            //FALTA VUELO CON PAQUETES
             ArrayList<pedido> lista_pedidos = controlador_pedido.listarPedidos(codigo, id_aeropuerto_origen, id_aeropuerto_destino, id_cliente_emisor, id_cliente_receptor, id_estado, fecha_i, fecha_f);
 
             inicializar_Tabla(lista_pedidos);
@@ -397,6 +410,7 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     private com.toedter.calendar.JDateChooser dateSalida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.Label label10;
     private java.awt.Label label11;
@@ -412,5 +426,6 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtDniEmisor;
     private javax.swing.JTextField txtDniReceptor;
+    private javax.swing.JTextField txtVuelo;
     // End of variables declaration//GEN-END:variables
 }

@@ -39,7 +39,7 @@ public class frmBuscarVuelo extends javax.swing.JDialog {
         lstVuelos = controlador.listaVuelos();
         DefaultTableModel model = (DefaultTableModel)tblVuelo.getModel();
         for(int i=0; i<lstVuelos.size(); i++){
-            Object[] obj = new Object[3];
+            Object[] obj = new Object[5];
             obj[0] = lstVuelos.get(i).getCodigo();
             obj[1] = lstVuelos.get(i).getAeropuertoOrigen() + " -> " + lstVuelos.get(i).getAeropuertoDestino();
             obj[2] = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(lstVuelos.get(i).getFechaSalida());
@@ -162,9 +162,9 @@ public class frmBuscarVuelo extends javax.swing.JDialog {
         }
         else filter = lstVuelos;
         for(int i=0; i<filter.size(); i++){
-            Object[] obj = new Object[3];
+            Object[] obj = new Object[5];
             obj[0] = filter.get(i).getCodigo();
-            obj[1] = filter.get(i).getAeropuertoDestino() + " -> " + filter.get(i).getAeropuertoOrigen();
+            obj[1] = filter.get(i).getAeropuertoOrigen() + " -> " + filter.get(i).getAeropuertoDestino();
             obj[2] = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(filter.get(i).getFechaSalida());
             obj[3] = lstVuelos.get(i).getCapActual();
             obj[4] = lstVuelos.get(i).getCapMax();

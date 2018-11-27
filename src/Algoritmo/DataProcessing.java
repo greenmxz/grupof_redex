@@ -335,6 +335,7 @@ public class DataProcessing {
     public int getTrackTime(Vuelo evalFlight){
         int timeOrigin = evalFlight.getOriginHour()*60 + evalFlight.getOriginMin();
         int timeDestiny = evalFlight.getDestinyHour()*60 + evalFlight.getDestinyMin();
+//        System.out.println(String.valueOf(timeOrigin) + " " + String.valueOf(timeDestiny));
         if(timeDestiny > timeOrigin)
             return (timeDestiny - timeOrigin);
         else
@@ -344,6 +345,7 @@ public class DataProcessing {
     public int getWaitTime(Vuelo currentFlight, Vuelo pastFlight){
         int timeDeparture = currentFlight.getOriginHour()*60 + currentFlight.getOriginMin(); //07
         int timeArrival = pastFlight.getDestinyHour()*60 + pastFlight.getDestinyMin();  //23
+//        System.out.println(String.valueOf(timeDeparture) + " " + String.valueOf(timeArrival));
         if(timeDeparture > timeArrival)
             return (timeDeparture - timeArrival);
         else
