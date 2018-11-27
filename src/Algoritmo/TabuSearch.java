@@ -116,7 +116,7 @@ public class TabuSearch {
         ArrayList<String> aux = new ArrayList<String>();
         numAirport = getListAirport().size();
         capVuelos = new ArrayList<Integer>();
-        for(int i=0; i<listFlight.size(); i++)
+        for(int i=0; i<paquetesAct.size(); i++)
             capVuelos.add(0);
 //        for(int i=0; i<listFlight.size(); i++)
 //            listFlight.get(i).print();
@@ -137,23 +137,30 @@ public class TabuSearch {
                 if(optimal.size() > 0)
                     for(int i : optimal)
                         capVuelos.set(i-1, capVuelos.get(i-1)+1);
+                
                 String solution = generateTabuString(optimal);
+  
 //                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
                 if(solution.equals("")){
                     noAsign++;
 //                    System.out.println(iter);
+                }else{// si hay solucion
+                    paquetesAct.get(iter).setRuta(solution);
+                    paquetesAct.get(iter).setEstado(0); // paquete no disponible
                 }
-//                if(solution.equals("")) System.out.println(iter);
+//              if(solution.equals("")) System.out.println(iter);
                 aux.add(solution);
             }else{
                 System.out.println("Some airport doesn't exist!");
             }
         }
         System.out.println("Vacíos: " + String.valueOf(noAsign));
+        /*
         System.out.println("Estado: ");
         for(int i=0; i<capVuelos.size(); i++)
             if(capVuelos.get(i) > 0)
                 System.out.println(String.valueOf(i+1) + " : " + capVuelos.get(i));
+        */
         return aux;
     }
     
@@ -431,6 +438,7 @@ public class TabuSearch {
             }
         }catch(Exception e){
             System.out.println("Error abc" + e.getMessage());
+            e.printStackTrace();
             return originalRoute;
         }
 //        System.out.print("Llegué con ");

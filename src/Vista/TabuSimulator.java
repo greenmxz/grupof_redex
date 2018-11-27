@@ -6,6 +6,7 @@
 package Vista;
 
 import Algoritmo.Aeropuerto;
+import Algoritmo.Paquete;
 import Algoritmo.TabuSearch;
 import Modelo.paquete;
 import java.text.DateFormat;
@@ -28,7 +29,7 @@ public class TabuSimulator extends Thread{
     private TabuSearch tabu;
     private ArrayList<TabuSearch>eliminenlo;
     private ArrayList<paquete> listaPaquetes = new ArrayList();
-    public ArrayList<String> rutasPaquetes = new ArrayList();
+    public ArrayList<Algoritmo.Paquete> rutasPaquetesAlgo = new ArrayList();
     
     public ArrayList<Aeropuerto> listaAeropuertos = new ArrayList<>();
     private ArrayList<Algoritmo.Vuelo> listaVuelos = new ArrayList<>();
@@ -38,7 +39,7 @@ public class TabuSimulator extends Thread{
     private int tiempoAlgo; 
     
     public TabuSimulator(int hora,int min,Date fecha,TabuSearch tabu,ArrayList<Aeropuerto> listaAeropuertos,ArrayList<Algoritmo.Vuelo> listaVuelos,
-            ArrayList<paquete> listaPaquetes,ArrayList<String> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
+            ArrayList<paquete> listaPaquetes,ArrayList<Algoritmo.Paquete> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
         this.horaMundial=hora;
         this.minutoMundial=min;
         this.fechaActual=fecha;
@@ -46,14 +47,14 @@ public class TabuSimulator extends Thread{
         this.listaAeropuertos=listaAeropuertos;
         this.listaVuelos=listaVuelos;
         this.listaPaquetes=listaPaquetes;
-        this.rutasPaquetes=rutasPaquetes;
+        this.rutasPaquetesAlgo=rutasPaquetes;
         this.listPack=listPack;
         this.tiempoAlgo = tiempoAlgo;
         this.algoritmoDelayMinutes = algoritmoDelayMinutes;
     }
     void seleccionPacksAlgo(){
         this.listPackAlgo = new ArrayList();
-        System.out.println("cant listPack = " + this.listPackAlgo.size());
+        System.out.println("cant listPack = " + this.listPack.size());
         
         int timeFin = tiempoAlgo + this.algoritmoDelayMinutes; // TOPE DE BLOQUE
         int timeIni = tiempoAlgo; // INICIO DE BLOQUE
@@ -120,10 +121,17 @@ public class TabuSimulator extends Thread{
                 //MUTEX
                 mutex.acquire();
                 System.out.println("ENTRO AL HILO");
-                ArrayList<String> rutasPacksTrabajados = this.tabu.executeVCRPTabu(this.listPackAlgo);
-
-                if (rutasPacksTrabajados.size() > 0){
-                    this.rutasPaquetes.addAll(rutasPacksTrabajados);
+                
+                //OBTIENE RUTAS
+                this.tabu.executeVCRPTabu(this.listPackAlgo);
+                
+                
+            //if (this.listPackAlgo.size() > 0){
+                    //this.rutasPaquetesAlgo.addAll(rutasPacksTrabajados);
+                    
+                    //this.rutasPaquetesAlgo=this.listPackAlgo;
+                    
+                    /*
                     //se llenan los almacenes con los paquetes nuevos
                     for (String ruta : rutasPacksTrabajados){
                         String[] ids = ruta.split("-");
@@ -135,8 +143,9 @@ public class TabuSimulator extends Thread{
                             this.listaAeropuertos.get(idAero-1).setCapActual(this.listaAeropuertos.get(idAero-1).getCapActual() + 1);
                         }
 
-                    }
-                }
+                    }   */
+              //  }
+                
                 mutex.release();
                 //MUTEX OFF
             }
@@ -156,6 +165,14 @@ public class TabuSimulator extends Thread{
 
     public void setTiempoAlgo(int tiempoAlgo) {
         this.tiempoAlgo = tiempoAlgo;
+    }
+
+    public ArrayList<Paquete> getListPackAlgo() {
+        return listPackAlgo;
+    }
+
+    public void setListPackAlgo(ArrayList<Paquete> listPackAlgo) {
+        this.listPackAlgo = listPackAlgo;
     }
     
 }
