@@ -35,9 +35,12 @@ public class TabuSimulator extends Thread{
 
     private ArrayList<Algoritmo.Paquete> listPack = new ArrayList<>();
     private ArrayList<Algoritmo.Paquete> listPackAlgo = new ArrayList<>();
+    private int tiempoAlgo; 
     
     public TabuSimulator(int hora,int min,Date fecha,TabuSearch tabu,ArrayList<Aeropuerto> listaAeropuertos,ArrayList<Algoritmo.Vuelo> listaVuelos,
-            ArrayList<String> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack){
+
+            ArrayList<String> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo){
+
         this.horaMundial=hora;
         this.minutoMundial=min;
         this.fechaActual=fecha;
@@ -47,12 +50,14 @@ public class TabuSimulator extends Thread{
         
         this.rutasPaquetes=rutasPaquetes;
         this.listPack=listPack;
+        this.tiempoAlgo = tiempoAlgo;
     }
     void seleccionPacksAlgo(){
-        this.listPackAlgo.clear();
+        this.listPackAlgo = new ArrayList();
+        System.out.println("cant listPack = " + this.listPackAlgo.size());
         //hora max a partir de hora mundial
-        int timeMM = this.horaMundial * 60 + this.minutoMundial + this.algoritmoDelayMinutes;
-        int timeANT = this.horaMundial * 60 + this.minutoMundial - this.algoritmoDelayMinutes;
+        int timeMM = tiempoAlgo + this.algoritmoDelayMinutes;
+        int timeANT = tiempoAlgo;
         if (timeANT < 0) timeANT = 0;
         
         
@@ -69,13 +74,18 @@ public class TabuSimulator extends Thread{
             if (dateFormat.format(fechaActual).compareTo(dateFormat.format(fechaPack))==0){//pertenecen al dia de hoy
                 int timePack = this.listPack.get(i).getOriginHour()*60 + this.listPack.get(i).getOriginMin();
                 if (timePack <= timeMM && timePack > timeANT){
-                    this.listPackAlgo.add(this.listPack.get(i));
+                    this.listPackAlgo.add(this.listPack.get(i)); // añade lista pack a procesar
+                    this.listPack.remove(i); // quita pack de lista original
                     //System.out.println(this.listPack.get(i).getOriginAirport() + "->" + this.listPack.get(i).getDestinyAirport());
                 }
             }
             
             
         }
+        System.out.println("cant listPack f = " + this.listPackAlgo.size());
+        System.out.println("tiempo ALGO = " + this.tiempoAlgo);
+        this.tiempoAlgo += algoritmoDelayMinutes;
+        if (this.tiempoAlgo >= 24*60) this.tiempoAlgo = 0;
         
     }
     public void run(){   
@@ -117,6 +127,14 @@ public class TabuSimulator extends Thread{
 
             
         
+    }
+
+    public int getTiempoAlgo() {
+        return tiempoAlgo;
+    }
+
+    public void setTiempoAlgo(int tiempoAlgo) {
+        this.tiempoAlgo = tiempoAlgo;
     }
     
 }
