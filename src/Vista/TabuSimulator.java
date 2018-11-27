@@ -23,7 +23,7 @@ public class TabuSimulator extends Thread{
     private static Semaphore mutex = new Semaphore(1);
     private int horaMundial=0;
     private int minutoMundial=0;
-    private int algoritmoDelayMinutes = 60*5;
+    private int algoritmoDelayMinutes;
     private Date fechaActual;
     private TabuSearch tabu;
     private ArrayList<TabuSearch>eliminenlo;
@@ -38,7 +38,7 @@ public class TabuSimulator extends Thread{
     private int tiempoAlgo; 
     
     public TabuSimulator(int hora,int min,Date fecha,TabuSearch tabu,ArrayList<Aeropuerto> listaAeropuertos,ArrayList<Algoritmo.Vuelo> listaVuelos,
-            ArrayList<paquete> listaPaquetes,ArrayList<String> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo){
+            ArrayList<paquete> listaPaquetes,ArrayList<String> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
         this.horaMundial=hora;
         this.minutoMundial=min;
         this.fechaActual=fecha;
@@ -49,15 +49,17 @@ public class TabuSimulator extends Thread{
         this.rutasPaquetes=rutasPaquetes;
         this.listPack=listPack;
         this.tiempoAlgo = tiempoAlgo;
+        this.algoritmoDelayMinutes = algoritmoDelayMinutes;
     }
     void seleccionPacksAlgo(){
         this.listPackAlgo = new ArrayList();
         System.out.println("cant listPack = " + this.listPackAlgo.size());
-        //hora max a partir de hora mundial
-        int timeMM = tiempoAlgo + this.algoritmoDelayMinutes;
-        int timeANT = tiempoAlgo;
-        if (timeANT < 0) timeANT = 0;
         
+        int timeFin = tiempoAlgo + this.algoritmoDelayMinutes; // TOPE DE BLOQUE
+        int timeIni = tiempoAlgo; // INICIO DE BLOQUE
+        
+        System.out.println("bloque -- t ini " + timeIni);
+        System.out.println("bloque -- t fin " + timeFin);
         
         
         for(int i = 0; i < this.listPack.size(); i++){
@@ -68,12 +70,23 @@ public class TabuSimulator extends Thread{
             calendarioPack.set(this.listPack.get(i).getOriginYear(),this.listPack.get(i).getOriginMonth()-1,this.listPack.get(i).getOriginDay());
             
             Date fechaPack = calendarioPack.getTime();
-                       
-            if (dateFormat.format(fechaActual).compareTo(dateFormat.format(fechaPack))==0){//pertenecen al dia de hoy
+            
+            //vertifica si los packs pertenecen al dia de hoy           
+            if (dateFormat.format(fechaActual).compareTo(dateFormat.format(fechaPack))==0){
+                //tiempo de llegada del pack
                 int timePack = this.listPack.get(i).getOriginHour()*60 + this.listPack.get(i).getOriginMin();
-                if (timePack <= timeMM && timePack > timeANT){
-                    this.listPackAlgo.add(this.listPack.get(i)); // añade lista pack a procesar
-                    this.listPack.remove(i); // quita pack de lista original
+                /* 
+                System.out.println("bloque -- t ini " + timeIni);
+                System.out.println("bloque -- t fin " + timeFin);
+                System.out.println("bloque -- t pack " + timePack);
+                */
+                //si se encuentra en el rango
+                if (timePack < timeFin && timePack >= timeIni){
+                    //System.out.println("bloque -- se añade pack");
+                    // añade lista pack a procesar
+                    this.listPackAlgo.add(this.listPack.get(i));
+                    // quita pack de lista original
+                    this.listPack.remove(i); 
                     //System.out.println(this.listPack.get(i).getOriginAirport() + "->" + this.listPack.get(i).getDestinyAirport());
                 }
             }
@@ -82,8 +95,18 @@ public class TabuSimulator extends Thread{
         }
         System.out.println("cant listPack f = " + this.listPackAlgo.size());
         System.out.println("tiempo ALGO = " + this.tiempoAlgo);
-        this.tiempoAlgo += algoritmoDelayMinutes;
-        if (this.tiempoAlgo >= 24*60) this.tiempoAlgo = 0;
+        
+        
+        
+        if (this.tiempoAlgo < 24*60) this.tiempoAlgo += algoritmoDelayMinutes;
+        else
+            if (this.tiempoAlgo >= 24*60) this.tiempoAlgo = 0;
+        
+        
+        
+        
+            
+        
         
     }
     public void run(){   

@@ -56,7 +56,7 @@ static final int FONT_SIZE = 11;
     private int cantTics = 0;
     private int inicio = 0;
     private int inicioAlgo = 1;
-    private int algoritmoDelayMinutes = 60*5;
+    private int algoritmoDelayMinutes = 60*2;
     private int tiempoAlgoMM = 0;
     private ArrayList<String> Archivos = new ArrayList<>();
     
@@ -287,8 +287,8 @@ static final int FONT_SIZE = 11;
 
                     
                 }
-                if (v.getCapacidadActual() > 0)
-                    System.out.println(">>>>>>>>>>> vuelo salida " + v.getId() + " -- " + v.getCapacidadActual());    
+                //if (v.getCapacidadActual() > 0)
+                    //System.out.println(">>>>>>>>>>> vuelo salida " + v.getId() + " -- " + v.getCapacidadActual());    
                 if (v.getCapacidadActual() > v.getCapacidadMax()){
                     System.out.println("------------ COLAPSO POR VUELO----vuelo  " + v.getId() + "  lleno");
                 }
@@ -346,8 +346,8 @@ static final int FONT_SIZE = 11;
         
         //si ya es la hora de llegada se situa en el destino
         if (this.horaMundial*60 + this.minutoMundial == v.getHora_llegada()*60 + v.getMin_llegada()){
-            if (v.getCapacidadActual() > 0)
-                System.out.println(">>>>>>>>>>> vuelo llega " + v.getId() + " -- " + v.getCapacidadActual());
+            //if (v.getCapacidadActual() > 0)
+                //System.out.println(">>>>>>>>>>> vuelo llega " + v.getId() + " -- " + v.getCapacidadActual());
             v.getActual().setX(v.getDestino().getX());
             v.getActual().setY(v.getDestino().getY());
             // EL AVION LLEGA Y VACIA ALMACEN Y DEJA PAQUETES EN EL AEROPUERTO
@@ -369,7 +369,7 @@ static final int FONT_SIZE = 11;
                 }
             }
             v.setCapacidadActual(0);
-            System.out.println("<<<<<<<<<<<<< vuelo vacia" + v.getId() + " -- " + v.getCapacidadActual());
+            //System.out.println("<<<<<<<<<<<<< vuelo vacia" + v.getId() + " -- " + v.getCapacidadActual());
         }
         
     }
@@ -479,25 +479,28 @@ static final int FONT_SIZE = 11;
 //        }
 //    }
     
+    
+    //REALIZAR UNA CANTIDAD N DE BLOQUES DE PACKS ANTES DE EJECUTAR EL SIMULADOR
     public void calculoInicial(int n){
        try{ 
            
         for(int i = 0; i < n ; i++){   
            
             if (this.inicioAlgo == 1){
-                TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.listaPaquetes, this.rutasPaquetes, this.listPack,this.inicioAlgo);
+                TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.listaPaquetes, this.rutasPaquetes, this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes);
                 long startTime = System.nanoTime();
                 simulador.start();
                 simulador.join();
                 long endTime = System.nanoTime();
                 long totalTime = endTime - startTime;
-                this.inicioAlgo = simulador.getTiempoAlgo();
+                this.tiempoAlgoMM = simulador.getTiempoAlgo();
             }
-            this.inicioAlgo = 0;
             
-        }    
+            
+        }
+        this.inicioAlgo = 0;
        }catch(Exception ex){
-           System.out.println("error " + ex.getLocalizedMessage());
+           System.out.println("error calculoInicial " + ex.getLocalizedMessage());
        }
     }
     
@@ -522,23 +525,25 @@ static final int FONT_SIZE = 11;
             
             //si esta al inicio de todo, calcular n cantidad de lotes para evitar descuadre
             
-            calculoInicial(4);
+            calculoInicial(4); // OBTIENE RUTAS DE 4 BLOQUES PACKS AL INICIO
             
             
             
             
             //aplica algoritmo al inicio del dia y luego cada cantidad de tics
-            if (this.cantTics == this.algoritmoDelayMinutes || this.horaMundial*60 + this.minutoMundial == 0){
-                TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.listaPaquetes,this.rutasPaquetes,this.listPack,this.inicioAlgo); 
+            if (this.cantTics == this.algoritmoDelayMinutes){
+                TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.listaPaquetes,this.rutasPaquetes,this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes); 
+                
                 long startTime = System.nanoTime();
                 simulador.start();
                 simulador.join();
                 long endTime = System.nanoTime();
                 long  totalTime = endTime - startTime;
                 System.out.println("Tiempo -> " + totalTime);
+                
                 rutasPaquetes=simulador.rutasPaquetes;
                 listaAeropuertos=simulador.listaAeropuertos;
-                this.inicioAlgo = simulador.getTiempoAlgo();
+                this.tiempoAlgoMM = simulador.getTiempoAlgo();
                 System.out.println("------>cantidad de rutas  " +  rutasPaquetes.size());
                 //generateRoutes();
                 this.cantTics=0;
