@@ -38,19 +38,27 @@ import Controlador.VueloBL;
 import Controlador.generalBL;
 import Modelo.Vuelo;
 import Modelo.continente;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import static java.lang.Math.abs;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 import java.util.Date;
 import java.util.*;
+import javax.imageio.ImageIO;
+
 
 /**
  *
@@ -75,6 +83,29 @@ public class MapWorkerTest {
     private final ArrayList<CoordenadaDouble>destino=new ArrayList<>();
       
     private ArrayList<avionDot> avionesDot = new ArrayList<>();
+
+    
+    
+    
+    static final String HELP =
+    "Type Ctrl-0 to get a screenshot of the current GUI.\n" +
+    "The screenshot will be saved to the current " +
+    "directory as 'screenshot.png'.";
+
+    public static BufferedImage getScreenShot(Component component) {
+
+        BufferedImage image = new BufferedImage(component.getWidth(),component.getHeight(),BufferedImage.TYPE_INT_RGB);
+        // call the Component's paint method, using
+        // the Graphics object of the image.
+        component.paint( image.getGraphics() ); // alternately use .printAll(..)
+        return image;
+    }
+    public static void getSaveSnapShot(Component component, String fileName) throws Exception {
+        BufferedImage img = getScreenShot(component);
+        // write the captured image as a PNG
+        ImageIO.write(img, "png", new File(fileName));
+    }
+    
 
     public int buscaAeropuerto( ArrayList<aeropuerto> listaAe, String codigo){
         try{
@@ -102,6 +133,8 @@ public class MapWorkerTest {
         JFrame f = new JFrame("MapWorker");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+      
+
         JMapViewer map = new JMapViewer() {
         
             @Override
@@ -221,6 +254,7 @@ public class MapWorkerTest {
                 dot.setDestino(new CoordenadaDouble(x,y));
             }
             this.avionesDot.add(dot);
+            
         }
         
         
@@ -238,7 +272,12 @@ public class MapWorkerTest {
             newAero.setContinent(idCont);
             newAero.setCountry(a.getPais());
             newAero.setCapMax(a.getCapMax());
-            newAero.setCapActual(a.getCapActual());
+
+           newAero.setCapActual(a.getCapActual());
+           newAero.setCoordX(a.getCoordX());
+           newAero.setCoordY(a.getCoordY());
+           newAero.setColor("verde");
+
             this.listaAeropuertosNew.add(newAero);
             
  
@@ -272,6 +311,9 @@ public class MapWorkerTest {
         button4.setLocation(900,900);
         button4.setText("Reanudar");
         
+        JButton button5 = new JButton();
+        button5.setLocation(900,900);
+        button5.setText("Capturar Imagen");
         
         JLabel label = new JLabel();
         label.setText("Velocidad");
@@ -369,9 +411,33 @@ public class MapWorkerTest {
                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
-
         });
         
+        
+        button5.addActionListener(new ActionListener() {//Disminuir velocidad
+            
+            private void button5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+                // BUCAR AEROPUERTO ORIGEN
+                
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    //String fecha=dateFormat.format(cal);
+                    //System.out.println(fecha);
+                    getSaveSnapShot(f,"captures\\"+dtf.format(now)+".png");
+                }catch(Exception exp){
+                    System.out.println("Error de captura");
+                }
+                  
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+        });
         /*
                 System.out.println("AQUI AQUI");
         velocidad*=2;*/
@@ -383,7 +449,7 @@ public class MapWorkerTest {
         ilustradorAvion.add(button3);
         ilustradorAvion.add(button4);
         ilustradorAvion.add(label2);
-        
+        ilustradorAvion.add(button5);
         
         ilustradorAvion.addMouseListener(new MouseListener() {//Disminuir velocidad
             

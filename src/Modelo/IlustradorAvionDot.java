@@ -21,12 +21,12 @@ import static javax.swing.text.html.CSS.Attribute.FONT_SIZE;
 import java.awt.Color;
 import javafx.scene.Group;
 import java.awt.Shape;
-import java.awt.geom.Area;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import Algoritmo.*;
 import Vista.TabuSimulator;
+import java.awt.geom.Rectangle2D;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -60,8 +60,12 @@ static final int FONT_SIZE = 11;
     private int tiempoAlgoMM = 0;
     private ArrayList<String> Archivos = new ArrayList<>();
     
-    private ArrayList<paquete> listaPaquetes = new ArrayList();
+
+   
+    //private ArrayList<String> rutasPaquetes = new ArrayList();
+
     private ArrayList<Algoritmo.Paquete> rutasPaquetesAlgo = new ArrayList();
+
     
     private ArrayList<Aeropuerto> listaAeropuertos = new ArrayList<>();
     private ArrayList<Algoritmo.Vuelo> listaVuelos = new ArrayList<>();
@@ -165,14 +169,14 @@ static final int FONT_SIZE = 11;
         //int sizeList=destiny.size();
         Font font = new Font("Arial", Font.PLAIN, toPixels(FONT_SIZE));
         g2.setFont(font);
-        if(horaMundial>0 && horaMundial<10)
-            g2.drawString("0"+String.valueOf(horaMundial), 700, 80);
+        if(horaMundial>=0 && horaMundial<10)
+            g2.drawString("0"+String.valueOf(horaMundial), 800, 80);
         else
-            g2.drawString(String.valueOf(horaMundial), 700, 80);
-        if(minutoMundial>0 && minutoMundial<10)
-            g2.drawString(" :0"+String.valueOf(minutoMundial), 732, 80);
+            g2.drawString(String.valueOf(horaMundial), 800, 80);
+        if(minutoMundial>=0 && minutoMundial<10)
+            g2.drawString(" : 0"+String.valueOf(minutoMundial), 832, 80);
         else
-            g2.drawString(" :"+String.valueOf(minutoMundial), 732, 80);
+            g2.drawString(" : "+String.valueOf(minutoMundial), 832, 80);
         
         
         //this.calendar.add(this.calendar.DATE,1);
@@ -182,10 +186,34 @@ static final int FONT_SIZE = 11;
         String newMonth = Integer.toString(diaNuevo.getMonth());
         String newDay = Integer.toString(diaNuevo.getDate());
         
-        g2.drawString(" " + newDay + "/" + newMonth + "/" +newYear,700,35);
+        g2.drawString(" " + newDay + "/" + newMonth + "/" +newYear,780,35);
         
         //g2.fill(new Shape("Holamundo"));
         ArrayList<Shape>arrayEllipse=new ArrayList<>();
+        
+        for(int i=0;i<this.listaAeropuertos.size();i++){
+            double x=this.listaAeropuertos.get(i).getCoordX();
+            double y=this.listaAeropuertos.get(i).getCoordY();
+            Rectangle2D aeropuerto = new Rectangle2D.Double(x,y,7,7);
+            
+            String color = this.listaAeropuertos.get(i).getColor();
+            
+            switch (color){
+                case "negro":
+                    g2.setPaint(new Color (1,1,1));
+                    break;
+                case "rojo":
+                    g2.setPaint(new Color (238, 54, 63));
+                    break;
+                case "amarillo":
+                    g2.setPaint(new Color (234, 203, 29));
+                    break;
+                case "verde":
+                    g2.setPaint(new Color (106, 203, 29));
+                    break;
+            }
+            g2.fill(aeropuerto);
+        }
         
         for(int i=0;i<this.avionesDot.size();i++){
             
@@ -253,22 +281,22 @@ static final int FONT_SIZE = 11;
                 v.setEstado_mov(1);// en transito
                 
                 //verificar si tiene paquetes que recojer
-                for(int i = 0; i < this.rutasPaquetesAlgo.size();i++){
-                    String ruta = this.rutasPaquetesAlgo.get(i).getRuta();
+                for(int i = 0; i < this.listPackAlgo.size();i++){
+                    String ruta = this.listPackAlgo.get(i).getRuta();
                     
                     if (ruta.equals("")){ // si la ruta esta vacia se quita de rutasPaquetesAlgo
-                        this.rutasPaquetesAlgo.remove(i);
+                        this.listPackAlgo.remove(i);
                     }else{
                         //System.out.println(ruta);
                         
-                        int tiempoPack = this.rutasPaquetesAlgo.get(i).getOriginHour()*60 + this.rutasPaquetesAlgo.get(i).getOriginMin();
+                        int tiempoPack = this.listPackAlgo.get(i).getOriginHour()*60 + this.listPackAlgo.get(i).getOriginMin();
                         
                         
                         String[] ids = ruta.split("-");
                         int idVuelo = Integer.parseInt(ids[0]);
                         
                         //SI EL ES EL VUELO QUE REQUIERE EL PAQUETE, TIEMPO COINCIDE Y EL PAQUETE ESTA DISPONIBLE
-                        if (idVuelo == v.getId() && tiempoSalidaAvion >= tiempoPack && this.rutasPaquetesAlgo.get(i).getEstado() == 1){
+                        if (idVuelo == v.getId() && tiempoSalidaAvion >= tiempoPack && this.listPackAlgo.get(i).getEstado() == 1){
   
                             v.setCapacidadActual(v.getCapacidadActual() + 1); // se mete paquete en avion
                             
@@ -276,21 +304,30 @@ static final int FONT_SIZE = 11;
                                 if (aero.getIcaoCode().equals(v.getIcaoOrigen())){
                                     aero.setCapActual(aero.getCapActual() - 1); // se quita el paquete del aeropuerto
                                     break;
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                 }
                             }
-                            
+                           //System.out.println("AQUI EJEAJEAJ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ids.length);
                             if (ids.length == 1){// es su ultimo paradero
                                 
                                 //COMPROBAR COLAPSO POR TIEMPO
                                 
                                 //
                                 
-                                this.rutasPaquetesAlgo.remove(i);// es su ruta final, remueve de listapack
+                                this.listPackAlgo.remove(i);// es su ruta final, remueve de listapack
                                 v.setPack_finales(v.getPack_finales() + 1);
-                                
+                                System.out.println("Cantidad de pack_finales: "+v.getPack_finales());
                             }else{
                                 ruta = ruta.substring(ruta.indexOf("-", 0)+1,ruta.length()); // se quita el paso dado
-                                this.rutasPaquetesAlgo.get(i).setRuta(ruta);
+                                this.listPackAlgo.get(i).setRuta(ruta);
                             }
                             
                             
@@ -307,11 +344,28 @@ static final int FONT_SIZE = 11;
             }
         }
     }
+    public void cambiaColorAeropuerto(Aeropuerto aero){
+        if(aero.getCapActual()>aero.getCapMax()){
+            aero.setColor("negro");
+           
+        }else if(aero.getCapActual()>(2*aero.getCapMax()/3)){
+            aero.setColor("rojo");
+            
+        }else if(aero.getCapActual()>(aero.getCapMax()/3)){
+            aero.setColor("amarillo");
+            
+        }else{
+            aero.setColor("verde");
+            
+        }
+        
+    }
     
     public void cambiaEstadoAlmacen(avionDot v){
         if(v.getCapacidadActual()>v.getCapacidadMax()){
             v.setColor("negro");
             v.setEstado_almacen(3);
+            
         }else if(v.getCapacidadActual()>(2*v.getCapacidadMax()/3)){
             v.setColor("rojo");
             v.setEstado_almacen(2);
@@ -322,6 +376,8 @@ static final int FONT_SIZE = 11;
             v.setColor("verde");
             v.setEstado_almacen(0);
         }
+//        if(v.getCapacidadActual()!=0)
+//            System.out.println(v.getId()+" -> " + v.getCapacidadActual());
     }
     
     public void mueveAvion(avionDot v){
@@ -366,7 +422,7 @@ static final int FONT_SIZE = 11;
             for(Aeropuerto aero : this.listaAeropuertos){
                 if(aero.getIcaoCode().equals(v.getIcaoDestino())){
                     aero.setCapActual(aero.getCapActual() + v.getCapacidadActual());
-                    
+                    cambiaColorAeropuerto(aero);
                     //VERIFICAR COLAPSO POR FALTA DE ESPACIO EN ALMACEN DE AEROPUERTO
                     if (aero.getCapActual() > aero.getCapMax()){
                         // SISTEMA COLAPSA
@@ -376,7 +432,7 @@ static final int FONT_SIZE = 11;
                         
                     }
                     aero.setCapActual(aero.getCapActual() - v.getPack_finales());//cliente recoge sus packs
-
+                    System.out.println(aero.getCapActual() + " : " + v.getPack_finales());
 
                     v.setPack_finales(0); // se queda sin pack finales
                     break;
@@ -387,6 +443,7 @@ static final int FONT_SIZE = 11;
         }
         
     }
+    
     
     public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
@@ -450,7 +507,7 @@ static final int FONT_SIZE = 11;
 
                 this.tabu.setInputProcess(this.dp);
                 for (String a : this.Archivos){
-                    dp.processPackNew("resources\\pack_enviados\\" + a);
+                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
                 }
 
                 System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
@@ -504,7 +561,11 @@ static final int FONT_SIZE = 11;
         for(int i = 0; i < n ; i++){   
            
             if (this.inicioAlgo == 1){
-                TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.listaPaquetes, this.rutasPaquetesAlgo, this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes);
+
+                //TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.rutasPaquetes, this.listPack,this.inicioAlgo);
+
+                TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.rutasPaquetesAlgo, this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes);
+
                 long startTime = System.nanoTime();
                 simulador.start();
                 simulador.join();
@@ -596,6 +657,7 @@ static final int FONT_SIZE = 11;
                 this.cantDays++;
             }
             
+
             
             
             
@@ -607,9 +669,14 @@ static final int FONT_SIZE = 11;
             cambiaEstadoPacks(); // SE CAMBIA EL ESTADO DE LOS PAQUETES SEGUN VAN LLEGANDO A SU ORIGEN
             
             //aplica algoritmo al inicio del dia y luego cada cantidad de tics
+
+            //if (this.cantTics == this.algoritmoDelayMinutes || this.horaMundial*60 + this.minutoMundial == 0){
+              //  TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.rutasPaquetes,this.listPack,this.inicioAlgo); 
+
             if (this.cantTics == this.algoritmoDelayMinutes){
-                TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.listaPaquetes,this.rutasPaquetesAlgo,this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes); 
+                TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.rutasPaquetesAlgo,this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes); 
                 
+
                 long startTime = System.nanoTime();
                 simulador.start();
                 simulador.join();
@@ -649,6 +716,7 @@ static final int FONT_SIZE = 11;
             this.cantTics++;
        }catch(Exception ex){
            System.out.println("ACTION PERFORMDED" + ex.getMessage() );
+           ex.printStackTrace();
        }
         
     }

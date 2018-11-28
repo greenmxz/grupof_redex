@@ -30,7 +30,7 @@ public class frmBuscarPaquete extends javax.swing.JDialog {
         for(int i=0; i<lstAerop.size(); i++){
             Object[] obj = new Object[3];
             obj[0] = lstAerop.get(i).getCodigo();
-            obj[1] = lstAerop.get(i).getAeropuertoDestino() + " -> " + lstAerop.get(i).getAeropuertoOrigen();
+            obj[1] = lstAerop.get(i).getAeropuertoOrigen() + " -> " + lstAerop.get(i).getAeropuertoDestino();
             obj[2] = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(lstAerop.get(i).getFechaSalida());
             model.addRow(obj);
         }

@@ -27,9 +27,13 @@ public class TabuSimulator extends Thread{
     private int algoritmoDelayMinutes;
     private Date fechaActual;
     private TabuSearch tabu;
-    private ArrayList<TabuSearch>eliminenlo;
-    private ArrayList<paquete> listaPaquetes = new ArrayList();
+    
+
+    
+    //public ArrayList<String> rutasPaquetes = new ArrayList();
+
     public ArrayList<Algoritmo.Paquete> rutasPaquetesAlgo = new ArrayList();
+
     
     public ArrayList<Aeropuerto> listaAeropuertos = new ArrayList<>();
     private ArrayList<Algoritmo.Vuelo> listaVuelos = new ArrayList<>();
@@ -39,21 +43,31 @@ public class TabuSimulator extends Thread{
     private int tiempoAlgo; 
     
     public TabuSimulator(int hora,int min,Date fecha,TabuSearch tabu,ArrayList<Aeropuerto> listaAeropuertos,ArrayList<Algoritmo.Vuelo> listaVuelos,
-            ArrayList<paquete> listaPaquetes,ArrayList<Algoritmo.Paquete> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
+
+
+//            ArrayList<String> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo){
+
+
+            ArrayList<Algoritmo.Paquete> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
         this.horaMundial=hora;
         this.minutoMundial=min;
         this.fechaActual=fecha;
         this.tabu=tabu;
-        this.listaAeropuertos=listaAeropuertos;
-        this.listaVuelos=listaVuelos;
-        this.listaPaquetes=listaPaquetes;
-        this.rutasPaquetesAlgo=rutasPaquetes;
-        this.listPack=listPack;
+        this.listaAeropuertos=(ArrayList<Aeropuerto>)listaAeropuertos.clone();
+        this.listaVuelos=(ArrayList<Algoritmo.Vuelo>)listaVuelos.clone();
+
+        
+        //this.rutasPaquetes=rutasPaquetes;
+
+        
+        this.rutasPaquetesAlgo=(ArrayList<Algoritmo.Paquete>)rutasPaquetes.clone();
+
+        this.listPack=(ArrayList<Algoritmo.Paquete>)listPack;
         this.tiempoAlgo = tiempoAlgo;
         this.algoritmoDelayMinutes = algoritmoDelayMinutes;
     }
     void seleccionPacksAlgo(){
-        this.listPackAlgo = new ArrayList();
+        this.listPackAlgo = new ArrayList<>();
         System.out.println("cant listPack = " + this.listPack.size());
         
         int timeFin = tiempoAlgo + this.algoritmoDelayMinutes; // TOPE DE BLOQUE

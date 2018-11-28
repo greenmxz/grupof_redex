@@ -412,6 +412,51 @@ public class usuarioDA {
              return false;
          }
          
-     }
-    
+    }
+    public boolean existeNumDoc(int index){
+        int id=-1;
+        try{
+            database connect = new database();
+            String queryUsuario="select numero_documento_identidad from persona where numero_documento_identidad = ?";
+            PreparedStatement stmt=connect.getConnection().prepareStatement(queryUsuario);
+            stmt.setInt(1, index);
+            stmt.execute();
+            ResultSet rs = stmt.executeQuery();
+            //ArrayList<usuario> lista = new ArrayList<>();
+            
+            if (rs.next( ))
+                id=rs.getInt("numero_documento_identidad");
+            
+            
+            connect.getConnection().close();
+            
+            return id==index;
+        }catch(Exception exp){
+            System.out.println("Error: "+exp.getMessage());
+            return false;
+        }
+    }
+    public boolean existeUsuario(String usuario){
+        String user=null;
+        try{
+            database connect = new database();
+            String queryUsuario="select codigo from usuario where codigo = ?";
+            PreparedStatement stmt=connect.getConnection().prepareStatement(queryUsuario);
+            stmt.setString(1, usuario);
+            stmt.execute();
+            ResultSet rs = stmt.executeQuery();
+            //ArrayList<usuario> lista = new ArrayList<>();
+            
+            if (rs.next( ))
+                user=rs.getString("codigo");
+            
+            
+            connect.getConnection().close();
+            
+            return usuario.equals(user);
+        }catch(Exception exp){
+            System.out.println("Error: "+exp.getMessage());
+            return false;
+        }
+    }
 }
