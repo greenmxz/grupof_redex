@@ -56,12 +56,16 @@ static final int FONT_SIZE = 11;
     private int cantTics = 0;
     private int inicio = 0;
     private int inicioAlgo = 1;
-    private int algoritmoDelayMinutes = 60*5;
+    private int algoritmoDelayMinutes = 60*2;
     private int tiempoAlgoMM = 0;
     private ArrayList<String> Archivos = new ArrayList<>();
     
+
    
-    private ArrayList<String> rutasPaquetes = new ArrayList();
+    //private ArrayList<String> rutasPaquetes = new ArrayList();
+
+    private ArrayList<Algoritmo.Paquete> rutasPaquetesAlgo = new ArrayList();
+
     
     private ArrayList<Aeropuerto> listaAeropuertos = new ArrayList<>();
     private ArrayList<Algoritmo.Vuelo> listaVuelos = new ArrayList<>();
@@ -272,37 +276,58 @@ static final int FONT_SIZE = 11;
         
         // VERIFICAR HORA DE SALIDA DEL AVION
         if (v.getEstado_mov() == 0){
-            if (this.horaMundial*60 + this.minutoMundial == v.getHora_salida()*60 + v.getMin_salida()){
+            int tiempoSalidaAvion = v.getHora_salida()*60 + v.getMin_salida();
+            if (this.horaMundial*60 + this.minutoMundial == tiempoSalidaAvion){
                 v.setEstado_mov(1);// en transito
                 
                 //verificar si tiene paquetes que recojer
-                for(int i = 0; i < this.rutasPaquetes.size();i++){
-                    String ruta = this.rutasPaquetes.get(i);
+                for(int i = 0; i < this.listPackAlgo.size();i++){
+                    String ruta = this.listPackAlgo.get(i).getRuta();
                     
-                    if (ruta.equals("")){ // si la ruta esta vacia se quita de rutasPaquetes
-                        this.rutasPaquetes.remove(i);
+                    if (ruta.equals("")){ // si la ruta esta vacia se quita de rutasPaquetesAlgo
+                        this.listPackAlgo.remove(i);
                     }else{
-                        //System.out.println(ruta);  
+                        //System.out.println(ruta);
+                        
+                        int tiempoPack = this.listPackAlgo.get(i).getOriginHour()*60 + this.listPackAlgo.get(i).getOriginMin();
+                        
+                        
                         String[] ids = ruta.split("-");
                         int idVuelo = Integer.parseInt(ids[0]);
-                        if (idVuelo == v.getId()){//si el paquete debe entrar a ese vuelo
-                            
-                            
+                        
+                        //SI EL ES EL VUELO QUE REQUIERE EL PAQUETE, TIEMPO COINCIDE Y EL PAQUETE ESTA DISPONIBLE
+                        if (idVuelo == v.getId() && tiempoSalidaAvion >= tiempoPack && this.listPackAlgo.get(i).getEstado() == 1){
+  
                             v.setCapacidadActual(v.getCapacidadActual() + 1); // se mete paquete en avion
                             
                             for(Aeropuerto aero : this.listaAeropuertos){
                                 if (aero.getIcaoCode().equals(v.getIcaoOrigen())){
                                     aero.setCapActual(aero.getCapActual() - 1); // se quita el paquete del aeropuerto
                                     break;
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                 }
                             }
-                            
+                           //System.out.println("AQUI EJEAJEAJ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ids.length);
                             if (ids.length == 1){// es su ultimo paradero
-                                this.rutasPaquetes.remove(i); // se quita el paso dado
+                                
+                                //COMPROBAR COLAPSO POR TIEMPO
+                                
+                                //
+                                
+                                this.listPackAlgo.remove(i);// es su ruta final, remueve de listapack
                                 v.setPack_finales(v.getPack_finales() + 1);
+                                System.out.println("Cantidad de pack_finales: "+v.getPack_finales());
                             }else{
                                 ruta = ruta.substring(ruta.indexOf("-", 0)+1,ruta.length()); // se quita el paso dado
-                                this.rutasPaquetes.set(i, ruta);
+                                this.listPackAlgo.get(i).setRuta(ruta);
                             }
                             
                             
@@ -311,8 +336,8 @@ static final int FONT_SIZE = 11;
 
                     
                 }
-                if (v.getCapacidadActual() > 0)
-                    System.out.println(">>>>>>>>>>> vuelo salida " + v.getId() + " -- " + v.getCapacidadActual());    
+                //if (v.getCapacidadActual() > 0)
+                    //System.out.println(">>>>>>>>>>> vuelo salida " + v.getId() + " -- " + v.getCapacidadActual());    
                 if (v.getCapacidadActual() > v.getCapacidadMax()){
                     System.out.println("------------ COLAPSO POR VUELO----vuelo  " + v.getId() + "  lleno");
                 }
@@ -389,8 +414,8 @@ static final int FONT_SIZE = 11;
         
         //si ya es la hora de llegada se situa en el destino
         if (this.horaMundial*60 + this.minutoMundial == v.getHora_llegada()*60 + v.getMin_llegada()){
-            if (v.getCapacidadActual() > 0)
-                System.out.println(">>>>>>>>>>> vuelo llega " + v.getId() + " -- " + v.getCapacidadActual());
+            //if (v.getCapacidadActual() > 0)
+                //System.out.println(">>>>>>>>>>> vuelo llega " + v.getId() + " -- " + v.getCapacidadActual());
             v.getActual().setX(v.getDestino().getX());
             v.getActual().setY(v.getDestino().getY());
             // EL AVION LLEGA Y VACIA ALMACEN Y DEJA PAQUETES EN EL AEROPUERTO
@@ -407,12 +432,14 @@ static final int FONT_SIZE = 11;
                         
                     }
                     aero.setCapActual(aero.getCapActual() - v.getPack_finales());//cliente recoge sus packs
+                    System.out.println(aero.getCapActual() + " : " + v.getPack_finales());
+
                     v.setPack_finales(0); // se queda sin pack finales
                     break;
                 }
             }
             v.setCapacidadActual(0);
-            System.out.println("<<<<<<<<<<<<< vuelo vacia" + v.getId() + " -- " + v.getCapacidadActual());
+            //System.out.println("<<<<<<<<<<<<< vuelo vacia" + v.getId() + " -- " + v.getCapacidadActual());
         }
         
     }
@@ -461,38 +488,41 @@ static final int FONT_SIZE = 11;
 //    }
     
     void lecturaData(){
-        
-        if (this.inicio == 0){
-            
-            
-            
-            
-            final File folder = new File("resources\\pack_enviados");
-            listFilesForFolder(folder);
-            
+        try{
+            if (this.inicio == 0){
 
-            
-            this.tabu.setListAirport(this.listaAeropuertos);
-            this.tabu.setListFlight(this.listaVuelos);
-            this.tabu.generateFlightMatrix();
-            
-            this.dp.setListAirport(this.listaAeropuertos);
 
-            this.tabu.setInputProcess(this.dp);
-            for (String a : this.Archivos){
-                dp.processPackNew("resources\\pack_enviados_generados\\" + a);
+
+
+                final File folder = new File("resources\\pack_enviados");
+                listFilesForFolder(folder);
+
+
+
+                this.tabu.setListAirport(this.listaAeropuertos);
+                this.tabu.setListFlight(this.listaVuelos);
+                this.tabu.generateFlightMatrix();
+
+                this.dp.setListAirport(this.listaAeropuertos);
+
+                this.tabu.setInputProcess(this.dp);
+                for (String a : this.Archivos){
+                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
+                }
+
+                System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
+
+
+                this.listPack = this.dp.getPackList();
+
+                if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
+                    this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
+
+                this.inicio = 1;
             }
-            
-            System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
-            
-            
-            this.listPack = this.dp.getPackList();
-           
-            if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
-                this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
-            
-            this.inicio = 1;
-        }
+        }catch(Exception ex){
+           System.out.println("ERROR lecturaData " + ex.getMessage() );
+       }
     }
 //    public void generateRoutes(){    
 //        //aplica algoritmo a un set de paquetes cada cierto delay en minutos de simulacion
@@ -503,7 +533,7 @@ static final int FONT_SIZE = 11;
 //                //se van agregando las rutas segun se aplique el algoritmo
 //                ArrayList<String> rutasPacksTrabajados = this.tabu.executeVCRPTabu(this.listPackAlgo);
 //                if (rutasPacksTrabajados.size() > 0){
-//                    this.rutasPaquetes.addAll(rutasPacksTrabajados);
+//                    this.rutasPaquetesAlgo.addAll(rutasPacksTrabajados);
 //                    //se llenan los almacenes con los paquetes nuevos
 //                    for (String ruta : rutasPacksTrabajados){
 //                        String[] ids = ruta.split("-");
@@ -523,25 +553,88 @@ static final int FONT_SIZE = 11;
 //        }
 //    }
     
+    
+    //REALIZAR UNA CANTIDAD N DE BLOQUES DE PACKS ANTES DE EJECUTAR EL SIMULADOR
     public void calculoInicial(int n){
        try{ 
            
         for(int i = 0; i < n ; i++){   
            
             if (this.inicioAlgo == 1){
-                TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.rutasPaquetes, this.listPack,this.inicioAlgo);
+
+                //TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.rutasPaquetes, this.listPack,this.inicioAlgo);
+
+                TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.rutasPaquetesAlgo, this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes);
+
                 long startTime = System.nanoTime();
                 simulador.start();
                 simulador.join();
                 long endTime = System.nanoTime();
                 long totalTime = endTime - startTime;
-                this.inicioAlgo = simulador.getTiempoAlgo();
+                
+                //rutasPaquetesAlgo=simulador.rutasPaquetesAlgo;
+                listaAeropuertos=simulador.listaAeropuertos;      
+                
+                //AGREGA LISTA PAQUETES CON RUTAS A LA EXISTENTE
+                System.out.println("------>cantidad de packs  procesados " +  simulador.getListPackAlgo().size());
+                
+                this.listPackAlgo.addAll(simulador.getListPackAlgo());
+                
+                System.out.println("------>tiempo " +  totalTime/1000000000 + "segundos"); 
+                
+                System.out.println("------>cantidad de packs  almacenado " +  listPack.size()); 
+                System.out.println("------>cantidad de packs  con rutas " +  listPackAlgo.size());                
+                
+                //Actualiza tiempo de algoritmo
+                this.tiempoAlgoMM = simulador.getTiempoAlgo();
             }
-            this.inicioAlgo = 0;
             
-        }    
+            
+        }
+        this.inicioAlgo = 0;
        }catch(Exception ex){
-           System.out.println("error " + ex.getLocalizedMessage());
+           System.out.println("error calculoInicial " + ex.getLocalizedMessage());
+       }
+    }
+    
+    
+    public void cambiaEstadoPacks(){
+         try{               
+            //SE ACTUALIZA ESTADO DE PAQUETES SEGUN LA HORA ACTUAL (LLEGADA A AEROPUERTO DE ORIGEN)
+            //System.out.println("cambiaEstadoPacks listPackAlgo ->  " + this.listPackAlgo.size());
+            for (int iter = 0; iter < this.listPackAlgo.size(); iter++) {
+                Paquete p = this.listPackAlgo.get(iter);
+                if (!p.getRuta().equals("")) {
+                    
+                    int tiempoActual = this.horaMundial * 60 + this.minutoMundial;
+                    int tiempoPack = p.getOriginHour() * 60 + p.getOriginMin();
+
+                    DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+                    Calendar calendarioPack = Calendar.getInstance();
+                    calendarioPack.set(p.getOriginYear(),p.getOriginMonth()-1,p.getOriginDay());
+
+                    Date fechaPack = calendarioPack.getTime();
+                    Date fechaActual = this.calendar.getTime();
+
+                    //System.out.println("fecha_pack  " + fechaPack);
+                    //System.out.println("fecha_act " + fechaActual);
+                    
+                    //pertenece al dia de hoy
+                    if (dateFormat.format(fechaActual).compareTo(dateFormat.format(fechaPack))==0){
+                        // es su hora de llegada al origen
+                        if (tiempoActual == tiempoPack){
+                            p.setEstado(1); //paquete ahora esta disponible
+                            //System.out.println("pack - " + p.getRuta());
+                            //SE AUMENTA EN 1 LA CAPACIDAD ACTUAL DEL AEROPUERTO ORIGEN
+                            this.listaAeropuertos.get(p.getOriginAirport()).setCapActual(this.listaAeropuertos.get(p.getOriginAirport()).getCapActual() + 1);
+
+                        }
+                    }
+                }
+            }
+        }catch(Exception ex){
+           System.out.println("ERROR cambiaEstadoPacks " + ex.getLocalizedMessage());
+           ex.printStackTrace();
        }
     }
     
@@ -564,33 +657,51 @@ static final int FONT_SIZE = 11;
                 this.cantDays++;
             }
             
-            //si esta al inicio de todo, calcular n cantidad de lotes para evitar descuadre
 
             
-            calculoInicial(4);
             
             
+            //si esta al inicio de todo, calcular n cantidad de lotes para evitar descuadre
             
+            calculoInicial(4); // OBTIENE RUTAS DE 4 BLOQUES PACKS AL INICIO
+            
+            
+            cambiaEstadoPacks(); // SE CAMBIA EL ESTADO DE LOS PAQUETES SEGUN VAN LLEGANDO A SU ORIGEN
             
             //aplica algoritmo al inicio del dia y luego cada cantidad de tics
-            if (this.cantTics == this.algoritmoDelayMinutes || this.horaMundial*60 + this.minutoMundial == 0){
-                TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.rutasPaquetes,this.listPack,this.inicioAlgo); 
+
+            //if (this.cantTics == this.algoritmoDelayMinutes || this.horaMundial*60 + this.minutoMundial == 0){
+              //  TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.rutasPaquetes,this.listPack,this.inicioAlgo); 
+
+            if (this.cantTics == this.algoritmoDelayMinutes){
+                TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.rutasPaquetesAlgo,this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes); 
+                
+
                 long startTime = System.nanoTime();
                 simulador.start();
                 simulador.join();
                 long endTime = System.nanoTime();
                 long  totalTime = endTime - startTime;
-                System.out.println("Tiempo -> " + totalTime);
-                rutasPaquetes=simulador.rutasPaquetes;
+                
+                //rutasPaquetesAlgo=simulador.rutasPaquetesAlgo;
                 listaAeropuertos=simulador.listaAeropuertos;
-                this.inicioAlgo = simulador.getTiempoAlgo();
-                System.out.println("------>cantidad de rutas  " +  rutasPaquetes.size());
+                
+                //AGREGA LISTA PAQUETES CON RUTAS A LA EXISTENTE
+                System.out.println("------>cantidad de packs  procesados " +  simulador.getListPackAlgo().size());
+                
+                this.listPackAlgo.addAll(simulador.getListPackAlgo());
+                
+                System.out.println("------>tiempo " +  totalTime/1000000000 + "segundos"); 
+                
+                System.out.println("------>cantidad de packs  almacenado " +  listPack.size()); 
+                System.out.println("------>cantidad de packs  con rutas " +  listPackAlgo.size()); 
+                
                 //generateRoutes();
                 this.cantTics=0;
             }
+            
+            //DIBUJA MOVIMIENTO
             for(int i=0;i<this.avionesDot.size();i++){
-
-                //if (i == 1) break;
 
                 cambiaEstadoMov(this.avionesDot.get(i));
 
@@ -604,7 +715,8 @@ static final int FONT_SIZE = 11;
             repaint();
             this.cantTics++;
        }catch(Exception ex){
-           System.out.println("ERROR JOIN HILO " + ex.getMessage() );
+           System.out.println("ACTION PERFORMDED" + ex.getMessage() );
+           ex.printStackTrace();
        }
         
     }

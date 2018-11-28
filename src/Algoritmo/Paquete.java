@@ -11,6 +11,8 @@ public class Paquete {
     private int originDay;
     private int originMonth;
     private int originYear;
+    private String ruta = "";
+    private int estado; // 0: no disponible, 1: en espera
     
     public Paquete(int originHour, int originMin, int originAirport,
             int destinyAirport){
@@ -86,6 +88,22 @@ public class Paquete {
 
     public void setOriginYear(int originYear) {
         this.originYear = originYear;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
     
     public void print(){
