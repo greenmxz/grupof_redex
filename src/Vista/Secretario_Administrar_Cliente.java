@@ -255,7 +255,7 @@ public class Secretario_Administrar_Cliente extends javax.swing.JPanel {
                     "Cliente con el documento de identidad " + cliente.getPersona().getNumeroDocumentoIdentidad() + " será modificado",
                     "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 
-                Vista.Secretario_Modificar_Cliente m_cliente = new Vista.Secretario_Modificar_Cliente(tblClientes,cliente);
+                Vista.Secretario_Modificar_Cliente m_cliente = new Vista.Secretario_Modificar_Cliente(tblClientes,cliente, x,true,null);
                 m_cliente.setVisible(true);
             }else{
                 JOptionPane.showMessageDialog(null,

@@ -209,7 +209,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnClientes1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientes1ActionPerformed
-        new CambiarPanel(panelPrincipal, new frmAdministrarCuenta(this));
+        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Cliente(this));
         if(this.panelMenu.getX()>-1)
         Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);
     }//GEN-LAST:event_btnClientes1ActionPerformed
