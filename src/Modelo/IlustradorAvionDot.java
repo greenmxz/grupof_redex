@@ -59,8 +59,10 @@ static final int FONT_SIZE = 11;
     private int algoritmoDelayMinutes = 60*2;
     private int tiempoAlgoMM = 0;
     private ArrayList<String> Archivos = new ArrayList<>();
-    
-
+    private int cantMaxColapsoAero = 0;
+    private String aeroColapsoMax = "";
+    private int cantMaxColapsoAvion = 0;
+    private int avionColapsoMax = -1;
    
     //private ArrayList<String> rutasPaquetes = new ArrayList();
 
@@ -284,8 +286,8 @@ static final int FONT_SIZE = 11;
                 for(int i = 0; i < this.listPackAlgo.size();i++){
                     String ruta = this.listPackAlgo.get(i).getRuta();
                     
-                    if (ruta.equals("")){ // si la ruta esta vacia se quita de rutasPaquetesAlgo
-                        this.listPackAlgo.remove(i);
+                    if (ruta.equals("")){ // si la ruta esta vacia se cambia a NO DISPONIBLE
+                        this.listPackAlgo.get(i).setEstado(0);
                     }else{
                         //System.out.println(ruta);
                         
@@ -297,40 +299,42 @@ static final int FONT_SIZE = 11;
                         
                         //SI EL ES EL VUELO QUE REQUIERE EL PAQUETE, TIEMPO COINCIDE Y EL PAQUETE ESTA DISPONIBLE
                         if (idVuelo == v.getId() && tiempoSalidaAvion >= tiempoPack && this.listPackAlgo.get(i).getEstado() == 1){
-  
-                            v.setCapacidadActual(v.getCapacidadActual() + 1); // se mete paquete en avion
                             
+                            // se mete paquete en avion
+                            v.setCapacidadActual(v.getCapacidadActual() + 1); 
+                            
+                            //Se busca aeropuerto origen para quitar el paquete
                             for(Aeropuerto aero : this.listaAeropuertos){
                                 if (aero.getIcaoCode().equals(v.getIcaoOrigen())){
                                     aero.setCapActual(aero.getCapActual() - 1); // se quita el paquete del aeropuerto
-                                    if(aero.getCountry().equals("Belgica"))
-                                        System.out.println(aero.getIdentificator()+" "+aero.getCapActual()+ " <- "+v.getCapacidadActual());
+                                    //if(aero.getCountry().equals("Belgica"))
+                                    //System.out.println(aero.getIdentificator()+" "+aero.getCapActual()+ " <- "+v.getCapacidadActual());
                                     break;
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
                                     
                                 }
                             }
+                            
                            //System.out.println("AQUI EJEAJEAJ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ids.length);
                             if (ids.length == 1){// es su ultimo paradero
                                 
                                 //COMPROBAR COLAPSO POR TIEMPO
                                 
-                                //
-                                
-                                this.listPackAlgo.remove(i);// es su ruta final, remueve de listapack
+                                //////////////////////////////// 
+                                // es su ruta final, remueve de listapack
+                                //this.listPackAlgo.remove(i);// no se necesita el id del pack ya que es su ultimo movimiento y no necesita cambiar de estado
+                                v.getIdPacks().add(i);
                                 v.setPack_finales(v.getPack_finales() + 1);
+                                this.listPackAlgo.get(i).setRuta(""); // su ruta se encuestra finalizada
                                 //if(v.getId()==1505)
                                     System.out.println("Cantidad de pack_finales: "+v.getPack_finales() + " - " + v.getId());
-                            }else{
-                                ruta = ruta.substring(ruta.indexOf("-", 0)+1,ruta.length()); // se quita el paso dado
+                            }else{ // vuelos escalados
+                                // se quita el paso dado
+                                ruta = ruta.substring(ruta.indexOf("-", 0)+1,ruta.length());
+                                // se brinda la nueva ruta
                                 this.listPackAlgo.get(i).setRuta(ruta);
+                                // cambia a estado en transito para que no se vuelva a usar hasta que llegue
+                                this.listPackAlgo.get(i).setEstado(2);
+                                v.getIdPacks().add(i);
                             }
                             
                             
@@ -343,6 +347,10 @@ static final int FONT_SIZE = 11;
                     //System.out.println(">>>>>>>>>>> vuelo salida " + v.getId() + " -- " + v.getCapacidadActual());    
                 if (v.getCapacidadActual() > v.getCapacidadMax()){
                     System.out.println("------------ COLAPSO POR VUELO----vuelo  " + v.getId() + "  lleno");
+                    if (this.cantMaxColapsoAvion < v.getCapacidadActual()){
+                        this.cantMaxColapsoAvion = v.getCapacidadActual();
+                        this.avionColapsoMax = v.getId();
+                    }
                 }
             }
         }
@@ -424,24 +432,40 @@ static final int FONT_SIZE = 11;
             // EL AVION LLEGA Y VACIA ALMACEN Y DEJA PAQUETES EN EL AEROPUERTO
             for(Aeropuerto aero : this.listaAeropuertos){
                 if(aero.getIcaoCode().equals(v.getIcaoDestino())){
+                    //capacidad el aero se actualiza
                     aero.setCapActual(aero.getCapActual() + v.getCapacidadActual());
-                    if(aero.getCountry().equals("Belgica"))
-                            System.out.println(aero.getIdentificator()+" "+aero.getCapActual()+ " <- "+v.getCapacidadActual());
+                    //
+                    //if(aero.getCountry().equals("Belgica"))
+                    //        System.out.println(aero.getIdentificator()+" "+aero.getCapActual()+ " <- "+v.getCapacidadActual());
+                    //
                     cambiaColorAeropuerto(aero);
                     //VERIFICAR COLAPSO POR FALTA DE ESPACIO EN ALMACEN DE AEROPUERTO
                     if (aero.getCapActual() > aero.getCapMax()){
                         // SISTEMA COLAPSA
                         System.out.println("------------------------->COLAPSO<-----------------------");
                         System.out.println(" -- " + " "+aero.getIdentificator()+" "+aero.getCountry()+" "+aero.getCapActual());
-                        
+                        if (this.cantMaxColapsoAero < aero.getCapActual()){
+                            this.cantMaxColapsoAero = aero.getCapActual();
+                            this.aeroColapsoMax = aero.getCountry();
+                        }
                         
                     }
-                    if(aero.getCountry().equals("Belgica"))
-                        System.out.println("Cantidad de pack_finales: "+aero.getCountry()+" "+aero.getCapActual()+" "+v.getPack_finales() + " - " + v.getId() + " "+ v.getCapacidadActual());
-                    if(v.getPack_finales()<aero.getCapActual())
-                        aero.setCapActual(aero.getCapActual() - v.getPack_finales());//cliente recoge sus packs
+                    
+                    //if(aero.getCountry().equals("Belgica"))
+                    //    System.out.println("Cantidad de pack_finales: "+aero.getCountry()+" "+aero.getCapActual()+" "+v.getPack_finales() + " - " + v.getId() + " "+ v.getCapacidadActual());
+                    
+                    //ACTUALIZA ESTADOS DE PAQUETES QUE LLEGAN
+                    
+                    //if(v.getPack_finales()<aero.getCapActual())
+                    aero.setCapActual(aero.getCapActual() - v.getPack_finales());//cliente recoge sus packs
+                    
+                    for(Integer id : v.getIdPacks()){
+                        this.listPackAlgo.get(id).setEstado(1); // vuelven a estar disponibles los paquetes
+                    }
+                        
                     System.out.println(aero.getCountry()+" "+aero.getCapActual() + " : " + v.getPack_finales());
-
+                    
+                    v.getIdPacks().clear(); // se queda sin packs
                     v.setPack_finales(0); // se queda sin pack finales
                     break;
                 }
@@ -486,6 +510,7 @@ static final int FONT_SIZE = 11;
                 this.tabu.setInputProcess(this.dp);
                 for (String a : this.Archivos){
                     dp.processPackNew("resources\\pack_enviados_generados\\" + a);
+                    //dp.processPackNew("resources\\pack_enviados\\" + a);
                 }
 
                 System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
@@ -575,15 +600,21 @@ static final int FONT_SIZE = 11;
                         if (tiempoActual == tiempoPack){
                             p.setEstado(1); //paquete ahora esta disponible
                             //System.out.println("pack - " + p.getRuta());
-                            //SE AUMENTA EN 1 LA CAPACIDAD ACTUAL DEL AEROPUERTO ORIGEN
                             
+                            /*
                             for(int i=0;i<this.listaAeropuertos.size();i++)
                                 if(this.listaAeropuertos.get(i).getCountry().equals("Belgica"))
                                       System.out.println(this.listaAeropuertos.get(i).getCountry()+" "+this.listaAeropuertos.get(i).getCapActual());
-                            this.listaAeropuertos.get(p.getOriginAirport()).setCapActual(this.listaAeropuertos.get(p.getOriginAirport()).getCapActual() + 1);
+                            */
+                            
+                            //SE AUMENTA EN 1 LA CAPACIDAD ACTUAL DEL AEROPUERTO ORIGEN
+                            this.listaAeropuertos.get(p.getOriginAirport()-1).setCapActual(this.listaAeropuertos.get(p.getOriginAirport()-1).getCapActual() + 1);
+                            
+                            /*
                             for(int i=0;i<this.listaAeropuertos.size();i++)
                                 if(this.listaAeropuertos.get(i).getCountry().equals("Belgica"))
                                    System.out.println(this.listaAeropuertos.get(i).getCountry()+" "+this.listaAeropuertos.get(i).getCapActual());
+                            */
                         }
                     }
                 }
@@ -611,6 +642,9 @@ static final int FONT_SIZE = 11;
             if (this.minutoMundial == 0 && this.horaMundial == 0){
                 this.calendar.add(this.calendar.DATE,1);
                 this.cantDays++;
+                System.out.println("<<<<<<<Cantidad de dias transcurridos>>>>>>>>>> -------------> " + this.cantDays);
+                System.out.println("<<<<<<<Colapso maximo aero>>>>>>>>>> -------------> " + this.aeroColapsoMax + " - " + this.cantMaxColapsoAero);
+                System.out.println("<<<<<<<Colapso maximo avion>>>>>>>>>> -------------> " + this.avionColapsoMax + " - "  + this.cantMaxColapsoAvion);
             }
             
 

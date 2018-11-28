@@ -12,7 +12,7 @@ public class Paquete {
     private int originMonth;
     private int originYear;
     private String ruta = "";
-    private int estado; // 0: no disponible, 1: en espera
+    private int estado; // 0: no disponible, 1: en espera, 2: en transito
     
     public Paquete(int originHour, int originMin, int originAirport,
             int destinyAirport){
