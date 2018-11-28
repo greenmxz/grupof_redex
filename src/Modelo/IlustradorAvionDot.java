@@ -324,7 +324,8 @@ static final int FONT_SIZE = 11;
                                 
                                 this.listPackAlgo.remove(i);// es su ruta final, remueve de listapack
                                 v.setPack_finales(v.getPack_finales() + 1);
-                                System.out.println("Cantidad de pack_finales: "+v.getPack_finales());
+                                //if(v.getId()==1505)
+                                    System.out.println("Cantidad de pack_finales: "+v.getPack_finales() + " - " + v.getId());
                             }else{
                                 ruta = ruta.substring(ruta.indexOf("-", 0)+1,ruta.length()); // se quita el paso dado
                                 this.listPackAlgo.get(i).setRuta(ruta);
@@ -422,17 +423,22 @@ static final int FONT_SIZE = 11;
             for(Aeropuerto aero : this.listaAeropuertos){
                 if(aero.getIcaoCode().equals(v.getIcaoDestino())){
                     aero.setCapActual(aero.getCapActual() + v.getCapacidadActual());
+                    if(aero.getCountry().equals("Checa"))
+                            System.out.println(aero.getIdentificator()+" "+aero.getCapActual()+ " <- "+v.getCapacidadActual());
                     cambiaColorAeropuerto(aero);
                     //VERIFICAR COLAPSO POR FALTA DE ESPACIO EN ALMACEN DE AEROPUERTO
                     if (aero.getCapActual() > aero.getCapMax()){
                         // SISTEMA COLAPSA
                         System.out.println("------------------------->COLAPSO<-----------------------");
-                        System.out.println(" -- " + aero.getCapActual());
+                        System.out.println(" -- " + " "+aero.getIdentificator()+" "+aero.getCountry()+" "+aero.getCapActual());
                         
                         
                     }
-                    aero.setCapActual(aero.getCapActual() - v.getPack_finales());//cliente recoge sus packs
-                    System.out.println(aero.getCapActual() + " : " + v.getPack_finales());
+                    if(aero.getCountry().equals("Checa"))
+                        System.out.println("Cantidad de pack_finales: "+aero.getCountry()+" "+aero.getCapActual()+" "+v.getPack_finales() + " - " + v.getId() + " "+ v.getCapacidadActual());
+                    if(v.getPack_finales()<aero.getCapActual())
+                        aero.setCapActual(aero.getCapActual() - v.getPack_finales());//cliente recoge sus packs
+                    System.out.println(aero.getCountry()+" "+aero.getCapActual() + " : " + v.getPack_finales());
 
                     v.setPack_finales(0); // se queda sin pack finales
                     break;
@@ -456,36 +462,6 @@ static final int FONT_SIZE = 11;
         }
     }
     
-//    void seleccionPacksAlgo(){
-//        this.listPackAlgo.clear();
-//        //hora max a partir de hora mundial
-//        int timeMM = this.horaMundial * 60 + this.minutoMundial + this.algoritmoDelayMinutes;
-//        int timeANT = this.horaMundial * 60 + this.minutoMundial - this.algoritmoDelayMinutes;
-//        if (timeANT < 0) timeANT = 0;
-//        
-//        Date fechaActual = this.calendar.getTime();
-//        
-//        for(int i = 0; i < this.listPack.size(); i++){
-//            
-//            DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-//            
-//            Calendar calendarioPack = Calendar.getInstance();
-//            calendarioPack.set(this.listPack.get(i).getOriginYear(),this.listPack.get(i).getOriginMonth()-1,this.listPack.get(i).getOriginDay());
-//            
-//            Date fechaPack = calendarioPack.getTime();
-//                       
-//            if (dateFormat.format(fechaActual).compareTo(dateFormat.format(fechaPack))==0){//pertenecen al dia de hoy
-//                int timePack = this.listPack.get(i).getOriginHour()*60 + this.listPack.get(i).getOriginMin();
-//                if (timePack <= timeMM && timePack > timeANT){
-//                    this.listPackAlgo.add(this.listPack.get(i));
-//                    //System.out.println(this.listPack.get(i).getOriginAirport() + "->" + this.listPack.get(i).getDestinyAirport());
-//                }
-//            }
-//            
-//            
-//        }
-//        
-//    }
     
     void lecturaData(){
         try{
@@ -524,34 +500,6 @@ static final int FONT_SIZE = 11;
            System.out.println("ERROR lecturaData " + ex.getMessage() );
        }
     }
-//    public void generateRoutes(){    
-//        //aplica algoritmo a un set de paquetes cada cierto delay en minutos de simulacion
-//        if (this.cantTics == this.algoritmoDelayMinutes){
-//            join();
-//            System.out.println("cant de paquetes que aplicaran tabu - " + this.listPackAlgo.size());
-//            if (this.listPackAlgo.size() > 0){
-//                //se van agregando las rutas segun se aplique el algoritmo
-//                ArrayList<String> rutasPacksTrabajados = this.tabu.executeVCRPTabu(this.listPackAlgo);
-//                if (rutasPacksTrabajados.size() > 0){
-//                    this.rutasPaquetesAlgo.addAll(rutasPacksTrabajados);
-//                    //se llenan los almacenes con los paquetes nuevos
-//                    for (String ruta : rutasPacksTrabajados){
-//                        String[] ids = ruta.split("-");
-//                        if(!ruta.equals("")){
-//                            int idVuelo = Integer.parseInt(ids[0]);
-//                            
-//                            int idAero = this.listaVuelos.get(idVuelo-1).getOriginAirport();
-//                            
-//                            this.listaAeropuertos.get(idAero-1).setCapActual(this.listaAeropuertos.get(idAero-1).getCapActual() + 1);
-//                        }
-//
-//                    }
-//                }
-//            }
-//
-//            this.cantTics = 0;
-//        }
-//    }
     
     
     //REALIZAR UNA CANTIDAD N DE BLOQUES DE PACKS ANTES DE EJECUTAR EL SIMULADOR
@@ -626,8 +574,14 @@ static final int FONT_SIZE = 11;
                             p.setEstado(1); //paquete ahora esta disponible
                             //System.out.println("pack - " + p.getRuta());
                             //SE AUMENTA EN 1 LA CAPACIDAD ACTUAL DEL AEROPUERTO ORIGEN
+                            
+                            for(int i=0;i<this.listaAeropuertos.size();i++)
+                                if(this.listaAeropuertos.get(i).getCountry().equals("Belgica"))
+                                      System.out.println(this.listaAeropuertos.get(i).getCountry()+" "+this.listaAeropuertos.get(i).getCapActual());
                             this.listaAeropuertos.get(p.getOriginAirport()).setCapActual(this.listaAeropuertos.get(p.getOriginAirport()).getCapActual() + 1);
-
+                            for(int i=0;i<this.listaAeropuertos.size();i++)
+                                if(this.listaAeropuertos.get(i).getCountry().equals("Belgica"))
+                                   System.out.println(this.listaAeropuertos.get(i).getCountry()+" "+this.listaAeropuertos.get(i).getCapActual());
                         }
                     }
                 }
