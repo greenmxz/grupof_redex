@@ -116,13 +116,7 @@ public class TabuSimulator extends Thread{
         
         if (this.tiempoAlgo < 24*60) this.tiempoAlgo += algoritmoDelayMinutes;
         else
-            if (this.tiempoAlgo >= 24*60) this.tiempoAlgo = 0;
-        
-        
-        
-        
-            
-        
+            if (this.tiempoAlgo >= 24*60) this.tiempoAlgo = 0;       
         
     }
     public void run(){   

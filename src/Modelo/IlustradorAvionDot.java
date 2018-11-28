@@ -303,6 +303,8 @@ static final int FONT_SIZE = 11;
                             for(Aeropuerto aero : this.listaAeropuertos){
                                 if (aero.getIcaoCode().equals(v.getIcaoOrigen())){
                                     aero.setCapActual(aero.getCapActual() - 1); // se quita el paquete del aeropuerto
+                                    if(aero.getCountry().equals("Belgica"))
+                                        System.out.println(aero.getIdentificator()+" "+aero.getCapActual()+ " <- "+v.getCapacidadActual());
                                     break;
                                     
                                     
@@ -423,7 +425,7 @@ static final int FONT_SIZE = 11;
             for(Aeropuerto aero : this.listaAeropuertos){
                 if(aero.getIcaoCode().equals(v.getIcaoDestino())){
                     aero.setCapActual(aero.getCapActual() + v.getCapacidadActual());
-                    if(aero.getCountry().equals("Checa"))
+                    if(aero.getCountry().equals("Belgica"))
                             System.out.println(aero.getIdentificator()+" "+aero.getCapActual()+ " <- "+v.getCapacidadActual());
                     cambiaColorAeropuerto(aero);
                     //VERIFICAR COLAPSO POR FALTA DE ESPACIO EN ALMACEN DE AEROPUERTO
@@ -434,7 +436,7 @@ static final int FONT_SIZE = 11;
                         
                         
                     }
-                    if(aero.getCountry().equals("Checa"))
+                    if(aero.getCountry().equals("Belgica"))
                         System.out.println("Cantidad de pack_finales: "+aero.getCountry()+" "+aero.getCapActual()+" "+v.getPack_finales() + " - " + v.getId() + " "+ v.getCapacidadActual());
                     if(v.getPack_finales()<aero.getCapActual())
                         aero.setCapActual(aero.getCapActual() - v.getPack_finales());//cliente recoge sus packs
