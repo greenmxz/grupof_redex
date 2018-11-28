@@ -63,6 +63,8 @@ static final int FONT_SIZE = 11;
     private String aeroColapsoMax = "";
     private int cantMaxColapsoAvion = 0;
     private int avionColapsoMax = -1;
+    private int cantPacksEntrantes = 0;
+    private int cantPacksSalientes = 0;
    
     //private ArrayList<String> rutasPaquetes = new ArrayList();
 
@@ -285,10 +287,8 @@ static final int FONT_SIZE = 11;
                 //verificar si tiene paquetes que recojer
                 for(int i = 0; i < this.listPackAlgo.size();i++){
                     String ruta = this.listPackAlgo.get(i).getRuta();
-                    
-                    if (ruta.equals("")){ // si la ruta esta vacia se cambia a NO DISPONIBLE
-                        this.listPackAlgo.get(i).setEstado(0);
-                    }else{
+                    // verifica si tiene camino por recorrer
+                    if (!ruta.equals("")){
                         //System.out.println(ruta);
                         
                         int tiempoPack = this.listPackAlgo.get(i).getOriginHour()*60 + this.listPackAlgo.get(i).getOriginMin();
@@ -326,7 +326,7 @@ static final int FONT_SIZE = 11;
                                 v.setPack_finales(v.getPack_finales() + 1);
                                 this.listPackAlgo.get(i).setRuta(""); // su ruta se encuestra finalizada
                                 //if(v.getId()==1505)
-                                    System.out.println("Cantidad de pack_finales: "+v.getPack_finales() + " - " + v.getId());
+                                    //System.out.println("Cantidad de pack_finales: "+v.getPack_finales() + " - " + v.getId());
                             }else{ // vuelos escalados
                                 // se quita el paso dado
                                 ruta = ruta.substring(ruta.indexOf("-", 0)+1,ruta.length());
@@ -458,9 +458,11 @@ static final int FONT_SIZE = 11;
                     
                     //if(v.getPack_finales()<aero.getCapActual())
                     aero.setCapActual(aero.getCapActual() - v.getPack_finales());//cliente recoge sus packs
-                    
+                    this.cantPacksSalientes+=v.getPack_finales();
+                    //LOS PACK QUE AUN TIENEN RECORRIDO POR HACER VUELVEN A ESTAR DISPONIBLES
                     for(Integer id : v.getIdPacks()){
-                        this.listPackAlgo.get(id).setEstado(1); // vuelven a estar disponibles los paquetes
+                        if(!this.listPackAlgo.get(id).getRuta().equals(""))
+                            this.listPackAlgo.get(id).setEstado(1);
                     }
                         
                     System.out.println(aero.getCountry()+" "+aero.getCapActual() + " : " + v.getPack_finales());
@@ -534,12 +536,21 @@ static final int FONT_SIZE = 11;
        try{ 
            
         for(int i = 0; i < n ; i++){   
-           
             if (this.inicioAlgo == 1){
-
-                //TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.rutasPaquetes, this.listPack,this.inicioAlgo);
-
-                TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.rutasPaquetesAlgo, this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes);
+                aplicaAlgoritmo();
+            }    
+        }
+        this.inicioAlgo = 0;
+       }catch(Exception ex){
+           System.out.println("error calculoInicial " + ex.getLocalizedMessage());
+       }
+    }
+    
+    
+    
+    public void aplicaAlgoritmo(){
+        try{
+                TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.listPackAlgo, this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes);
 
                 long startTime = System.nanoTime();
                 simulador.start();
@@ -562,15 +573,12 @@ static final int FONT_SIZE = 11;
                 
                 //Actualiza tiempo de algoritmo
                 this.tiempoAlgoMM = simulador.getTiempoAlgo();
-            }
-            
-            
-        }
-        this.inicioAlgo = 0;
-       }catch(Exception ex){
-           System.out.println("error calculoInicial " + ex.getLocalizedMessage());
+                
+        }catch(Exception ex){
+           System.out.println("error aplicaAlgoritmo " + ex.getLocalizedMessage());
        }
     }
+    
     
     
     public void cambiaEstadoPacks(){
@@ -579,7 +587,8 @@ static final int FONT_SIZE = 11;
             //System.out.println("cambiaEstadoPacks listPackAlgo ->  " + this.listPackAlgo.size());
             for (int iter = 0; iter < this.listPackAlgo.size(); iter++) {
                 Paquete p = this.listPackAlgo.get(iter);
-                if (!p.getRuta().equals("")) {
+                //CAMBIA EL ESTADO DE 0: NO DISPONIBLE A 1: DISPONIBLE SI TIENEN RUTA POR RECORRER
+                if (!p.getRuta().equals("") && p.getEstado() == 0) {
                     
                     int tiempoActual = this.horaMundial * 60 + this.minutoMundial;
                     int tiempoPack = p.getOriginHour() * 60 + p.getOriginMin();
@@ -609,7 +618,7 @@ static final int FONT_SIZE = 11;
                             
                             //SE AUMENTA EN 1 LA CAPACIDAD ACTUAL DEL AEROPUERTO ORIGEN
                             this.listaAeropuertos.get(p.getOriginAirport()-1).setCapActual(this.listaAeropuertos.get(p.getOriginAirport()-1).getCapActual() + 1);
-                            
+                            this.cantPacksEntrantes++;
                             /*
                             for(int i=0;i<this.listaAeropuertos.size();i++)
                                 if(this.listaAeropuertos.get(i).getCountry().equals("Belgica"))
@@ -647,9 +656,8 @@ static final int FONT_SIZE = 11;
                 System.out.println("<<<<<<<Colapso maximo avion>>>>>>>>>> -------------> " + this.avionColapsoMax + " - "  + this.cantMaxColapsoAvion);
             }
             
-
-            
-            
+            System.out.println("----->Cant Paquetes Entrantes " + this.cantPacksEntrantes);
+            System.out.println("----->Cant Paquetes Salientes " + this.cantPacksSalientes);
             
             //si esta al inicio de todo, calcular n cantidad de lotes para evitar descuadre
             
@@ -662,31 +670,11 @@ static final int FONT_SIZE = 11;
 
             //if (this.cantTics == this.algoritmoDelayMinutes || this.horaMundial*60 + this.minutoMundial == 0){
               //  TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.rutasPaquetes,this.listPack,this.inicioAlgo); 
-
+                      
             if (this.cantTics == this.algoritmoDelayMinutes){
-                TabuSimulator simulador=new TabuSimulator(this.horaMundial,this.minutoMundial,this.calendar.getTime(),this.tabu,this.listaAeropuertos,this.listaVuelos,this.rutasPaquetesAlgo,this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes); 
                 
-
-                long startTime = System.nanoTime();
-                simulador.start();
-                simulador.join();
-                long endTime = System.nanoTime();
-                long  totalTime = endTime - startTime;
+                aplicaAlgoritmo();
                 
-                //rutasPaquetesAlgo=simulador.rutasPaquetesAlgo;
-                listaAeropuertos=simulador.listaAeropuertos;
-                
-                //AGREGA LISTA PAQUETES CON RUTAS A LA EXISTENTE
-                System.out.println("------>cantidad de packs  procesados " +  simulador.getListPackAlgo().size());
-                
-                this.listPackAlgo.addAll(simulador.getListPackAlgo());
-                
-                System.out.println("------>tiempo " +  totalTime/1000000000 + "segundos"); 
-                
-                System.out.println("------>cantidad de packs  almacenado " +  listPack.size()); 
-                System.out.println("------>cantidad de packs  con rutas " +  listPackAlgo.size()); 
-                
-                //generateRoutes();
                 this.cantTics=0;
             }
             

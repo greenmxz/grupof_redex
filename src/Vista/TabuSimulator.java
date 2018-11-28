@@ -32,7 +32,7 @@ public class TabuSimulator extends Thread{
     
     //public ArrayList<String> rutasPaquetes = new ArrayList();
 
-    public ArrayList<Algoritmo.Paquete> rutasPaquetesAlgo = new ArrayList();
+
 
     
     public ArrayList<Aeropuerto> listaAeropuertos = new ArrayList<>();
@@ -40,15 +40,16 @@ public class TabuSimulator extends Thread{
 
     private ArrayList<Algoritmo.Paquete> listPack = new ArrayList<>();
     private ArrayList<Algoritmo.Paquete> listPackAlgo = new ArrayList<>();
+    private ArrayList<Algoritmo.Paquete> listPackAlgoAnterior = new ArrayList<>();
     private int tiempoAlgo; 
     
     public TabuSimulator(int hora,int min,Date fecha,TabuSearch tabu,ArrayList<Aeropuerto> listaAeropuertos,ArrayList<Algoritmo.Vuelo> listaVuelos,
 
 
-//            ArrayList<String> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo){
+//            ArrayList<String> listPackAlgo,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo){
 
 
-            ArrayList<Algoritmo.Paquete> rutasPaquetes,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
+            ArrayList<Algoritmo.Paquete> listPackAlgo,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
         this.horaMundial=hora;
         this.minutoMundial=min;
         this.fechaActual=fecha;
@@ -56,11 +57,8 @@ public class TabuSimulator extends Thread{
         this.listaAeropuertos=(ArrayList<Aeropuerto>)listaAeropuertos.clone();
         this.listaVuelos=(ArrayList<Algoritmo.Vuelo>)listaVuelos.clone();
 
-        
-        //this.rutasPaquetes=rutasPaquetes;
-
-        
-        this.rutasPaquetesAlgo=(ArrayList<Algoritmo.Paquete>)rutasPaquetes.clone();
+        //PACKS QUE YA TIENEN RUTA
+        this.listPackAlgoAnterior=listPackAlgo;
 
         this.listPack=(ArrayList<Algoritmo.Paquete>)listPack;
         this.tiempoAlgo = tiempoAlgo;
