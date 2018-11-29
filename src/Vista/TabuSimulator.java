@@ -59,8 +59,9 @@ public class TabuSimulator extends Thread{
 
         //PACKS QUE YA TIENEN RUTA
         this.listPackAlgoAnterior=listPackAlgo;
-
-        this.listPack=(ArrayList<Algoritmo.Paquete>)listPack;
+        // TODOS LOS PACKS GENERADOS
+        this.listPack=listPack; 
+        
         this.tiempoAlgo = tiempoAlgo;
         this.algoritmoDelayMinutes = algoritmoDelayMinutes;
     }
@@ -121,8 +122,14 @@ public class TabuSimulator extends Thread{
         try{
             //aplica algoritmo a un set de paquetes cada cierto delay en minutos de simulacion
             //if (this.cantTics == this.algoritmoDelayMinutes){
+            //SE SELECCIONAN PACKS NUEVOS SEGUN VAN LLEGANDO
             seleccionPacksAlgo();
-            System.out.println("cant de paquetes que aplicaran tabu - " + this.listPackAlgo.size());
+            System.out.println("cant de paquetes nuevos que aplicaran tabu - " + this.listPackAlgo.size());
+            
+            //SE JUNTAN LOS NUEVOS CON LOS QUE YA TIENEN RUTA
+            // EL ALGORITMO SOLO BRINDA RUTA A LOS PACKS DISPONIBLES Y A LOS NUEVOS
+            //this.listPackAlgo.addAll(this.listPack);
+            
             if (this.listPackAlgo.size() > 0){
                 //se van agregando las rutas segun se aplique el algoritmo
                 //MUTEX

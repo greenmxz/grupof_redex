@@ -150,39 +150,41 @@ public class TabuSearch {
         int noAsign = 0;
 
         for(int iter=0; iter<numPack; iter++){
+            //NO APLICA ALGORITMO A LOS QUE SE ENCUENTRAN EN EL AIRE Y A LOS QUE YA NO NECESITAN
+            if (paquetesAct.get(iter).getEstado() < 2){// SOLO PARA 0 y 1
+                int origin = paquetesAct.get(iter).getOriginAirport();
+                int destiny = paquetesAct.get(iter).getDestinyAirport();
 
-            int origin = paquetesAct.get(iter).getOriginAirport();
-            int destiny = paquetesAct.get(iter).getDestinyAirport();
+    //            getListPack().get(iter).print();
+                if(validator(origin, destiny)){
+                    String time = String.valueOf(paquetesAct.get(iter).getOriginHour()) + ":" + 
+                            String.valueOf(paquetesAct.get(iter).getOriginMin());
+                    tabuAlgorithm(origin, destiny, time);
+                    ArrayList<Integer> optimal = getRouteOptimal();
+                    if(optimal.size() > 0)
+                        for(int i : optimal)
+                            capVuelos.set(i-1, capVuelos.get(i-1)+1);
 
-//            getListPack().get(iter).print();
-            if(validator(origin, destiny)){
-                String time = String.valueOf(paquetesAct.get(iter).getOriginHour()) + ":" + 
-                        String.valueOf(paquetesAct.get(iter).getOriginMin());
-                tabuAlgorithm(origin, destiny, time);
-                ArrayList<Integer> optimal = getRouteOptimal();
-                if(optimal.size() > 0)
-                    for(int i : optimal)
-                        capVuelos.set(i-1, capVuelos.get(i-1)+1);
-                
-                String solution = generateTabuString(optimal);
+                    String solution = generateTabuString(optimal);
 
-//                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
-                if(solution.equals("")){
-                    noAsign++;
-//                    System.out.println(iter);
-                }else{// si hay solucion
-                    paquetesAct.get(iter).setRuta(solution);
-                    paquetesAct.get(iter).setEstado(0); // paquete no disponible
+    //                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
+                    if(solution.equals("")){
+                        noAsign++;
+    //                    System.out.println(iter);
+                    }else{// si hay solucion
+                        paquetesAct.get(iter).setRuta(solution);
+                        paquetesAct.get(iter).setEstado(0); // paquete no disponible
+                    }
+
+    //              if(solution.equals("")) System.out.println(iter);
+
+                    aux.add(solution);
+                }else{
+                    System.out.println("Some airport doesn't exist!");
                 }
-
-//              if(solution.equals("")) System.out.println(iter);
-
-                aux.add(solution);
-            }else{
-                System.out.println("Some airport doesn't exist!");
             }
         }
-
+        /*
         System.out.println("Vacíos: " + String.valueOf(noAsign));
         System.out.println("Estado: ");
         for(int i=0; i<capVuelos.size(); i++)
@@ -190,7 +192,7 @@ public class TabuSearch {
                 System.out.println("Tabu: "+String.valueOf(i+1) + " : " + capVuelos.get(i));
 
         System.out.println("Vacíos: " + String.valueOf(noAsign));
-        
+        */
         return aux;
     }
     
