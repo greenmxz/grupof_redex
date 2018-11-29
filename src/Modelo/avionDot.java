@@ -36,6 +36,7 @@ public class avionDot {
     private double t_llegada;
     private double t_restante;
     private int pack_finales;
+    private ArrayList<Integer> idPacks = new ArrayList<>();
 
     public double getT_llegada() {
         return abs((this.hora_llegada*60 + this.min_llegada) -(this.hora_salida*60 + this.min_salida));
@@ -216,6 +217,14 @@ public class avionDot {
 
     public void setPack_finales(int pack_finales) {
         this.pack_finales = pack_finales;
+    }
+
+    public ArrayList<Integer> getIdPacks() {
+        return idPacks;
+    }
+
+    public void setIdPacks(ArrayList<Integer> idPacks) {
+        this.idPacks = idPacks;
     }
     
   

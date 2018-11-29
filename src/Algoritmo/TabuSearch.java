@@ -28,6 +28,31 @@ public class TabuSearch {
     private int hourBegin;
     private boolean finded = false;
     private int timeToCmp;
+
+    public TabuSearch(){
+        
+    }
+    
+    public TabuSearch(TabuSearch tabu) {
+        this.listAirport = (ArrayList<Aeropuerto>)tabu.listAirport.clone();
+        this.listFlight = (ArrayList<Vuelo>)tabu.listFlight.clone();
+        int filas=this.flightMatrix.size();
+        for(int f=0;f<filas;f++){
+            this.flightMatrix.add((ArrayList<Integer>)tabu.flightMatrix.get(f).clone());
+        }
+        this.tabuString = tabu.tabuString;
+        this.routeOptimal = tabu.routeOptimal;
+        this.capVuelos = tabu.capVuelos;
+        this.numAirport = tabu.numAirport;
+        this.numFlight = tabu.numFlight;
+        this.originId = tabu.originId;
+        this.destinyId = tabu.destinyId;
+        this.limit = tabu.limit;
+        this.hourBegin = tabu.hourBegin;
+        this.timeToCmp = tabu.timeToCmp;
+    }
+    
+    
     
     public ArrayList<Integer> getRouteOptimal(){
         return routeOptimal;
@@ -116,6 +141,7 @@ public class TabuSearch {
         ArrayList<String> aux = new ArrayList<String>();
         numAirport = getListAirport().size();
         capVuelos = new ArrayList<Integer>();
+        int numPack=paquetesAct.size();
         for(int i=0; i<listFlight.size(); i++)
             capVuelos.add(0);
 //        for(int i=0; i<listFlight.size(); i++)
@@ -123,51 +149,50 @@ public class TabuSearch {
         setListPack(paquetesAct);
         int noAsign = 0;
 
+        for(int iter=0; iter<numPack; iter++){
+            //NO APLICA ALGORITMO A LOS QUE SE ENCUENTRAN EN EL AIRE Y A LOS QUE YA NO NECESITAN
+            if (paquetesAct.get(iter).getEstado() < 2){// SOLO PARA 0 y 1
+                int origin = paquetesAct.get(iter).getOriginAirport();
+                int destiny = paquetesAct.get(iter).getDestinyAirport();
 
-        
-//        for(int iter=0; iter<1500; iter++){
-        for(int iter=0; iter<listPack.size(); iter++){
-//        for(int iter=1744; iter<1745; iter++){
-//        for(int iter=1449; iter<1450; iter++){              
+    //            getListPack().get(iter).print();
+                if(validator(origin, destiny)){
+                    String time = String.valueOf(paquetesAct.get(iter).getOriginHour()) + ":" + 
+                            String.valueOf(paquetesAct.get(iter).getOriginMin());
+                    tabuAlgorithm(origin, destiny, time);
+                    ArrayList<Integer> optimal = getRouteOptimal();
+                    if(optimal.size() > 0)
+                        for(int i : optimal)
+                            capVuelos.set(i-1, capVuelos.get(i-1)+1);
 
-            int origin = getListPack().get(iter).getOriginAirport();
-            int destiny = getListPack().get(iter).getDestinyAirport();
-//            getListPack().get(iter).print();
-            if(validator(origin, destiny)){
-                String time = String.valueOf(getListPack().get(iter).getOriginHour()) + ":" + 
-                        String.valueOf(getListPack().get(iter).getOriginMin());
-                tabuAlgorithm(origin, destiny, time);
-                ArrayList<Integer> optimal = getRouteOptimal();
-                if(optimal.size() > 0)
-                    for(int i : optimal)
-                        capVuelos.set(i-1, capVuelos.get(i-1)+1);
-                String solution = generateTabuString(optimal);
+                    String solution = generateTabuString(optimal);
 
-//                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
-                if(solution.equals("")){
-                    noAsign++;
-//                    System.out.println(iter);
+    //                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
+                    if(solution.equals("")){
+                        noAsign++;
+    //                    System.out.println(iter);
+                    }else{// si hay solucion
+                        paquetesAct.get(iter).setRuta(solution);
+                        paquetesAct.get(iter).setEstado(0); // paquete no disponible
+                    }
+
+    //              if(solution.equals("")) System.out.println(iter);
+
+                    aux.add(solution);
+                }else{
+                    System.out.println("Some airport doesn't exist!");
                 }
-//                if(solution.equals("")) System.out.println(iter);
-
-                aux.add(solution);
-            }else{
-                System.out.println("Some airport doesn't exist!");
             }
         }
-
-//        System.out.println("Vacíos: " + String.valueOf(noAsign));
-//        System.out.println("Estado: ");
-//        for(int i=0; i<capVuelos.size(); i++)
-//            if(capVuelos.get(i) > 0)
-//                System.out.println("Tabu: "+String.valueOf(i+1) + " : " + capVuelos.get(i));
-
+        /*
         System.out.println("Vacíos: " + String.valueOf(noAsign));
         System.out.println("Estado: ");
         for(int i=0; i<capVuelos.size(); i++)
             if(capVuelos.get(i) > 0)
-                System.out.println(String.valueOf(i+1) + " : " + capVuelos.get(i));
+                System.out.println("Tabu: "+String.valueOf(i+1) + " : " + capVuelos.get(i));
 
+        System.out.println("Vacíos: " + String.valueOf(noAsign));
+        */
         return aux;
     }
     
@@ -332,6 +357,10 @@ public class TabuSearch {
             timeToCmp = obtainStandardHour(getListFlight().get(route[getLastMinusOne(route)-1]-1),'L');
         }
         int iSup = 0, iInf = 0, iTop = 0;
+
+        
+        
+        
         for(int i=0; i<listNeighbor.length; i++){
             /* Origin */
             cmpTime = obtainStandardHour(getListFlight().get(listNeighborAL.get(i)-1),'P');
@@ -445,6 +474,7 @@ public class TabuSearch {
             }
         }catch(Exception e){
             System.out.println("Error abc" + e.getMessage());
+            e.printStackTrace();
             return originalRoute;
         }
 //        System.out.print("Llegué con ");

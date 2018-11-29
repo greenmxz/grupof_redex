@@ -22,7 +22,7 @@ public class generalDA {
         try{
             continente continente = new continente();
             database connect = new database();
-            String query =  "select tabla_general.id, tabla_general.codigo, tabla_general_detalle.valor \n" +
+            String query =  "select tabla_general_detalle.id, tabla_general.codigo, tabla_general_detalle.valor \n" +
                             "from tabla_general\n" +
                             "inner join tabla_general_detalle on tabla_general_detalle.id_tabla_general = tabla_general.id\n" +
                             "where tabla_general_detalle.activo = 1 and tabla_general.codigo = '"+codigo+"' and\n" +

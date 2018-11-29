@@ -36,7 +36,9 @@ public class AdministrarPedidoDA {
 
       try{   
             database connect = new database();
-            String query = "select * from pedido where id = " + id_pedido + ";";
+            String query = " select *,tgd.valor  as estado from pedido as p "
+                    + "inner join tabla_general_detalle as tgd on p.id_estado=tgd.id "
+                    + " where p.id = " + id_pedido + ";";
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             
@@ -57,8 +59,8 @@ public class AdministrarPedidoDA {
                 pedido.setDescripcion(rs.getString("descripcion"));
                 pedido.setMonto(rs.getDouble("monto"));
                 
-                pedido.setEstado("Enviado"); // <---POR CAMBIAR
-                
+                //pedido.setEstado("Enviado"); // <---POR CAMBIAR
+                pedido.setEstado(rs.getString("estado")); 
                 //obtener clientes
                 cliente_emisor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_emisor"));
                 cliente_receptor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_receptor"));
@@ -88,7 +90,9 @@ public class AdministrarPedidoDA {
 
       try{   
             database connect = new database();
-            String query = "select * from pedido where codigo = '" + codigo + "';";
+            String query = "select *,tgd.valor  as estado from pedido as p "
+                    + "inner join tabla_general_detalle as tgd on p.id_estado=tgd.id "
+                    + " where p.codigo = '" + codigo + "';";
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             
@@ -109,8 +113,8 @@ public class AdministrarPedidoDA {
                 pedido.setDescripcion(rs.getString("descripcion"));
                 pedido.setMonto(rs.getDouble("monto"));
                 
-                pedido.setEstado("Enviado"); // <---POR CAMBIAR
-                
+                //pedido.setEstado("Enviado"); // <---POR CAMBIAR
+                pedido.setEstado(rs.getString("estado")); 
                 //obtener clientes
                 cliente_emisor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_emisor"));
                 cliente_receptor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_receptor"));
@@ -140,7 +144,7 @@ public class AdministrarPedidoDA {
         try {
             ArrayList<pedido> listPedidos = new ArrayList<>();
             database connect = new database();
-            String query = "select pedido.id, pedido.codigo, pedido.fecha_pedido, pedido.descripcion, pedido.monto, pedido.fecha_entrega, pedido.id_estado,\n" +
+            String query = "select pedido.id, pedido.codigo, pedido.fecha_pedido, pedido.descripcion, pedido.monto, pedido.fecha_entrega, tgd.id as estado_id,tgd.valor as estado,\n" +
                             "aero_emisor.id as id_aeropuerto_emisor, aero_emisor.nombre as aeropuerto_emisor, aero_emisor.codigo as aeropuerto_emisor_codigo,\n" +
                             "aero_receptor.id as id_aeropuerto_receptor, aero_receptor.nombre as aeropuerto_receptor, aero_receptor.codigo as aeropuerto_receptor_codigo,\n" +
                             "aero_actual.id as id_aeropuerto_actual, aero_actual.nombre as aeropuerto_actual, aero_actual.codigo as aeropuerto_actual_codigo,\n" +
@@ -149,6 +153,7 @@ public class AdministrarPedidoDA {
                             "cliente_receptor.id as id_cliente_receptor, cliente_receptor.codigo as codigo_cl_receptor,\n" +
                             "persona_receptor.numero_documento_identidad as cliente_receptor_dni\n" +
                             "from pedido\n" +
+                            "inner join tabla_general_detalle as tgd on tgd.id = pedido.id_estado "+
                             "inner join aeropuerto as aero_emisor on pedido.id_aeropuerto_emisor = aero_emisor.id\n" +
                             "inner join aeropuerto as aero_receptor on pedido.id_aeropuerto_receptor = aero_receptor.id\n" +
                             "inner join aeropuerto as aero_actual on pedido.id_aeropuerto_actual = aero_actual.id\n" +
@@ -226,8 +231,8 @@ public class AdministrarPedidoDA {
                 pedido.setDescripcion(rs.getString("descripcion"));
                 pedido.setMonto(rs.getDouble("monto"));
                 
-                pedido.setEstado("Enviado"); // <---POR CAMBIAR
-                
+               // pedido.setEstado("Enviado"); // <---POR CAMBIAR
+                pedido.setEstado(rs.getString("estado")); 
                 //obtener clientes
                 cliente_emisor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_emisor"));
                 cliente_receptor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_receptor"));

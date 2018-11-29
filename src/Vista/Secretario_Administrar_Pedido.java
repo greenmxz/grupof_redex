@@ -10,8 +10,10 @@ import Modelo.aeropuerto;
 import Modelo.cliente;
 import Modelo.estado;
 import Modelo.pedido;
+import java.awt.Frame;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -347,7 +349,7 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
             pedido pedido = controlador_pedido.obtenerPedidoxCodigo(codigo);
 
             if (pedido != null){
-                Vista.Secretario_Modificar_Pedido m_pedido = new Vista.Secretario_Modificar_Pedido(tblPedidos,pedido);
+                Vista.Secretario_Modificar_Pedido m_pedido = new Vista.Secretario_Modificar_Pedido(tblPedidos,pedido,parent,true,null);
                 m_pedido.setVisible(true);
             }else{
                 JOptionPane.showMessageDialog(null,
