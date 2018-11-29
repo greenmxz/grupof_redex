@@ -9,12 +9,12 @@ package Vista;
  *
  * @author Jorge F
  */
-public class frmReporteRanking extends javax.swing.JPanel {
+public class frmReporteHistorial extends javax.swing.JPanel {
 
     /**
      * Creates new form frmReporteRanking
      */
-    public frmReporteRanking() {
+    public frmReporteHistorial() {
         initComponents();
     }
 
