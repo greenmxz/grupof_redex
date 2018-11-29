@@ -151,7 +151,7 @@ public class TabuSearch {
 
         for(int iter=0; iter<numPack; iter++){
             //NO APLICA ALGORITMO A LOS QUE SE ENCUENTRAN EN EL AIRE Y A LOS QUE YA NO NECESITAN
-            if (paquetesAct.get(iter).getEstado() < 2){// SOLO PARA 0 y 1
+            if (paquetesAct.get(iter).getEstado() < 2 && paquetesAct.get(iter).getEsFinal() == 0){// SOLO PARA 0 o 1 y no es final
                 int origin = paquetesAct.get(iter).getOriginAirport();
                 int destiny = paquetesAct.get(iter).getDestinyAirport();
 
@@ -173,7 +173,7 @@ public class TabuSearch {
     //                    System.out.println(iter);
                     }else{// si hay solucion
                         paquetesAct.get(iter).setRuta(solution);
-                        paquetesAct.get(iter).setEstado(0); // paquete no disponible
+                        //paquetesAct.get(iter).setEstado(0); // paquete no disponible
                     }
 
     //              if(solution.equals("")) System.out.println(iter);

@@ -215,6 +215,8 @@ public class MapWorkerTest {
             dot.setColor("verde");
             dot.setIcaoOrigen(v.getAeropuertoOrigen());
             dot.setIcaoDestino(v.getAeropuertoDestino());
+            dot.setIdAeroOrigen(v.getIdAeropuertoOrigen());
+            dot.setIdAeroDestino(v.getIdAeropuertoDestino());
             dot.setPack_finales(0);
             //hora de salida
             Date fs = v.getFechaSalida();

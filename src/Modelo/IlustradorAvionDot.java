@@ -316,7 +316,7 @@ static final int FONT_SIZE = 11;
                             
                            //System.out.println("AQUI EJEAJEAJ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ids.length);
                             if (ids.length == 1){// es su ultimo paradero
-                                
+                                this.listPackAlgo.get(i).setEsFinal(1);
                                 //COMPROBAR COLAPSO POR TIEMPO
                                 int tiempoSalida = v.getHora_salida() * 60 + v.getMin_salida();
                                 int tiempoLlegada = v.getHora_llegada() * 60 + v.getMin_llegada();
@@ -463,6 +463,7 @@ static final int FONT_SIZE = 11;
         calculaMovAvion(v);
         
         
+        
         //SI ES LA HORA DE LLEGADA DEL AVION
         if (this.horaMundial*60 + this.minutoMundial == v.getHora_llegada()*60 + v.getMin_llegada()){
             //if (v.getCapacidadActual() > 0)
@@ -470,8 +471,9 @@ static final int FONT_SIZE = 11;
             v.getActual().setX(v.getDestino().getX());
             v.getActual().setY(v.getDestino().getY());
             // EL AVION LLEGA Y VACIA ALMACEN Y DEJA PAQUETES EN EL AEROPUERTO
-            for(Aeropuerto aero : this.listaAeropuertos){
-                if(aero.getIcaoCode().equals(v.getIcaoDestino())){
+            Aeropuerto aero = this.listaAeropuertos.get(v.getIdAeroDestino()-1);
+            //for(Aeropuerto aero : this.listaAeropuertos){
+                //if(aero.getIcaoCode().equals(v.getIcaoDestino())){
                     //capacidad el aero se actualiza
                     aero.setCapActual(aero.getCapActual() + v.getCapacidadActual());
                     //
@@ -502,9 +504,10 @@ static final int FONT_SIZE = 11;
                     this.cantPacksSalientes+=v.getPack_finales();
                     //LOS PACK QUE AUN TIENEN RECORRIDO POR HACER VUELVEN A ESTAR DISPONIBLES
                     for(Integer id : v.getIdPacks()){
-                        if(!this.listPackAlgo.get(id).getRuta().equals(""))
+                        if(!this.listPackAlgo.get(id).getRuta().equals("")){
                             this.listPackAlgo.get(id).setEstado(1);
-                        else
+                            this.listPackAlgo.get(id).setOriginAirport(aero.getIdentificator());
+                        }else
                             this.listPackAlgo.get(id).setEstado(3); // packs fuera
 
                     }
@@ -513,9 +516,9 @@ static final int FONT_SIZE = 11;
                     
                     v.getIdPacks().clear(); // se queda sin packs
                     v.setPack_finales(0); // se queda sin pack finales
-                    break; //se sale del for
-                }
-            }
+                    //break; //se sale del for
+             //   }
+            //}
             v.setCapacidadActual(0);
             //System.out.println("<<<<<<<<<<<<< vuelo vacia" + v.getId() + " -- " + v.getCapacidadActual());
         }
@@ -608,7 +611,8 @@ static final int FONT_SIZE = 11;
                 //AGREGA LISTA PAQUETES CON RUTAS A LA EXISTENTE
                 System.out.println("------>cantidad de packs  procesados " +  simulador.getListPackAlgo().size());
                 
-                this.listPackAlgo.addAll(simulador.getListPackAlgo());
+                //this.listPackAlgo.addAll(simulador.getListPackAlgo());
+                this.listPackAlgo = simulador.getListPackAlgo();
                 
                 System.out.println("------>tiempo " +  totalTime/1000000000 + "segundos"); 
                 
