@@ -12,7 +12,8 @@ public class Paquete {
     private int originMonth;
     private int originYear;
     private String ruta = "";
-    private int estado; // 0: no disponible, 1: en espera, 2: en transito
+    private int esFinal = 0; // 0: tiene varios pasos, 1: solo le falta un paso
+    private int estado = 0; // 0: no disponible, 1: en espera, 2: en transito
     
     public Paquete(int originHour, int originMin, int originAirport,
             int destinyAirport){
@@ -112,6 +113,14 @@ public class Paquete {
                 String.valueOf(this.getOriginMin()) + " route " +
                 String.valueOf(this.getOriginAirport()) + " -> " +
                 String.valueOf(this.getDestinyAirport()));
+    }
+
+    public int getEsFinal() {
+        return esFinal;
+    }
+
+    public void setEsFinal(int esFinal) {
+        this.esFinal = esFinal;
     }
     
 }

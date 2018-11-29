@@ -41,6 +41,7 @@ public class TabuSimulator extends Thread{
     private ArrayList<Algoritmo.Paquete> listPack = new ArrayList<>();
     private ArrayList<Algoritmo.Paquete> listPackAlgo = new ArrayList<>();
     private ArrayList<Algoritmo.Paquete> listPackAlgoAnterior = new ArrayList<>();
+    private ArrayList<Algoritmo.Paquete> listPackAlgoFusion = new ArrayList<>();
     private int tiempoAlgo; 
     
     public TabuSimulator(int hora,int min,Date fecha,TabuSearch tabu,ArrayList<Aeropuerto> listaAeropuertos,ArrayList<Algoritmo.Vuelo> listaVuelos,
@@ -59,8 +60,9 @@ public class TabuSimulator extends Thread{
 
         //PACKS QUE YA TIENEN RUTA
         this.listPackAlgoAnterior=listPackAlgo;
-
-        this.listPack=(ArrayList<Algoritmo.Paquete>)listPack;
+        // TODOS LOS PACKS GENERADOS
+        this.listPack=listPack; 
+        
         this.tiempoAlgo = tiempoAlgo;
         this.algoritmoDelayMinutes = algoritmoDelayMinutes;
     }
@@ -121,16 +123,26 @@ public class TabuSimulator extends Thread{
         try{
             //aplica algoritmo a un set de paquetes cada cierto delay en minutos de simulacion
             //if (this.cantTics == this.algoritmoDelayMinutes){
+            //SE SELECCIONAN PACKS NUEVOS SEGUN VAN LLEGANDO
             seleccionPacksAlgo();
-            System.out.println("cant de paquetes que aplicaran tabu - " + this.listPackAlgo.size());
-            if (this.listPackAlgo.size() > 0){
+            System.out.println("cant de paquetes nuevos que aplicaran tabu - " + this.listPackAlgo.size());
+            
+            //SE JUNTAN LOS NUEVOS CON LOS QUE YA TIENEN RUTA
+            // EL ALGORITMO SOLO BRINDA RUTA A LOS PACKS DISPONIBLES Y A LOS NUEVOS
+            //this.listPackAlgo.addAll(this.listPack);
+            
+            this.listPackAlgoFusion.addAll(this.listPackAlgoAnterior);
+            this.listPackAlgoFusion.addAll(this.listPackAlgo);
+            
+            System.out.println("cant de paquetes totales que aplicaran tabu - " + this.listPackAlgoFusion.size());
+            if (this.listPackAlgoFusion.size() > 0){
                 //se van agregando las rutas segun se aplique el algoritmo
                 //MUTEX
                 mutex.acquire();
                 System.out.println("ENTRO AL HILO");
                 
                 //OBTIENE RUTAS
-                this.tabu.executeVCRPTabu(this.listPackAlgo);
+                this.tabu.executeVCRPTabu(this.listPackAlgoFusion);
                 
                 
             //if (this.listPackAlgo.size() > 0){
@@ -175,11 +187,11 @@ public class TabuSimulator extends Thread{
     }
 
     public ArrayList<Paquete> getListPackAlgo() {
-        return listPackAlgo;
+        return listPackAlgoFusion;
     }
 
     public void setListPackAlgo(ArrayList<Paquete> listPackAlgo) {
-        this.listPackAlgo = listPackAlgo;
+        this.listPackAlgoFusion = listPackAlgo;
     }
     
 }
