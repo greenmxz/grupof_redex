@@ -39,6 +39,10 @@ import Controlador.generalBL;
 import Modelo.Vuelo;
 import Modelo.continente;
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Panel;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
@@ -83,14 +87,11 @@ public class MapWorkerTest {
     private final ArrayList<CoordenadaDouble>destino=new ArrayList<>();
       
     private ArrayList<avionDot> avionesDot = new ArrayList<>();
-
     
     
     
-    static final String HELP =
-    "Type Ctrl-0 to get a screenshot of the current GUI.\n" +
-    "The screenshot will be saved to the current " +
-    "directory as 'screenshot.png'.";
+    
+  
 
     public static BufferedImage getScreenShot(Component component) {
 
@@ -132,30 +133,29 @@ public class MapWorkerTest {
     void display() throws IOException {
         JFrame f = new JFrame("MapWorker");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-      
 
-        JMapViewer map = new JMapViewer() {
-        
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(1040, 780);
-            }
 
-            @Override
-            public String getToolTipText(MouseEvent e) {
-                Coordinate c = (Coordinate) getPosition(e.getX(), e.getY());
-                return c.getLat() + " " + c.getLon();
-            }
-        };
-        
-        map.setToolTipText("");
-        //Coordinate start = new Coordinate(-34.9286, 138.6);
-        Coordinate start =new Coordinate(0,0);
-        route.add(start);
-        MapPolygonImpl poly = new MapPolygonImpl(route);
-        poly.setColor(Color.blue);
-        map.addMapPolygon(poly);
+//        JMapViewer map = new JMapViewer() {
+//        
+//            @Override
+//            public Dimension getPreferredSize() {
+//                return new Dimension(1040, 780);
+//            }
+//
+//            @Override
+//            public String getToolTipText(MouseEvent e) {
+//                Coordinate c = (Coordinate) getPosition(e.getX(), e.getY());
+//                return c.getLat() + " " + c.getLon();
+//            }
+//        };
+//        map.setMapRectanglesVisible(false);
+//        map.setToolTipText("");
+//        //Coordinate start = new Coordinate(-34.9286, 138.6);
+//        Coordinate start =new Coordinate(0,0);
+//        route.add(start);
+//        MapPolygonImpl poly = new MapPolygonImpl(route);
+//        poly.setColor(Color.blue);
+//        map.addMapPolygon(poly);
         
         
         // Lectura de Aeropuertos
@@ -180,15 +180,15 @@ public class MapWorkerTest {
                 String paisAe = arr[10];//pais
                 
                 
-                int h=map.getPreferredSize().height;
-                int w=map.getPreferredSize().width;
+                //int h=map.getPreferredSize().height;
+                //int w=map.getPreferredSize().width;
                
                 
                 int index = buscaAeropuerto(this.listaAeropuertos,codigoAe);
                 
                 if (index != -1){
                     //  si existe aeropuerto en data del profe se asigna coordenadas y pinta puntito
-                    map.addMapMarker(new MapMarkerDot(lat,lon)); // pinta puntito amarillo
+                    //map.addMapMarker(new MapMarkerDot(lat,lon)); // pinta puntito amarillo
                     
                     this.listaAeropuertos.get(index).setCoordX(coordX);
                     this.listaAeropuertos.get(index).setCoordY(coordY);
@@ -258,7 +258,7 @@ public class MapWorkerTest {
         }
         
         
-        map.setDisplayPosition(start, 2);
+        //map.setDisplayPosition(start, 2);
 
         this.continentes = general.obtenerContinentes();
 
@@ -295,8 +295,9 @@ public class MapWorkerTest {
         
         IlustradorAvionDot ilustradorAvion = new IlustradorAvionDot(this.avionesDot,this.listaAeropuertosNew,this.listaVuelosNew);   
         ilustradorAvion.setVisible(true);
-        ilustradorAvion.setSize(map.getPreferredSize());
-        ilustradorAvion.setOpaque(false);
+        //ilustradorAvion.setSize(map.getPreferredSize());
+        //ilustradorAvion.setOpaque(false);
+        
         JButton button1 = new JButton();
         button1.setLocation(900,900);
         button1.setText("<<");
@@ -450,7 +451,7 @@ public class MapWorkerTest {
         ilustradorAvion.add(button4);
         ilustradorAvion.add(label2);
         ilustradorAvion.add(button5);
-        
+       
         ilustradorAvion.addMouseListener(new MouseListener() {//Disminuir velocidad
             
 
@@ -524,18 +525,18 @@ public class MapWorkerTest {
 
 
         });
-        ilustradorAvion.setLocation(map.getLocation());
-        map.add(ilustradorAvion); 
-        map.setZoomControlsVisible(false);
+        //ilustradorAvion.setLocation(map.getLocation());
+        //map.add(ilustradorAvion); 
+        //map.setZoomControlsVisible(false);
        
-        f.add(map);
+        f.add(ilustradorAvion);
         //f.setResizable(false);
         Dimension d = new Dimension(1040,780);
         f.setMaximumSize( d);
         f.setResizable(false);
         System.out.println( "MI SIZE: " + f.getMaximumSize( ));
         f.pack();
-        f.setSize(map.getPreferredSize());
+        f.setSize(1023,697);
         f.setLocationRelativeTo(null);
         f.setVisible(true);
         
@@ -548,51 +549,6 @@ public class MapWorkerTest {
             }
         }
         return -1;
-    }
-    private class MapWorker extends SwingWorker<Void, Coordinate> {
-
-        private final JMapViewer map;
-        private Coordinate last;
-        private MapMarkerDot lastdot;
-        private MapMarkerDot actualdot;
-        
-        public MapWorker(JMapViewer map, Coordinate start)  {
-            this.map = map;
-            this.last = start;
-        }
-        
-        @Override
-        protected Void doInBackground() throws Exception {
-            while (!isCancelled()) {
-                
-                lastdot=new MapMarkerDot(last.getLat(),last.getLon());
-                last = new Coordinate(last.getLat() + 1, last.getLon() + 1);
-                actualdot=new MapMarkerDot(last.getLat(),last.getLon());
-                publish(last);
-                
-                //Thread.sleep(1000);
-                
-            }
-            return null;
-        }
-
-        @Override
-        protected void process(List<Coordinate> chunks) {
-            //for (Coordinate c : chunks) {
-                //route.add(c);
-                
-                
-                //map.removeAllMapMarkers();
-                
-                
-                
-                
-             //map.removeMapMarker(lastdot);
-                map.addMapMarker(actualdot);
-                
-            //}
-            map.repaint();
-        }
     }
 
     public static void main(String[] args) {

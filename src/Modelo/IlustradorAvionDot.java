@@ -26,9 +26,12 @@ import java.util.Calendar;
 import java.util.Date;
 import Algoritmo.*;
 import Vista.TabuSimulator;
+import java.awt.BasicStroke;
+import java.awt.Image;
 import java.awt.geom.Rectangle2D;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -81,7 +84,12 @@ static final int FONT_SIZE = 11;
     
     private DataProcessing dp = new DataProcessing();
     private TabuSearch tabu = new TabuSearch();
+    private Image img;
+    final static BasicStroke stroke = new BasicStroke(5.0f);
     
+    public void setImg(Image img) {
+        this.img = img;
+    }
     
     
         /**
@@ -169,7 +177,10 @@ static final int FONT_SIZE = 11;
 }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+        
         Graphics2D g2=(Graphics2D)g;
+        img=new ImageIcon("src\\Resource\\mapaMundi.PNG").getImage();
+        g.drawImage(img, 0, 0, this);
         //int sizeList=destiny.size();
         Font font = new Font("Arial", Font.PLAIN, toPixels(FONT_SIZE));
         g2.setFont(font);
@@ -178,10 +189,10 @@ static final int FONT_SIZE = 11;
         else
             g2.drawString(String.valueOf(horaMundial), 800, 80);
         if(minutoMundial>=0 && minutoMundial<10)
-            g2.drawString(" : 0"+String.valueOf(minutoMundial), 832, 80);
+            g2.drawString("  : 0"+String.valueOf(minutoMundial), 832, 80);
         else
-            g2.drawString(" : "+String.valueOf(minutoMundial), 832, 80);
-        
+            g2.drawString("  : "+String.valueOf(minutoMundial), 832, 80);
+        ArrayList<Shape>arrayEllipse=new ArrayList<>();
         
         //this.calendar.add(this.calendar.DATE,1);
         Date diaNuevo = this.calendar.getTime();
@@ -193,11 +204,19 @@ static final int FONT_SIZE = 11;
         g2.drawString(" " + newDay + "/" + newMonth + "/" +newYear,780,35);
         
         //g2.fill(new Shape("Holamundo"));
-        ArrayList<Shape>arrayEllipse=new ArrayList<>();
+       
+        int numAero=this.listaAeropuertos.size();
+           
         
-        for(int i=0;i<this.listaAeropuertos.size();i++){
+        for(int i=0;i<numAero;i++){
             double x=this.listaAeropuertos.get(i).getCoordX();
             double y=this.listaAeropuertos.get(i).getCoordY();
+            g2.setPaint(new Color(255,251,0));
+            g2.setStroke(stroke);
+            Shape aeropuertoElipse = new Ellipse2D.Double(x,y,10,10);
+            g2.fill(aeropuertoElipse);
+            
+            g2.setStroke(new BasicStroke(0.0f));
             Rectangle2D aeropuerto = new Rectangle2D.Double(x,y,7,7);
             
             String color = this.listaAeropuertos.get(i).getColor();
@@ -207,13 +226,13 @@ static final int FONT_SIZE = 11;
                     g2.setPaint(new Color (1,1,1));
                     break;
                 case "rojo":
-                    g2.setPaint(new Color (238, 54, 63));
+                    g2.setPaint(new Color (242, 99, 70));
                     break;
                 case "amarillo":
-                    g2.setPaint(new Color (234, 203, 29));
+                    g2.setPaint(new Color (203, 201, 14));
                     break;
                 case "verde":
-                    g2.setPaint(new Color (106, 203, 29));
+                    g2.setPaint(new Color (117, 239, 37));
                     break;
             }
             g2.fill(aeropuerto);
@@ -252,11 +271,9 @@ static final int FONT_SIZE = 11;
             
             double dx,dy;
             
-
-           
                   
             Shape avion = new Ellipse2D.Double(xIni,yIni,4,4);
-            g2.fill(avion); //pinta avion
+            //g2.fill(avion); //pinta avion
              
             arrayEllipse.add(avion);
             
@@ -633,6 +650,8 @@ static final int FONT_SIZE = 11;
            ex.printStackTrace();
        }
     }
+    
+    
     
     public void actionPerformed(ActionEvent e){
        try{
