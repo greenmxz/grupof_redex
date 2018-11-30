@@ -1,5 +1,6 @@
 package Vista;
 
+import Controlador.AdministrarClienteBL;
 import Controlador.PaqueteBL;
 import Controlador.VueloBL;
 import Controlador.aeropuertoBL;
@@ -8,10 +9,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import Modelo.Archivo;
 import Modelo.Vuelo;
 import Modelo.aeropuerto;
+import Modelo.cliente;
 import Modelo.paquete;
+import Modelo.persona;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -164,7 +169,43 @@ public class frmCargaDatos extends javax.swing.JPanel {
         }
         return aux;
     }
-    
+    public ArrayList<persona> procesarClientes(String ruta){
+        ArrayList<persona> aux = new ArrayList<persona>();
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(ruta));
+            String line;
+            String continent = "";
+            while( (line = reader.readLine()) != null){
+                String[] arr = line.split(",");
+                System.out.println(arr);
+                persona p = new persona();
+                //nombre,apellido_paterno,apellido_materno,numero_documento_identidad,direccion,correo,telefono,fecha_nacimiento,id_ciudad,id_tipo_documento,
+                p.setNombre(arr[0]);
+                p.setApellidoPaterno(arr[1]);
+                p.setApellidoMaterno(arr[2]);
+                p.setNumeroDocumentoIdentidad(Integer.parseInt(arr[3]));
+                p.setDireccion(arr[4]);
+                p.setCorreo(arr[5]);
+                p.setTelefono(arr[6]);
+                
+                Date date1=new SimpleDateFormat("dd-MM-yyyy").parse(arr[7]);
+                
+                
+                
+                p.setFechaNacimiento(date1);
+                p.setCiudad((arr[8]));
+                p.setTipoDocumento(arr[9]);
+                
+                 aux.add(p);
+
+            }
+            System.out.println("Clients' reading process successful!");
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+        return aux;
+    }
     public ArrayList<Vuelo> procesarVuelos(String ruta){
         ArrayList<Vuelo> aux = new ArrayList<Vuelo>();
         try{
@@ -460,6 +501,13 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 procBL.registrarVuelos(procesarVuelos(listFile.get(i).getUbicacion()));
                 JOptionPane.showMessageDialog(null,
                 "El proceso de registro de vuelos", "Término de proceso",
+                JOptionPane.INFORMATION_MESSAGE);
+            }else if (listFile.get(i).getTipo() == "Clientes"){
+               AdministrarClienteBL procBL = new AdministrarClienteBL();
+                //procBL.registrarClientes(procesarClientes(listFile.get(i).getUbicacion()));
+                procBL.registarClientes(procesarClientes(listFile.get(i).getUbicacion()));
+                JOptionPane.showMessageDialog(null,
+                "El proceso de registro de clientes", "Término de proceso",
                 JOptionPane.INFORMATION_MESSAGE);
             }else if(listFile.get(i).getTipo() == "Paquetes"){
                 if(chkCargaMultiple.getModel().isSelected()){
