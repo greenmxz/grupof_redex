@@ -5,6 +5,7 @@ import AccesoDatos.usuarioDA;
 import Algoritmo.Aeropuerto;
 import Algoritmo.DataProcessing;
 import Algoritmo.TabuSearch;
+import Controlador.AdministrarClienteBL;
 import Controlador.VueloBL;
 import Controlador.aeropuertoBL;
 import Controlador.generalBL;
@@ -14,6 +15,7 @@ import Modelo.Hashing;
 import static Modelo.Hashing.MD5Hash;
 import Modelo.Vuelo;
 import Modelo.aeropuerto;
+import Modelo.cliente;
 import Modelo.continente;
 import Modelo.usuario;
 import java.awt.Color;
@@ -49,7 +51,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
      private ArrayList<String> Archivos = new ArrayList<>();
      private TabuSearch tabu  = new TabuSearch();
      private int esInicio = 1;
-     
+     private ArrayList<cliente>arrClientes;
     public Login() {
        
         initComponents();
@@ -271,8 +273,8 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 this.esInicio = 0;
             }
             if (this.minutoMundial== 0  && this.horaMundial%2==0){
-                
-                EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu);
+                usuario userRecuperar = usuarioBL.obtenerUsuarioRecuperar(this.userName.getText());
+                EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,userRecuperar.getPersona().getCorreo());
                 t.start();
                 System.out.println("ES LA HORA ->>>>>>");
             }
@@ -284,7 +286,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             aeropuertoBL controladorAeropuerto= new aeropuertoBL();
             VueloBL controladorVuelo=new VueloBL();
             generalBL general = new generalBL();
-            
+            AdministrarClienteBL controladorCliente=new AdministrarClienteBL();
             ArrayList<continente> continentes = new ArrayList<continente>();
             ArrayList<aeropuerto>listaAeropuertos=new ArrayList<aeropuerto>();
             ArrayList<Modelo.Vuelo>listaVuelos=new ArrayList<Modelo.Vuelo>();
@@ -325,24 +327,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             this.dp.setListAirport(listaAeropuertosNew);
 
             this.tabu.setInputProcess(this.dp);
-//                for (String a : this.Archivos){
-//                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
-//                    //dp.processPackNew("resources\\pack_enviados\\" + a);
-//                }
 
-//                System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
-
-
-                
-                //this.matrixPackXDay = this.dp.getMatrixPackXDay();
-                
-
-                //if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
-                  //  this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
-                
-                //this.listPack.clear();
-                
-            
         }catch(Exception ex){
            System.out.println("ERROR lecturaData " + ex.getMessage() );
        }
@@ -425,6 +410,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             System.out.println("DESPUES DE ENCRIPTAR: "+hashPwB);
             //String hashPw = MD5Hash(userRecuperar.getPassword());
             String hashPw = td.decrypt(userRecuperar.getPassword());
+            
             MailWorkerTest notificadorEmail=new MailWorkerTest(userRecuperar.getPersona().getCorreo(),"sdfdf");
             String asunto="Sistema RedEx - Recuperación de contraseña";        
             String cuerpo="Estimado usuario, "

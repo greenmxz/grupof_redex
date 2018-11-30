@@ -8,7 +8,9 @@ package AccesoDatos;
 import Algoritmo.DataProcessing;
 import Algoritmo.Paquete;
 import Algoritmo.TabuSearch;
+import Controlador.AdministrarClienteBL;
 import Controlador.PaqueteBL;
+import Vista.MailWorkerTest;
 import Vista.TabuSimulator;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,16 +41,18 @@ public class EjecutaAlgoritmo extends Thread{
      private DataProcessing dp = new DataProcessing();
      private ArrayList<String> Archivos = new ArrayList<>();
      private TabuSearch ts=new TabuSearch();
-     
-     public EjecutaAlgoritmo(TabuSearch tabu){
+     private String correo;
+     public EjecutaAlgoritmo(TabuSearch tabu,String correo){
          ts=tabu;
          ts.setListPack(new ArrayList<Paquete>());
+         this.correo=correo;
      }
     public void run(){
 //        t = new Timer(8,this);
 //        t.start();
         //while(true){
         calendar=Calendar.getInstance();
+        AdministrarClienteBL controladorCliente=new AdministrarClienteBL(); 
         PaqueteBL controladorPaquete= new PaqueteBL();    
         try {
             System.out.println("AQUI implementare algoritmo");
@@ -78,13 +82,13 @@ public class EjecutaAlgoritmo extends Thread{
                 System.out.println(listPackAlgo.get(i).getRuta());
             }
             cambiaEstadoPacks();
-            //ArrayList<String> solution = ts.executeVCRPTabu(ts.getListPack());
-            //simulador.start();
-            //this.listPackAlgo = simulador.getListPackAlgo();
-            //this.tiempoAlgoMM = simulador.getTiempoAlgo();
-            //for(int i=0;i<size;i++)
-                //System.out.println(listPackAlgo.get(i).getRuta());
+            MailWorkerTest notificadorEmail=new MailWorkerTest(correo,"sdfdf");
             
+//            for(int i=0;i<size;i++){
+//                if(listPackAlgo.get(i).getEstado()==1){
+//                    
+//                }
+//            }
             this.finalize();
             
             
@@ -145,6 +149,7 @@ public class EjecutaAlgoritmo extends Thread{
            ex.printStackTrace();
        }
     }
+    
 
 
 }

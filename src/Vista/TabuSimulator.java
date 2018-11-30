@@ -43,8 +43,6 @@ public class TabuSimulator extends Thread{
     public TabuSimulator(int hora,int min,Date fecha,TabuSearch tabu,ArrayList<Aeropuerto> listaAeropuertos,ArrayList<Algoritmo.Vuelo> listaVuelos,
 
 
-//            ArrayList<String> listPackAlgo,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo){
-
 
             ArrayList<Algoritmo.Paquete> listPackAlgo,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
         this.horaMundial=hora;
@@ -170,9 +168,7 @@ public class TabuSimulator extends Thread{
         catch(Exception ex ){
             System.out.println("HILOS ERROR: "+ex.getMessage());
         }
-        
-
-            
+      
         
     }
 
