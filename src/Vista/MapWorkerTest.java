@@ -245,8 +245,8 @@ public class MapWorkerTest {
                 double y = this.listaAeropuertos.get(indexAeOrigen).getCoordY();
                if (x == 0 || y == 0) 
                     continue;
-                dot.setOrigen(new CoordenadaDouble(x,y));
-                dot.setActual(new CoordenadaDouble(x,y));
+                dot.setOrigen(new CoordenadaDouble(x-10,y-10));
+                dot.setActual(new CoordenadaDouble(x-10,y-10));
             }
             if (indexAeDestino != -1){
                 double x = this.listaAeropuertos.get(indexAeDestino).getCoordX();

@@ -85,7 +85,7 @@ static final int FONT_SIZE = 11;
     private DataProcessing dp = new DataProcessing();
     private TabuSearch tabu = new TabuSearch();
     private Image img;
-    final static BasicStroke stroke = new BasicStroke(5.0f);
+    final static BasicStroke stroke = new BasicStroke(2.0f);
     
     public void setImg(Image img) {
         this.img = img;
@@ -213,11 +213,11 @@ static final int FONT_SIZE = 11;
             double y=this.listaAeropuertos.get(i).getCoordY();
             g2.setPaint(new Color(255,251,0));
             g2.setStroke(stroke);
-            Shape aeropuertoElipse = new Ellipse2D.Double(x,y,10,10);
+            Shape aeropuertoElipse = new Ellipse2D.Double(x-10,y-10,10,10);
             g2.fill(aeropuertoElipse);
             
-            g2.setStroke(new BasicStroke(0.0f));
-            Rectangle2D aeropuerto = new Rectangle2D.Double(x,y,7,7);
+            //g2.setStroke(new BasicStroke(0.0f));
+            Rectangle2D aeropuerto = new Rectangle2D.Double(x-10,y-10,7,7);
             
             String color = this.listaAeropuertos.get(i).getColor();
             
