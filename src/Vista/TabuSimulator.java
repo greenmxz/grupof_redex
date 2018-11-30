@@ -43,7 +43,9 @@ public class TabuSimulator extends Thread{
     private ArrayList<Algoritmo.Paquete> listPackAlgoAnterior = new ArrayList<>();
     private ArrayList<Algoritmo.Paquete> listPackAlgoFusion = new ArrayList<>();
     private int tiempoAlgo; 
-    
+    public TabuSimulator(){
+        
+    }
     public TabuSimulator(int hora,int min,Date fecha,TabuSearch tabu,ArrayList<Aeropuerto> listaAeropuertos,ArrayList<Algoritmo.Vuelo> listaVuelos,
 
 
