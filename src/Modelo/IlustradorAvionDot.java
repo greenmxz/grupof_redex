@@ -320,17 +320,16 @@ static final int FONT_SIZE = 11;
                             // se mete paquete en avion
                             v.setCapacidadActual(v.getCapacidadActual() + 1); 
                             
-                            //Se busca aeropuerto origen para quitar el paquete
-                            for(Aeropuerto aero : this.listaAeropuertos){
-                                if (aero.getIcaoCode().equals(v.getIcaoOrigen())){
-                                    aero.setCapActual(aero.getCapActual() - 1); // se quita el paquete del aeropuerto
-                                    //if(aero.getCountry().equals("Belgica"))
-                                    //System.out.println(aero.getIdentificator()+" "+aero.getCapActual()+ " <- "+v.getCapacidadActual());
-                                    break;
-                                    
-                                }
-                            }
                             
+                            
+                            
+                            //Se busca aeropuerto origen para quitar el paquete
+                            Aeropuerto aero = this.listaAeropuertos.get(v.getIdAeroOrigen()-1);
+                            if(aero.getCapActual() > 0)
+                                aero.setCapActual(aero.getCapActual() - 1); // se quita el paquete del aeropuerto
+                            
+                      
+                                    
                            //System.out.println("AQUI EJEAJEAJ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ids.length);
                             if (ids.length == 1){// es su ultimo paradero
                                 this.listPackAlgo.get(i).setEsFinal(1);
