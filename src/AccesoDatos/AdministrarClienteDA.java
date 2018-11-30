@@ -231,7 +231,54 @@ public class AdministrarClienteDA {
          }
          
      }
-    
+    public boolean registrarClientes(ArrayList<persona> p){
+            /*codigos de resultado
+            0 - error al insertar en bd
+            1 - correcto
+            2 - dni repetido
+            */
+            
+        try {
+            System.out.println("->");
+            for (persona persona: p){
+                database connect = new database();
+                String query = "{CALL registrarClientesMasivo(?,?,?,?,?,?,?,?,?,?)}";
+                CallableStatement stmt = connect.getConnection().prepareCall(query);
+                stmt.setString(1, persona.getNombre());
+                stmt.setString(2, persona.getApellidoPaterno());
+                stmt.setString(3, persona.getApellidoMaterno());
+                stmt.setString(4, persona.getCiudad());
+                stmt.setString(5, persona.getCorreo());
+                stmt.setString(6, persona.getTipoDocumento());
+                stmt.setInt(7, persona.getNumeroDocumentoIdentidad());
+                stmt.setString(8, persona.getDireccion());
+
+                
+                SimpleDateFormat  sdf;
+                String            s;
+                sdf = new SimpleDateFormat("yyyy-MM-dd");  // Or whatever format you need
+                s = sdf.format(persona.getFechaNacimiento()); 
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date fd =   formatter.parse(s);
+                java.sql.Date sqlDate = new java.sql.Date(fd.getTime());
+                stmt.setDate(9,sqlDate);
+                stmt.setString(10,persona.getTelefono());
+                
+
+                
+                ResultSet rs = stmt.executeQuery();
+                System.out.println("OK");
+                connect.closeConnection();
+            }
+            return true;
+
+
+         }catch(Exception ex){
+             System.out.println(ex.getMessage());
+             return false;
+         }
+         
+     }
     public int modificarCliente(cliente cliente){
         /*codigos de resultado
             0 - error al insertar en bd

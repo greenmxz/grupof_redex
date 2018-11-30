@@ -20,4 +20,8 @@ public class PaqueteBL {
     public ArrayList<paquete> obtenerPaquetes(){
         return administrarPaqueteDA.obtenerPaquetes();
     }
+    public String obtenerCadenaRuta(String idO, String idD){
+        return administrarPaqueteDA.obtenerCadenaRuta(idO, idD);
+    }
+    
 }

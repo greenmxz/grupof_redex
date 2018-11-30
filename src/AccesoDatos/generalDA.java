@@ -327,4 +327,31 @@ public class generalDA {
         }
         return aux;
     }
+    
+    public ArrayList<ArrayList<String>> obtenerPlanVuelo(String cod){
+        ArrayList<ArrayList<String>> aux = new ArrayList<ArrayList<String>>();
+       try{
+            database connection = new database();
+            String query = "SELECT v.id, a1.nombre, a2.nombre\n" +
+                "FROM redexdb.pedido_vuelo as pv, redexdb.pedido as p, redexdb.aeropuerto AS a1,\n" +
+                "redexdb.aeropuerto AS a2, redexdb.plan_vuelo as v\n" +
+                "WHERE pv.id_pedido = p.id AND pv.id_vuelo = v.id AND\n" +
+                "a1.id = v.id_aeropuerto_salida AND a2.id = v.id_aeropuerto_llegada AND p.codigo = '" +
+                cod + "'";
+            Statement sentencia= connection.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while(rs.next()){
+                ArrayList<String> auxs = new ArrayList<String>();
+                auxs.add(rs.getString("Vuelo"));
+                auxs.add(rs.getString("Origen"));
+                auxs.add(rs.getString("Destino"));
+                aux.add(auxs);
+            }
+            connection.closeConnection();
+        }catch(Exception ex){
+            return null;
+        }
+        return aux;
+    }
+    
 }

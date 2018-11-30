@@ -149,4 +149,24 @@ public class PaqueteDA {
         }
         return aux;
     }
+    
+    public String obtenerCadenaRuta(String idO, String idD){
+        String respuesta = "";
+        try{
+            database connect = new database();
+            Statement sentencia = connect.getConnection().createStatement();
+            String query = "SELECT nombre FROM redexdb.aeropuerto WHERE id = " + idO;
+            ResultSet rs = sentencia.executeQuery(query);
+            rs.next();
+            respuesta += rs.getString("nombre") + " -> ";
+            query = "SELECT nombre FROM redexdb.aeropuerto WHERE id = " + idD;
+            rs = sentencia.executeQuery(query);
+            rs.next();
+            respuesta += rs.getString("nombre");
+            connect.getConnection().close();
+        }catch(Exception e){
+            System.out.println("ERROR obtenerCadenaRuta "+e.getMessage());
+        }
+        return respuesta;
+    }
 }

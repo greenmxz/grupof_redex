@@ -91,6 +91,7 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         btnGenData = new Especial.RSButtonMetro();
         btnFrecuencias = new Especial.RSButtonMetro();
+        btnHistoriales = new Especial.RSButtonMetro();
         panelPrincipal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -172,7 +173,7 @@ public class frmMenuProvisional extends javax.swing.JFrame {
                 btnSimulacionActionPerformed(evt);
             }
         });
-        panelMenu.add(btnSimulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 195, 140, 30));
+        panelMenu.add(btnSimulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 225, 140, 30));
 
         btnDetermUnit.setText("Generación de ruta");
         btnDetermUnit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -181,14 +182,14 @@ public class frmMenuProvisional extends javax.swing.JFrame {
                 btnDetermUnitActionPerformed(evt);
             }
         });
-        panelMenu.add(btnDetermUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 135, 140, 30));
+        panelMenu.add(btnDetermUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 165, 140, 30));
 
         jSeparator1.setBackground(new java.awt.Color(1, 58, 223));
         jSeparator1.setForeground(new java.awt.Color(1, 58, 223));
         jSeparator1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jSeparator1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jSeparator1.setEnabled(false);
-        panelMenu.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 130, 140, 3));
+        panelMenu.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 160, 140, 3));
 
         btnGenData.setText("Generación de data");
         btnGenData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -197,7 +198,7 @@ public class frmMenuProvisional extends javax.swing.JFrame {
                 btnGenDataActionPerformed(evt);
             }
         });
-        panelMenu.add(btnGenData, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 165, 140, 30));
+        panelMenu.add(btnGenData, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 195, 140, 30));
 
         btnFrecuencias.setText("Frecuencias");
         btnFrecuencias.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -207,6 +208,15 @@ public class frmMenuProvisional extends javax.swing.JFrame {
             }
         });
         panelMenu.add(btnFrecuencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 95, 140, 30));
+
+        btnHistoriales.setText("Historiales");
+        btnHistoriales.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnHistoriales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistorialesActionPerformed(evt);
+            }
+        });
+        panelMenu.add(btnHistoriales, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 125, 140, 30));
 
         panelFondo.add(panelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 150, 500));
 
@@ -291,6 +301,12 @@ public class frmMenuProvisional extends javax.swing.JFrame {
             Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu); 
     }//GEN-LAST:event_btnFrecuenciasActionPerformed
 
+    private void btnHistorialesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialesActionPerformed
+        new CambiarPanel(panelPrincipal, new frmReportePlanes(this));
+        if(this.panelMenu.getX()>-1)
+            Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);
+    }//GEN-LAST:event_btnHistorialesActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -330,6 +346,7 @@ public class frmMenuProvisional extends javax.swing.JFrame {
     private Especial.RSButtonMetro btnDetermUnit;
     private Especial.RSButtonMetro btnFrecuencias;
     private Especial.RSButtonMetro btnGenData;
+    private Especial.RSButtonMetro btnHistoriales;
     private javax.swing.JButton btnMenu;
     private Especial.RSButtonMetro btnPaquetes;
     private Especial.RSButtonMetro btnSimulacion;
