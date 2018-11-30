@@ -14,6 +14,7 @@ public class frmBuscarPaquete extends javax.swing.JDialog {
     private ArrayList<paquete> filter = new ArrayList<paquete>();
     private PaqueteBL controlador = new PaqueteBL();
     private frmReportePaquete panelPaq = null;
+    private frmReportePlanes panelPlan = null;
     
     public frmBuscarPaquete(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -30,7 +31,23 @@ public class frmBuscarPaquete extends javax.swing.JDialog {
         for(int i=0; i<lstAerop.size(); i++){
             Object[] obj = new Object[3];
             obj[0] = lstAerop.get(i).getCodigo();
-            obj[1] = lstAerop.get(i).getAeropuertoOrigen() + " -> " + lstAerop.get(i).getAeropuertoDestino();
+            obj[1] = controlador.obtenerCadenaRuta(lstAerop.get(i).getAeropuertoOrigen(), lstAerop.get(i).getAeropuertoDestino());
+            obj[2] = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(lstAerop.get(i).getFechaSalida());
+            model.addRow(obj);
+        }
+        filter = lstAerop;
+    }
+    
+    public frmBuscarPaquete(java.awt.Frame parent, boolean modal, frmReportePlanes panel) {
+        super(parent, modal);
+        initComponents();
+        this.panelPlan = panel;
+        lstAerop = controlador.obtenerPaquetes();
+        DefaultTableModel model = (DefaultTableModel)tblAerop.getModel();
+        for(int i=0; i<lstAerop.size(); i++){
+            Object[] obj = new Object[3];
+            obj[0] = lstAerop.get(i).getCodigo();
+            obj[1] = controlador.obtenerCadenaRuta(lstAerop.get(i).getAeropuertoOrigen(), lstAerop.get(i).getAeropuertoDestino());
             obj[2] = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(lstAerop.get(i).getFechaSalida());
             model.addRow(obj);
         }
@@ -115,7 +132,10 @@ public class frmBuscarPaquete extends javax.swing.JDialog {
                 "Debe seleccionar un aeropuerto de la tabla primero",
                 "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
         else{
-            panelPaq.setCodigo(filter.get(tblAerop.getSelectedRow()).getCodigo());
+            if(panelPaq != null)
+                panelPaq.setCodigo(filter.get(tblAerop.getSelectedRow()).getCodigo());
+            else
+                panelPlan.setCodigo(filter.get(tblAerop.getSelectedRow()).getCodigo());
             this.dispose();
         }
     }//GEN-LAST:event_btnSelecActionPerformed

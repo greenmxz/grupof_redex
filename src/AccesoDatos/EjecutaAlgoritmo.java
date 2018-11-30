@@ -74,6 +74,7 @@ public class EjecutaAlgoritmo extends Thread{
             ts.setListPack(listaPackNew);
             //ts.executeVCRPTabu(listPack);
             TabuSimulator simulador=new TabuSimulator(horaMundial,minutoMundial,calendar.getTime(),ts,ts.getListAirport(),ts.getListFlight(),listPackAlgo,ts.getListPack(),tiempoAlgoMM,tiempoDelayAlgoritmo);
+            simulador.setManual(1);
             simulador.start();
             this.listPackAlgo = simulador.getListPackAlgo();
             size=listPackAlgo.size();
