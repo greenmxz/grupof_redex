@@ -1,8 +1,13 @@
 package Vista;
 
+import Controlador.generalBL;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 public class frmReportePlanes extends javax.swing.JPanel {
 
     private javax.swing.JFrame x;
+    private generalBL controlador = new generalBL();
     
     public frmReportePlanes(javax.swing.JFrame x) {
         initComponents();
@@ -22,7 +27,7 @@ public class frmReportePlanes extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         btnExcel = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblQuery = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         btnQuery = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -46,12 +51,12 @@ public class frmReportePlanes extends javax.swing.JPanel {
         });
         panelFondo.add(btnExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 430, 172, -1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblQuery.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3"
+                "Vuelo Nro.", "Origen", "Destino"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -62,7 +67,7 @@ public class frmReportePlanes extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblQuery);
 
         panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 740, 210));
 
@@ -115,9 +120,21 @@ public class frmReportePlanes extends javax.swing.JPanel {
     }//GEN-LAST:event_btnExcelActionPerformed
 
     private void btnQueryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQueryActionPerformed
-        String query = "";
-        /* Identificar el tipo */
-
+        if(!txtCodigo.getText().equals("")){
+            ArrayList<ArrayList<String>> result = controlador.obtenerPlanVuelo(txtCodigo.getText());
+            DefaultTableModel modelo = (DefaultTableModel) tblQuery.getModel();
+            int tamanho = modelo.getRowCount();
+            for(int i=0; i<tamanho; i++){
+                modelo.removeRow(0);
+            }
+            Object[] obj = new Object[3];
+            for(int i = 0; i < result.size(); i++){
+                obj[0] = result.get(i).get(0);
+                obj[1] = result.get(i).get(1);
+                obj[2] = result.get(i).get(2);
+                modelo.addRow(obj);
+            }
+        }
     }//GEN-LAST:event_btnQueryActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -134,8 +151,8 @@ public class frmReportePlanes extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel panelFondo;
+    private javax.swing.JTable tblQuery;
     private javax.swing.JTextField txtCodigo;
     // End of variables declaration//GEN-END:variables
 }

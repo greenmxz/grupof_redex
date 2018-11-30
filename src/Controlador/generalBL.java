@@ -70,4 +70,9 @@ public class generalBL {
     public ArrayList<String> obtenerContinenteLlegada(){
         return generalDA.obtenerContinenteLlegada();
     }
+    
+    public ArrayList<ArrayList<String>> obtenerPlanVuelo(String cod){
+        return generalDA.obtenerPlanVuelo(cod);
+    }
+    
 }
