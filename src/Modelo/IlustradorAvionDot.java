@@ -85,11 +85,7 @@ static final int FONT_SIZE = 11;
     private DataProcessing dp = new DataProcessing();
     private TabuSearch tabu = new TabuSearch();
     private Image img;
-    final static BasicStroke stroke = new BasicStroke(2.0f);
-    
-    public void setImg(Image img) {
-        this.img = img;
-    }
+    final static BasicStroke stroke = new BasicStroke(2.0f);   
     
     
         /**

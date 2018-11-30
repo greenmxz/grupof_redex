@@ -157,20 +157,6 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="Especial.RSButtonMetro" name="btnAdminUsuario">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Administrar Usuarios"/>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAdminUsuarioActionPerformed"/>
-              </Events>
-              <Constraints>
-                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="10" y="70" width="140" height="30"/>
-                </Constraint>
-              </Constraints>
-            </Component>
             <Component class="Especial.RSButtonMetro" name="btnCargaMasiva1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Carga de datos"/>

@@ -28,12 +28,6 @@ public class TabuSimulator extends Thread{
     private Date fechaActual;
     private TabuSearch tabu;
     
-
-    
-    //public ArrayList<String> rutasPaquetes = new ArrayList();
-
-
-
     
     public ArrayList<Aeropuerto> listaAeropuertos = new ArrayList<>();
     private ArrayList<Algoritmo.Vuelo> listaVuelos = new ArrayList<>();

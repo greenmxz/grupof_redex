@@ -5,10 +5,12 @@
  */
 package AccesoDatos;
 
+import Algoritmo.DataProcessing;
 import Algoritmo.TabuSearch;
 import Vista.TabuSimulator;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -19,7 +21,7 @@ import javax.swing.Timer;
  *
  * @author JUAN
  */
-public class EjecutaAlgoritmo extends Thread {
+public class EjecutaAlgoritmo extends Thread{
 //    private  Timer t ;
 //
      private int minutoMundial=0  ;
@@ -29,6 +31,11 @@ public class EjecutaAlgoritmo extends Thread {
      private ArrayList<Algoritmo.Paquete> listPackAlgo = new ArrayList<>();
      private int tiempoAlgoMM=0;
      private int tiempoDelayAlgoritmo=60*2;
+     private DataProcessing dp = new DataProcessing();
+     private ArrayList<String> Archivos = new ArrayList<>();
+     private TabuSearch ts;
+     
+    
     public void run(){
 //        t = new Timer(8,this);
 //        t.start();
@@ -37,17 +44,9 @@ public class EjecutaAlgoritmo extends Thread {
             
         try {
             System.out.println("AQUI implementare algoritmo");
-            TabuSearch ts;
-            ts = new TabuSearch();
-            ts.inputData("resources\\aeropuertos.txt",
-                "resources\\planes_vuelo.txt",
-                "resources\\pack_enviados");
-            ts.generateFlightMatrix();  
-            int size=ts.getListPack().size();
-            for(int i=0;i<size;i++)
-                System.out.println(ts.getListPack().get(i).getRuta());
-            ts.executeVCRPTabu(listPack);
-//TabuSimulator simulador=new TabuSimulator(horaMundial,minutoMundial,calendar.getTime(),ts,ts.getListAirport(),ts.getListFlight(),listPackAlgo,ts.getListPack(),tiempoAlgoMM,tiempoDelayAlgoritmo);
+            
+            //ts.executeVCRPTabu(listPack);
+            TabuSimulator simulador=new TabuSimulator(horaMundial,minutoMundial,calendar.getTime(),ts,ts.getListAirport(),ts.getListFlight(),listPackAlgo,ts.getListPack(),tiempoAlgoMM,tiempoDelayAlgoritmo);
             //ArrayList<String> solution = ts.executeVCRPTabu(ts.getListPack());
             //simulador.start();
             //this.listPackAlgo = simulador.getListPackAlgo();
@@ -64,30 +63,5 @@ public class EjecutaAlgoritmo extends Thread {
         }
     }
 
-//    @Override
-//    public void actionPerformed(ActionEvent e) {
-//        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//            HiloEjecuta he = new HiloEjecuta();
-//            he.start();
-//            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>");
-//            
-//            if (this.minutoMundial<59){
-//                this.minutoMundial++;
-//            }else{
-//                this.minutoMundial=0;
-//                if (this.horaMundial <23)
-//                    this.horaMundial++;
-//                else {
-//                    this.minutoMundial=0;
-//                    this.horaMundial=0; 
-//                }    
-//            }
-//            
-//            if (this.minutoMundial== 0  && this.horaMundial%2==0){
-//                HiloEjecuta t = new HiloEjecuta();
-//                t.start();
-//                System.out.println("ES LA HORA ->>>>>>");
-//            }
-//        
-//    }
+
 }
