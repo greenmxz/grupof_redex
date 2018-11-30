@@ -28,6 +28,7 @@ public class TabuSearch {
     private int hourBegin;
     private boolean finded = false;
     private int timeToCmp;
+    private int cantReruteo = 0;
 
     public TabuSearch(){
         
@@ -172,7 +173,14 @@ public class TabuSearch {
                         noAsign++;
     //                    System.out.println(iter);
                     }else{// si hay solucion
+                        if(paquetesAct.get(iter).getEstado() == 1){
+                            this.cantReruteo++;
+                            //System.out.println("estado -> " + paquetesAct.get(iter).getEsFinal());
+                            //System.out.println("Ruta anterior -> " + paquetesAct.get(iter).getRuta());
+                        }                        
                         paquetesAct.get(iter).setRuta(solution);
+                        //if(paquetesAct.get(iter).getEstado() == 1)
+                          //  System.out.println("Ruta actual -> " + paquetesAct.get(iter).getRuta());
                         //paquetesAct.get(iter).setEstado(0); // paquete no disponible
                     }
 
@@ -184,6 +192,7 @@ public class TabuSearch {
                 }
             }
         }
+        System.out.println("Cantidad de Reruteos " + this.cantReruteo);
         /*
         System.out.println("Vacíos: " + String.valueOf(noAsign));
         System.out.println("Estado: ");

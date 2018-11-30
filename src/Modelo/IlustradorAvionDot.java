@@ -76,7 +76,7 @@ static final int FONT_SIZE = 11;
 
     private ArrayList<Algoritmo.Paquete> listPack = new ArrayList<>();
     private ArrayList<Algoritmo.Paquete> listPackAlgo = new ArrayList<>();
-    
+    private ArrayList<ArrayList<ArrayList<Paquete>>> matrixPackXDay = new ArrayList<ArrayList<ArrayList<Paquete>>>();
     private Calendar calendar;
     
     private DataProcessing dp = new DataProcessing();
@@ -566,10 +566,13 @@ static final int FONT_SIZE = 11;
 
 
                 this.listPack = this.dp.getPackList();
+                this.matrixPackXDay = this.dp.getMatrixPackXDay();
+                
 
                 if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
                     this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
-
+                
+                this.listPack.clear();
                 this.inicio = 1;
             }
         }catch(Exception ex){
@@ -597,6 +600,7 @@ static final int FONT_SIZE = 11;
     
     public void aplicaAlgoritmo(){
         try{
+                
                 TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.listPackAlgo, this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes);
 
                 long startTime = System.nanoTime();
@@ -614,7 +618,7 @@ static final int FONT_SIZE = 11;
                 //this.listPackAlgo.addAll(simulador.getListPackAlgo());
                 this.listPackAlgo = simulador.getListPackAlgo();
                 
-                System.out.println("------>tiempo " +  totalTime/1000000000 + "segundos"); 
+                System.out.println("------>tiempo " +  totalTime/1000000000 + " segundos"); 
                 
                 System.out.println("------>cantidad de packs  almacenado " +  listPack.size()); 
                 System.out.println("------>cantidad de packs  con rutas " +  listPackAlgo.size());                
@@ -684,6 +688,27 @@ static final int FONT_SIZE = 11;
     
     public void actionPerformed(ActionEvent e){
        try{
+           //ArrayList<ArrayList<ArrayList<Paquete>>>
+           
+            if (this.minutoMundial == 0 && this.horaMundial == 0){
+                
+                this.listPack.clear();
+                
+                for(ArrayList<ArrayList<Paquete>> dataPacksAero : this.matrixPackXDay){
+                    if(dataPacksAero.size() > cantDays){
+                        ArrayList<Paquete> listaPacksxDia = dataPacksAero.get(cantDays);
+                        this.listPack.addAll(listaPacksxDia);
+                    }
+                }
+ 
+                System.out.println("<<<<<<<Cantidad de dias transcurridos>>>>>>>>>> -------------> " + this.cantDays);
+                System.out.println("<<<<<<<Colapso maximo aero>>>>>>>>>> -------------> " + this.aeroColapsoMax + " - " + this.cantMaxColapsoAero);
+                System.out.println("<<<<<<<Colapso maximo avion>>>>>>>>>> -------------> " + this.avionColapsoMax + " - "  + this.cantMaxColapsoAvion);
+                
+                this.cantDays++;
+            }
+           
+           
             if (this.minutoMundial<59){
                 this.minutoMundial++;
             }else{
@@ -692,17 +717,12 @@ static final int FONT_SIZE = 11;
                     this.horaMundial++;
                 else {
                     this.minutoMundial=0;
-                    this.horaMundial=0; 
+                    this.horaMundial=0;
+                    this.calendar.add(this.calendar.DATE,1);
                 }    
             }
 
-            if (this.minutoMundial == 0 && this.horaMundial == 0){
-                this.calendar.add(this.calendar.DATE,1);
-                this.cantDays++;
-                System.out.println("<<<<<<<Cantidad de dias transcurridos>>>>>>>>>> -------------> " + this.cantDays);
-                System.out.println("<<<<<<<Colapso maximo aero>>>>>>>>>> -------------> " + this.aeroColapsoMax + " - " + this.cantMaxColapsoAero);
-                System.out.println("<<<<<<<Colapso maximo avion>>>>>>>>>> -------------> " + this.avionColapsoMax + " - "  + this.cantMaxColapsoAvion);
-            }
+
             
             System.out.println("----->Cant Paquetes Entrantes " + this.cantPacksEntrantes);
             System.out.println("----->Cant Paquetes Salientes " + this.cantPacksSalientes);

@@ -66,6 +66,7 @@ public class TabuSimulator extends Thread{
         this.tiempoAlgo = tiempoAlgo;
         this.algoritmoDelayMinutes = algoritmoDelayMinutes;
     }
+    
     void seleccionPacksAlgo(){
         this.listPackAlgo = new ArrayList<>();
         System.out.println("cant listPack = " + this.listPack.size());
@@ -119,6 +120,7 @@ public class TabuSimulator extends Thread{
             if (this.tiempoAlgo >= 24*60) this.tiempoAlgo = 0;       
         
     }
+    
     public void run(){   
         try{
             //aplica algoritmo a un set de paquetes cada cierto delay en minutos de simulacion
