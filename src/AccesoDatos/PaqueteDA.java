@@ -119,6 +119,12 @@ public class PaqueteDA {
                     rs.getString("id_aeropuerto_emisor"), rs.getString("id_aeropuerto_receptor"),
                     rs.getString("id_cliente_emisor"), rs.getString("id_cliente_emisor"),
                     rs.getString("id_estado"));
+                
+                newPaq.setAeropuertoOrigenId(rs.getInt("id_aeropuerto_emisor"));
+                newPaq.setAeropuertoDestinoId(rs.getInt("id_aeropuerto_receptor"));
+                
+                newPaq.setFechaSalida(nuevaFecha);
+                
                 aux.add(newPaq);
             }
             for(int i=0; i<aux.size(); i++){
@@ -142,5 +148,25 @@ public class PaqueteDA {
             System.out.println("ERROR obtenerPaquetesAsign "+e.getMessage());
         }
         return aux;
+    }
+    
+    public String obtenerCadenaRuta(String idO, String idD){
+        String respuesta = "";
+        try{
+            database connect = new database();
+            Statement sentencia = connect.getConnection().createStatement();
+            String query = "SELECT nombre FROM redexdb.aeropuerto WHERE id = " + idO;
+            ResultSet rs = sentencia.executeQuery(query);
+            rs.next();
+            respuesta += rs.getString("nombre") + " -> ";
+            query = "SELECT nombre FROM redexdb.aeropuerto WHERE id = " + idD;
+            rs = sentencia.executeQuery(query);
+            rs.next();
+            respuesta += rs.getString("nombre");
+            connect.getConnection().close();
+        }catch(Exception e){
+            System.out.println("ERROR obtenerCadenaRuta "+e.getMessage());
+        }
+        return respuesta;
     }
 }

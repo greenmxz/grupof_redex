@@ -2,12 +2,19 @@ package Vista;
 
 import AccesoDatos.EjecutaAlgoritmo;
 import AccesoDatos.usuarioDA;
+import Algoritmo.Aeropuerto;
 import Algoritmo.DataProcessing;
 import Algoritmo.TabuSearch;
+import Controlador.VueloBL;
+import Controlador.aeropuertoBL;
+import Controlador.generalBL;
 import Controlador.usuarioBL;
 import Modelo.Encriptar;
 import Modelo.Hashing;
 import static Modelo.Hashing.MD5Hash;
+import Modelo.Vuelo;
+import Modelo.aeropuerto;
+import Modelo.continente;
 import Modelo.usuario;
 import java.awt.Color;
 import java.awt.Font;
@@ -40,7 +47,8 @@ public class Login extends javax.swing.JFrame implements ActionListener {
      private int tiempoDelayAlgoritmo=60*2;
      private DataProcessing dp = new DataProcessing();
      private ArrayList<String> Archivos = new ArrayList<>();
-     private TabuSearch ts;
+     private TabuSearch tabu  = new TabuSearch();
+     private int esInicio = 1;
      
     public Login() {
        
@@ -258,14 +266,95 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             }    
         }
             
+            if(this.esInicio == 1){
+                lecturaData();
+                this.esInicio = 0;
+            }
             if (this.minutoMundial== 0  && this.horaMundial%2==0){
                 
-                EjecutaAlgoritmo t = new EjecutaAlgoritmo();
-//                t.start();
+                EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu);
+                t.start();
                 System.out.println("ES LA HORA ->>>>>>");
             }
             
         
+    }
+    void lecturaData(){
+        try{
+            aeropuertoBL controladorAeropuerto= new aeropuertoBL();
+            VueloBL controladorVuelo=new VueloBL();
+            generalBL general = new generalBL();
+            
+            ArrayList<continente> continentes = new ArrayList<continente>();
+            ArrayList<aeropuerto>listaAeropuertos=new ArrayList<aeropuerto>();
+            ArrayList<Modelo.Vuelo>listaVuelos=new ArrayList<Modelo.Vuelo>();
+            
+            listaAeropuertos=controladorAeropuerto.listaAeropuertos();
+            listaVuelos=controladorVuelo.listaVuelos();
+            
+            ArrayList<Aeropuerto>listaAeropuertosNew = new ArrayList<Aeropuerto>();
+            
+            ArrayList<Algoritmo.Vuelo>listaVuelosNew=new ArrayList<Algoritmo.Vuelo>();
+            
+            continentes = general.obtenerContinentes();
+            for (aeropuerto a : listaAeropuertos){
+                Aeropuerto newAero = new Aeropuerto();
+
+                newAero.setIdentificator(a.getId());
+                newAero.setIcaoCode(a.getCodigo());
+                newAero.setCityId(a.getCiudad());
+                int idCont = buscarContinente(a.getContinente(),continentes);
+                newAero.setContinent(idCont);
+                newAero.setCountry(a.getPais());
+                newAero.setCapMax(a.getCapMax());
+
+               newAero.setCapActual(a.getCapActual());
+               newAero.setCoordX(a.getCoordX());
+               newAero.setCoordY(a.getCoordY());
+               newAero.setColor("verde");
+
+               listaAeropuertosNew.add(newAero);
+
+            }
+            
+            
+            this.tabu.setListAirport(listaAeropuertosNew);
+            this.tabu.setListFlight(listaVuelosNew);
+            this.tabu.generateFlightMatrix();
+
+            this.dp.setListAirport(listaAeropuertosNew);
+
+            this.tabu.setInputProcess(this.dp);
+//                for (String a : this.Archivos){
+//                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
+//                    //dp.processPackNew("resources\\pack_enviados\\" + a);
+//                }
+
+//                System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
+
+
+                
+                //this.matrixPackXDay = this.dp.getMatrixPackXDay();
+                
+
+                //if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
+                  //  this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
+                
+                //this.listPack.clear();
+                
+            
+        }catch(Exception ex){
+           System.out.println("ERROR lecturaData " + ex.getMessage() );
+       }
+        
+    }
+    private int buscarContinente(String c,ArrayList<continente>continentes){
+        for (continente cont :continentes){
+            if (cont.getNombre().equals(c)){
+                return cont.getId();
+            }
+        }
+        return -1;
     }
     private void userNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userNameKeyTyped
         if(evt.getKeyCode() == KeyEvent.VK_TAB)

@@ -198,7 +198,7 @@ public class frmMenuAdmin extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnCargaMasiva1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargaMasiva1ActionPerformed
-        new CambiarPanel(panelPrincipal, new frmCargaDatos());
+        new CambiarPanel(panelPrincipal, new frmCargaDatos(this));
         if(this.panelMenu.getX()>-1)
             Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);
     }//GEN-LAST:event_btnCargaMasiva1ActionPerformed
