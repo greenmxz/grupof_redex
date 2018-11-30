@@ -31,7 +31,7 @@ public class TabuSearch {
     private int cantReruteo = 0;
 
     public TabuSearch(){
-        
+        this.listPack=new ArrayList<Paquete>();
     }
     
     public TabuSearch(TabuSearch tabu) {

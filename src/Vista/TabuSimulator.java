@@ -79,7 +79,7 @@ public class TabuSimulator extends Thread{
             DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
             
             Calendar calendarioPack = Calendar.getInstance();
-            calendarioPack.set(this.listPack.get(i).getOriginYear(),this.listPack.get(i).getOriginMonth()-1,this.listPack.get(i).getOriginDay());
+            calendarioPack.set(this.listPack.get(i).getOriginYear() + 1900,this.listPack.get(i).getOriginMonth()-1,this.listPack.get(i).getOriginDay());
             
             Date fechaPack = calendarioPack.getTime();
             

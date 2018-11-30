@@ -119,6 +119,12 @@ public class PaqueteDA {
                     rs.getString("id_aeropuerto_emisor"), rs.getString("id_aeropuerto_receptor"),
                     rs.getString("id_cliente_emisor"), rs.getString("id_cliente_emisor"),
                     rs.getString("id_estado"));
+                
+                newPaq.setAeropuertoOrigenId(rs.getInt("id_aeropuerto_emisor"));
+                newPaq.setAeropuertoDestinoId(rs.getInt("id_aeropuerto_receptor"));
+                
+                newPaq.setFechaSalida(nuevaFecha);
+                
                 aux.add(newPaq);
             }
             for(int i=0; i<aux.size(); i++){
