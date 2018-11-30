@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class DataProcessing {
     private ArrayList<Aeropuerto> listAirport;
-
+    private static int cont =0;
     public ArrayList<Aeropuerto> getListAirport() {
         return listAirport;
     }
@@ -27,6 +27,8 @@ public class DataProcessing {
     private ArrayList<avionDot> listFlightSimu;
     
     private ArrayList<Paquete> listPack;
+    private ArrayList<ArrayList<Paquete>> listPackXDay =  new ArrayList<ArrayList<Paquete>>();
+    private ArrayList<ArrayList<ArrayList<Paquete>>> matrixPackXDay = new ArrayList<ArrayList<ArrayList<Paquete>>>();
     private ArrayList<ArrayList<Integer>> flightMatrix = new ArrayList<ArrayList<Integer>>();
     private ArrayList<Vuelo> listFlightSorted;
     
@@ -226,9 +228,10 @@ public class DataProcessing {
             String identificator = namePack.split(Pattern.quote(backslash))
                     [namePack.split(Pattern.quote(backslash)).length - 1]
                     .split("_")[2].substring(0, 4);
+            listPack.clear();
             while( (line = reader.readLine()) != null){
                 String[] arr = line.split("-");
-
+                
                 if(arr.length == 4){
                     Paquete plannedPack = new Paquete(Integer.parseInt(arr[2].split(":")[0]),
                             Integer.parseInt(arr[2].split(":")[1]),
@@ -240,6 +243,7 @@ public class DataProcessing {
                     listPack.add(plannedPack);
                 }
             }
+            
             Collections.sort(listPack, new Comparator<Paquete>() {
             @Override
             public int compare(Paquete pk1, Paquete pk2)
@@ -275,6 +279,26 @@ public class DataProcessing {
                 }
             }
             });
+            
+            if (listPack.size() > 0){
+                ArrayList<Paquete> aux = new ArrayList<Paquete>();
+                int day = listPack.get(0).getOriginDay();
+                
+                for (Paquete p : listPack){
+                    if (p.getOriginDay() == day){
+                        aux.add(p);
+                    }else{
+                        day = p.getOriginDay();
+                        listPackXDay.add(aux);
+                        aux = new ArrayList<Paquete>();
+                        aux.add(p);
+                    }
+                }
+                matrixPackXDay.add(listPackXDay);
+                listPackXDay = new ArrayList<ArrayList<Paquete>>();
+            }
+            
+            cont ++;
 //            System.out.println("Packs' reading process successful!");
         }catch(Exception e){
             e.printStackTrace();
@@ -365,4 +389,21 @@ public class DataProcessing {
     public int getFormatHour(int hour, int min){
         return hour*60 + min;        
     }
+
+    public ArrayList<ArrayList<Paquete>> getListPackXDay() {
+        return listPackXDay;
+    }
+
+    public void setListPackXDay(ArrayList<ArrayList<Paquete>> listPackXDay) {
+        this.listPackXDay = listPackXDay;
+    }
+
+    public ArrayList<ArrayList<ArrayList<Paquete>>> getMatrixPackXDay() {
+        return matrixPackXDay;
+    }
+
+    public void setMatrixPackXDay(ArrayList<ArrayList<ArrayList<Paquete>>> matrixPackXDay) {
+        this.matrixPackXDay = matrixPackXDay;
+    }
+    
 }

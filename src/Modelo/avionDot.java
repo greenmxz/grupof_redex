@@ -33,6 +33,8 @@ public class avionDot {
     private int id;
     private String icaoOrigen;
     private String icaoDestino;
+    private int idAeroOrigen;
+    private int idAeroDestino;
     private double t_llegada;
     private double t_restante;
     private int pack_finales;
@@ -225,6 +227,22 @@ public class avionDot {
 
     public void setIdPacks(ArrayList<Integer> idPacks) {
         this.idPacks = idPacks;
+    }
+
+    public int getIdAeroOrigen() {
+        return idAeroOrigen;
+    }
+
+    public void setIdAeroOrigen(int idAeroOrigen) {
+        this.idAeroOrigen = idAeroOrigen;
+    }
+
+    public int getIdAeroDestino() {
+        return idAeroDestino;
+    }
+
+    public void setIdAeroDestino(int idAeroDestino) {
+        this.idAeroDestino = idAeroDestino;
     }
     
   

@@ -1,5 +1,6 @@
 package Vista;
 
+import AccesoDatos.EjecutaAlgoritmo;
 import AccesoDatos.usuarioDA;
 import Controlador.usuarioBL;
 import Modelo.Encriptar;
@@ -9,6 +10,8 @@ import Modelo.usuario;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
 import java.util.Map;
@@ -16,11 +19,16 @@ import javafx.scene.Cursor;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-public class Login extends javax.swing.JFrame {
+public class Login extends javax.swing.JFrame implements ActionListener {
     private usuarioBL usuarioBL ;
     private usuario usuarioLogin;
     private Encriptar td ;
+    private Timer timer  ;
+     private int minutoMundial=0  ;
+     private int horaMundial =0 ;
+     
     public Login() {
        
         initComponents();
@@ -76,7 +84,7 @@ public class Login extends javax.swing.JFrame {
                 loginActionPerformed(evt);
             }
         });
-        jPanel3.add(login, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 200, 150, -1));
+        jPanel3.add(login, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 203, 150, 20));
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -163,7 +171,8 @@ public class Login extends javax.swing.JFrame {
                     boolean respuesta = usuarioBL.iniciarSesion(usuarioLogin.getId());
                     if (respuesta==true){
                         JOptionPane.showMessageDialog(null, "Bienvenido");
-                        this.dispose();
+                     //   this.dispose();
+                     this.hide();
                         System.out.println("USUARIO "+ usuarioLogin.getRol());
 
                         if (usuarioLogin.getRol().equals("gerente")){
@@ -181,6 +190,12 @@ public class Login extends javax.swing.JFrame {
 
                             menuAdmin.setVisible(true);
                         }
+                        System.out.println("Estoy escondido");
+                        /* Crear nuevo hilo*/
+                        this.timer = new Timer(8, (ActionListener) this);
+                        timer.start();
+//                            EjecutaAlgoritmo e = new EjecutaAlgoritmo();
+//                            e.start();
                     }else{
                         JOptionPane.showMessageDialog(null, "ERROR: El usuario ya se encuentra logueado en otra instancia.");
                     }
@@ -213,6 +228,28 @@ public class Login extends javax.swing.JFrame {
         
     }//GEN-LAST:event_loginActionPerformed
 
+    public void actionPerformed(ActionEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+               if (this.minutoMundial<59){
+                this.minutoMundial++;
+            }else{
+                this.minutoMundial=0;
+                if (this.horaMundial <23)
+                    this.horaMundial++;
+                else {
+                    this.minutoMundial=0;
+                    this.horaMundial=0; 
+                }    
+            }
+            
+            if (this.minutoMundial== 0  && this.horaMundial%2==0){
+                //EjecutaAlgoritmo t = new EjecutaAlgoritmo();
+                //t.start();
+                //System.out.println("ES LA HORA ->>>>>>");
+            }
+            
+        
+    }
     private void userNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userNameKeyTyped
         if(evt.getKeyCode() == KeyEvent.VK_TAB)
             password.requestFocus();
