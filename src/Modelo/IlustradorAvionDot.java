@@ -616,6 +616,7 @@ static final int FONT_SIZE = 11;
                 TabuSimulator simulador = new TabuSimulator(this.horaMundial, this.minutoMundial, this.calendar.getTime(), this.tabu, this.listaAeropuertos, this.listaVuelos, this.listPackAlgo, this.listPack,this.tiempoAlgoMM,this.algoritmoDelayMinutes);
 
                 long startTime = System.nanoTime();
+                simulador.setManual(0);
                 simulador.start();
                 simulador.join();
                 long endTime = System.nanoTime();
