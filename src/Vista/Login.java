@@ -67,6 +67,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         ImageIcon iconFront= new ImageIcon (imgFront.getImage().getScaledInstance(frontLogin.getWidth(), frontLogin.getHeight(), Image.SCALE_DEFAULT));
         frontLogin.setIcon(iconFront);
         
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -245,21 +246,22 @@ public class Login extends javax.swing.JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-               if (this.minutoMundial<59){
-                this.minutoMundial++;
-            }else{
+        if (this.minutoMundial<59){
+            this.minutoMundial++;
+        }else{
+            this.minutoMundial=0;
+            if (this.horaMundial <23)
+                this.horaMundial++;
+            else {
                 this.minutoMundial=0;
-                if (this.horaMundial <23)
-                    this.horaMundial++;
-                else {
-                    this.minutoMundial=0;
-                    this.horaMundial=0; 
-                }    
-            }
+                this.horaMundial=0; 
+            }    
+        }
             
             if (this.minutoMundial== 0  && this.horaMundial%2==0){
+                
                 EjecutaAlgoritmo t = new EjecutaAlgoritmo();
-                t.start();
+//                t.start();
                 System.out.println("ES LA HORA ->>>>>>");
             }
             
@@ -353,54 +355,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         
         
     }//GEN-LAST:event_lblRecoverPasswordMouseClicked
-
-    public void listFilesForFolder(final File folder) {
-        for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.isDirectory()) {
-                listFilesForFolder(fileEntry);
-            } else {
-                Archivos.add(fileEntry.getName());
-                
-            }
-        }
-    }
-    void lecturaData(){
-        try{
-
-                final File folder = new File("resources\\pack_enviados");
-                listFilesForFolder(folder);
-
-
-
-                this.tabu.setListAirport(this.listaAeropuertos);
-                this.tabu.setListFlight(this.listaVuelos);
-                this.tabu.generateFlightMatrix();
-
-                this.dp.setListAirport(this.listaAeropuertos);
-
-                this.tabu.setInputProcess(this.dp);
-                for (String a : this.Archivos){
-                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
-                    //dp.processPackNew("resources\\pack_enviados\\" + a);
-                }
-
-                System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
-
-
-                this.listPack = this.dp.getPackList();
-                this.matrixPackXDay = this.dp.getMatrixPackXDay();
-                
-
-                if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
-                    this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
-                
-                this.listPack.clear();
-                
-            
-        }catch(Exception ex){
-           System.out.println("ERROR lecturaData " + ex.getMessage() );
-       }
-    }
+     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
