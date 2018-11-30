@@ -36,6 +36,7 @@ public class frmReporteHistorial extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
+        btnQuery = new javax.swing.JButton();
 
         panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -56,15 +57,20 @@ public class frmReporteHistorial extends javax.swing.JPanel {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title 1", "Title 2", "Title 3"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 740, 170));
@@ -77,6 +83,14 @@ public class frmReporteHistorial extends javax.swing.JPanel {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Historial de planes de vuelo realizados", "Lista de vuelos según aeropuerto", "Frecuencia de vuelos usados en planes de vuelo", "Frecuencia de movimientos de paquetes en zonas geográficas", " " }));
         jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 22, 280, -1));
+
+        btnQuery.setText("Realizar consulta");
+        btnQuery.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQueryActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnQuery, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 120, 180, -1));
 
         panelFondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 740, 160));
 
@@ -101,9 +115,90 @@ public class frmReporteHistorial extends javax.swing.JPanel {
 //        controlerExcel.excelExportPaquetes(filter);
     }//GEN-LAST:event_btnExcelActionPerformed
 
+    private void btnQueryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQueryActionPerformed
+        String query = "";
+        /* Identificar el tipo */
+        switch(cboTipo.getSelectedIndex()*10+cboDiv.getSelectedIndex()){
+            case 0:
+            query += "SELECT n.codigo AS Codigo, n.nombre AS Nombre, count(d.id_aeropuerto_emisor) AS Frecuencia "+
+            "FROM redexdb.pais as p, redexdb.pedido as d, redexdb.aeropuerto as a, redexdb.ciudad as c, redexdb.continente as n "+
+            "WHERE a.id = d.id_aeropuerto_emisor AND a.id_ciudad = c.id AND p.id = c.id_pais AND n.id = p.id_continente "+
+            "GROUP BY d.id_aeropuerto_emisor ORDER BY count(1) ";
+            break;
+            case 1:
+            query += "SELECT p.codigo AS Codigo, p.nombre AS Nombre, count(d.id_aeropuerto_emisor) AS Frecuencia "+
+            "FROM redexdb.pais as p, redexdb.pedido as d, redexdb.aeropuerto as a, redexdb.ciudad as c "+
+            "WHERE a.id = d.id_aeropuerto_emisor AND a.id_ciudad = c.id AND p.id = c.id_pais "+
+            "GROUP BY d.id_aeropuerto_emisor ORDER BY count(1) ";
+            break;
+            case 2:
+            query += "SELECT c.codigo AS Codigo, c.nombre AS Nombre, count(d.id_aeropuerto_emisor) AS Frecuencia "+
+            "FROM redexdb.pedido as d, redexdb.aeropuerto as a, redexdb.ciudad as c "+
+            "WHERE a.id = d.id_aeropuerto_emisor AND a.id_ciudad = c.id "+
+            "GROUP BY d.id_aeropuerto_emisor ORDER BY count(1) ";
+            break;
+            case 3:
+            query += "SELECT a.codigo AS Codigo, a.nombre AS Nombre, count(d.id_aeropuerto_emisor) AS Frecuencia "+
+            "FROM redexdb.pedido as d, redexdb.aeropuerto as a "+
+            "WHERE a.id = d.id_aeropuerto_emisor "+
+            "GROUP BY d.id_aeropuerto_emisor ORDER BY count(1) ";
+            break;
+            case 10:
+            break;
+            case 11:
+            break;
+            case 12:
+            break;
+            case 13:
+            break;
+        }
+        switch(cboOrden.getSelectedIndex()){
+            case 0:
+            query += "desc";
+            break;
+            case 1:
+            query += "asc";
+            break;
+        }
+        switch(cboFrec.getSelectedIndex()){
+            case 0:
+            query += " LIMIT 1;";
+            break;
+            case 1:
+            query += " LIMIT 2;";
+            break;
+            case 2:
+            query += " LIMIT 5;";
+            break;
+            case 3:
+            query += " LIMIT 10;";
+            break;
+            default:
+            query += " LIMIT 20;";
+            break;
+        }
+        System.out.println(query);
+        ArrayList<ArrayList<String>> lista = consulta.hacerConsulta(query);
+        // Colocando en la tabla
+        DefaultTableModel modelo = (DefaultTableModel) tblConsulta.getModel();
+        int tamanho = modelo.getRowCount();
+        for(int i=0; i<tamanho; i++){
+            modelo.removeRow(0);
+        }
+        Object[] obj = new Object[3];
+        System.out.println(lista.size());
+        for(int i = 0; i < lista.size(); i++){
+            obj[0] = lista.get(i).get(0);
+            obj[1] = lista.get(i).get(1);
+            obj[2] = lista.get(i).get(2);
+            modelo.addRow(obj);
+        }
+    }//GEN-LAST:event_btnQueryActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExcel;
+    private javax.swing.JButton btnQuery;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
