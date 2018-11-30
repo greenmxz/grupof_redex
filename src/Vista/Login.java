@@ -2,6 +2,8 @@ package Vista;
 
 import AccesoDatos.EjecutaAlgoritmo;
 import AccesoDatos.usuarioDA;
+import Algoritmo.DataProcessing;
+import Algoritmo.TabuSearch;
 import Controlador.usuarioBL;
 import Modelo.Encriptar;
 import Modelo.Hashing;
@@ -14,6 +16,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 import javafx.scene.Cursor;
 import javax.swing.ImageIcon;
@@ -26,8 +31,16 @@ public class Login extends javax.swing.JFrame implements ActionListener {
     private usuario usuarioLogin;
     private Encriptar td ;
     private Timer timer  ;
-     private int minutoMundial=0  ;
-     private int horaMundial =0 ;
+    private int minutoMundial=0  ;
+    private int horaMundial =0 ;
+    private Calendar calendar;
+     private ArrayList<Algoritmo.Paquete> listPack = new ArrayList<>();
+     private ArrayList<Algoritmo.Paquete> listPackAlgo = new ArrayList<>();
+     private int tiempoAlgoMM=0;
+     private int tiempoDelayAlgoritmo=60*2;
+     private DataProcessing dp = new DataProcessing();
+     private ArrayList<String> Archivos = new ArrayList<>();
+     private TabuSearch ts;
      
     public Login() {
        
@@ -158,6 +171,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
     void resetColor(JPanel panel){
         panel.setBackground(new Color(173,192,206));
     }
+    
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
         usuarioLogin = usuarioBL.obtenerUsuario(this.userName.getText(),this.password.getText());
         if (usuarioLogin!=null){
@@ -194,6 +208,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                         /* Crear nuevo hilo*/
                         this.timer = new Timer(8, (ActionListener) this);
                         timer.start();
+                        
 //                            EjecutaAlgoritmo e = new EjecutaAlgoritmo();
 //                            e.start();
                     }else{
@@ -243,9 +258,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             }
             
             if (this.minutoMundial== 0  && this.horaMundial%2==0){
-                //EjecutaAlgoritmo t = new EjecutaAlgoritmo();
-                //t.start();
-                //System.out.println("ES LA HORA ->>>>>>");
+                EjecutaAlgoritmo t = new EjecutaAlgoritmo();
+                t.start();
+                System.out.println("ES LA HORA ->>>>>>");
             }
             
         
@@ -339,6 +354,53 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         
     }//GEN-LAST:event_lblRecoverPasswordMouseClicked
 
+    public void listFilesForFolder(final File folder) {
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                listFilesForFolder(fileEntry);
+            } else {
+                Archivos.add(fileEntry.getName());
+                
+            }
+        }
+    }
+    void lecturaData(){
+        try{
+
+                final File folder = new File("resources\\pack_enviados");
+                listFilesForFolder(folder);
+
+
+
+                this.tabu.setListAirport(this.listaAeropuertos);
+                this.tabu.setListFlight(this.listaVuelos);
+                this.tabu.generateFlightMatrix();
+
+                this.dp.setListAirport(this.listaAeropuertos);
+
+                this.tabu.setInputProcess(this.dp);
+                for (String a : this.Archivos){
+                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
+                    //dp.processPackNew("resources\\pack_enviados\\" + a);
+                }
+
+                System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
+
+
+                this.listPack = this.dp.getPackList();
+                this.matrixPackXDay = this.dp.getMatrixPackXDay();
+                
+
+                if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
+                    this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
+                
+                this.listPack.clear();
+                
+            
+        }catch(Exception ex){
+           System.out.println("ERROR lecturaData " + ex.getMessage() );
+       }
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

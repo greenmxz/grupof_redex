@@ -84,7 +84,6 @@ public class frmMenuAdmin extends javax.swing.JFrame {
         btnMenu = new javax.swing.JButton();
         panelMenu = new javax.swing.JPanel();
         btnCuentas = new Especial.RSButtonMetro();
-        btnAdminUsuario = new Especial.RSButtonMetro();
         btnCargaMasiva1 = new Especial.RSButtonMetro();
         panelPrincipal = new javax.swing.JPanel();
 
@@ -140,15 +139,6 @@ public class frmMenuAdmin extends javax.swing.JFrame {
             }
         });
         panelMenu.add(btnCuentas, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 140, 30));
-
-        btnAdminUsuario.setText("Administrar Usuarios");
-        btnAdminUsuario.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnAdminUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdminUsuarioActionPerformed(evt);
-            }
-        });
-        panelMenu.add(btnAdminUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 140, 30));
 
         btnCargaMasiva1.setText("Carga de datos");
         btnCargaMasiva1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -213,12 +203,6 @@ public class frmMenuAdmin extends javax.swing.JFrame {
             Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);
     }//GEN-LAST:event_btnCargaMasiva1ActionPerformed
 
-    private void btnAdminUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminUsuarioActionPerformed
-        new CambiarPanel(panelPrincipal, new frmAdministrarCuenta(this));
-        if(this.panelMenu.getX()>-1)
-            Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);
-    }//GEN-LAST:event_btnAdminUsuarioActionPerformed
-
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -253,7 +237,6 @@ public class frmMenuAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Especial.RSButtonMetro btnAdminUsuario;
     private Especial.RSButtonMetro btnCargaMasiva1;
     private Especial.RSButtonMetro btnCerrarSesion;
     private Especial.RSButtonMetro btnCuentas;
