@@ -14,6 +14,7 @@ public class Paquete {
     private String ruta = "";
     private int esFinal = 0; // 0: tiene varios pasos, 1: solo le falta un paso
     private int estado = 0; // 0: no disponible, 1: en espera, 2: en transito
+    private int nuevo = 1;
     
     public Paquete(int originHour, int originMin, int originAirport,
             int destinyAirport){
@@ -121,6 +122,14 @@ public class Paquete {
 
     public void setEsFinal(int esFinal) {
         this.esFinal = esFinal;
+    }
+
+    public int getNuevo() {
+        return nuevo;
+    }
+
+    public void setNuevo(int nuevo) {
+        this.nuevo = nuevo;
     }
     
 }
