@@ -34,15 +34,16 @@ public class EjecutaAlgoritmo extends Thread{
      private Calendar calendar;
      private ArrayList<Algoritmo.Paquete> listPack = new ArrayList<>();
      private ArrayList<Algoritmo.Paquete> listPackAlgo = new ArrayList<>();
-     private int tiempoAlgoMM=0;
+     private int tiempoAlgoMM;
      private int tiempoDelayAlgoritmo=60*2;
      private DataProcessing dp = new DataProcessing();
      private ArrayList<String> Archivos = new ArrayList<>();
      private TabuSearch ts=new TabuSearch();
      
-     public EjecutaAlgoritmo(TabuSearch tabu){
+     public EjecutaAlgoritmo(TabuSearch tabu, int t){
          ts=tabu;
          ts.setListPack(new ArrayList<Paquete>());
+         this.tiempoAlgoMM = t;
      }
     public void run(){
 //        t = new Timer(8,this);
@@ -72,6 +73,7 @@ public class EjecutaAlgoritmo extends Thread{
             TabuSimulator simulador=new TabuSimulator(horaMundial,minutoMundial,calendar.getTime(),ts,ts.getListAirport(),ts.getListFlight(),listPackAlgo,ts.getListPack(),tiempoAlgoMM,tiempoDelayAlgoritmo);
             simulador.setManual(1);
             simulador.start();
+            simulador.join();
             this.listPackAlgo = simulador.getListPackAlgo();
             size=listPackAlgo.size();
             System.out.println(size);
