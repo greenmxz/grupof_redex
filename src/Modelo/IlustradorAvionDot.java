@@ -710,7 +710,7 @@ static final int FONT_SIZE = 11;
             if (this.minutoMundial == 0 && this.horaMundial == 0){
                 
                 this.listPack.clear();
-                
+                //XKD
                 for(ArrayList<ArrayList<Paquete>> dataPacksAero : this.matrixPackXDay){
                     if(dataPacksAero.size() > cantDays){
                         ArrayList<Paquete> listaPacksxDia = dataPacksAero.get(cantDays);

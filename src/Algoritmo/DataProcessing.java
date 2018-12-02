@@ -284,15 +284,21 @@ public class DataProcessing {
                 ArrayList<Paquete> aux = new ArrayList<Paquete>();
                 int day = listPack.get(0).getOriginDay();
                 
-                for (Paquete p : listPack){
-                    if (p.getOriginDay() == day){
+                for (Paquete p : listPack){        
+                    if (listPack.size()==1){
                         aux.add(p);
+                         listPackXDay.add(aux);
                     }else{
-                        day = p.getOriginDay();
-                        listPackXDay.add(aux);
-                        aux = new ArrayList<Paquete>();
-                        aux.add(p);
+                        if (p.getOriginDay() == day){
+                            aux.add(p);
+                        }else{
+                            day = p.getOriginDay();
+                            listPackXDay.add(aux);
+                            aux = new ArrayList<Paquete>();
+                            aux.add(p);
+                        }
                     }
+                    
                 }
                 matrixPackXDay.add(listPackXDay);
                 listPackXDay = new ArrayList<ArrayList<Paquete>>();
