@@ -49,7 +49,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
      private ArrayList<String> Archivos = new ArrayList<>();
      private TabuSearch tabu  = new TabuSearch();
      private int esInicio = 1;
-     private EjecutaAlgoritmo ejAlgo;
+     //private EjecutaAlgoritmo ejAlgo;
      
     public Login() {
        
@@ -274,7 +274,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 }
                 if (this.minutoMundial== 0  && this.horaMundial%2==0){
 
-                    EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu);
+                    EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.tiempoAlgoMM);
 
                     t.start();
                     
@@ -338,7 +338,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             this.tabu.setInputProcess(this.dp);
             
             
-            this.ejAlgo = new EjecutaAlgoritmo(this.tabu);
+            //this.ejAlgo = new EjecutaAlgoritmo(this.tabu);
 //                for (String a : this.Archivos){
 //                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
 //                    //dp.processPackNew("resources\\pack_enviados\\" + a);
