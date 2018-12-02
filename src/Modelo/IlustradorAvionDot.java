@@ -323,7 +323,8 @@ static final int FONT_SIZE = 11;
                             Aeropuerto aero = this.listaAeropuertos.get(v.getIdAeroOrigen()-1);
                             if(aero.getCapActual() > 0)
                                 aero.setCapActual(aero.getCapActual() - 1); // se quita el paquete del aeropuerto
-                            
+                            else
+                                System.out.println("ERROR AQUI");
                       
                                     
                            //System.out.println("AQUI EJEAJEAJ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ids.length);
@@ -379,6 +380,7 @@ static final int FONT_SIZE = 11;
                                 this.listPackAlgo.get(i).setRuta(ruta);
                                 // cambia a estado en transito para que no se vuelva a usar hasta que llegue
                                 this.listPackAlgo.get(i).setEstado(2);
+                                this.listPackAlgo.get(i).setNuevo(0);
                                 v.getIdPacks().add(i);
                             }
                             
@@ -756,6 +758,12 @@ static final int FONT_SIZE = 11;
                 aplicaAlgoritmo();
                 
                 this.cantTics=0;
+                
+                
+                for (Aeropuerto a : this.listaAeropuertos){
+                    System.out.println(a.getCountry() + " -> " + a.getCapActual());
+                }
+                
             }
             
             //DIBUJA MOVIMIENTO
