@@ -6,7 +6,7 @@
 package Controlador;
 
 import AccesoDatos.usuarioDA;
-import Modelo.Avion;
+import Modelo.persona;
 import Modelo.usuario;
 import java.util.ArrayList;
 
@@ -53,6 +53,8 @@ public class usuarioBL {
     public boolean existeUsuario(String usuario){
         return usuarioDA.existeUsuario(usuario);
     }
-    
+    public void registrarUsuarios(ArrayList<persona> lstUser, ArrayList<ArrayList<String>> adic){
+        usuarioDA.registrarUsuarios(lstUser, adic);
+    }
 
 }

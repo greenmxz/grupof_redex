@@ -459,4 +459,50 @@ public class usuarioDA {
             return false;
         }
     }
+    
+    public void registrarUsuarios(ArrayList<persona> lstUser, ArrayList<ArrayList<String>> adic){
+        try{
+            database connect = new database();
+            for(int i=0; i<lstUser.size(); i++){
+                Statement sentencia = connect.getConnection().createStatement();
+                String query = "SELECT MAX(id) AS id FROM redexdb.persona";
+                ResultSet rs = sentencia.executeQuery(query);
+                rs.next();
+                int idPersona = rs.getInt("id") + 1;
+                /* Como es nuevo, se registra */
+                sentencia = connect.getConnection().createStatement();
+                query = "INSERT INTO redexdb.persona (id,nombre,apellido_paterno, apellido_materno,"
+                        + "numero_documento_identidad,direccion,correo,telefono,fecha_nacimiento"
+                        + ",id_ciudad,id_tipo_documento,activo) VALUES ('" +
+                        String.valueOf(idPersona) + "','" + lstUser.get(i).getNombre() + "','" + 
+                        lstUser.get(i).getApellidoPaterno() + "','" + lstUser.get(i).getApellidoMaterno() + "','" +
+                        String.valueOf(lstUser.get(i).getNumeroDocumentoIdentidad()) + "','" +
+                        lstUser.get(i).getDireccion() + "','" + lstUser.get(i).getCorreo() + "','" +
+                        lstUser.get(i).getTelefono() + "','" + 
+                        new SimpleDateFormat("yyyy-mm-dd").format(lstUser.get(i).getFechaNacimiento()) + "','" + 
+                        lstUser.get(i).getCiudad() + "','" + lstUser.get(i).getTipoDocumento() + "',1)";
+//                System.out.println("A " + query);
+                sentencia.executeUpdate(query);
+                
+                /* 2er paso: Registrar usuario*/
+                //
+                sentencia = connect.getConnection().createStatement();
+                query = "SELECT MAX(id) AS id FROM redexdb.usuario";
+                rs = sentencia.executeQuery(query);
+                rs.next();
+                int idUsuario = rs.getInt("id") + 1;
+                /* Como es nuevo, se registra */
+                sentencia = connect.getConnection().createStatement();
+                query = "INSERT INTO redexdb.usuario (id,codigo,password,activo,id_rol,id_persona) " +
+                        "VALUES ('" + String.valueOf(idUsuario) + "','" + adic.get(i).get(0) + "','" +
+                        adic.get(i).get(1) + "',1,'" + adic.get(i).get(2) + "','" + 
+                        String.valueOf(idPersona) + "')";
+                sentencia.executeUpdate(query);
+//                System.out.println("B " + query);
+            }
+            connect.getConnection().close();
+        }catch(Exception e){
+            System.out.println("ERROR registrarUsuarios "+e.getMessage());
+        }
+    }
 }

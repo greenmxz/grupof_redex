@@ -45,7 +45,7 @@ public class aeropuerto {
         this.id = id;
         this.nombre = nombre;
         this.codigo = codigo;
-        this.capMax = 600;
+        this.capMax = 1000;
         this.capActual = 0;
         this.continente = continente;
         this.pais = pais;

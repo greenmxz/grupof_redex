@@ -4,6 +4,7 @@ import Controlador.AdministrarClienteBL;
 import Controlador.PaqueteBL;
 import Controlador.VueloBL;
 import Controlador.aeropuertoBL;
+import Controlador.usuarioBL;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import Modelo.Archivo;
@@ -32,6 +33,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
     private ArrayList<String> listAerop = new ArrayList<String>();
     private ArrayList<Integer> listHusos = new ArrayList<Integer>();
     private javax.swing.JFrame x;
+    private ArrayList<ArrayList<String>> usuarios = new ArrayList<ArrayList<String>>();
     
     public frmCargaDatos(javax.swing.JFrame x) {
         initComponents();
@@ -179,10 +181,12 @@ public class frmCargaDatos extends javax.swing.JPanel {
     }
     public ArrayList<persona> procesarClientes(String ruta){
         ArrayList<persona> aux = new ArrayList<persona>();
+        int linea = 1;
         try{
             BufferedReader reader = new BufferedReader(new FileReader(ruta));
             String line;
             String continent = "";
+            this.usuarios = new ArrayList<ArrayList<String>>();
             while( (line = reader.readLine()) != null){
                 String[] arr = line.split(",");
                 System.out.println(arr);
@@ -198,22 +202,105 @@ public class frmCargaDatos extends javax.swing.JPanel {
                 
                 Date date1=new SimpleDateFormat("dd-MM-yyyy").parse(arr[7]);
                 
-                
-                
                 p.setFechaNacimiento(date1);
                 p.setCiudad((arr[8]));
                 p.setTipoDocumento(arr[9]);
                 
-                 aux.add(p);
-
+                aux.add(p);
+                linea++;
             }
             System.out.println("Clients' reading process successful!");
         }catch(Exception e){
             e.printStackTrace();
             System.out.println(e.getMessage());
+            if(linea == 1)
+                JOptionPane.showMessageDialog(null,
+                    "La línea 1 contiene un error de formato. No se podrá continuar con"
+                            + "la carga hasta que el error se corrija",
+                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+            int reply = JOptionPane.showConfirmDialog(null,
+                    "La línea " + String.valueOf(linea) + " contiene un error de formato.\n"
+                            + "¿Desea guardar los clientes ya leídos?",
+                    "Mensaje de error", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                return aux;
+            }
+            else {
+               JOptionPane.showMessageDialog(null, "Registro cancelado");
+               return new ArrayList<persona>();
+            }
         }
         return aux;
     }
+    
+    public ArrayList<persona> procesarEmpleados(String ruta){
+        ArrayList<persona> aux = new ArrayList<persona>();
+        int linea = 1;
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(ruta));
+            String line;
+            String continent = "";
+            this.usuarios = new ArrayList<ArrayList<String>>();
+            while( (line = reader.readLine()) != null){
+                String[] arr = line.split(",");
+                System.out.println(arr);
+                persona p = new persona();
+                
+                if(Integer.parseInt(arr[9]) < 1)
+                    throw new Exception();
+                
+//                arr[1].replace("O'", "O");
+//                arr[2].replace("O'", "O");
+                //nombre,apellido_paterno,apellido_materno,numero_documento_identidad,direccion,correo,telefono,fecha_nacimiento,id_ciudad,id_tipo_documento,
+                p.setNombre(arr[0]);
+                p.setApellidoPaterno(arr[1]);
+                p.setApellidoMaterno(arr[2]);
+                p.setNumeroDocumentoIdentidad(Integer.parseInt(arr[3]));
+                p.setDireccion(arr[4]);
+                p.setCorreo(arr[5]);
+                p.setTelefono(arr[6]);
+                
+                Date date1=new SimpleDateFormat("dd-MM-yyyy").parse(arr[7]);
+                
+                p.setFechaNacimiento(date1);
+                p.setCiudad((arr[8]));
+                p.setTipoDocumento(arr[9]);
+                
+                ArrayList<String> auxx = new ArrayList<String>();
+                auxx.add(arr[10]);
+                auxx.add(arr[11]);
+                auxx.add(arr[12]);
+                
+                aux.add(p);
+                this.usuarios.add(auxx);
+                linea++;
+            }
+            System.out.println("Employee's reading process successful!");
+        }catch(Exception e){
+//            e.printStackTrace();
+            System.out.println(e.getMessage());
+            if(linea == 1)
+                JOptionPane.showMessageDialog(null,
+                    "La línea 1 contiene un error de formato. No se podrá continuar con"
+                            + "la carga hasta que el error se corrija",
+                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+            else{
+                int reply = JOptionPane.showConfirmDialog(null,
+                        "La línea " + String.valueOf(linea) + " contiene un error de formato.\n"
+                                + "¿Desea guardar los empleados ya leídos?",
+                        "Mensaje de error", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    return aux;
+                }
+                else {
+                   JOptionPane.showMessageDialog(null, "Registro cancelado");
+                   return new ArrayList<persona>();
+                }
+            }
+        }
+        return aux;
+    }
+    
     public ArrayList<Vuelo> procesarVuelos(String ruta){
         ArrayList<Vuelo> aux = new ArrayList<Vuelo>();
         int linea = 1;
@@ -276,16 +363,18 @@ public class frmCargaDatos extends javax.swing.JPanel {
                     "La línea 1 contiene un error de formato. No se podrá continuar con"
                             + "la carga hasta que el error se corrija",
                     "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
-            int reply = JOptionPane.showConfirmDialog(null,
-                    "La línea " + String.valueOf(linea) + " contiene un error de formato.\n"
-                            + "¿Desea guardar los vuelos ya leídos?",
-                    "Mensaje de error", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                return aux;
-            }
-            else {
-               JOptionPane.showMessageDialog(null, "Registro cancelado");
-               return new ArrayList<Vuelo>();
+            else{
+                int reply = JOptionPane.showConfirmDialog(null,
+                        "La línea " + String.valueOf(linea) + " contiene un error de formato.\n"
+                                + "¿Desea guardar los vuelos ya leídos?",
+                        "Mensaje de error", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    return aux;
+                }
+                else {
+                   JOptionPane.showMessageDialog(null, "Registro cancelado");
+                   return new ArrayList<Vuelo>();
+                }
             }
         }
         return aux;
@@ -347,16 +436,18 @@ public class frmCargaDatos extends javax.swing.JPanel {
                     "La línea 1 contiene un error de formato. No se podrá continuar con"
                             + "la carga hasta que el error se corrija",
                     "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
-            int reply = JOptionPane.showConfirmDialog(null,
-                    "La línea " + String.valueOf(linea) + " contiene un error de formato.\n"
-                            + "¿Desea guardar los paquetes ya leídos?",
-                    "Mensaje de error", JOptionPane.YES_NO_OPTION);
-            if (reply == JOptionPane.YES_OPTION) {
-                return aux;
-            }
-            else {
-               JOptionPane.showMessageDialog(null, "Registro cancelado");
-               return new ArrayList<paquete>();
+            else{
+                int reply = JOptionPane.showConfirmDialog(null,
+                        "La línea " + String.valueOf(linea) + " contiene un error de formato.\n"
+                                + "¿Desea guardar los paquetes ya leídos?",
+                        "Mensaje de error", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    return aux;
+                }
+                else {
+                   JOptionPane.showMessageDialog(null, "Registro cancelado");
+                   return new ArrayList<paquete>();
+                }
             }
         }
         return aux;
@@ -441,7 +532,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
         jLabel3.setText("Contenido del archivo:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
-        cboTipoInfo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Aeropuertos", "Vuelos", "Paquetes", "Clientes" }));
+        cboTipoInfo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Aeropuertos", "Vuelos", "Paquetes", "Clientes", "Empleados" }));
         jPanel1.add(cboTipoInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 180, -1));
 
         lblPathArch.setText("Ruta:");
@@ -552,44 +643,73 @@ public class frmCargaDatos extends javax.swing.JPanel {
 
     private void btnProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarActionPerformed
         for(int i=0; i<listFile.size(); i++){
+            boolean order = false;
             if(listFile.get(i).getTipo() == "Aeropuertos"){
                 aeropuertoBL procBL = new aeropuertoBL();
-                procBL.registrarAeropuertos(procesarAeropuertos(listFile.get(i).getUbicacion()));
-                JOptionPane.showMessageDialog(null,
-                "El proceso de registro de aeropuertos", "Término de proceso",
-                JOptionPane.INFORMATION_MESSAGE);
+                try{
+                    procBL.registrarAeropuertos(procesarAeropuertos(listFile.get(i).getUbicacion()));
+                    JOptionPane.showMessageDialog(null,
+                    "El proceso de registro de aeropuertos", "Término de proceso",
+                    JOptionPane.INFORMATION_MESSAGE);
+                }catch(Exception e){order = true;}
             }else if(listFile.get(i).getTipo() == "Vuelos"){
                 VueloBL procBL = new VueloBL();
-                procBL.registrarVuelos(procesarVuelos(listFile.get(i).getUbicacion()));
-                JOptionPane.showMessageDialog(null,
-                "El proceso de registro de vuelos", "Término de proceso",
-                JOptionPane.INFORMATION_MESSAGE);
+                try{
+                    procBL.registrarVuelos(procesarVuelos(listFile.get(i).getUbicacion()));
+                    JOptionPane.showMessageDialog(null,
+                    "El proceso de registro de vuelos", "Término de proceso",
+                    JOptionPane.INFORMATION_MESSAGE);
+                }catch(Exception e){order = true;}
             }else if (listFile.get(i).getTipo() == "Clientes"){
                AdministrarClienteBL procBL = new AdministrarClienteBL();
                 //procBL.registrarClientes(procesarClientes(listFile.get(i).getUbicacion()));
-                procBL.registarClientes(procesarClientes(listFile.get(i).getUbicacion()));
-                JOptionPane.showMessageDialog(null,
-                "El proceso de registro de clientes", "Término de proceso",
-                JOptionPane.INFORMATION_MESSAGE);
+                try{
+                    procBL.registarClientes(procesarClientes(listFile.get(i).getUbicacion()));
+                    JOptionPane.showMessageDialog(null,
+                    "El proceso de registro de clientes", "Término de proceso",
+                    JOptionPane.INFORMATION_MESSAGE);
+                }catch(Exception e){order = true;}
             }else if(listFile.get(i).getTipo() == "Paquetes"){
                 if(chkCargaMultiple.getModel().isSelected()){
                     File f = new File(listFile.get(i).getUbicacion());
                     String[] fileList = f.list();
-                    for(String str : fileList){
-                        PaqueteBL procBL = new PaqueteBL();
-                        procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion() + "\\" + str));
-                    }
-                    JOptionPane.showMessageDialog(null,
-                    "El proceso de registro de paquetes", "Término de proceso",
-                    JOptionPane.INFORMATION_MESSAGE);
+                    try{
+                        for(String str : fileList){
+                            PaqueteBL procBL = new PaqueteBL();
+                            procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion() + "\\" + str));
+                        }
+                        JOptionPane.showMessageDialog(null,
+                        "El proceso de registro de paquetes", "Término de proceso",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    }catch(Exception e){order = true;}
                 }else{
                     PaqueteBL procBL = new PaqueteBL();
-                    procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion()));
-                    JOptionPane.showMessageDialog(null,
-                    "El proceso de registro de paquetes", "Término de proceso",
-                    JOptionPane.INFORMATION_MESSAGE);
+                    try{
+                        procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion()));
+                        JOptionPane.showMessageDialog(null,
+                        "El proceso de registro de paquetes", "Término de proceso",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    }catch(Exception e){order = true;}
                 }
+            }else if(listFile.get(i).getTipo() == "Empleados"){
+                usuarioBL procBL = new usuarioBL();
+                try{
+                    ArrayList<persona> aux = procesarEmpleados(listFile.get(i).getUbicacion());
+                    if(aux.isEmpty())
+                        throw new Exception();
+                    procBL.registrarUsuarios(aux, this.usuarios);
+                    JOptionPane.showMessageDialog(null,
+                    "El proceso de registro de empleados ha ", "Término de proceso",
+                    JOptionPane.INFORMATION_MESSAGE);
+                }catch(Exception e){order = true;}
             }
+            Archivo auxx = listFile.get(i);
+            if(order)
+                listFile.remove(auxx);
+        }
+        DefaultTableModel modelTable = (DefaultTableModel) tblArchivos.getModel();
+        while(modelTable.getRowCount() > 0){
+            modelTable.removeRow(0);
         }
     }//GEN-LAST:event_btnProcesarActionPerformed
 
