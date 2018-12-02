@@ -245,9 +245,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                     }
                 }
             }
-            userName.setText("Usuario");
+            //userName.setText("Usuario");
         }else{
-            userName.setText("Usuario");
+            //userName.setText("Usuario");
             JOptionPane.showMessageDialog(null, "Usuario o contrasena incorrectos");
             
         }
@@ -268,18 +268,28 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             }    
         }
             
-            if(this.esInicio == 1){
-                lecturaData();
-                this.esInicio = 0;
-            }
-            if (this.minutoMundial== 0  && this.horaMundial%2==0){
-                usuario userRecuperar = usuarioBL.obtenerUsuarioRecuperar(this.userName.getText());
-                EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,userRecuperar.getPersona().getCorreo());
-                t.start();
-                System.out.println("ES LA HORA ->>>>>>");
-            }
+        if(this.esInicio == 1){
+            lecturaData();
+            this.esInicio = 0;
+        }
+        if (this.minutoMundial== 0  && this.horaMundial%2==0){
+            usuario userRecuperar = usuarioBL.obtenerUsuarioRecuperar(this.userName.getText());
+            EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,userRecuperar.getPersona().getCorreo());
+            t.start();
+            System.out.println("ES LA HORA ->>>>>>");
+        }
             
         
+    }
+     public void listFilesForFolder(final File folder) {
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                listFilesForFolder(fileEntry);
+            } else {
+                Archivos.add(fileEntry.getName());
+                
+            }
+        }
     }
     void lecturaData(){
         try{
@@ -291,6 +301,10 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             ArrayList<aeropuerto>listaAeropuertos=new ArrayList<aeropuerto>();
             ArrayList<Modelo.Vuelo>listaVuelos=new ArrayList<Modelo.Vuelo>();
             
+            final File folder = new File("resources\\pack_enviados");
+                listFilesForFolder(folder);
+                
+                
             listaAeropuertos=controladorAeropuerto.listaAeropuertos();
             listaVuelos=controladorVuelo.listaVuelos();
             
@@ -324,9 +338,24 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             this.tabu.setListFlight(listaVuelosNew);
             this.tabu.generateFlightMatrix();
 
-            this.dp.setListAirport(listaAeropuertosNew);
-
             this.tabu.setInputProcess(this.dp);
+                for (String a : this.Archivos){
+                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
+                    //dp.processPackNew("resources\\pack_enviados\\" + a);
+                }
+
+                System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
+
+
+                this.listPack = this.dp.getPackList();
+                //this.matrixPackXDay = this.dp.getMatrixPackXDay();
+                
+
+                if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
+                    this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
+                
+                this.listPack.clear();
+                //this.inicio = 1;
 
         }catch(Exception ex){
            System.out.println("ERROR lecturaData " + ex.getMessage() );

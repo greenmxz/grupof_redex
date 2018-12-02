@@ -85,11 +85,11 @@ public class EjecutaAlgoritmo extends Thread{
             cambiaEstadoPacks();
             MailWorkerTest notificadorEmail=new MailWorkerTest(correo,"sdfdf");
             
-//            for(int i=0;i<size;i++){
-//                if(listPackAlgo.get(i).getEstado()==1){
-//                    
-//                }
-//            }
+            for(int i=0;i<size;i++){
+                if(listPackAlgo.get(i).getEstado()==1){
+                    System.out.println(listPackAlgo.get(i).getRuta());
+                }
+            }
             this.finalize();
             
             
