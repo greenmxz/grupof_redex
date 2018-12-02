@@ -584,7 +584,7 @@ static final int FONT_SIZE = 11;
                 
 
                 if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
-                    this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
+                    this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth(),this.listPack.get(0).getOriginDay());
                 
                 this.listPack.clear();
                 this.inicio = 1;
@@ -662,7 +662,7 @@ static final int FONT_SIZE = 11;
 
                     DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
                     Calendar calendarioPack = Calendar.getInstance();
-                    calendarioPack.set(p.getOriginYear(),p.getOriginMonth()-1,p.getOriginDay());
+                    calendarioPack.set(p.getOriginYear(),p.getOriginMonth(),p.getOriginDay());
 
                     Date fechaPack = calendarioPack.getTime();
                     Date fechaActual = this.calendar.getTime();
