@@ -87,34 +87,38 @@ public class TabuSimulator extends Thread{
                 DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
                 Calendar calendarioPack = Calendar.getInstance();
-                if (this.manual == 1)
-                    calendarioPack.set(this.listPack.get(i).getOriginYear()+1900,this.listPack.get(i).getOriginMonth()-1,this.listPack.get(i).getOriginDay());
-                else
-                    calendarioPack.set(this.listPack.get(i).getOriginYear(),this.listPack.get(i).getOriginMonth()-1,this.listPack.get(i).getOriginDay());
-
-                Date fechaPack = calendarioPack.getTime();
-
-                //vertifica si los packs pertenecen al dia de hoy           
-                if (dateFormat.format(fechaActual).compareTo(dateFormat.format(fechaPack))==0){
-                    //tiempo de llegada del pack
-                    int timePack = this.listPack.get(i).getOriginHour()*60 + this.listPack.get(i).getOriginMin();
-                    /* 
-                    System.out.println("bloque -- t ini " + timeIni);
-                    System.out.println("bloque -- t fin " + timeFin);
-                    System.out.println("bloque -- t pack " + timePack);
-                    */
+                
+                if (this.manual == 1){
+                    
+                    //calendarioPack.set(this.listPack.get(i).getOriginYear()+1900,this.listPack.get(i).getOriginMonth()-1,this.listPack.get(i).getOriginDay());
+                    int timePackM = this.listPack.get(i).getOriginHour() * 60 + this.listPack.get(i).getOriginMin();
                     //si se encuentra en el rango
-                    if (timePack < timeFin && timePack >= timeIni){
+                    if (timePackM < timeFin && timePackM >= timeIni) {
                         //System.out.println("bloque -- se añade pack");
                         // añade lista pack a procesar
                         this.listPackAlgo.add(this.listPack.get(i));
                         // quita pack de lista original
-                        this.listPack.remove(i); 
+                        this.listPack.remove(i);
                         //System.out.println(this.listPack.get(i).getOriginAirport() + "->" + this.listPack.get(i).getDestinyAirport());
                     }
+                }else{
+                    calendarioPack.set(this.listPack.get(i).getOriginYear(),this.listPack.get(i).getOriginMonth(),this.listPack.get(i).getOriginDay());
+                    Date fechaPack = calendarioPack.getTime();
+                    //vertifica si los packs pertenecen al dia de hoy           
+                    if (dateFormat.format(fechaActual).compareTo(dateFormat.format(fechaPack))==0){
+                        //tiempo de llegada del pack
+                        int timePack = this.listPack.get(i).getOriginHour()*60 + this.listPack.get(i).getOriginMin();
+                        //si se encuentra en el rango
+                        if (timePack < timeFin && timePack >= timeIni){
+                            //System.out.println("bloque -- se añade pack");
+                            // añade lista pack a procesar
+                            this.listPackAlgo.add(this.listPack.get(i));
+                            // quita pack de lista original
+                            this.listPack.remove(i); 
+                            //System.out.println(this.listPack.get(i).getOriginAirport() + "->" + this.listPack.get(i).getDestinyAirport());
+                        }
+                    }
                 }
-
-
             }
             System.out.println("cant listPackAlgo f = " + this.listPackAlgo.size());
             System.out.println("cant listPack f = " + this.listPack.size());
