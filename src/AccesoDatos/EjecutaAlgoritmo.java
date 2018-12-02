@@ -80,13 +80,13 @@ public class EjecutaAlgoritmo extends Thread{
             }
             cambiaEstadoPacks();
             //ArrayList<String> solution = ts.executeVCRPTabu(ts.getListPack());
-            //simulador.start();
+            //simulador.start();ackAlgo
             //this.listPackAlgo = simulador.getListPackAlgo();
-            //this.tiempoAlgoMM = simulador.getTiempoAlgo();
+            this.tiempoAlgoMM = simulador.getTiempoAlgo();
             //for(int i=0;i<size;i++)
                 //System.out.println(listPackAlgo.get(i).getRuta());
             
-            this.finalize();
+            //this.finalize();
             
             
             //}
@@ -145,6 +145,14 @@ public class EjecutaAlgoritmo extends Thread{
            System.out.println("ERROR cambiaEstadoPacks " + ex.getLocalizedMessage());
            ex.printStackTrace();
        }
+    }
+
+    public int getTiempoAlgoMM() {
+        return tiempoAlgoMM;
+    }
+
+    public void setTiempoAlgoMM(int tiempoAlgoMM) {
+        this.tiempoAlgoMM = tiempoAlgoMM;
     }
 
 

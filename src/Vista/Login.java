@@ -49,6 +49,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
      private ArrayList<String> Archivos = new ArrayList<>();
      private TabuSearch tabu  = new TabuSearch();
      private int esInicio = 1;
+     private EjecutaAlgoritmo ejAlgo;
      
     public Login() {
        
@@ -253,30 +254,40 @@ public class Login extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_loginActionPerformed
 
     public void actionPerformed(ActionEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        if (this.minutoMundial<59){
-            this.minutoMundial++;
-        }else{
-            this.minutoMundial=0;
-            if (this.horaMundial <23)
-                this.horaMundial++;
-            else {
+        try{
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            if (this.minutoMundial<59){
+                this.minutoMundial++;
+            }else{
                 this.minutoMundial=0;
-                this.horaMundial=0; 
-            }    
-        }
-            
-            if(this.esInicio == 1){
-                lecturaData();
-                this.esInicio = 0;
+                if (this.horaMundial <23)
+                    this.horaMundial++;
+                else {
+                    this.minutoMundial=0;
+                    this.horaMundial=0; 
+                }    
             }
-            if (this.minutoMundial== 0  && this.horaMundial%2==0){
-                
-                EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu);
-                t.start();
-                System.out.println("ES LA HORA ->>>>>>");
-            }
-            
+
+                if(this.esInicio == 1){
+                    lecturaData();
+                    this.esInicio = 0;
+                }
+                if (this.minutoMundial== 0  && this.horaMundial%2==0){
+
+                    EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu);
+
+                    t.start();
+                    
+                    t.join();
+
+                    this.tiempoAlgoMM = t.getTiempoAlgoMM();
+
+                    System.out.println("ES LA HORA ->>>>>>");
+                }
+       }catch(Exception ex){
+           System.out.println("ERROR actionPerformed Login " + ex.getMessage() );
+           ex.printStackTrace();
+       }   
         
     }
     void lecturaData(){
@@ -325,6 +336,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             this.dp.setListAirport(listaAeropuertosNew);
 
             this.tabu.setInputProcess(this.dp);
+            
+            
+            this.ejAlgo = new EjecutaAlgoritmo(this.tabu);
 //                for (String a : this.Archivos){
 //                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
 //                    //dp.processPackNew("resources\\pack_enviados\\" + a);
