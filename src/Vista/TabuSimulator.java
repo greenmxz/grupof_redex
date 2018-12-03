@@ -176,6 +176,7 @@ public class TabuSimulator extends Thread{
               //  }
                 
                 mutex.release();
+              
                 //MUTEX OFF
             }
         }
