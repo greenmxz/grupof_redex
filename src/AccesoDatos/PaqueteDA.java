@@ -36,7 +36,7 @@ public class PaqueteDA {
                     if(rs.getObject("id") != null)
                         idOrigen = rs.getInt("id");
                 }else{
-                    System.out.println("ËRROR ORIGEN");
+                    System.out.println("ERROR ORIGEN");
                 }
                 /* 2do paso: Hallar id de aeropuerto donde quiere llegar */
                 // 
@@ -49,7 +49,7 @@ public class PaqueteDA {
                     if(rs.getObject("id") != null)
                         idDestino = rs.getInt("id");
                 }else{
-                    System.out.println("ËRROR DESTINO");
+                    System.out.println("ERROR DESTINO");
                 }
 //                System.out.println(String.valueOf(idOrigen) + " -> " + String.valueOf(idDestino));
                 
@@ -122,7 +122,7 @@ public class PaqueteDA {
                 
                 newPaq.setAeropuertoOrigenId(rs.getInt("id_aeropuerto_emisor"));
                 newPaq.setAeropuertoDestinoId(rs.getInt("id_aeropuerto_receptor"));
-                
+                newPaq.setId(rs.getInt("id"));
                 newPaq.setFechaSalida(nuevaFecha);
                 
                 aux.add(newPaq);

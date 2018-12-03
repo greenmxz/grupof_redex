@@ -3,7 +3,7 @@ package Algoritmo;
 public class Paquete {
 
 //    private static int count = 0;
-//    private int identificator;
+    private int identificator;
     private int originHour;
     private int originMin;
     private int originAirport;
@@ -34,6 +34,14 @@ public class Paquete {
         this.originDay = originDay;
         this.originMonth = originMonth;
         this.originYear = originYear;
+    }
+
+    public int getIdentificator() {
+        return identificator;
+    }
+
+    public void setIdentificator(int identificator) {
+        this.identificator = identificator;
     }
     
     public int getOriginHour() {

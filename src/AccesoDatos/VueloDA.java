@@ -137,7 +137,8 @@ public class VueloDA {
                         "    plan_vuelo.activo\n" +
                         "FROM redexdb.plan_vuelo\n" +
                         "INNER JOIN redexdb.aeropuerto as aeOrigen on  aeOrigen.id = plan_vuelo.id_aeropuerto_salida\n" +
-                        "INNER JOIN redexdb.aeropuerto as aeDestino on aeDestino.id = plan_vuelo.id_aeropuerto_llegada;";
+                        "INNER JOIN redexdb.aeropuerto as aeDestino on aeDestino.id = plan_vuelo.id_aeropuerto_llegada "
+                    + " order by plan_vuelo.id asc;";
             System.out.println("query => " + query);
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);

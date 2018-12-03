@@ -318,6 +318,30 @@ public class AdministrarPedidoDA {
         
         
     }
+    public String obtenerCorreosClientes(int pedido_id){
+        try{
+            database connect = new database();
+            String query="select p1.correo as 'correo_cliente_emisor' ,p2.correo as 'correo_cliente_receptor' from pedido as p\n" +
+                        "inner join cliente as c1 on c1.id = p.id_cliente_emisor\n" +
+                        "inner join cliente as c2 on c2.id = p.id_cliente_receptor\n" +
+                        "inner join persona as p1 on p1.id = c1.id_persona \n" +
+                        "inner join persona as p2 on p2.id = c2.id_persona"
+                        + " and p.id = " + pedido_id + ";";
+            System.out.println("query => " + query);
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while (rs.next( )){
+                String correo=rs.getString("correo_cliente_emisor");
+                correo.concat(",");
+                correo.concat("correo_cliente_receptor");
+                return correo;
+            }
+        }catch(Exception ex){
+            System.out.println("ERROR en obtenerCorreosClientes " + ex.getMessage());
+             return null;
+        }
+        return null;
+    }
     
      public boolean modificarPedido(pedido pedido){
         try{
@@ -364,6 +388,7 @@ public class AdministrarPedidoDA {
         
         
     }
+    
     
      public boolean eliminarPedido(int id_pedido){
         try{

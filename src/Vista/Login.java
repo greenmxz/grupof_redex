@@ -6,6 +6,7 @@ import Algoritmo.Aeropuerto;
 import Algoritmo.DataProcessing;
 import Algoritmo.TabuSearch;
 import Controlador.AdministrarClienteBL;
+import Controlador.PaqueteBL;
 import Controlador.VueloBL;
 import Controlador.aeropuertoBL;
 import Controlador.generalBL;
@@ -42,7 +43,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
     private Timer timer  ;
     private int minutoMundial=0  ;
     private int horaMundial =0 ;
-    private Calendar calendar;
+    private Calendar calendar=Calendar.getInstance();
      private ArrayList<Algoritmo.Paquete> listPack = new ArrayList<>();
      private ArrayList<Algoritmo.Paquete> listPackAlgo = new ArrayList<>();
      private int tiempoAlgoMM=0;
@@ -51,7 +52,12 @@ public class Login extends javax.swing.JFrame implements ActionListener {
      private ArrayList<String> Archivos = new ArrayList<>();
      private TabuSearch tabu  = new TabuSearch();
      private int esInicio = 1;
-     private ArrayList<cliente>arrClientes;
+     private ArrayList<usuario>arrUsuarios;
+     private PaqueteBL controladorPaquete= new PaqueteBL(); 
+     ArrayList<Algoritmo.Paquete>listaPackNew=new ArrayList<>();
+     //private EjecutaAlgoritmo ejAlgo;
+     
+
     public Login() {
        
         initComponents();
@@ -255,30 +261,42 @@ public class Login extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_loginActionPerformed
 
     public void actionPerformed(ActionEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        if (this.minutoMundial<59){
-            this.minutoMundial++;
-        }else{
-            this.minutoMundial=0;
-            if (this.horaMundial <23)
-                this.horaMundial++;
-            else {
+        try{
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            if (this.minutoMundial<59){
+                this.minutoMundial++;
+            }else{
                 this.minutoMundial=0;
-                this.horaMundial=0; 
-            }    
-        }
-            
-        if(this.esInicio == 1){
-            lecturaData();
-            this.esInicio = 0;
-        }
-        if (this.minutoMundial== 0  && this.horaMundial%2==0){
-            usuario userRecuperar = usuarioBL.obtenerUsuarioRecuperar(this.userName.getText());
-            EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,userRecuperar.getPersona().getCorreo());
-            t.start();
-            System.out.println("ES LA HORA ->>>>>>");
-        }
-            
+                if (this.horaMundial <23)
+                    this.horaMundial++;
+                else {
+                    this.minutoMundial=0;
+                    this.horaMundial=0; 
+                }    
+            }
+
+                if(this.esInicio == 1){
+                    lecturaData();
+                    this.esInicio = 0;
+                }
+                if (this.minutoMundial== 0  && this.horaMundial%2==0){
+                    usuarioBL controladorCliente=new usuarioBL();
+                    arrUsuarios=controladorCliente.obtenerUsuarios();
+                    EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,arrUsuarios,this.tiempoAlgoMM);
+
+                    t.start();
+                    
+                    t.join();
+
+                    this.tiempoAlgoMM = t.getTiempoAlgoMM();
+
+                    System.out.println("ES LA HORA ->>>>>>");
+                }
+       }catch(Exception ex){
+           System.out.println("ERROR actionPerformed Login " + ex.getMessage() );
+           ex.printStackTrace();
+       }   
+
         
     }
      public void listFilesForFolder(final File folder) {
@@ -333,16 +351,31 @@ public class Login extends javax.swing.JFrame implements ActionListener {
 
             }
             
+            for(Modelo.Vuelo v:listaVuelos){
+                int origenAero=v.getIdAeropuertoOrigen();
+                int destinoAero=v.getIdAeropuertoDestino();
+                int origenHour=v.getFechaSalida().getHours();
+                int origenMin=v.getFechaSalida().getMinutes();
+                int destinoHour=v.getFechaLlegada().getHours();
+                int destinoMin=v.getFechaLlegada().getMinutes();
+                Algoritmo.Vuelo newVuelo=new Algoritmo.Vuelo(origenAero, origenHour, origenMin, destinoAero, destinoHour, destinoMin);
+                listaVuelosNew.add(newVuelo);
+            }
             
             this.tabu.setListAirport(listaAeropuertosNew);
             this.tabu.setListFlight(listaVuelosNew);
             this.tabu.generateFlightMatrix();
 
             this.tabu.setInputProcess(this.dp);
+
+            
+            
+            //this.ejAlgo = new EjecutaAlgoritmo(this.tabu);
                 for (String a : this.Archivos){
                     dp.processPackNew("resources\\pack_enviados_generados\\" + a);
                     //dp.processPackNew("resources\\pack_enviados\\" + a);
                 }
+
 
                 System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
 
@@ -354,9 +387,26 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
                     this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
                 
+                ArrayList<Modelo.paquete>listaPack=controladorPaquete.obtenerPaquetes();
+                ArrayList<Algoritmo.Paquete>listaPackNew=new ArrayList<>();
+                int size=listaPack.size();
+                for(int i=0;i<size;i++){
+                    int origenId=listaPack.get(i).getAeropuertoOrigenId();
+                    int destinoId=listaPack.get(i).getAeropuertoDestinoId();
+                    int origenHour=listaPack.get(i).getFechaSalida().getHours();
+                    int origenMin=listaPack.get(i).getFechaSalida().getMinutes();
+                    int origenDay=listaPack.get(i).getFechaSalida().getDay();
+                    int origenMonth=listaPack.get(i).getFechaSalida().getMonth();
+                    int origenYear=listaPack.get(i).getFechaSalida().getYear();
+                    int id=listaPack.get(i).getId();
+                    Algoritmo.Paquete pack=new Algoritmo.Paquete(origenHour,origenMin,origenId,destinoId,origenDay,origenMonth,origenYear);
+                    pack.setIdentificator(id);
+                    listaPackNew.add(pack);
+                }
+                
                 this.listPack.clear();
                 //this.inicio = 1;
-
+              
         }catch(Exception ex){
            System.out.println("ERROR lecturaData " + ex.getMessage() );
        }

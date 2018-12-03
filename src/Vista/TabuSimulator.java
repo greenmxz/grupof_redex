@@ -116,14 +116,11 @@ public class TabuSimulator extends Thread{
             }
             System.out.println("cant listPackAlgo f = " + this.listPackAlgo.size());
             System.out.println("cant listPack f = " + this.listPack.size());
-            System.out.println("tiempo ALGO = " + this.tiempoAlgo);
-
-
-
-            if (this.tiempoAlgo < 24*60) this.tiempoAlgo += algoritmoDelayMinutes;
-            else
-                if (this.tiempoAlgo >= 24*60) this.tiempoAlgo = 0;       
+            System.out.println("tiempo ALGO = " + this.tiempoAlgo);      
         }
+        if (this.tiempoAlgo < 24*60) this.tiempoAlgo += algoritmoDelayMinutes;
+        else
+            if (this.tiempoAlgo >= 24*60) this.tiempoAlgo = 0; 
     }
     
     public void run(){   
