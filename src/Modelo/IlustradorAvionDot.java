@@ -343,7 +343,7 @@ static final int FONT_SIZE = 11;
                                     calendarioLlegada.add(Calendar.DATE, 1);
                                 
                                 //FECHA DE LLEGADA DEL PACK
-                                Date fechaLlegada= this.calendar.getTime();
+                                Date fechaLlegada= calendarioLlegada.getTime();
                                 //FECHA DE DEBERIA LLEGAR EL PACK
                                 calendarioLlegada = Calendar.getInstance();
                                 //SI ES CONTINENTAL
@@ -353,7 +353,7 @@ static final int FONT_SIZE = 11;
                                     calendarioLlegada.add(Calendar.DATE, 2); // A LO MUCHO EN 48HRS
                                 }
                                 
-                                Date fecha_LlegadaMax = this.calendar.getTime();
+                                Date fecha_LlegadaMax = calendarioLlegada.getTime();
                                 //SI LLEGA DESPUES DE LA FECHA MAXIMA COLAPSA
                                 
                                 if(dateFormat.format(fechaLlegada).compareTo(dateFormat.format(fecha_LlegadaMax))==1){
