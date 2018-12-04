@@ -567,13 +567,13 @@ static final int FONT_SIZE = 11;
                 this.tabu.setListAirport(this.listaAeropuertos);
                 this.tabu.setListFlight(this.listaVuelos);
                 this.tabu.generateFlightMatrix();
-
+                
                 this.dp.setListAirport(this.listaAeropuertos);
 
                 this.tabu.setInputProcess(this.dp);
                 for (String a : this.Archivos){
                     dp.processPackNew("resources\\pack_enviados_generados\\" + a);
-                    //dp.processPackNew("resources\\pack_enviados\\" + a);
+//                    dp.processPackNew("resources\\pack_enviados\\" + a);
                 }
 
                 System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
@@ -584,7 +584,7 @@ static final int FONT_SIZE = 11;
                 
 
                 if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
-                    this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
+                    this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth(),this.listPack.get(0).getOriginDay());
                 
                 this.listPack.clear();
                 this.inicio = 1;
@@ -662,7 +662,7 @@ static final int FONT_SIZE = 11;
 
                     DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
                     Calendar calendarioPack = Calendar.getInstance();
-                    calendarioPack.set(p.getOriginYear(),p.getOriginMonth()-1,p.getOriginDay());
+                    calendarioPack.set(p.getOriginYear(),p.getOriginMonth(),p.getOriginDay());
 
                     Date fechaPack = calendarioPack.getTime();
                     Date fechaActual = this.calendar.getTime();
@@ -710,7 +710,7 @@ static final int FONT_SIZE = 11;
             if (this.minutoMundial == 0 && this.horaMundial == 0){
                 
                 this.listPack.clear();
-                
+                //XKD
                 for(ArrayList<ArrayList<Paquete>> dataPacksAero : this.matrixPackXDay){
                     if(dataPacksAero.size() > cantDays){
                         ArrayList<Paquete> listaPacksxDia = dataPacksAero.get(cantDays);

@@ -125,6 +125,8 @@ public class TabuSearch {
                 }
                 flightMatrix.add(temp);
             }
+            
+            
             System.out.println("Flights' matrix generated process successful!");
         }catch(Exception e){
             e.printStackTrace();
@@ -400,6 +402,7 @@ public class TabuSearch {
             listNeighbor[iGen] = listInferior[i];
             iGen++;
         }
+        //VECINOS
 //        System.out.print(currentElement);
 //        System.out.print(" ");
 //        if(currentElement > -1)
