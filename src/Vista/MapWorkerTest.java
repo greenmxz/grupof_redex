@@ -206,6 +206,7 @@ public class MapWorkerTest {
         this.listaVuelos = controladorVuelo.listaVuelos();
         int i = 0;
         for(Vuelo v : this.listaVuelos){
+            
             // crea AvionDot por vuelo
             avionDot dot = new avionDot();
             dot.setId(v.getId());
@@ -255,6 +256,23 @@ public class MapWorkerTest {
                     continue;
                 dot.setDestino(new CoordenadaDouble(x,y));
             }
+            
+            
+            // PARA EL MANEJO DE TIEMPOS
+            int horaSalida = dot.getHora_salida();
+            int horaLlegada = dot.getHora_llegada();
+            int llegaDiaSig = revisaTiempo(horaSalida,horaLlegada);
+            
+            if (llegaDiaSig == 1){
+                horaLlegada += 24; // llega al dia siguiente
+            }
+            
+            
+            dot.setSalidaMM(horaSalida*60 + dot.getMin_salida());
+            dot.setLlegadaMM(horaLlegada*60 + dot.getMin_llegada());
+            dot.setLlegaDiaSig(llegaDiaSig);
+            dot.setTiempoTranscurridoMM(0);
+            
             this.avionesDot.add(dot);
             
         }
@@ -552,6 +570,17 @@ public class MapWorkerTest {
         }
         return -1;
     }
+    
+    public int revisaTiempo(int horaSalida, int horaLlegada){
+        
+        if (horaLlegada <= horaSalida) return 1; // llega un dia despues
+        
+        else if (horaLlegada - horaSalida < 9) return 1; // llega un dia despues
+        
+        return 0; // llega el mismo dia
+        
+    } 
+    
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {

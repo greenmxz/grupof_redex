@@ -38,6 +38,16 @@ public class avionDot {
     private double t_llegada;
     private double t_restante;
     private int pack_finales;
+    
+    
+    //MANEJO DE TIEMPOS, MANEJADO EN MINUTOS
+    private int salidaMM;
+    private int llegadaMM;
+    private int llegaDiaSig;
+    private int tiempoTranscurridoMM;
+    
+    
+    
     private ArrayList<Integer> idPacks = new ArrayList<>();
 
     public double getT_llegada() {
@@ -243,6 +253,38 @@ public class avionDot {
 
     public void setIdAeroDestino(int idAeroDestino) {
         this.idAeroDestino = idAeroDestino;
+    }
+
+    public int getLlegaDiaSig() {
+        return llegaDiaSig;
+    }
+
+    public void setLlegaDiaSig(int llegaDiaSig) {
+        this.llegaDiaSig = llegaDiaSig;
+    }
+
+    public int getSalidaMM() {
+        return salidaMM;
+    }
+
+    public void setSalidaMM(int salidaMM) {
+        this.salidaMM = salidaMM;
+    }
+
+    public int getLlegadaMM() {
+        return llegadaMM;
+    }
+
+    public void setLlegadaMM(int llegadaMM) {
+        this.llegadaMM = llegadaMM;
+    }
+
+    public int getTiempoTranscurridoMM() {
+        return tiempoTranscurridoMM;
+    }
+
+    public void setTiempoTranscurridoMM(int tiempoTranscurridoMM) {
+        this.tiempoTranscurridoMM = tiempoTranscurridoMM;
     }
     
   
