@@ -180,6 +180,7 @@ static final int FONT_SIZE = 11;
         //int sizeList=destiny.size();
         Font font = new Font("Arial", Font.PLAIN, toPixels(FONT_SIZE));
         g2.setFont(font);
+        g2.setPaint(new Color (203, 201, 14));
         if(horaMundial>=0 && horaMundial<10)
             g2.drawString("0"+String.valueOf(horaMundial), 800, 80);
         else
@@ -205,8 +206,9 @@ static final int FONT_SIZE = 11;
            
         
         for(int i=0;i<numAero;i++){
-            double x=this.listaAeropuertos.get(i).getCoordX();
-            double y=this.listaAeropuertos.get(i).getCoordY();
+            Aeropuerto aero = this.listaAeropuertos.get(i);
+            double x=aero.getCoordX();
+            double y=aero.getCoordY();
             g2.setPaint(new Color(255,251,0));
             g2.setStroke(stroke);
             Shape aeropuertoElipse = new Ellipse2D.Double(x-10,y-10,10,10);
@@ -215,7 +217,7 @@ static final int FONT_SIZE = 11;
             //g2.setStroke(new BasicStroke(0.0f));
             Rectangle2D aeropuerto = new Rectangle2D.Double(x-10,y-10,7,7);
             
-            String color = this.listaAeropuertos.get(i).getColor();
+            String color = aero.getColor();
             
             switch (color){
                 case "negro":
@@ -232,6 +234,10 @@ static final int FONT_SIZE = 11;
                     break;
             }
             g2.fill(aeropuerto);
+            
+            /// PINTA ESTADO
+            g.setFont(new Font("Arial", Font.PLAIN, 15));
+            g2.drawString(aero.getCountry() + " : " + aero.getCapActual(), 50, 50 + (i*15));
         }
         
         
@@ -554,7 +560,7 @@ static final int FONT_SIZE = 11;
                 }
             }
 
-            System.out.println(aero.getCountry() + " " + aero.getCapActual() + " : " + v.getPack_finales());
+            //System.out.println(aero.getCountry() + " " + aero.getCapActual() + " : " + v.getPack_finales());
 
             v.getIdPacks().clear(); // se queda sin packs
             v.setPack_finales(0); // se queda sin pack finales
