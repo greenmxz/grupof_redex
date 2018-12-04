@@ -180,6 +180,7 @@ static final int FONT_SIZE = 11;
         //int sizeList=destiny.size();
         Font font = new Font("Arial", Font.PLAIN, toPixels(FONT_SIZE));
         g2.setFont(font);
+        g2.setPaint(new Color (203, 201, 14));
         if(horaMundial>=0 && horaMundial<10)
             g2.drawString("0"+String.valueOf(horaMundial), 800, 80);
         else
@@ -205,8 +206,9 @@ static final int FONT_SIZE = 11;
            
         
         for(int i=0;i<numAero;i++){
-            double x=this.listaAeropuertos.get(i).getCoordX();
-            double y=this.listaAeropuertos.get(i).getCoordY();
+            Aeropuerto aero = this.listaAeropuertos.get(i);
+            double x=aero.getCoordX();
+            double y=aero.getCoordY();
             g2.setPaint(new Color(255,251,0));
             g2.setStroke(stroke);
             Shape aeropuertoElipse = new Ellipse2D.Double(x-10,y-10,10,10);
@@ -215,7 +217,7 @@ static final int FONT_SIZE = 11;
             //g2.setStroke(new BasicStroke(0.0f));
             Rectangle2D aeropuerto = new Rectangle2D.Double(x-10,y-10,7,7);
             
-            String color = this.listaAeropuertos.get(i).getColor();
+            String color = aero.getColor();
             
             switch (color){
                 case "negro":
@@ -232,12 +234,28 @@ static final int FONT_SIZE = 11;
                     break;
             }
             g2.fill(aeropuerto);
+            
+            /// PINTA ESTADO
+            g.setFont(new Font("Arial", Font.PLAIN, 15));
+            g2.drawString(aero.getCountry() + " : " + aero.getCapActual(), 50, 50 + (i*15));
         }
+        
+        
+        //CALCULO DE VELOCIDAD DE LOS AVIONES A GRAFICAR
         
         for(int i=0;i<this.avionesDot.size();i++){
             
-            double t_min = abs((this.avionesDot.get(i).getHora_llegada()*60 + this.avionesDot.get(i).getMin_llegada()) -
-                       (this.avionesDot.get(i).getHora_salida()*60 + this.avionesDot.get(i).getMin_salida()));
+            
+            int horaSalida = this.avionesDot.get(i).getHora_salida();
+            int horaLlegada = this.avionesDot.get(i).getHora_llegada();
+            
+            if (this.avionesDot.get(i).getLlegaDiaSig() == 1){
+                horaLlegada += 24; // llega al dia siguiente
+            }
+            
+            
+            double t_min = abs((horaLlegada*60 + this.avionesDot.get(i).getMin_llegada()) -
+                       (horaSalida*60 + this.avionesDot.get(i).getMin_salida()));
             
               
             //double t_min=this.avionesDot.get(i).getT_restante();
@@ -293,8 +311,15 @@ static final int FONT_SIZE = 11;
         
         // VERIFICAR HORA DE SALIDA DEL AVION
         if (v.getEstado_mov() == 0){
-            int tiempoSalidaAvion = v.getHora_salida()*60 + v.getMin_salida();
-            if (this.horaMundial*60 + this.minutoMundial == tiempoSalidaAvion){
+            
+            int tiempoActual = this.horaMundial*60 + this.minutoMundial;
+            
+            int tiempoSalidaAvion = v.getSalidaMM();
+            
+            if (tiempoActual == tiempoSalidaAvion){
+                
+                v.setTiempoTranscurridoMM(tiempoSalidaAvion);
+                
                 v.setEstado_mov(1);// en transito
                 
                 //verificar si tiene paquetes que recojer
@@ -315,9 +340,7 @@ static final int FONT_SIZE = 11;
                             
                             // se mete paquete en avion
                             v.setCapacidadActual(v.getCapacidadActual() + 1); 
-                            
-                            
-                            
+                             
                             
                             //Se busca aeropuerto origen para quitar el paquete
                             Aeropuerto aero = this.listaAeropuertos.get(v.getIdAeroOrigen()-1);
@@ -326,53 +349,22 @@ static final int FONT_SIZE = 11;
                             else
                                 System.out.println("ERROR AQUI");
                       
-                                    
+                            //VERIFICA COLAPSO POR TIEMPO    
+                            verificaColapsoxTiempo(v,i);
+
+                            
                            //System.out.println("AQUI EJEAJEAJ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ids.length);
                             if (ids.length == 1){// es su ultimo paradero
                                 this.listPackAlgo.get(i).setEsFinal(1);
-                                //COMPROBAR COLAPSO POR TIEMPO
-                                int tiempoSalida = v.getHora_salida() * 60 + v.getMin_salida();
-                                int tiempoLlegada = v.getHora_llegada() * 60 + v.getMin_llegada();
-                                
 
-                                DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");                  
-                                Calendar calendarioLlegada = Calendar.getInstance();
-                                
-                                //SI EL TIEMPO DE LLEGADA ES MENOR AL DE SALIDA ENTONCES LLEGA AL DIA SIGUIENTE
-                                if (tiempoLlegada < tiempoSalida)
-                                    calendarioLlegada.add(Calendar.DATE, 1);
-                                
-                                //FECHA DE LLEGADA DEL PACK
-                                Date fechaLlegada= this.calendar.getTime();
-                                //FECHA DE DEBERIA LLEGAR EL PACK
-                                calendarioLlegada = Calendar.getInstance();
-                                //SI ES CONTINENTAL
-                                if (this.listaAeropuertos.get(this.listPackAlgo.get(i).getOriginAirport()-1) == this.listaAeropuertos.get(this.listPackAlgo.get(i).getDestinyAirport()-1)){
-                                    calendarioLlegada.add(Calendar.DATE, 1); // A LO MUCHO EN 24HRS
-                                }else{//SI ES INTERCONTINENTAL
-                                    calendarioLlegada.add(Calendar.DATE, 2); // A LO MUCHO EN 48HRS
-                                }
-                                
-                                Date fecha_LlegadaMax = this.calendar.getTime();
-                                //SI LLEGA DESPUES DE LA FECHA MAXIMA COLAPSA
-                                
-                                if(dateFormat.format(fechaLlegada).compareTo(dateFormat.format(fecha_LlegadaMax))==1){
-                                    System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
-                                    System.out.println("fecha estipulada " + fechaLlegada);
-                                    System.out.println("fecha llegada " + fecha_LlegadaMax);
-                                }
-                                
-                                
                                 //calendarioLlegada.set(this.listPack.get(i).getOriginYear(),this.listPack.get(i).getOriginMonth() - 1,this.listPack.get(i).getOriginDay());
                                 
                                 //////////////////////////////// 
                                 // es su ruta final, remueve de listapack
-                                //this.listPackAlgo.remove(i);// no se necesita el id del pack ya que es su ultimo movimiento y no necesita cambiar de estado
                                 v.getIdPacks().add(i);
                                 v.setPack_finales(v.getPack_finales() + 1);
                                 this.listPackAlgo.get(i).setRuta(""); // su ruta se encuestra finalizada
-                                //if(v.getId()==1505)
-                                    //System.out.println("Cantidad de pack_finales: "+v.getPack_finales() + " - " + v.getId());
+
                             }else{ // vuelos escalados
                                 // se quita el paso dado
                                 ruta = ruta.substring(ruta.indexOf("-", 0)+1,ruta.length());
@@ -390,8 +382,7 @@ static final int FONT_SIZE = 11;
 
                     
                 }
-                //if (v.getCapacidadActual() > 0)
-                    //System.out.println(">>>>>>>>>>> vuelo salida " + v.getId() + " -- " + v.getCapacidadActual());    
+                
                 if (v.getCapacidadActual() > v.getCapacidadMax()){
                     System.out.println("------------ COLAPSO POR VUELO----vuelo  " + v.getId() + "  lleno");
                     if (this.cantMaxColapsoAvion < v.getCapacidadActual()){
@@ -402,6 +393,46 @@ static final int FONT_SIZE = 11;
             }
         }
     }
+    
+    
+    public void verificaColapsoxTiempo(avionDot v, int i){
+                                    //COMPROBAR COLAPSO POR TIEMPO
+                            int tiempoSalida = v.getHora_salida() * 60 + v.getMin_salida();
+                            int tiempoLlegada = v.getHora_llegada() * 60 + v.getMin_llegada();
+
+                            DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+                            Calendar calendarioLlegada = Calendar.getInstance();
+
+                            //SI EL TIEMPO DE LLEGADA ES MENOR AL DE SALIDA ENTONCES LLEGA AL DIA SIGUIENTE
+                            if (tiempoLlegada < tiempoSalida) {
+                                calendarioLlegada.add(Calendar.DATE, 1);
+                            }
+
+                            //FECHA DE LLEGADA DEL PACK
+                            Date fechaLlegada = calendarioLlegada.getTime();
+                            //FECHA DE DEBERIA LLEGAR EL PACK
+                            calendarioLlegada = Calendar.getInstance();
+                            //SI ES CONTINENTAL
+                            if (this.listaAeropuertos.get(this.listPackAlgo.get(i).getOriginAirport() - 1) == this.listaAeropuertos.get(this.listPackAlgo.get(i).getDestinyAirport() - 1)) {
+                                calendarioLlegada.add(Calendar.DATE, 1); // A LO MUCHO EN 24HRS
+                            } else {//SI ES INTERCONTINENTAL
+                                calendarioLlegada.add(Calendar.DATE, 2); // A LO MUCHO EN 48HRS
+                            }
+
+                            Date fecha_LlegadaMax = calendarioLlegada.getTime();
+                            //SI LLEGA DESPUES DE LA FECHA MAXIMA COLAPSA
+
+                            if (dateFormat.format(fechaLlegada).compareTo(dateFormat.format(fecha_LlegadaMax)) == 1) {
+                                System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
+                                System.out.println("fecha estipulada " + fechaLlegada);
+                                System.out.println("fecha llegada " + fecha_LlegadaMax);
+                            }
+    }
+    
+    
+    
+    
+    
     public void cambiaColorAeropuerto(Aeropuerto aero){
         if(aero.getCapActual()>aero.getCapMax()){
             aero.setColor("negro");
@@ -434,8 +465,7 @@ static final int FONT_SIZE = 11;
             v.setColor("verde");
             v.setEstado_almacen(0);
         }
-//        if(v.getCapacidadActual()!=0)
-//            System.out.println(v.getId()+" -> " + v.getCapacidadActual());
+
     }
     
     
@@ -467,76 +497,80 @@ static final int FONT_SIZE = 11;
 
             v.getActual().setX(v.getOrigen().getX());
             v.getActual().setY(v.getOrigen().getY());
-            v.setEstado_mov(0); // EL AVION PARA EN SU DESTINO
         }
     }
     
-    public void mueveAvion(avionDot v){
+    
+    public int revisaTiempo(int horaSalida, int horaLlegada){
         
+        if (horaLlegada <= horaSalida) return 1; // llega un dia despues
         
+        else if (horaLlegada - horaSalida < 9) return 1; // llega un dia despues
+        
+        return 0; // llega el mismo dia
+        
+    } 
+    
+    
+    
+    
+       public void mueveAvion(avionDot v) {
+
         calculaMovAvion(v);
-        
-        
-        
+
+        int tiempoTranscurrido = v.getTiempoTranscurridoMM();
+        int tiempoLlegada = v.getLlegadaMM();
+
         //SI ES LA HORA DE LLEGADA DEL AVION
-        if (this.horaMundial*60 + this.minutoMundial == v.getHora_llegada()*60 + v.getMin_llegada()){
-            //if (v.getCapacidadActual() > 0)
-                //System.out.println(">>>>>>>>>>> vuelo llega " + v.getId() + " -- " + v.getCapacidadActual());
+        if (tiempoTranscurrido == tiempoLlegada) {
+            
             v.getActual().setX(v.getDestino().getX());
             v.getActual().setY(v.getDestino().getY());
             // EL AVION LLEGA Y VACIA ALMACEN Y DEJA PAQUETES EN EL AEROPUERTO
-            Aeropuerto aero = this.listaAeropuertos.get(v.getIdAeroDestino()-1);
-            //for(Aeropuerto aero : this.listaAeropuertos){
-                //if(aero.getIcaoCode().equals(v.getIcaoDestino())){
-                    //capacidad el aero se actualiza
-                    aero.setCapActual(aero.getCapActual() + v.getCapacidadActual());
-                    //
-                    //if(aero.getCountry().equals("Belgica"))
-                    //        System.out.println(aero.getIdentificator()+" "+aero.getCapActual()+ " <- "+v.getCapacidadActual());
-                    //
-                    cambiaColorAeropuerto(aero);
-                    //VERIFICAR COLAPSO POR FALTA DE ESPACIO EN ALMACEN DE AEROPUERTO
-                    if (aero.getCapActual() > aero.getCapMax()){
-                        // SISTEMA COLAPSA
-                        System.out.println("------------------------->COLAPSO<-----------------------");
-                        System.out.println(" -- " + " "+aero.getIdentificator()+" "+aero.getCountry()+" "+aero.getCapActual());
-                        if (this.cantMaxColapsoAero < aero.getCapActual()){
-                            this.cantMaxColapsoAero = aero.getCapActual();
-                            this.aeroColapsoMax = aero.getCountry();
-                        }
-                        
-                    }
-                    
-                    //if(aero.getCountry().equals("Belgica"))
-                    //    System.out.println("Cantidad de pack_finales: "+aero.getCountry()+" "+aero.getCapActual()+" "+v.getPack_finales() + " - " + v.getId() + " "+ v.getCapacidadActual());
-                    
-                    //ACTUALIZA ESTADOS DE PAQUETES QUE LLEGAN
-                    
-                    //cliente recoge sus packs
-                    aero.setCapActual(aero.getCapActual() - v.getPack_finales());
-                    
-                    this.cantPacksSalientes+=v.getPack_finales();
-                    //LOS PACK QUE AUN TIENEN RECORRIDO POR HACER VUELVEN A ESTAR DISPONIBLES
-                    for(Integer id : v.getIdPacks()){
-                        if(!this.listPackAlgo.get(id).getRuta().equals("")){
-                            this.listPackAlgo.get(id).setEstado(1);
-                            this.listPackAlgo.get(id).setOriginAirport(aero.getIdentificator());
-                        }else
-                            this.listPackAlgo.get(id).setEstado(3); // packs fuera
+            Aeropuerto aero = this.listaAeropuertos.get(v.getIdAeroDestino() - 1);
 
-                    }
-                        
-                    System.out.println(aero.getCountry()+" "+aero.getCapActual() + " : " + v.getPack_finales());
-                    
-                    v.getIdPacks().clear(); // se queda sin packs
-                    v.setPack_finales(0); // se queda sin pack finales
-                    //break; //se sale del for
-             //   }
-            //}
+            //capacidad el aero se actualiza
+            aero.setCapActual(aero.getCapActual() + v.getCapacidadActual());
+
+            cambiaColorAeropuerto(aero);
+            //VERIFICAR COLAPSO POR FALTA DE ESPACIO EN ALMACEN DE AEROPUERTO
+            if (aero.getCapActual() > aero.getCapMax()) {
+                // SISTEMA COLAPSA
+                System.out.println("------------------------->COLAPSO<-----------------------");
+                System.out.println(" -- " + " " + aero.getIdentificator() + " " + aero.getCountry() + " " + aero.getCapActual());
+                if (this.cantMaxColapsoAero < aero.getCapActual()) {
+                    this.cantMaxColapsoAero = aero.getCapActual();
+                    this.aeroColapsoMax = aero.getCountry();
+                }
+
+            }
+
+            //ACTUALIZA ESTADOS DE PAQUETES QUE LLEGAN
+            //cliente recoge sus packs
+            aero.setCapActual(aero.getCapActual() - v.getPack_finales());
+
+            this.cantPacksSalientes += v.getPack_finales();
+            //LOS PACK QUE AUN TIENEN RECORRIDO POR HACER VUELVEN A ESTAR DISPONIBLES
+            for (Integer id : v.getIdPacks()) {
+                if (!this.listPackAlgo.get(id).getRuta().equals("")) {
+                    this.listPackAlgo.get(id).setEstado(1);
+                    this.listPackAlgo.get(id).setOriginAirport(aero.getIdentificator());
+                } else {
+                    this.listPackAlgo.get(id).setEstado(3); // packs fuera
+                }
+            }
+
+            //System.out.println(aero.getCountry() + " " + aero.getCapActual() + " : " + v.getPack_finales());
+
+            v.getIdPacks().clear(); // se queda sin packs
+            v.setPack_finales(0); // se queda sin pack finales
+            v.setEstado_mov(0); // se queda en espera
+            v.setTiempoTranscurridoMM(0); // se reinicia tiempo transcurrido
+
             v.setCapacidadActual(0);
             //System.out.println("<<<<<<<<<<<<< vuelo vacia" + v.getId() + " -- " + v.getCapacidadActual());
         }
-        
+
     }
     
     
@@ -573,7 +607,7 @@ static final int FONT_SIZE = 11;
                 this.tabu.setInputProcess(this.dp);
                 for (String a : this.Archivos){
                     dp.processPackNew("resources\\pack_enviados_generados\\" + a);
-//                    dp.processPackNew("resources\\pack_enviados\\" + a);
+//                      dp.processPackNew("resources\\pack_enviados\\" + a);
                 }
 
                 System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
@@ -651,7 +685,6 @@ static final int FONT_SIZE = 11;
     public void cambiaEstadoPacks(){
          try{               
             //SE ACTUALIZA ESTADO DE PAQUETES SEGUN LA HORA ACTUAL (LLEGADA A AEROPUERTO DE ORIGEN)
-            //System.out.println("cambiaEstadoPacks listPackAlgo ->  " + this.listPackAlgo.size());
             for (int iter = 0; iter < this.listPackAlgo.size(); iter++) {
                 Paquete p = this.listPackAlgo.get(iter);
                 //CAMBIA EL ESTADO DE 0: NO DISPONIBLE A 1: DISPONIBLE SI TIENEN RUTA POR RECORRER
@@ -666,31 +699,18 @@ static final int FONT_SIZE = 11;
 
                     Date fechaPack = calendarioPack.getTime();
                     Date fechaActual = this.calendar.getTime();
-
-                    //System.out.println("fecha_pack  " + fechaPack);
-                    //System.out.println("fecha_act " + fechaActual);
                     
                     //pertenece al dia de hoy
                     if (dateFormat.format(fechaActual).compareTo(dateFormat.format(fechaPack))==0){
                         // es su hora de llegada al origen
                         if (tiempoActual == tiempoPack){
                             p.setEstado(1); //paquete ahora esta disponible
-                            //System.out.println("pack - " + p.getRuta());
-                            
-                            /*
-                            for(int i=0;i<this.listaAeropuertos.size();i++)
-                                if(this.listaAeropuertos.get(i).getCountry().equals("Belgica"))
-                                      System.out.println(this.listaAeropuertos.get(i).getCountry()+" "+this.listaAeropuertos.get(i).getCapActual());
-                            */
+
                             
                             //SE AUMENTA EN 1 LA CAPACIDAD ACTUAL DEL AEROPUERTO ORIGEN
                             this.listaAeropuertos.get(p.getOriginAirport()-1).setCapActual(this.listaAeropuertos.get(p.getOriginAirport()-1).getCapActual() + 1);
                             this.cantPacksEntrantes++;
-                            /*
-                            for(int i=0;i<this.listaAeropuertos.size();i++)
-                                if(this.listaAeropuertos.get(i).getCountry().equals("Belgica"))
-                                   System.out.println(this.listaAeropuertos.get(i).getCountry()+" "+this.listaAeropuertos.get(i).getCapActual());
-                            */
+
                         }
                     }
                 }
@@ -705,12 +725,11 @@ static final int FONT_SIZE = 11;
     
     public void actionPerformed(ActionEvent e){
        try{
-           //ArrayList<ArrayList<ArrayList<Paquete>>>
+
            
             if (this.minutoMundial == 0 && this.horaMundial == 0){
                 
                 this.listPack.clear();
-                //XKD
                 for(ArrayList<ArrayList<Paquete>> dataPacksAero : this.matrixPackXDay){
                     if(dataPacksAero.size() > cantDays){
                         ArrayList<Paquete> listaPacksxDia = dataPacksAero.get(cantDays);
@@ -767,15 +786,18 @@ static final int FONT_SIZE = 11;
             }
             
             //DIBUJA MOVIMIENTO
-            for(int i=0;i<this.avionesDot.size();i++){
+            for(avionDot dot : this.avionesDot){
 
-                cambiaEstadoMov(this.avionesDot.get(i));
+                cambiaEstadoMov(dot);
 
-                if (this.avionesDot.get(i).getEstado_mov() == 1){
+                if (dot.getEstado_mov() == 1){
                     //COLOR DEL ALMACEN
-                    cambiaEstadoAlmacen(this.avionesDot.get(i));
-                    mueveAvion(this.avionesDot.get(i));
-
+                    cambiaEstadoAlmacen(dot);
+                    mueveAvion(dot);
+                    //EL TIEMPO TRANSCURRIDO DEL AVION AUMENTA EN 1 min mientras esta en movimiento
+                    if (dot.getEstado_mov() == 1){
+                        dot.setTiempoTranscurridoMM(dot.getTiempoTranscurridoMM() + 1);
+                    }
                 }
             }
 

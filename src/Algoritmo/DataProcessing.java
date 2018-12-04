@@ -366,8 +366,12 @@ public class DataProcessing {
         int timeOrigin = evalFlight.getOriginHour()*60 + evalFlight.getOriginMin();
         int timeDestiny = evalFlight.getDestinyHour()*60 + evalFlight.getDestinyMin();
 //        System.out.println(String.valueOf(timeOrigin) + " " + String.valueOf(timeDestiny));
-        if(timeDestiny > timeOrigin)
-            return (timeDestiny - timeOrigin);
+        if(timeDestiny > timeOrigin){
+            if(listAirport.get(evalFlight.getOriginAirport()-1).getContinent() == 
+                    listAirport.get(evalFlight.getDestinyAirport()-1).getContinent()) // Es continental
+                return (timeDestiny - timeOrigin);
+            else return (timeDestiny - timeOrigin + 1440);
+        }
         else
             return (timeDestiny - timeOrigin + 1440);
     }
