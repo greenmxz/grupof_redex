@@ -14,7 +14,9 @@ public class Paquete {
     private String ruta = "";
     private int esFinal = 0; // 0: tiene varios pasos, 1: solo le falta un paso
     private int estado = 0; // 0: no disponible, 1: en espera, 2: en transito
-    private int nuevo = 1;
+    private int nuevo = 1; // 1: no ha dado ningun paso, 0: ha dado por lo menos un paso
+    private int procesado = 0; // 0:no ha sido procesado por algoritmo, 1: ya se encuentra procesado
+    private int tiempoTranscurridoMM = 0;
     
     public Paquete(int originHour, int originMin, int originAirport,
             int destinyAirport){
@@ -130,6 +132,22 @@ public class Paquete {
 
     public void setNuevo(int nuevo) {
         this.nuevo = nuevo;
+    }
+
+    public int getTiempoTranscurridoMM() {
+        return tiempoTranscurridoMM;
+    }
+
+    public void setTiempoTranscurridoMM(int tiempoTranscurridoMM) {
+        this.tiempoTranscurridoMM = tiempoTranscurridoMM;
+    }
+
+    public int getProcesado() {
+        return procesado;
+    }
+
+    public void setProcesado(int procesado) {
+        this.procesado = procesado;
     }
     
 }

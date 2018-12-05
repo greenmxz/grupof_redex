@@ -54,6 +54,9 @@ static final int FONT_SIZE = 11;
     static private double velocidad = 1;
     private int horaMundial=0;
     private int minutoMundial=0;
+    private int diaMundial = 0;
+    private int mesMundial = 0;
+    private int anioMundial = 0;
     private int timeMS=8;
     private int cantDays = 0;
     private int cantTics = 0;
@@ -281,6 +284,9 @@ static final int FONT_SIZE = 11;
                 case "verde":
                     g2.setPaint(new Color (106, 203, 29));
                     break;
+                case "blanco":
+                    g2.setPaint(new Color (255, 255, 255));
+                    break;
             }
             
             double dx,dy;
@@ -395,40 +401,29 @@ static final int FONT_SIZE = 11;
     }
     
     
-    public void verificaColapsoxTiempo(avionDot v, int i){
-                                    //COMPROBAR COLAPSO POR TIEMPO
-                            int tiempoSalida = v.getHora_salida() * 60 + v.getMin_salida();
-                            int tiempoLlegada = v.getHora_llegada() * 60 + v.getMin_llegada();
-
-                            DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-                            Calendar calendarioLlegada = Calendar.getInstance();
-
-                            //SI EL TIEMPO DE LLEGADA ES MENOR AL DE SALIDA ENTONCES LLEGA AL DIA SIGUIENTE
-                            if (tiempoLlegada < tiempoSalida) {
-                                calendarioLlegada.add(Calendar.DATE, 1);
-                            }
-
-                            //FECHA DE LLEGADA DEL PACK
-                            Date fechaLlegada = calendarioLlegada.getTime();
-                            //FECHA DE DEBERIA LLEGAR EL PACK
-                            calendarioLlegada = Calendar.getInstance();
-                            //SI ES CONTINENTAL
-                            if (this.listaAeropuertos.get(this.listPackAlgo.get(i).getOriginAirport() - 1) == this.listaAeropuertos.get(this.listPackAlgo.get(i).getDestinyAirport() - 1)) {
-                                calendarioLlegada.add(Calendar.DATE, 1); // A LO MUCHO EN 24HRS
-                            } else {//SI ES INTERCONTINENTAL
-                                calendarioLlegada.add(Calendar.DATE, 2); // A LO MUCHO EN 48HRS
-                            }
-
-                            Date fecha_LlegadaMax = calendarioLlegada.getTime();
-                            //SI LLEGA DESPUES DE LA FECHA MAXIMA COLAPSA
-
-                            if (dateFormat.format(fechaLlegada).compareTo(dateFormat.format(fecha_LlegadaMax)) == 1) {
-                                System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
-                                System.out.println("fecha estipulada " + fechaLlegada);
-                                System.out.println("fecha llegada " + fecha_LlegadaMax);
-                            }
+    public void verificaColapsoxTiempo(avionDot v, int id_pack) {
+        
+        Paquete pack = this.listPackAlgo.get(id_pack);
+        Aeropuerto aero_origen = this.listaAeropuertos.get(pack.getOriginAirport() - 1);
+        Aeropuerto aero_destino = this.listaAeropuertos.get(pack.getDestinyAirport() - 1);
+        
+        int continente_origen = aero_origen.getContinent();
+        int continente_destino = aero_destino.getContinent();
+        
+        if (continente_origen == continente_destino){ // VUELO CONTINENTAL
+            if (pack.getTiempoTranscurridoMM() > 1440){
+                // COLAPSA POR TIEMPO, VUELO CONTINENTAL QUE TARDA MAS DE UN DIA                System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
+                System.out.println("id pack " + id_pack);
+            }
+        }else{// VUELO INTERCONTINENTAL
+            if (pack.getTiempoTranscurridoMM() > 2880){
+                // COLAPSA POR TIEMPO, VUELO CONTINENTAL QUE TARDA MAS DE DOS DIAS
+                System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
+                System.out.println("id pack " + id_pack);
+            }
+        }
     }
-    
+
     
     
     
@@ -461,6 +456,9 @@ static final int FONT_SIZE = 11;
         }else if(v.getCapacidadActual()>(v.getCapacidadMax()/3)){
             v.setColor("amarillo");
             v.setEstado_almacen(1);
+        }else if(v.getCapacidadActual()==0){
+            v.setColor("blanco");
+            v.setEstado_almacen(0);
         }else{
             v.setColor("verde");
             v.setEstado_almacen(0);
@@ -553,8 +551,15 @@ static final int FONT_SIZE = 11;
             //LOS PACK QUE AUN TIENEN RECORRIDO POR HACER VUELVEN A ESTAR DISPONIBLES
             for (Integer id : v.getIdPacks()) {
                 if (!this.listPackAlgo.get(id).getRuta().equals("")) {
-                    this.listPackAlgo.get(id).setEstado(1);
-                    this.listPackAlgo.get(id).setOriginAirport(aero.getIdentificator());
+                    Paquete pack = this.listPackAlgo.get(id);
+                    pack.setEstado(1);
+                    pack.setOriginAirport(aero.getIdentificator());
+                    pack.setOriginHour(this.horaMundial);
+                    pack.setOriginMin(this.minutoMundial);
+                    pack.setOriginDay(this.diaMundial);
+                    pack.setOriginMonth(this.mesMundial);
+                    pack.setOriginYear(this.anioMundial);
+                    //pack.setTiempoTranscurridoMM(pack.getTiempoTranscurridoMM() + v.getTiempoTranscurridoMM());
                 } else {
                     this.listPackAlgo.get(id).setEstado(3); // packs fuera
                 }
@@ -565,8 +570,9 @@ static final int FONT_SIZE = 11;
             v.getIdPacks().clear(); // se queda sin packs
             v.setPack_finales(0); // se queda sin pack finales
             v.setEstado_mov(0); // se queda en espera
+            //v.setTiempoTranscurridoMMAcu(v.getTiempoTranscurridoMMAcu() + v.getTiempoTranscurridoMM()); // tiempo transcurrido acumulado
             v.setTiempoTranscurridoMM(0); // se reinicia tiempo transcurrido
-
+            
             v.setCapacidadActual(0);
             //System.out.println("<<<<<<<<<<<<< vuelo vacia" + v.getId() + " -- " + v.getCapacidadActual());
         }
@@ -617,9 +623,13 @@ static final int FONT_SIZE = 11;
                 this.matrixPackXDay = this.dp.getMatrixPackXDay();
                 
 
-                if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
-                    this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth(),this.listPack.get(0).getOriginDay());
-                
+                if (this.listPack.size()>0){//se coloca la fecha del primer pack como fecha del simulador
+                    this.anioMundial = this.listPack.get(0).getOriginYear();
+                    this.mesMundial = this.listPack.get(0).getOriginMonth();
+                    this.diaMundial = this.listPack.get(0).getOriginDay();
+                    this.calendar.set(this.anioMundial,this.mesMundial,this.diaMundial);
+                    
+                }
                 this.listPack.clear();
                 this.inicio = 1;
             }
@@ -687,6 +697,12 @@ static final int FONT_SIZE = 11;
             //SE ACTUALIZA ESTADO DE PAQUETES SEGUN LA HORA ACTUAL (LLEGADA A AEROPUERTO DE ORIGEN)
             for (int iter = 0; iter < this.listPackAlgo.size(); iter++) {
                 Paquete p = this.listPackAlgo.get(iter);
+                
+                //CUENTA EL TIEMPO DE ESPERA DE LOS PACKS DISPONIBLES Y EN VUELO
+                if (p.getEstado() == 1 || p.getEstado() == 2){
+                    p.setTiempoTranscurridoMM(p.getTiempoTranscurridoMM() + 1);
+                }
+                            
                 //CAMBIA EL ESTADO DE 0: NO DISPONIBLE A 1: DISPONIBLE SI TIENEN RUTA POR RECORRER
                 if (!p.getRuta().equals("") && p.getEstado() == 0) {
                     
@@ -726,83 +742,80 @@ static final int FONT_SIZE = 11;
     public void actionPerformed(ActionEvent e){
        try{
 
-           
-            if (this.minutoMundial == 0 && this.horaMundial == 0){
-                
-                this.listPack.clear();
-                for(ArrayList<ArrayList<Paquete>> dataPacksAero : this.matrixPackXDay){
-                    if(dataPacksAero.size() > cantDays){
-                        ArrayList<Paquete> listaPacksxDia = dataPacksAero.get(cantDays);
-                        this.listPack.addAll(listaPacksxDia);
-                    }
-                }
- 
-                System.out.println("<<<<<<<Cantidad de dias transcurridos>>>>>>>>>> -------------> " + this.cantDays);
-                System.out.println("<<<<<<<Colapso maximo aero>>>>>>>>>> -------------> " + this.aeroColapsoMax + " - " + this.cantMaxColapsoAero);
-                System.out.println("<<<<<<<Colapso maximo avion>>>>>>>>>> -------------> " + this.avionColapsoMax + " - "  + this.cantMaxColapsoAvion);
-                
-                this.cantDays++;
-            }
-           
-           
-            if (this.minutoMundial<59){
-                this.minutoMundial++;
-            }else{
-                this.minutoMundial=0;
-                if (this.horaMundial <23)
-                    this.horaMundial++;
-                else {
-                    this.minutoMundial=0;
-                    this.horaMundial=0;
-                    this.calendar.add(this.calendar.DATE,1);
-                }    
-            }
+           if (this.minutoMundial == 0 && this.horaMundial == 0) {
 
+               this.listPack.clear();
+               for (ArrayList<ArrayList<Paquete>> dataPacksAero : this.matrixPackXDay) {
+                   if (dataPacksAero.size() > cantDays) {
+                       ArrayList<Paquete> listaPacksxDia = dataPacksAero.get(cantDays);
+                       this.listPack.addAll(listaPacksxDia);
+                   }
+               }
 
-            
-            System.out.println("----->Cant Paquetes Entrantes " + this.cantPacksEntrantes);
-            System.out.println("----->Cant Paquetes Salientes " + this.cantPacksSalientes);
-            
-            //si esta al inicio de todo, calcular n cantidad de lotes para evitar descuadre
-            
-            calculoInicial(4); // OBTIENE RUTAS DE 4 BLOQUES PACKS AL INICIO
-            
-            
-            cambiaEstadoPacks(); // SE CAMBIA EL ESTADO DE LOS PAQUETES SEGUN VAN LLEGANDO A SU ORIGEN
-            
-            //aplica algoritmo al inicio del dia y luego cada cantidad de tics
+               System.out.println("<<<<<<<Cantidad de dias transcurridos>>>>>>>>>> -------------> " + this.cantDays);
+               System.out.println("<<<<<<<Colapso maximo aero>>>>>>>>>> -------------> " + this.aeroColapsoMax + " - " + this.cantMaxColapsoAero);
+               System.out.println("<<<<<<<Colapso maximo avion>>>>>>>>>> -------------> " + this.avionColapsoMax + " - " + this.cantMaxColapsoAvion);
 
-            if (this.cantTics == this.algoritmoDelayMinutes){
-                
-                aplicaAlgoritmo();
-                
-                this.cantTics=0;
-                
-                
-                for (Aeropuerto a : this.listaAeropuertos){
-                    System.out.println(a.getCountry() + " -> " + a.getCapActual());
-                }
-                
-            }
-            
-            //DIBUJA MOVIMIENTO
-            for(avionDot dot : this.avionesDot){
+               this.cantDays++;
+           }
 
-                cambiaEstadoMov(dot);
+           System.out.println("----->Cant Paquetes Entrantes " + this.cantPacksEntrantes);
+           System.out.println("----->Cant Paquetes Salientes " + this.cantPacksSalientes);
 
-                if (dot.getEstado_mov() == 1){
-                    //COLOR DEL ALMACEN
-                    cambiaEstadoAlmacen(dot);
-                    mueveAvion(dot);
-                    //EL TIEMPO TRANSCURRIDO DEL AVION AUMENTA EN 1 min mientras esta en movimiento
-                    if (dot.getEstado_mov() == 1){
-                        dot.setTiempoTranscurridoMM(dot.getTiempoTranscurridoMM() + 1);
-                    }
-                }
-            }
+           //si esta al inicio de todo, calcular n cantidad de lotes para evitar descuadre
+           calculoInicial(4); // OBTIENE RUTAS DE 4 BLOQUES PACKS AL INICIO
 
-            repaint();
-            this.cantTics++;
+           cambiaEstadoPacks(); // SE CAMBIA EL ESTADO DE LOS PAQUETES SEGUN VAN LLEGANDO A SU ORIGEN
+
+           //aplica algoritmo al inicio del dia y luego cada cantidad de tics
+           if (this.cantTics == this.algoritmoDelayMinutes) {
+
+               aplicaAlgoritmo();
+
+               this.cantTics = 0;
+
+               for (Aeropuerto a : this.listaAeropuertos) {
+                   System.out.println(a.getCountry() + " -> " + a.getCapActual());
+               }
+
+           }
+
+           //DIBUJA MOVIMIENTO
+           for (avionDot dot : this.avionesDot) {
+
+               cambiaEstadoMov(dot);
+
+               if (dot.getEstado_mov() == 1) {
+                   //COLOR DEL ALMACEN
+                   cambiaEstadoAlmacen(dot);
+                   mueveAvion(dot);
+                   //EL TIEMPO TRANSCURRIDO DEL AVION AUMENTA EN 1 min mientras esta en movimiento
+                   if (dot.getEstado_mov() == 1) {
+                       dot.setTiempoTranscurridoMM(dot.getTiempoTranscurridoMM() + 1);
+                       //dot.setTiempoTranscurridoMMAcu(dot.getTiempoTranscurridoMMAcu() + 1);
+                   }
+               }
+           }
+
+           repaint();
+
+           if (this.minutoMundial < 59) {
+               this.minutoMundial++;
+           } else {
+               this.minutoMundial = 0;
+               if (this.horaMundial < 23) {
+                   this.horaMundial++;
+               } else {
+                   this.minutoMundial = 0;
+                   this.horaMundial = 0;
+                   this.calendar.add(this.calendar.DATE, 1);
+                   this.anioMundial = this.calendar.YEAR;
+                   this.mesMundial = this.calendar.MONTH;
+                   this.diaMundial = this.calendar.DAY_OF_MONTH;
+               }
+           }
+
+           this.cantTics++;
        }catch(Exception ex){
            System.out.println("ACTION PERFORMDED" + ex.getMessage() );
            ex.printStackTrace();
