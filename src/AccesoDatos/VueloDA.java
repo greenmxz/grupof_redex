@@ -150,9 +150,9 @@ public class VueloDA {
                 vuelo.setId(rs.getInt("id"));
                 vuelo.setFechaSalida(rs.getTimestamp("fecha_salida"));
                 vuelo.setFechaLlegada(rs.getTimestamp("fecha_llegada"));
-                
-                vuelo.setIdAeropuertoDestino(rs.getInt("aeDestinoId"));
                 vuelo.setIdAeropuertoOrigen(rs.getInt("aeOrigenId"));
+                vuelo.setIdAeropuertoDestino(rs.getInt("aeDestinoId"));
+                
 
         /*
                 vuelo.setFechaSalida(new SimpleDateFormat("yyyy-MM-dd HH:mm").

@@ -204,9 +204,9 @@ public class MapWorkerTest {
         // Se lee planes de vuelo para llenar los AvionesDot
         
         this.listaVuelos = controladorVuelo.listaVuelos();
-        int i = 0;
-        for(Vuelo v : this.listaVuelos){
-            
+        
+        for(int i = 0;i < this.listaVuelos.size();i++){
+            Vuelo v = this.listaVuelos.get(i);
             // crea AvionDot por vuelo
             avionDot dot = new avionDot();
             dot.setId(v.getId());
@@ -305,7 +305,6 @@ public class MapWorkerTest {
 
 
         for (Modelo.Vuelo a : this.listaVuelos){
-
             Algoritmo.Vuelo v = new Algoritmo.Vuelo(a.getIdAeropuertoOrigen(),a.getFechaSalida().getHours(),a.getFechaSalida().getMinutes(),
             a.getIdAeropuertoDestino(),a.getFechaLlegada().getHours(),a.getFechaLlegada().getMinutes()
             );
