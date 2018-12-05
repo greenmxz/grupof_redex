@@ -1,12 +1,14 @@
 package Vista;
 
 import AccesoDatos.QueryGenerator;
+import Controlador.excelExport;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 public class frmReporteFrecuencias extends javax.swing.JPanel {
 
     private QueryGenerator consulta = new QueryGenerator();
+    private ArrayList<ArrayList<String>> lista = new ArrayList<ArrayList<String>>();
     
     public frmReporteFrecuencias() {
         initComponents();
@@ -124,8 +126,8 @@ public class frmReporteFrecuencias extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActionPerformed
-//        excelExport controlerExcel = new excelExport();
-//        controlerExcel.excelExportPaquetes(filter);
+        excelExport controlerExcel = new excelExport();
+        controlerExcel.excelString(lista, "ReporteFrecuencias.xls");
     }//GEN-LAST:event_btnExcelActionPerformed
 
     private void btnQueryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQueryActionPerformed
@@ -191,7 +193,7 @@ public class frmReporteFrecuencias extends javax.swing.JPanel {
                 break; 
         }
         System.out.println(query);
-        ArrayList<ArrayList<String>> lista = consulta.hacerConsulta(query);
+        lista = consulta.hacerConsulta(query);
         // Colocando en la tabla
         DefaultTableModel modelo = (DefaultTableModel) tblConsulta.getModel();
         int tamanho = modelo.getRowCount();

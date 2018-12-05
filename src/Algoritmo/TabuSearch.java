@@ -19,6 +19,7 @@ public class TabuSearch {
     private ArrayList<String> tabuString;
     private ArrayList<Integer> routeOptimal;
     private ArrayList<Integer> capVuelos;
+    private int[] rutaRiesgo;
     private int numAirport;
     private int numFlight;
     private int numInt = 1;
@@ -51,6 +52,7 @@ public class TabuSearch {
         this.limit = tabu.limit;
         this.hourBegin = tabu.hourBegin;
         this.timeToCmp = tabu.timeToCmp;
+        this.rutaRiesgo = generateInitialRoute();
     }
     
     
@@ -195,8 +197,8 @@ public class TabuSearch {
             }
         }
         System.out.println("Cantidad de Reruteos " + this.cantReruteo);
-        /*
         System.out.println("Vacíos: " + String.valueOf(noAsign));
+        /*
         System.out.println("Estado: ");
         for(int i=0; i<capVuelos.size(); i++)
             if(capVuelos.get(i) > 0)
@@ -212,6 +214,7 @@ public class TabuSearch {
         this.destinyId = inputProcess.searchAirportId(codeDestiny);
         tabuString = new ArrayList<String>();
         routeOptimal = new ArrayList<Integer>();
+        rutaRiesgo = generateInitialRoute();
         if(getListAirport().get(originId-1).getContinent() ==
                 getListAirport().get(destinyId-1).getContinent()){
             this.limit = 1440;
@@ -232,6 +235,7 @@ public class TabuSearch {
         this.finded = false;
         tabuString = new ArrayList<String>();
         routeOptimal = new ArrayList<Integer>();
+        rutaRiesgo = generateInitialRoute();
         if(getListAirport().get(originId-1).getContinent() ==
                 getListAirport().get(destinyId-1).getContinent()){
             this.limit = 1440;
@@ -257,8 +261,14 @@ public class TabuSearch {
         }
         int lenghtRoute = getRouteLenght(routeAL);
         int destiny = getListFlight().get(route[lastValid-1]-1).getDestinyAirport();
-        if((lastValid > 0) && (lenghtRoute <= this.limit) && (destiny == this.destinyId)){
-            return 1;
+        if((lastValid > 0) && (destiny == this.destinyId)){
+            if((lenghtRoute <= this.limit))
+                return 1;
+            else{
+                if((rutaRiesgo[0] == -1) || (lenghtRoute < getRouteLenght(rutaRiesgo)))
+                    rutaRiesgo = route.clone();
+                return 0;
+            }
         }
         return 0;
     }
@@ -311,7 +321,9 @@ public class TabuSearch {
             if(auxBestRoute[0] == -10) continue;
             else bestRoute = auxBestRoute.clone();
         }
-        return bestRoute;
+        if(bestRoute[0] != -1)
+            return bestRoute;
+        else return rutaRiesgo;
     }
     
     private int getLastMinusOne(int[] arr){
@@ -368,17 +380,15 @@ public class TabuSearch {
             timeToCmp = obtainStandardHour(getListFlight().get(route[getLastMinusOne(route)-1]-1),'L');
         }
         int iSup = 0, iInf = 0, iTop = 0;
-
-        
-        
         
         for(int i=0; i<listNeighbor.length; i++){
             /* Origin */
             cmpTime = obtainStandardHour(getListFlight().get(listNeighborAL.get(i)-1),'P');
             int[] provisional = route.clone();
             provisional[getLastMinusOne(route)] = listNeighborAL.get(i);
-            if((getRouteLenght(provisional) > this.limit) ||
-                    (capVuelos.get(listNeighborAL.get(i)-1) > 195))
+//            if((getRouteLenght(provisional) > this.limit) ||
+//                    (capVuelos.get(listNeighborAL.get(i)-1) > 280))
+            if(capVuelos.get(listNeighborAL.get(i)-1) > 280)
                 continue;
             if(cmpTime > timeToCmp){
                 listSuperior[iSup] = listNeighborAL.get(i);

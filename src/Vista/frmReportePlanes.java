@@ -1,5 +1,6 @@
 package Vista;
 
+import Controlador.excelExport;
 import Controlador.generalBL;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
@@ -8,6 +9,7 @@ public class frmReportePlanes extends javax.swing.JPanel {
 
     private javax.swing.JFrame x;
     private generalBL controlador = new generalBL();
+    private ArrayList<ArrayList<String>> result;
     
     public frmReportePlanes(javax.swing.JFrame x) {
         initComponents();
@@ -115,13 +117,13 @@ public class frmReportePlanes extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActionPerformed
-//        excelExport controlerExcel = new excelExport();
-//        controlerExcel.excelExportPaquetes(filter);
+        excelExport controlerExcel = new excelExport();
+        controlerExcel.excelPlanes(result);
     }//GEN-LAST:event_btnExcelActionPerformed
 
     private void btnQueryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQueryActionPerformed
         if(!txtCodigo.getText().equals("")){
-            ArrayList<ArrayList<String>> result = controlador.obtenerPlanVuelo(txtCodigo.getText());
+            result = controlador.obtenerPlanVuelo(txtCodigo.getText());
             DefaultTableModel modelo = (DefaultTableModel) tblQuery.getModel();
             int tamanho = modelo.getRowCount();
             for(int i=0; i<tamanho; i++){
