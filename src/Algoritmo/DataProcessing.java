@@ -63,7 +63,8 @@ public class DataProcessing {
             File f = new File(namePack);
             String[] fileList = f.list();
             for(String str : fileList){
-                processPackNew(namePack + "\\" + str);
+                // processPackNew(namePack + "\\" + str);
+                processPackNew(namePack + "/" + str);
             }
             ///new
             generateFlightMatrix();
@@ -81,7 +82,8 @@ public class DataProcessing {
             int continent = -1;
             boolean change = true;
             while( (line = reader.readLine()) != null){
-                String[] arr = line.split("\\s+");
+                //String[] arr = line.split("\\s+");
+                String[] arr = line.split("/s+");
                 if(arr.length >=5 && change){
                     continent++;
                     change = false;
@@ -150,7 +152,8 @@ public class DataProcessing {
     
  public void processPack(String namePack){
         ArrayList<Paquete> aux = new ArrayList<Paquete>();
-        String backslash = "\\";
+        String backslash = "/";
+        //String backslash = "\\";
         try{
             BufferedReader reader = new BufferedReader(new FileReader(namePack));
             String line;
@@ -220,8 +223,8 @@ public class DataProcessing {
 
  
   public void processPackNew(String namePack){
-
-        String backslash = "\\";
+        //String backslash = "\\";
+        String backslash = "/";
         try{
             BufferedReader reader = new BufferedReader(new FileReader(namePack));
             String line;

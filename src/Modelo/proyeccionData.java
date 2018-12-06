@@ -309,7 +309,7 @@ public class proyeccionData {
                     }
  
                 }
-                
+                /*
                 // con cada string de envio generado se arma nuevo archivo
                 boolean makeDir = new File("resources\\pack_enviados_generados").mkdir();
                 
@@ -323,6 +323,23 @@ public class proyeccionData {
                 //copyFile(archivo,archivoNuevo);
                 //agrega data nueva
                 appendEnvios("resources\\pack_enviados_generados\\" + this.Archivos.get(numCiudad),enviosGen);
+
+
+                */
+                
+                // con cada string de envio generado se arma nuevo archivo
+                boolean makeDir = new File("resources/pack_enviados_generados").mkdir();
+                
+                File archivo = new File("resources/pack_enviados/" + this.Archivos.get(numCiudad));
+                File archivoNuevo = new File("resources/pack_enviados_generados/" + this.Archivos.get(numCiudad));
+                
+                //limpia data
+                cleanFile("resources/pack_enviados_generados/" + this.Archivos.get(numCiudad));
+                
+                //copia archivos
+                //copyFile(archivo,archivoNuevo);
+                //agrega data nueva
+                appendEnvios("resources/pack_enviados_generados/" + this.Archivos.get(numCiudad),enviosGen);
                 
                 
                 
@@ -338,13 +355,23 @@ public class proyeccionData {
     
     public void calcularCoeficientes(){
         try{
-        
+        /*
             final File folder = new File("resources\\pack_enviados");
             listFilesForFolder(folder);
 
             //por cada archivo en la carpeta va a sacar los coefs
             for(String name : Archivos){           
                 coefCiudad coefCiudad = processPack("resources\\pack_enviados\\"+name);
+                coeficientes.add(coefCiudad);         
+            }
+
+        */
+            final File folder = new File("resources/pack_enviados");
+            listFilesForFolder(folder);
+
+            //por cada archivo en la carpeta va a sacar los coefs
+            for(String name : Archivos){           
+                coefCiudad coefCiudad = processPack("resources/pack_enviados/"+name);
                 coeficientes.add(coefCiudad);         
             }
 

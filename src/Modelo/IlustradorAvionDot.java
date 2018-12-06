@@ -178,7 +178,8 @@ static final int FONT_SIZE = 11;
         super.paintComponent(g);
         
         Graphics2D g2=(Graphics2D)g;
-        img=new ImageIcon("src\\Resource\\mapaMundi.PNG").getImage();
+        //img=new ImageIcon("src\\Resource\\mapaMundi.PNG").getImage();
+        img=new ImageIcon("src/Resource/mapaMundi.PNG").getImage();
         g.drawImage(img, 0, 0, this);
         //int sizeList=destiny.size();
         Font font = new Font("Arial", Font.PLAIN, toPixels(FONT_SIZE));
@@ -598,8 +599,8 @@ static final int FONT_SIZE = 11;
 
 
 
-
-                final File folder = new File("resources\\pack_enviados");
+                //final File folder = new File("resources\\pack_enviados");
+                final File folder = new File("resources/pack_enviados");
                 listFilesForFolder(folder);
 
 
@@ -613,7 +614,7 @@ static final int FONT_SIZE = 11;
                 this.tabu.setInputProcess(this.dp);
                 for (String a : this.Archivos){
 //                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
-                      dp.processPackNew("resources\\pack_enviados\\" + a);
+                      dp.processPackNew("resources/pack_enviados/" + a);
                 }
 
                 System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
