@@ -6,6 +6,7 @@ import Algoritmo.Aeropuerto;
 import Algoritmo.DataProcessing;
 import Algoritmo.TabuSearch;
 import Controlador.AdministrarClienteBL;
+import Controlador.AdministrarPedidoBL;
 import Controlador.PaqueteBL;
 import Controlador.VueloBL;
 import Controlador.aeropuertoBL;
@@ -35,8 +36,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
 public class Login extends javax.swing.JFrame implements ActionListener {
+//public class Login extends javax.swing.JFrame  {
     private usuarioBL usuarioBL ;
     private usuario usuarioLogin;
     private Encriptar td ;
@@ -54,7 +55,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
      private int esInicio = 1;
      private ArrayList<usuario>arrUsuarios;
      private PaqueteBL controladorPaquete= new PaqueteBL(); 
-     ArrayList<Algoritmo.Paquete>listaPackNew=new ArrayList<>();
+     ArrayList<Algoritmo.Paquete>listaPackNew;
      //private EjecutaAlgoritmo ejAlgo;
      
 
@@ -279,18 +280,51 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                     lecturaData();
                     this.esInicio = 0;
                 }
+                if(this.listaPackNew.isEmpty()){
+                    System.out.println("numero total de paquetes cambiando de menu: "+this.listaPackNew.size());    
+                    System.out.println("tiempoAlgoMM: "+this.tiempoAlgoMM);  
+                }
+                
+                int numClientes=arrUsuarios.size();
+                int numPaquetes=0;
+                ArrayList<Algoritmo.Paquete>listaProcesada=null;
                 if (this.minutoMundial== 0  && this.horaMundial%2==0){
-                    usuarioBL controladorCliente=new usuarioBL();
-                    arrUsuarios=controladorCliente.obtenerUsuarios();
-                    EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,arrUsuarios,this.tiempoAlgoMM);
+                    
+                    //System.out.println("numero total de paquetes: "+this.listaPackNew.size());    
+                    EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM);
 
                     t.start();
                     
                     t.join();
-
+                    numPaquetes=t.getListPackAlgo().size();
                     this.tiempoAlgoMM = t.getTiempoAlgoMM();
-
+                    
                     System.out.println("ES LA HORA ->>>>>>");
+                    listaProcesada=t.getListPackAlgo();
+                }
+                
+                
+                AdministrarPedidoBL controladorPedido=new AdministrarPedidoBL();
+                try{
+                    for(int p=0;p<numPaquetes;p++){
+
+                        if(horaMundial*60+minutoMundial>=listaProcesada.get(p).getOriginHour()* 60 + listaProcesada.get(p).getOriginMin()){ 
+                            String correos=controladorPedido.obtenerCorreosClientes(listPackAlgo.get(p).getIdentificator());
+                            String [] correoMatrix=correos.split(",");
+                            String emisor=correoMatrix[0];
+                            String receptor = correoMatrix[1];
+                            MailWorkerTest mwt=new MailWorkerTest("juanfsts@gmail.com","asdasd");
+                            String asunto="Localización de paquete";
+                            String cuerpo="Estimado usuario, "
+                                        + "lo saludamos para informarle que su paquete se encuentra en el país de "+this.tabu.getListAirport().get(listPackAlgo.get(p).getDestinyAirport())
+                                    +". Muchas gracias por su atención.";
+                            mwt.enviarConGMail(emisor, asunto, cuerpo);
+                            mwt.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+                        }
+                    }
+                }
+                catch(Exception exp){
+                    System.out.println("Error de detección de correo");
                 }
        }catch(Exception ex){
            System.out.println("ERROR actionPerformed Login " + ex.getMessage() );
@@ -314,7 +348,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             aeropuertoBL controladorAeropuerto= new aeropuertoBL();
             VueloBL controladorVuelo=new VueloBL();
             generalBL general = new generalBL();
-            AdministrarClienteBL controladorCliente=new AdministrarClienteBL();
+            usuarioBL controladorCliente=new usuarioBL();
             ArrayList<continente> continentes = new ArrayList<continente>();
             ArrayList<aeropuerto>listaAeropuertos=new ArrayList<aeropuerto>();
             ArrayList<Modelo.Vuelo>listaVuelos=new ArrayList<Modelo.Vuelo>();
@@ -350,6 +384,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                listaAeropuertosNew.add(newAero);
 
             }
+            this.dp.setListAirport(listaAeropuertosNew);
             
             for(Modelo.Vuelo v:listaVuelos){
                 int origenAero=v.getIdAeropuertoOrigen();
@@ -366,16 +401,16 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             this.tabu.setListFlight(listaVuelosNew);
             this.tabu.generateFlightMatrix();
 
-            this.tabu.setInputProcess(this.dp);
+            arrUsuarios=controladorCliente.obtenerUsuarios();
 
             
             
             //this.ejAlgo = new EjecutaAlgoritmo(this.tabu);
                 for (String a : this.Archivos){
-                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
-                    //dp.processPackNew("resources\\pack_enviados\\" + a);
+                    //dp.processPackNew("resources\\pack_enviados_generados\\" + a);
+                    dp.processPackNew("resources\\pack_enviados\\" + a);
                 }
-
+            this.tabu.setInputProcess(this.dp);
 
                 System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
 
@@ -383,12 +418,12 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 this.listPack = this.dp.getPackList();
                 //this.matrixPackXDay = this.dp.getMatrixPackXDay();
                 
-
+                System.out.println("numero total de paquetes: "+this.listPack.size());    
                 if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
                     this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
                 
                 ArrayList<Modelo.paquete>listaPack=controladorPaquete.obtenerPaquetes();
-                ArrayList<Algoritmo.Paquete>listaPackNew=new ArrayList<>();
+                listaPackNew=new ArrayList<>();
                 int size=listaPack.size();
                 for(int i=0;i<size;i++){
                     int origenId=listaPack.get(i).getAeropuertoOrigenId();
@@ -420,6 +455,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         }
         return -1;
     }
+    
     private void userNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userNameKeyTyped
         if(evt.getKeyCode() == KeyEvent.VK_TAB)
             password.requestFocus();

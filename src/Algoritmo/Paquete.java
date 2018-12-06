@@ -15,7 +15,7 @@ public class Paquete {
     private int esFinal = 0; // 0: tiene varios pasos, 1: solo le falta un paso
     private int estado = 0; // 0: no disponible, 1: en espera, 2: en transito
     private int nuevo = 1;
-    
+    private int estadoEnviado=0;
     public Paquete(int originHour, int originMin, int originAirport,
             int destinyAirport){
         this.originHour = originHour;
@@ -34,8 +34,17 @@ public class Paquete {
         this.originDay = originDay;
         this.originMonth = originMonth;
         this.originYear = originYear;
+        this.estadoEnviado=0;
     }
 
+    public int getEstadoEnviado() {
+        return estadoEnviado;
+    }
+
+    public void setEstadoEnviado(int estadoEnviado) {
+        this.estadoEnviado = estadoEnviado;
+    }    
+    
     public int getIdentificator() {
         return identificator;
     }

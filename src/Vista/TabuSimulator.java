@@ -42,9 +42,7 @@ public class TabuSimulator extends Thread{
     }
     public TabuSimulator(int hora,int min,Date fecha,TabuSearch tabu,ArrayList<Aeropuerto> listaAeropuertos,ArrayList<Algoritmo.Vuelo> listaVuelos,
 
-
-
-            ArrayList<Algoritmo.Paquete> listPackAlgo,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
+        ArrayList<Algoritmo.Paquete> listPackAlgo,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
         this.horaMundial=hora;
         this.minutoMundial=min;
         this.fechaActual=fecha;

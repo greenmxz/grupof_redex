@@ -332,8 +332,8 @@ public class AdministrarPedidoDA {
             ResultSet rs = sentencia.executeQuery(query);
             while (rs.next( )){
                 String correo=rs.getString("correo_cliente_emisor");
-                correo.concat(",");
-                correo.concat("correo_cliente_receptor");
+                correo+=",";
+                correo+=rs.getString("correo_cliente_receptor");
                 return correo;
             }
         }catch(Exception ex){
