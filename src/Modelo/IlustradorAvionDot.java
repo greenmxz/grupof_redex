@@ -391,7 +391,7 @@ static final int FONT_SIZE = 11;
                 }
                 
                 if (v.getCapacidadActual() > v.getCapacidadMax()){
-                    System.out.println("------------ COLAPSO POR VUELO----vuelo  " + v.getId() + "  lleno");
+                   // System.out.println("------------ COLAPSO POR VUELO----vuelo  " + v.getId() + "  lleno");
                     if (this.cantMaxColapsoAvion < v.getCapacidadActual()){
                         this.cantMaxColapsoAvion = v.getCapacidadActual();
                         this.avionColapsoMax = v.getId();
@@ -419,8 +419,8 @@ static final int FONT_SIZE = 11;
         }else{// VUELO INTERCONTINENTAL
             if (pack.getTiempoTranscurridoMM() > 2880){
                 // COLAPSA POR TIEMPO, VUELO CONTINENTAL QUE TARDA MAS DE DOS DIAS
-                System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
-                System.out.println("id pack " + id_pack);
+                //System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
+                //System.out.println("id pack " + id_pack);
             }
         }
     }
