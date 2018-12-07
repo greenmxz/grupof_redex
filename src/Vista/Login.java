@@ -252,7 +252,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                                 + "los próximos 5 minutos para volver a ser funcional. Si usted está relacionado con esta actividad, "
                                 + "le recomendamos pasar por el proceso de Recuperación de Contraseña. Si usted no realizó esta actividad,"
                                 + " sugerimos cambiar su contraseña. Muchas gracias por su atención.";
-                        notificadorEmail.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+                        notificadorEmail.enviarConGMail("redex.admi@gmail.com", asunto, cuerpo);
                         usuarioLogin.setBaneado(true);
                     }else{
                         JOptionPane.showMessageDialog(null, "Datos ingresados incorrectos\n"
