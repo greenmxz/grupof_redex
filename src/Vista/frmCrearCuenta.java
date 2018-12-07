@@ -455,6 +455,11 @@ public class frmCrearCuenta extends javax.swing.JDialog {
         jButton2.setText("Limpiar");
 
         jButton3.setText("Cancelar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
@@ -488,7 +493,7 @@ public class frmCrearCuenta extends javax.swing.JDialog {
                     .addComponent(registrar)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -649,6 +654,11 @@ LocalDate localD = date.toLocalDate();
             System.out.println("Error " + ex.getMessage());
         }
     }//GEN-LAST:event_registrarActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
