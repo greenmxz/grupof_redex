@@ -4,6 +4,7 @@ import AccesoDatos.EjecutaAlgoritmo;
 import AccesoDatos.usuarioDA;
 import Algoritmo.Aeropuerto;
 import Algoritmo.DataProcessing;
+import Algoritmo.Paquete;
 import Algoritmo.TabuSearch;
 import Controlador.AdministrarClienteBL;
 import Controlador.AdministrarPedidoBL;
@@ -37,6 +38,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 public class Login extends javax.swing.JFrame implements ActionListener {
+    private static int esPrimero=1;
 //public class Login extends javax.swing.JFrame  {
     private usuarioBL usuarioBL ;
     private usuario usuarioLogin;
@@ -44,6 +46,8 @@ public class Login extends javax.swing.JFrame implements ActionListener {
     private Timer timer  ;
     private int minutoMundial=0  ;
     private int horaMundial =0 ;
+    private int procesado=1;
+    private int numProcesados=0;
     private Calendar calendar=Calendar.getInstance();
      private ArrayList<Algoritmo.Paquete> listPack = new ArrayList<>();
      private ArrayList<Algoritmo.Paquete> listPackAlgo = new ArrayList<>();
@@ -53,9 +57,13 @@ public class Login extends javax.swing.JFrame implements ActionListener {
      private ArrayList<String> Archivos = new ArrayList<>();
      private TabuSearch tabu  = new TabuSearch();
      private int esInicio = 1;
+     private int esInicioPack=1;
+     private int esInicioPack2=1;
      private ArrayList<usuario>arrUsuarios;
      private PaqueteBL controladorPaquete= new PaqueteBL(); 
      ArrayList<Algoritmo.Paquete>listaPackNew;
+     ArrayList<Algoritmo.Paquete>listaPackProcesada=new ArrayList<>();
+     ArrayList<Algoritmo.Paquete>listaPackGlobal=new ArrayList<>();
      //private EjecutaAlgoritmo ejAlgo;
      
 
@@ -262,7 +270,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_loginActionPerformed
 
     public void actionPerformed(ActionEvent e) {
+        
         try{
+            
             //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             if (this.minutoMundial<59){
                 this.minutoMundial++;
@@ -276,62 +286,244 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 }    
             }
 
-                if(this.esInicio == 1){
-                    lecturaData();
-                    this.esInicio = 0;
-                }
-                if(this.listaPackNew.isEmpty()){
-                    System.out.println("numero total de paquetes cambiando de menu: "+this.listaPackNew.size());    
-                    System.out.println("tiempoAlgoMM: "+this.tiempoAlgoMM);  
-                }
-                
-                int numClientes=arrUsuarios.size();
-                int numPaquetes=0;
-                ArrayList<Algoritmo.Paquete>listaProcesada=null;
-                if (this.minutoMundial== 0  && this.horaMundial%2==0){
-                    
-                    //System.out.println("numero total de paquetes: "+this.listaPackNew.size());    
-                    EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM);
+            if(this.esInicio == 1){
+                lecturaData();
+                this.esInicio = 0;
+            }
+            ArrayList<Modelo.paquete>listaPack=controladorPaquete.obtenerPaquetesCreados(usuarioLogin.getId());
+            listaPackNew=new ArrayList<>();
+            
+            int size=listaPack.size();
+            for(int i=0;i<size;i++){
+                int origenId=listaPack.get(i).getAeropuertoOrigenId();
+                int destinoId=listaPack.get(i).getAeropuertoDestinoId();
+                int origenHour=listaPack.get(i).getFechaSalida().getHours();
+                int origenMin=listaPack.get(i).getFechaSalida().getMinutes();
+                int origenDay=listaPack.get(i).getFechaSalida().getDay();
+                int origenMonth=listaPack.get(i).getFechaSalida().getMonth();
+                int origenYear=listaPack.get(i).getFechaSalida().getYear();
+                int id=listaPack.get(i).getId();
+                Algoritmo.Paquete pack=new Algoritmo.Paquete(origenHour,origenMin,origenId,destinoId,origenDay,origenMonth,origenYear);
+                pack.setIdentificator(id);
+                listaPackNew.add(pack);
+            }
+           
+            this.listPack.clear();
+            int numElem=0;
+            for(int i=0;i<listaPackGlobal.size();i++){
+                if(listaPackGlobal.get(i).getEnviado()==1)
+                    listaPackNew.remove(numElem);
+                else 
+                    numElem++;
+            }
 
-                    t.start();
+//            if(procesado==1){
+//                ArrayList<Algoritmo.Paquete>aux=(ArrayList<Algoritmo.Paquete>) listaPackNew.clone();
+//                if(listaPackProcesada.size()!=0 && numProcesados!=listaPackNew.size()){
+//                    int numPackNew=listaPackNew.size();
+//                    int numPackGlobal=listaPackGlobal.size();
+//                    
+//                    int j=0,numElement=0;
+//                    if(listaPackGlobal.size()==0){
+//                        for(int i=0;i<numPackNew;i++){
+//                            listaPackGlobal.add(listaPackNew.get(i));
+//                        }
+//                    }else{
+//                        for(j=0;j<numPackGlobal;j++){
+//                            if(listaPackGlobal.get(j).getIdentificator()!=listaPackNew.get(j).getIdentificator()){                            
+//                                numElement++;
+//                                //listaPackGlobal.add(listaPackNew.get(j));
+//                            }
+//                            else{
+//                                aux.remove(numElement);
+//                            }
+//                        }
+//                        for(;j<numPackNew;j++)
+//                            listaPackGlobal.add(listaPackNew.get(j));
+//                        listaPackNew=aux;
+//                    }
+//
+//                }
+//            }
+            if (this.minutoMundial== 0  && this.horaMundial%2==0 ){                              
+                if(listaPackNew.size()>0){
+//                    int numPackGlobal=listaPackGlobal.size();
+//                    ArrayList<Algoritmo.Paquete>aux=(ArrayList<Algoritmo.Paquete>) listaPackNew.clone();
+//                    int numElement=0;                    
+//                    if(numProcesados==0 || numProcesados<=listaPackNew.size()){
+//                        for(int j=0;j<numPackGlobal;j++){
+//                            if(listaPackGlobal.get(j).getIdentificator()!=listaPackNew.get(j).getIdentificator()){                            
+//                                numElement++;
+//                                //listaPackGlobal.add(listaPackNew.get(j));
+//                            }
+//                            else{
+//                                aux.remove(numElement);
+//                            }
+//                        }
                     
-                    t.join();
-                    numPaquetes=t.getListPackAlgo().size();
-                    this.tiempoAlgoMM = t.getTiempoAlgoMM();
-                    
-                    System.out.println("ES LA HORA ->>>>>>");
-                    listaProcesada=t.getListPackAlgo();
-                }
-                
-                
-                AdministrarPedidoBL controladorPedido=new AdministrarPedidoBL();
-                try{
-                    for(int p=0;p<numPaquetes;p++){
+                        //listaPackNew=aux;
+                        if(esInicioPack==1){
+                            esInicioPack=0;
+                            EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
+                            t.start();
+                            t.join();
+                            this.tiempoAlgoMM = t.getTiempoAlgoMM();
 
-                        if(horaMundial*60+minutoMundial>=listaProcesada.get(p).getOriginHour()* 60 + listaProcesada.get(p).getOriginMin()){ 
-                            String correos=controladorPedido.obtenerCorreosClientes(listPackAlgo.get(p).getIdentificator());
-                            String [] correoMatrix=correos.split(",");
-                            String emisor=correoMatrix[0];
-                            String receptor = correoMatrix[1];
-                            MailWorkerTest mwt=new MailWorkerTest("juanfsts@gmail.com","asdasd");
-                            String asunto="Localización de paquete";
-                            String cuerpo="Estimado usuario, "
-                                        + "lo saludamos para informarle que su paquete se encuentra en el país de "+this.tabu.getListAirport().get(listPackAlgo.get(p).getDestinyAirport())
-                                    +". Muchas gracias por su atención.";
-                            mwt.enviarConGMail(emisor, asunto, cuerpo);
-                            mwt.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+                            System.out.println("ES LA HORA ->>>>>>");
+                            listaPackProcesada=t.getListPackAlgo();
+                        
+                            //if(listaPackProcesada.size()==0)
+                            
+                          //  if(listaPackProcesada.size()==0 || listaPackProcesada.size()==listaPackNew.size())
+                               // procesado=0;
+//                            else{
+//                                procesado=1;
+                                listaPackNew.clear();
+                            //}
                         }
+                        else if(esInicioPack2==1){
+                            esInicioPack2=0;
+                            EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
+                            t.start();
+                            t.join();
+                            this.tiempoAlgoMM = t.getTiempoAlgoMM();
+
+                            System.out.println("ES LA HORA ->>>>>>");
+                            listaPackProcesada=t.getListPackAlgo();
+                        
+                            //if(listaPackProcesada.size()==0)
+                            
+                          //  if(listaPackProcesada.size()==0 || listaPackProcesada.size()==listaPackNew.size())
+                               // procesado=0;
+//                            else{
+//                                procesado=1;
+                                listaPackNew.clear();
+                        }
+                        else if(listaPackProcesada.size()==0 ){
+                            EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
+                            t.start();
+                            t.join();
+                            this.tiempoAlgoMM = t.getTiempoAlgoMM();
+
+                            System.out.println("ES LA HORA ->>>>>>");
+                            listaPackProcesada=t.getListPackAlgo();
+                        
+                            //if(listaPackProcesada.size()==0)
+                            
+                          //  if(listaPackProcesada.size()==0 || listaPackProcesada.size()==listaPackNew.size())
+                               // procesado=0;
+//                            else{
+//                                procesado=1;
+                                listaPackNew.clear();
+                            //}
+                        }
+                        
                     }
-                }
-                catch(Exception exp){
-                    System.out.println("Error de detección de correo");
-                }
+                
+                
+
+            }
+                           
+            try{
+                
+                cambiaEstadoMov();
+
+            }
+            catch(Exception exp){
+                System.out.println("Error de detección de correo "+exp.getMessage());
+            }
        }catch(Exception ex){
            System.out.println("ERROR actionPerformed Login " + ex.getMessage() );
            ex.printStackTrace();
        }   
 
         
+    }
+    public void cambiaEstadoMov(){
+        
+        //for(int i = 0; i < 1;i++){
+        for(int i = 0; i < this.listaPackProcesada.size();i++){
+            Algoritmo.Paquete pack = this.listaPackProcesada.get(i);
+            String ruta = pack.getRuta();
+            // verifica si tiene camino por recorrer
+            if (!ruta.equals("")){
+                //System.out.println(ruta);
+
+                //int tiempoPack = pack.getOriginHour()*60 + pack.getOriginMin();
+
+
+                String[] ids = ruta.split("-");
+                int idVuelo = Integer.parseInt(ids[0]);
+                Algoritmo.Vuelo v=this.tabu.getListFlight().get(idVuelo);
+                System.out.println("Paquete "+pack.getIdentificator());
+                System.out.println("Son las "+horaMundial+ " : "+minutoMundial);
+                System.out.println("Vuelo llego a las "+v.getDestinyHour() +" : "+v.getDestinyMin() );
+                if(horaMundial*60+minutoMundial==v.getDestinyHour()*60+v.getDestinyMin()){
+                    AdministrarPedidoBL controladorPedido=new AdministrarPedidoBL();
+                    String correos=controladorPedido.obtenerCorreosClientes(pack.getIdentificator());
+                    String [] correoMatrix=correos.split(",");
+                    String emisor=correoMatrix[0];
+                    String receptor = correoMatrix[1];
+                    MailWorkerTest mwt=new MailWorkerTest("juanfsts@gmail.com","asdasd");
+                    String asunto="Localización de paquete";
+                    if(ids.length==1){
+                        String cuerpoEmisor="Estimado usuario, "
+                                + "lo saludamos para informarle que el paquete de numero de tracking "
+                                + pack.getIdentificator()+ " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()).getCountry()
+                                +" en su paradero final a las "+v.getDestinyHour()+":"+v.getDestinyMin()+". Muchas gracias por su atención.";
+                        
+                        String cuerpoReceptor="Estimado usuario, "
+                                + "lo saludamos para informarle que el paquete de numero de tracking "
+                                + pack.getIdentificator() + " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()).getCountry()
+                                +" en su paradero final a las "+v.getDestinyHour()+":"+v.getDestinyMin()+". Por favor, acercarse a recoger su encargo. Muchas gracias por su atención.";
+                        //mwt.enviarConGMail(emisor, asunto, cuerpoEmisor);
+                        //mwt.enviarConGMail(receptor,asunto,cuerpoReceptor);
+                        mwt.enviarConGMail("juanfsts@gmail.com", asunto, cuerpoReceptor);
+                        numProcesados++;
+                        if(listaPackProcesada.size()==numProcesados){
+                           listaPackProcesada.clear();    
+                           numProcesados=0;
+                        }
+                        pack.setEnviado(1);
+                        listaPackGlobal.add(pack);
+                        return;
+                    }else{
+                        String cuerpo="Estimado usuario, "
+                                    + "lo saludamos para informarle que el paquete de numero de tracking "
+                                + pack.getIdentificator() + " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()).getCountry()
+                                    +" a las "+v.getDestinyHour()+":"+v.getDestinyMin()+". Muchas gracias por su atención.";
+                        //mwt.enviarConGMail(emisor, asunto, cuerpo);
+                        //mwt.enviarConGMail(receptor,asunto,cuerpo);
+                        mwt.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+                
+                    }
+                                    
+                   //System.out.println("AQUI EJEAJEAJ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ids.length);
+                    if (ids.length == 1){// es su ultimo paradero
+                        this.listaPackProcesada.get(i).setEsFinal(1);
+                            
+                        //calendarioLlegada.set(this.listPack.get(i).getOriginYear(),this.listPack.get(i).getOriginMonth() - 1,this.listPack.get(i).getOriginDay());
+
+                        //////////////////////////////// 
+                        // es su ruta final, remueve de listapack
+                        //v.getIdPacks().add(i);
+                        //v.setPack_finales(v.getPack_finales() + 1);
+                        this.listaPackProcesada.get(i).setRuta(""); // su ruta se encuestra finalizada
+
+                    }else{ // vuelos escalados
+                        // se quita el paso dado
+                        ruta = ruta.substring(ruta.indexOf("-", 0)+1,ruta.length());
+                        // se brinda la nueva ruta
+                        this.listaPackProcesada.get(i).setRuta(ruta);
+                        // cambia a estado en transito para que no se vuelva a usar hasta que llegue
+                        //this.listaPackProcesada.get(i).setEstado(2);
+                        //this.listaPackProcesada.get(i).setNuevo(0);
+                        //v.getIdPacks().add(i);
+                    }
+                }
+            }
+        }
+                   
     }
      public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
@@ -422,24 +614,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
                     this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
                 
-                ArrayList<Modelo.paquete>listaPack=controladorPaquete.obtenerPaquetes();
-                listaPackNew=new ArrayList<>();
-                int size=listaPack.size();
-                for(int i=0;i<size;i++){
-                    int origenId=listaPack.get(i).getAeropuertoOrigenId();
-                    int destinoId=listaPack.get(i).getAeropuertoDestinoId();
-                    int origenHour=listaPack.get(i).getFechaSalida().getHours();
-                    int origenMin=listaPack.get(i).getFechaSalida().getMinutes();
-                    int origenDay=listaPack.get(i).getFechaSalida().getDay();
-                    int origenMonth=listaPack.get(i).getFechaSalida().getMonth();
-                    int origenYear=listaPack.get(i).getFechaSalida().getYear();
-                    int id=listaPack.get(i).getId();
-                    Algoritmo.Paquete pack=new Algoritmo.Paquete(origenHour,origenMin,origenId,destinoId,origenDay,origenMonth,origenYear);
-                    pack.setIdentificator(id);
-                    listaPackNew.add(pack);
-                }
                 
-                this.listPack.clear();
                 //this.inicio = 1;
               
         }catch(Exception ex){
@@ -545,7 +720,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         
         
     }//GEN-LAST:event_lblRecoverPasswordMouseClicked
-     
+         
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

@@ -48,11 +48,13 @@ public class EjecutaAlgoritmo extends Thread{
      private ArrayList<Algoritmo.Paquete>listaPackNew;
 
     
-     public EjecutaAlgoritmo(TabuSearch tabu,ArrayList<Algoritmo.Paquete>listPackNew,int t){
+     public EjecutaAlgoritmo(TabuSearch tabu,ArrayList<Algoritmo.Paquete>listPackNew,int t,int h,int m){
          
          ts=tabu;
          //ts.setListPack(new ArrayList<Paquete>());
          //this.arrUsuario=(ArrayList<usuario>) arrUsuario.clone();
+         horaMundial=h;
+         minutoMundial=m;
          this.tiempoAlgoMM = t;
          this.listaPackNew=listPackNew;
      }

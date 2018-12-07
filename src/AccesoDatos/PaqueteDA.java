@@ -149,7 +149,51 @@ public class PaqueteDA {
         }
         return aux;
     }
-    
+    public ArrayList<paquete> obtenerPaquetesCreados(int id){
+        ArrayList<paquete> aux = new ArrayList<paquete>();
+        try{
+            database connect = new database();
+            Statement sentencia = connect.getConnection().createStatement();
+            String query = "SELECT * FROM redexdb.pedido where id_estado = '"+String.valueOf(id)+"';";
+            ResultSet rs = sentencia.executeQuery(query);
+            while(rs.next()){
+                Date nuevaFecha = new Date(rs.getDate("fecha_pedido").getYear(), rs.getDate("fecha_pedido").getMonth(),
+                            rs.getDate("fecha_pedido").getDay(), rs.getTime("fecha_pedido").getHours(),
+                            rs.getTime("fecha_pedido").getMinutes());
+                paquete newPaq = new paquete(rs.getString("codigo"), nuevaFecha, 
+                    rs.getString("id_aeropuerto_emisor"), rs.getString("id_aeropuerto_receptor"),
+                    rs.getString("id_cliente_emisor"), rs.getString("id_cliente_emisor"),
+                    rs.getString("id_estado"));
+                
+                newPaq.setAeropuertoOrigenId(rs.getInt("id_aeropuerto_emisor"));
+                newPaq.setAeropuertoDestinoId(rs.getInt("id_aeropuerto_receptor"));
+                newPaq.setId(rs.getInt("id"));
+                newPaq.setFechaSalida(nuevaFecha);
+                
+                aux.add(newPaq);
+            }
+            for(int i=0; i<aux.size(); i++){
+                ResultSet rs1 = sentencia.executeQuery("SELECT c.nombre as ciudad, n.nombre as continente\n" +
+                    "FROM redexdb.aeropuerto AS a, redexdb.ciudad as c, redexdb.pais as p, redexdb.continente as n\n" +
+                    "WHERE a.id = '" + aux.get(i).getAeropuertoOrigen() +
+                    "' AND a.id_ciudad = c.id AND c.id_pais = p.id AND p.id_continente = n.id");
+                rs1.next();
+                aux.get(i).setCiudadOrigen(rs1.getString("ciudad"));
+                aux.get(i).setContinenteOrigen(rs1.getString("continente"));
+                rs1 = sentencia.executeQuery("SELECT c.nombre as ciudad, n.nombre as continente\n" +
+                    "FROM redexdb.aeropuerto AS a, redexdb.ciudad as c, redexdb.pais as p, redexdb.continente as n\n" +
+                    "WHERE a.id = '" + aux.get(i).getAeropuertoDestino() +
+                    "' AND a.id_ciudad = c.id AND c.id_pais = p.id AND p.id_continente = n.id");
+                rs1.next();
+                aux.get(i).setCiudadDestino(rs1.getString("ciudad"));
+                aux.get(i).setContinenteDestino(rs1.getString("continente"));
+            }
+            connect.getConnection().close();
+        }catch(Exception e){
+            System.out.println("ERROR obtenerPaquetesAsign "+e.getMessage());
+        }
+        return aux;
+    }
     public String obtenerCadenaRuta(String idO, String idD){
         String respuesta = "";
         try{

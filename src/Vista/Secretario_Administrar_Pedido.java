@@ -28,11 +28,13 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     ArrayList<estado> listEstado;
     ArrayList<Vuelo> listVuelos;
     private javax.swing.JFrame parent;
+    private int id;
     
-    public Secretario_Administrar_Pedido(javax.swing.JFrame parent) {
+    public Secretario_Administrar_Pedido(javax.swing.JFrame parent,int id) {
         this.parent = parent;
         initComponents();
         inicializar();
+        this.id=id;
     }
 
     /* Métodos */
@@ -169,17 +171,17 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
 
         tblPedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Código", "Origen", "Cliente emisor", "Destino", "Cliente receptor", "Estado"
+                "Código", "Origen", "Cliente emisor", "Destino", "Cliente receptor"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -391,7 +393,7 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        new Vista.Secretario_Crear_Pedido(parent,true,tblPedidos).setVisible(true);
+        new Vista.Secretario_Crear_Pedido(parent,true,tblPedidos,id).setVisible(true);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed

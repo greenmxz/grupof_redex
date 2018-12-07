@@ -45,7 +45,7 @@ public class avionDot {
     private int llegadaMM;
     private int llegaDiaSig;
     private int tiempoTranscurridoMM;
-    
+    private int tiempoTranscurridoMMAcu;
     
     
     private ArrayList<Integer> idPacks = new ArrayList<>();
@@ -285,6 +285,14 @@ public class avionDot {
 
     public void setTiempoTranscurridoMM(int tiempoTranscurridoMM) {
         this.tiempoTranscurridoMM = tiempoTranscurridoMM;
+    }
+
+    public int getTiempoTranscurridoMMAcu() {
+        return tiempoTranscurridoMMAcu;
+    }
+
+    public void setTiempoTranscurridoMMAcu(int tiempoTranscurridoMMAcu) {
+        this.tiempoTranscurridoMMAcu = tiempoTranscurridoMMAcu;
     }
     
   
