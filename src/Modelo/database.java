@@ -18,8 +18,8 @@ public class database {
     public database(){
         try{
         this.setDriver("com.mysql.jdbc.Driver");
-        //connection = DriverManager.getConnection( "jdbc:mysql://192.168.201.105:3306/redexdb?noAccessToProcedureBodies=true","root","burp12" );
-        connection = DriverManager.getConnection( "jdbc:mysql://localhost:3306/redexdb","root","burp12" );
+        connection = DriverManager.getConnection( "jdbc:mysql://192.168.201.105:3306/redexdb?noAccessToProcedureBodies=true","root","burp12" );
+        //connection = DriverManager.getConnection( "jdbc:mysql://localhost:3306/redexdb","root","burp12" );
         System.out.println("Se ha conectado correctamente a la base de datos");
         }catch(Exception e){
             System.out.println("Ha ocurrido un error en la conexion "+ e.getMessage());
