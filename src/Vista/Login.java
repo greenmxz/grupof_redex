@@ -252,7 +252,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                                 + "los próximos 5 minutos para volver a ser funcional. Si usted está relacionado con esta actividad, "
                                 + "le recomendamos pasar por el proceso de Recuperación de Contraseña. Si usted no realizó esta actividad,"
                                 + " sugerimos cambiar su contraseña. Muchas gracias por su atención.";
-                        notificadorEmail.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+                        notificadorEmail.enviarConGMail("redex.admi@gmail.com", asunto, cuerpo);
                         usuarioLogin.setBaneado(true);
                     }else{
                         JOptionPane.showMessageDialog(null, "Datos ingresados incorrectos\n"
@@ -317,51 +317,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                     numElem++;
             }
 
-//            if(procesado==1){
-//                ArrayList<Algoritmo.Paquete>aux=(ArrayList<Algoritmo.Paquete>) listaPackNew.clone();
-//                if(listaPackProcesada.size()!=0 && numProcesados!=listaPackNew.size()){
-//                    int numPackNew=listaPackNew.size();
-//                    int numPackGlobal=listaPackGlobal.size();
-//                    
-//                    int j=0,numElement=0;
-//                    if(listaPackGlobal.size()==0){
-//                        for(int i=0;i<numPackNew;i++){
-//                            listaPackGlobal.add(listaPackNew.get(i));
-//                        }
-//                    }else{
-//                        for(j=0;j<numPackGlobal;j++){
-//                            if(listaPackGlobal.get(j).getIdentificator()!=listaPackNew.get(j).getIdentificator()){                            
-//                                numElement++;
-//                                //listaPackGlobal.add(listaPackNew.get(j));
-//                            }
-//                            else{
-//                                aux.remove(numElement);
-//                            }
-//                        }
-//                        for(;j<numPackNew;j++)
-//                            listaPackGlobal.add(listaPackNew.get(j));
-//                        listaPackNew=aux;
-//                    }
-//
-//                }
-//            }
             if (this.minutoMundial== 0  && this.horaMundial%2==0 ){                              
                 if(listaPackNew.size()>0){
-//                    int numPackGlobal=listaPackGlobal.size();
-//                    ArrayList<Algoritmo.Paquete>aux=(ArrayList<Algoritmo.Paquete>) listaPackNew.clone();
-//                    int numElement=0;                    
-//                    if(numProcesados==0 || numProcesados<=listaPackNew.size()){
-//                        for(int j=0;j<numPackGlobal;j++){
-//                            if(listaPackGlobal.get(j).getIdentificator()!=listaPackNew.get(j).getIdentificator()){                            
-//                                numElement++;
-//                                //listaPackGlobal.add(listaPackNew.get(j));
-//                            }
-//                            else{
-//                                aux.remove(numElement);
-//                            }
-//                        }
-                    
-                        //listaPackNew=aux;
+
                         if(esInicioPack==1){
                             esInicioPack=0;
                             EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
@@ -372,14 +330,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                             System.out.println("ES LA HORA ->>>>>>");
                             listaPackProcesada=t.getListPackAlgo();
                         
-                            //if(listaPackProcesada.size()==0)
+                           
+                            listaPackNew.clear();
                             
-                          //  if(listaPackProcesada.size()==0 || listaPackProcesada.size()==listaPackNew.size())
-                               // procesado=0;
-//                            else{
-//                                procesado=1;
-                                listaPackNew.clear();
-                            //}
                         }
                         else if(esInicioPack2==1){
                             esInicioPack2=0;
@@ -390,14 +343,8 @@ public class Login extends javax.swing.JFrame implements ActionListener {
 
                             System.out.println("ES LA HORA ->>>>>>");
                             listaPackProcesada=t.getListPackAlgo();
-                        
-                            //if(listaPackProcesada.size()==0)
-                            
-                          //  if(listaPackProcesada.size()==0 || listaPackProcesada.size()==listaPackNew.size())
-                               // procesado=0;
-//                            else{
-//                                procesado=1;
-                                listaPackNew.clear();
+                  
+                            listaPackNew.clear();
                         }
                         else if(listaPackProcesada.size()==0 ){
                             EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
@@ -408,14 +355,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                             System.out.println("ES LA HORA ->>>>>>");
                             listaPackProcesada=t.getListPackAlgo();
                         
-                            //if(listaPackProcesada.size()==0)
+                      
+                            listaPackNew.clear();
                             
-                          //  if(listaPackProcesada.size()==0 || listaPackProcesada.size()==listaPackNew.size())
-                               // procesado=0;
-//                            else{
-//                                procesado=1;
-                                listaPackNew.clear();
-                            //}
                         }
                         
                     }
@@ -464,7 +406,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                     String [] correoMatrix=correos.split(",");
                     String emisor=correoMatrix[0];
                     String receptor = correoMatrix[1];
-                    MailWorkerTest mwt=new MailWorkerTest("juanfsts@gmail.com","asdasd");
+                    MailWorkerTest mwt=new MailWorkerTest("redex.admi@gmail.com","grupofredex");
                     String asunto="Localización de paquete";
                     if(ids.length==1){
                         String cuerpoEmisor="Estimado usuario, "
@@ -476,9 +418,9 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                                 + "lo saludamos para informarle que el paquete de numero de tracking "
                                 + pack.getIdentificator() + " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()).getCountry()
                                 +" en su paradero final a las "+v.getDestinyHour()+":"+v.getDestinyMin()+". Por favor, acercarse a recoger su encargo. Muchas gracias por su atención.";
-                        //mwt.enviarConGMail(emisor, asunto, cuerpoEmisor);
-                        //mwt.enviarConGMail(receptor,asunto,cuerpoReceptor);
-                        mwt.enviarConGMail("juanfsts@gmail.com", asunto, cuerpoReceptor);
+                        mwt.enviarConGMail(emisor, asunto, cuerpoEmisor);
+                        mwt.enviarConGMail(receptor,asunto,cuerpoReceptor);
+                        mwt.enviarConGMail("redex.admi@gmail.com", asunto, cuerpoReceptor);
                         numProcesados++;
                         if(listaPackProcesada.size()==numProcesados){
                            listaPackProcesada.clear();    
@@ -492,22 +434,16 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                                     + "lo saludamos para informarle que el paquete de numero de tracking "
                                 + pack.getIdentificator() + " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()).getCountry()
                                     +" a las "+v.getDestinyHour()+":"+v.getDestinyMin()+". Muchas gracias por su atención.";
-                        //mwt.enviarConGMail(emisor, asunto, cuerpo);
-                        //mwt.enviarConGMail(receptor,asunto,cuerpo);
-                        mwt.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+                        mwt.enviarConGMail(emisor, asunto, cuerpo);
+                        mwt.enviarConGMail(receptor,asunto,cuerpo);
+                        mwt.enviarConGMail("redex.admi@gmail.com", asunto, cuerpo);
                 
                     }
                                     
                    //System.out.println("AQUI EJEAJEAJ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ids.length);
                     if (ids.length == 1){// es su ultimo paradero
                         this.listaPackProcesada.get(i).setEsFinal(1);
-                            
-                        //calendarioLlegada.set(this.listPack.get(i).getOriginYear(),this.listPack.get(i).getOriginMonth() - 1,this.listPack.get(i).getOriginDay());
-
-                        //////////////////////////////// 
-                        // es su ruta final, remueve de listapack
-                        //v.getIdPacks().add(i);
-                        //v.setPack_finales(v.getPack_finales() + 1);
+            
                         this.listaPackProcesada.get(i).setRuta(""); // su ruta se encuestra finalizada
 
                     }else{ // vuelos escalados
@@ -515,10 +451,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                         ruta = ruta.substring(ruta.indexOf("-", 0)+1,ruta.length());
                         // se brinda la nueva ruta
                         this.listaPackProcesada.get(i).setRuta(ruta);
-                        // cambia a estado en transito para que no se vuelva a usar hasta que llegue
-                        //this.listaPackProcesada.get(i).setEstado(2);
-                        //this.listaPackProcesada.get(i).setNuevo(0);
-                        //v.getIdPacks().add(i);
+                        
                     }
                 }
             }
@@ -709,7 +642,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                     + "de seguridad. Habiéndole informado, procedemos con la recuperación de su contraseña de su cuenta."
                     + "Su contraseña es" + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n "
                     + hashPw;
-            notificadorEmail.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+            notificadorEmail.enviarConGMail("redex.admi@gmail.com", asunto, cuerpo);
             JOptionPane.showMessageDialog(null, "El correo fue enviado satisfactoriamente");
             return ;
             
