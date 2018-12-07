@@ -42,11 +42,7 @@ public class TabuSimulator extends Thread{
     }
     public TabuSimulator(int hora,int min,Date fecha,TabuSearch tabu,ArrayList<Aeropuerto> listaAeropuertos,ArrayList<Algoritmo.Vuelo> listaVuelos,
 
-
-//            ArrayList<String> listPackAlgo,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo){
-
-
-            ArrayList<Algoritmo.Paquete> listPackAlgo,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
+        ArrayList<Algoritmo.Paquete> listPackAlgo,ArrayList<Algoritmo.Paquete> listPack, int tiempoAlgo, int algoritmoDelayMinutes){
         this.horaMundial=hora;
         this.minutoMundial=min;
         this.fechaActual=fecha;
@@ -94,6 +90,12 @@ public class TabuSimulator extends Thread{
                     //if (dateFormat.format(fechaActual).compareTo(dateFormat.format(fechaPack))==0){
                     //tiempo de llegada del pack
                     int timePack = pack.getOriginHour() * 60 + pack.getOriginMin();
+                    if(this.manual==1){
+                        this.listPackAlgo.add(this.listPack.get(i));
+                        // quita pack de lista original
+                        //this.listPack.remove(i);
+                        pack.setProcesado(1);
+                    }else
                     //si se encuentra en el rango
                     if (timePack < timeFin && timePack >= timeIni) {
                         //System.out.println("bloque -- se añade pack");
@@ -169,9 +171,7 @@ public class TabuSimulator extends Thread{
         catch(Exception ex ){
             System.out.println("HILOS ERROR: "+ex.getMessage());
         }
-        
-
-            
+      
         
     }
 

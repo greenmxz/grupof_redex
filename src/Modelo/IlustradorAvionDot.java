@@ -513,7 +513,7 @@ static final int FONT_SIZE = 11;
     
     
     
-       public void mueveAvion(avionDot v) {
+    public void mueveAvion(avionDot v) {
 
         calculaMovAvion(v);
 
@@ -818,7 +818,7 @@ static final int FONT_SIZE = 11;
 
            this.cantTics++;
        }catch(Exception ex){
-           System.out.println("ACTION PERFORMDED" + ex.getMessage() );
+           System.out.println("ACTION PERFORMED" + ex.getMessage() );
            ex.printStackTrace();
        }
         

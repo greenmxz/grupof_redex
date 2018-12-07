@@ -8,7 +8,13 @@ package AccesoDatos;
 import Algoritmo.DataProcessing;
 import Algoritmo.Paquete;
 import Algoritmo.TabuSearch;
+import Controlador.AdministrarClienteBL;
+import Controlador.AdministrarPedidoBL;
 import Controlador.PaqueteBL;
+import Modelo.cliente;
+import Modelo.usuario;
+import Vista.Login;
+import Vista.MailWorkerTest;
 import Vista.TabuSimulator;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,56 +45,69 @@ public class EjecutaAlgoritmo extends Thread{
      private DataProcessing dp = new DataProcessing();
      private ArrayList<String> Archivos = new ArrayList<>();
      private TabuSearch ts=new TabuSearch();
-     
-     public EjecutaAlgoritmo(TabuSearch tabu, int t){
+     private ArrayList<Algoritmo.Paquete>listaPackNew;
+
+    
+     public EjecutaAlgoritmo(TabuSearch tabu,ArrayList<Algoritmo.Paquete>listPackNew,int t,int h,int m){
+         
          ts=tabu;
-         ts.setListPack(new ArrayList<Paquete>());
+         //ts.setListPack(new ArrayList<Paquete>());
+         //this.arrUsuario=(ArrayList<usuario>) arrUsuario.clone();
+         horaMundial=h;
+         minutoMundial=m;
          this.tiempoAlgoMM = t;
+         this.listaPackNew=listPackNew;
      }
+
+    public ArrayList<Paquete> getListPackAlgo() {
+        return listPackAlgo;
+    }
+
+    public void setListPackAlgo(ArrayList<Paquete> listPackAlgo) {
+        this.listPackAlgo = listPackAlgo;
+    }
+     
     public void run(){
 //        t = new Timer(8,this);
 //        t.start();
         //while(true){
         calendar=Calendar.getInstance();
-        PaqueteBL controladorPaquete= new PaqueteBL();    
+        
+           
         try {
             System.out.println("AQUI implementare algoritmo");
-            ArrayList<Modelo.paquete>listaPack=controladorPaquete.obtenerPaquetes();
-            ArrayList<Algoritmo.Paquete>listaPackNew=new ArrayList<>();
-            int size=listaPack.size();
-            for(int i=0;i<size;i++){
-                int origenId=listaPack.get(i).getAeropuertoOrigenId();
-                int destinoId=listaPack.get(i).getAeropuertoDestinoId();
-                int origenHour=listaPack.get(i).getFechaSalida().getHours();
-                int origenMin=listaPack.get(i).getFechaSalida().getMinutes();
-                int origenDay=listaPack.get(i).getFechaSalida().getDay();
-                int origenMonth=listaPack.get(i).getFechaSalida().getMonth();
-                int origenYear=listaPack.get(i).getFechaSalida().getYear();
-                Algoritmo.Paquete pack=new Algoritmo.Paquete(origenHour,origenMin,origenId,destinoId,origenDay,origenMonth,origenYear);
-                listaPackNew.add(pack);
-            }
             
-            ts.setListPack(listaPackNew);
-            //ts.executeVCRPTabu(listPack);
+            ts.setListPack(this.listaPackNew);
+            
             TabuSimulator simulador=new TabuSimulator(horaMundial,minutoMundial,calendar.getTime(),ts,ts.getListAirport(),ts.getListFlight(),listPackAlgo,ts.getListPack(),tiempoAlgoMM,tiempoDelayAlgoritmo);
             simulador.setManual(1);
             simulador.start();
             simulador.join();
             this.listPackAlgo = simulador.getListPackAlgo();
-            size=listPackAlgo.size();
+            int size=listPackAlgo.size();
             System.out.println(size);
             for(int i=0;i<size;i++){
                 System.out.println(listPackAlgo.get(i).getRuta());
             }
             cambiaEstadoPacks();
-            //ArrayList<String> solution = ts.executeVCRPTabu(ts.getListPack());
-            //simulador.start();ackAlgo
-            //this.listPackAlgo = simulador.getListPackAlgo();
+
+            //MailWorkerTest notificadorEmail=new MailWorkerTest(correo,"sdfdf");
+            
+//            for(int i=0;i<size;i++){
+//                if(listPackAlgo.get(i).getEstado()==1){
+//                    System.out.println(listPackAlgo.get(i).getRuta());
+//                }
+//            }
+            
+            
+            
             this.tiempoAlgoMM = simulador.getTiempoAlgo();
+            this.finalize();
             //for(int i=0;i<size;i++)
                 //System.out.println(listPackAlgo.get(i).getRuta());
             
             //this.finalize();
+
             
             
             //}
@@ -148,6 +167,7 @@ public class EjecutaAlgoritmo extends Thread{
            ex.printStackTrace();
        }
     }
+    
 
     public int getTiempoAlgoMM() {
         return tiempoAlgoMM;

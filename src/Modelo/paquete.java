@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class paquete {
-
+    private int id;
     private String codigo;
     private Date fechaSalida;
     private Date fechaLlegada;
@@ -77,6 +77,14 @@ public class paquete {
         this.clienteEmisor = String.valueOf(1);
         this.clienteReceptor = String.valueOf(2);
         this.estado = String.valueOf(1);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
     
     public String getCodigo() {

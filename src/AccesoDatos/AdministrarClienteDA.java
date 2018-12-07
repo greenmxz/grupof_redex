@@ -184,6 +184,57 @@ public class AdministrarClienteDA {
         }
     }
     
+    public ArrayList<cliente> listarClientes(){ 
+        try {
+            ArrayList<cliente> listClientes = new ArrayList<>();       
+            database connect = new database();
+            boolean primero = true;
+            
+            String query = "select * \n" +
+                        " from cliente\n" +
+                        " inner join persona on cliente.id_persona = persona.id\n" +
+                        " inner join ciudad on persona.id_ciudad = ciudad.id\n" +
+                        " where cliente.activo = 1 ";
+            
+            
+            query += ";";
+            
+            System.out.println("query => " + query);
+
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while (rs.next( )){
+
+                persona persona= new persona();
+                cliente cliente = new cliente();
+                
+                cliente.setId(rs.getInt("id"));
+                cliente.setCantidad_pedidos(rs.getInt("cantidad_pedidos"));
+                cliente.setCodigo(rs.getString("codigo"));
+   
+                persona.setNombre(rs.getString("nombre"));
+                persona.setApellidoPaterno(rs.getString("apellido_paterno"));
+                persona.setApellidoMaterno(rs.getString("apellido_materno"));
+                persona.setNumeroDocumentoIdentidad(rs.getInt("numero_documento_identidad"));
+                persona.setDireccion(rs.getString("direccion"));
+                persona.setCorreo(rs.getString("correo"));
+                persona.setTelefono(rs.getString("telefono"));
+                //persona.setFechaNacimiento(fechaNacimiento);
+                persona.setCiudad(rs.getString("ciudad"));
+                
+                cliente.setPersona(persona);
+                
+                listClientes.add(cliente);
+            }  
+            
+            connect.closeConnection();
+            System.out.println("Cantidad de resultados = " + listClientes.size());
+            return listClientes;
+        }catch(Exception e){
+            System.out.println("ERROR "+e.getMessage());
+            return null;
+        }
+    }
     
      public int registrarCliente(cliente cliente){
             /*codigos de resultado

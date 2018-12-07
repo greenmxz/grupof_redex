@@ -30,6 +30,8 @@ public class TabuSearch {
     private boolean finded = false;
     private int timeToCmp;
     private int cantReruteo = 0;
+    private ArrayList<Integer> forbidden;
+    
 
     public TabuSearch(){
         this.listPack=new ArrayList<Paquete>();
@@ -146,9 +148,12 @@ public class TabuSearch {
         ArrayList<String> aux = new ArrayList<String>();
         numAirport = getListAirport().size();
         capVuelos = new ArrayList<Integer>();
+        forbidden = new ArrayList<Integer>();
         int numPack=paquetesAct.size();
         for(int i=0; i<listFlight.size(); i++)
             capVuelos.add(0);
+        for(int i=0; i<listAirport.size(); i++)
+            forbidden.add(10);
 //        for(int i=0; i<listFlight.size(); i++)
 //            listFlight.get(i).print();
         setListPack(paquetesAct);
@@ -160,7 +165,7 @@ public class TabuSearch {
                 int origin = paquetesAct.get(iter).getOriginAirport();
                 int destiny = paquetesAct.get(iter).getDestinyAirport();
 
-    //            getListPack().get(iter).print();
+//                getListPack().get(iter).print();
                 if(validator(origin, destiny)){
                     String time = String.valueOf(paquetesAct.get(iter).getOriginHour()) + ":" + 
                             String.valueOf(paquetesAct.get(iter).getOriginMin());
@@ -172,7 +177,7 @@ public class TabuSearch {
 
                     String solution = generateTabuString(optimal);
 
-    //                System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
+//                    System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
                     if(solution.equals("")){
                         noAsign++;
     //                    System.out.println(iter);
@@ -322,9 +327,52 @@ public class TabuSearch {
             else bestRoute = auxBestRoute.clone();
         }
         if(bestRoute[0] != -1)
-            return bestRoute;
-        else return rutaRiesgo;
+            if(turnoPermitido(bestRoute))
+                return bestRoute;
+        return rutaRiesgo;
     }
+    
+    private boolean turnoPermitido(int[] bestRoute){
+        // Comprobar que ningún aeropuerto esté baneado
+        if(bestRoute[0] == -1)
+            return false;
+        ArrayList<Integer> permitidos = new ArrayList<Integer>();
+        boolean ward = true;
+        for(int i=0; i<bestRoute.length; i++){
+            if(bestRoute[i] == -1)
+                break;
+//            int origin = listFlight.get(bestRoute[i]-1).getOriginAirport()-1;
+            int destiny = listFlight.get(bestRoute[i]-1).getDestinyAirport()-1;
+            if(forbidden.get(destiny) < 0){
+                permitidos.add(1);
+                ward = false;
+//                break;
+            }else permitidos.add(0);
+        }
+        // Actualizar los baneados
+       for(int i=0; i<bestRoute.length; i++){
+            if(bestRoute[i] == -1)
+                break;
+           int destiny = listFlight.get(bestRoute[i]-1).getDestinyAirport()-1;
+           // Si validamos la ruta ...
+           if(ward){
+               // ... le descontamos a cada aeropuerto su coef. de prohibición
+               if(forbidden.get(destiny) > 0)
+                   forbidden.set(destiny , forbidden.get(destiny)-1);
+               else
+                   forbidden.set(destiny , forbidden.get(destiny)-80);
+           }else{
+               // Le aumentamos en 1 su coef. de prohibición
+               if(permitidos.get(i) == 1)
+                   if(forbidden.get(destiny) < -1)
+                       forbidden.set(destiny , forbidden.get(destiny)+1);
+                   else
+                       forbidden.set(destiny , forbidden.get(destiny)+11);
+           }
+       }
+       return ward;
+    }
+    
     
     private int getLastMinusOne(int[] arr){
         int i=0;

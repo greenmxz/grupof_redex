@@ -30,6 +30,10 @@ public class AdministrarClienteBL {
         return AdministrarClienteDA.listarClientes(numeroDocumentoIdentidad, nombre, apellidoPaterno, apellidoMaterno);
     }
     
+    public ArrayList<cliente> listarClientes(){
+        return AdministrarClienteDA.listarClientes();
+    }
+    
     public int registrarCliente(cliente cliente){
         return AdministrarClienteDA.registrarCliente(cliente);
     }

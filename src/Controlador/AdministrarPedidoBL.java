@@ -42,4 +42,7 @@ public class AdministrarPedidoBL {
         return AdministrarPedidoDA.eliminarPedido(id_pedido);
     }
     
+    public String obtenerCorreosClientes(int p){
+        return AdministrarPedidoDA.obtenerCorreosClientes(p);
+    }
 }
