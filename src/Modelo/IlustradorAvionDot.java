@@ -413,13 +413,11 @@ static final int FONT_SIZE = 11;
         
         if (continente_origen == continente_destino){ // VUELO CONTINENTAL
             if (pack.getTiempoTranscurridoMM() > 1440){
-                // COLAPSA POR TIEMPO, VUELO CONTINENTAL QUE TARDA MAS DE UN DIA                System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
-                System.out.println("id pack " + id_pack);
+                //System.out.println("id pack " + id_pack);
             }
         }else{// VUELO INTERCONTINENTAL
             if (pack.getTiempoTranscurridoMM() > 2880){
-                // COLAPSA POR TIEMPO, VUELO CONTINENTAL QUE TARDA MAS DE DOS DIAS
-                //System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
+
                 //System.out.println("id pack " + id_pack);
             }
         }
