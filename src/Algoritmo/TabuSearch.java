@@ -362,7 +362,7 @@ public class TabuSearch {
                else
                    forbidden.set(destiny , forbidden.get(destiny)-80);
            }else{
-               // Le aumentamos en 1 su coef. de prohibición
+               // Le aumentamos en 1 su coef. de prohibición PRUEBA;
                if(permitidos.get(i) == 1)
                    if(forbidden.get(destiny) < -1)
                        forbidden.set(destiny , forbidden.get(destiny)+1);
