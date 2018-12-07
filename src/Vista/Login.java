@@ -642,7 +642,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                     + "de seguridad. Habiéndole informado, procedemos con la recuperación de su contraseña de su cuenta."
                     + "Su contraseña es" + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n "
                     + hashPw;
-            notificadorEmail.enviarConGMail("juanfsts@gmail.com", asunto, cuerpo);
+            notificadorEmail.enviarConGMail("redex.admi@gmail.com", asunto, cuerpo);
             JOptionPane.showMessageDialog(null, "El correo fue enviado satisfactoriamente");
             return ;
             
