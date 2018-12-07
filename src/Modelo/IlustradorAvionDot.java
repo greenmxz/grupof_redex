@@ -613,8 +613,9 @@ static final int FONT_SIZE = 11;
 
                 this.tabu.setInputProcess(this.dp);
                 for (String a : this.Archivos){
-//                    dp.processPackNew("resources\\pack_enviados_generados\\" + a);
-                      dp.processPackNew("resources/pack_enviados/" + a);
+                //   dp.processPackNew("resources\\pack_enviados_generados\\" + a);
+                    dp.processPackNew("resources/pack_enviados_generados/" + a);
+                      //dp.processPackNew("resources/pack_enviados/" + a);
                 }
 
                 System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
