@@ -22,8 +22,8 @@ public class MailWorkerTest {
     private String password;
     
     public MailWorkerTest(String remitente, String password){
-        this.remitente="juanfsts";
-        this.password="juancito94";
+        this.remitente="redex.admi";
+        this.password="grupofredex";
     }
     
     public void enviarConGMail(String destinatario, String asunto, String cuerpo) {
