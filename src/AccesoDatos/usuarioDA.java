@@ -39,7 +39,7 @@ public class usuarioDA {
             String hashPw = enc.encrypt(contraseña);
             System.out.println( " Antes de encriptar :" + contraseña + "\n Despus de encr: "+ hashPw);
             database connect = new database();
-            String query = "{CALL obtenerUsuario(?,?)}";
+            String query = "{CALL obtenerUsuario(?,?)};";
 
             CallableStatement stmt = connect.getConnection().prepareCall(query);
             stmt.setString(1, nombreUsuario);
