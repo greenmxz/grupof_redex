@@ -184,7 +184,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 lblRecoverPasswordMouseExited(evt);
             }
         });
-        jPanel3.add(lblRecoverPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 164, 100, 20));
+        jPanel3.add(lblRecoverPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 164, 130, 20));
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 250));
 
