@@ -132,8 +132,8 @@ public class MapWorkerTest {
     
     void display() throws IOException {
         JFrame f = new JFrame("MapWorker");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        f.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        
 
 //        JMapViewer map = new JMapViewer() {
 //        
@@ -335,6 +335,10 @@ public class MapWorkerTest {
         button5.setLocation(900,900);
         button5.setText("Capturar Imagen");
         
+        JButton button6 = new JButton();
+        button6.setLocation(900,900);
+        button6.setText("Cerrar");
+        
         JLabel label = new JLabel();
         label.setText("Velocidad");
         
@@ -458,6 +462,28 @@ public class MapWorkerTest {
             }
 
         });
+        
+        button6.addActionListener(new ActionListener(){
+            private void button5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+                // BUCAR AEROPUERTO ORIGEN
+                
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    //ilustradorAvion.setVisible(false);
+                    ilustradorAvion.setCerrado(1);
+                    //ilustradorAvion.removeAll();
+                    f.dispose();
+                    
+                }catch(Exception exp){
+                    System.out.println("Error en cerrar ventana");
+                }
+                  
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
         /*
                 System.out.println("AQUI AQUI");
         velocidad*=2;*/
@@ -470,7 +496,7 @@ public class MapWorkerTest {
         ilustradorAvion.add(button4);
         ilustradorAvion.add(label2);
         ilustradorAvion.add(button5);
-       
+        ilustradorAvion.add(button6);
         ilustradorAvion.addMouseListener(new MouseListener() {//Disminuir velocidad
             
 
