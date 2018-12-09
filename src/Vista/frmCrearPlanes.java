@@ -48,7 +48,7 @@ public class frmCrearPlanes extends javax.swing.JDialog {
             this.avionSeleccionado=vueloBL.obtenerInfoVuelo(index);
             this.capacidad.setText(String.valueOf(this.avionSeleccionado.getCapacidadMaxima()) );
             this.codigo.setText(this.avionSeleccionado.getCodigo());
-            this.descripcion.setText(this.avionSeleccionado.getDescripcion());
+            //this.descripcion.setText(this.avionSeleccionado.getDescripcion());
             
             
 
@@ -115,7 +115,7 @@ public class frmCrearPlanes extends javax.swing.JDialog {
     }
     private boolean validarDatos(){
         if(this.codigo.getText().length()>0 && this.capacidad.getText().length()>0  
-           && this.descripcion.getText().length()>0){
+           ){
             return true;
         }else{
             return false;
@@ -135,9 +135,6 @@ public class frmCrearPlanes extends javax.swing.JDialog {
         codigo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         capacidad = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        descripcion = new javax.swing.JTextArea();
         registrar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -168,12 +165,6 @@ public class frmCrearPlanes extends javax.swing.JDialog {
             }
         });
 
-        jLabel13.setText("Descripción:");
-
-        descripcion.setColumns(20);
-        descripcion.setRows(5);
-        jScrollPane1.setViewportView(descripcion);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -184,12 +175,10 @@ public class frmCrearPlanes extends javax.swing.JDialog {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addGap(79, 79, 79)
+                        .addGap(137, 137, 137)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(capacidad, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(codigo, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(capacidad, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                            .addComponent(codigo, javax.swing.GroupLayout.Alignment.LEADING))))
                 .addContainerGap(216, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -203,11 +192,7 @@ public class frmCrearPlanes extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(capacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(121, Short.MAX_VALUE))
         );
 
         registrar.setText("Registrar");
@@ -258,15 +243,13 @@ public class frmCrearPlanes extends javax.swing.JDialog {
                 .addComponent(registrarTxt)
                 .addGap(33, 33, 33)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(169, 169, 169)
+                .addGap(190, 190, 190)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(registrar)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jPanel1.getAccessibleContext().setAccessibleName("Vuelo");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -293,9 +276,8 @@ public class frmCrearPlanes extends javax.swing.JDialog {
         
             if (validarDatos()){
                 Avion v = new Avion();
-                v.setCodigo(codigo.getText());
+                v.setDescripcion(codigo.getText());
                 v.setCapacidadMaxima(Integer.parseInt(capacidad.getText()));
-                v.setDescripcion(descripcion.getText());
                 
                 
                 
@@ -303,11 +285,11 @@ public class frmCrearPlanes extends javax.swing.JDialog {
                     avionNuevo= new Avion();
                     avionNuevo.setId(this.index);
                     avionNuevo.setCapacidadMaxima(Integer.parseInt(this.capacidad.getText()));
-                    avionNuevo.setDescripcion(this.descripcion.getText());
-                    avionNuevo.setCodigo(this.codigo.getText());
+                    avionNuevo.setDescripcion(this.codigo.getText());
                     if (vueloBL.modificarVuelo(avionNuevo)){
                         
                         JOptionPane.showMessageDialog(this, "Se modifico correctamente");
+                        this.dispose();
                     }else{
                         JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
                     }
@@ -315,6 +297,7 @@ public class frmCrearPlanes extends javax.swing.JDialog {
                     if (vueloBL.registrarVuelo(v)){
                         
                     JOptionPane.showMessageDialog(this,"Se ha creado el vuelo correctamente");
+                    this.dispose();
                     }else{
                         JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
                     }
@@ -401,14 +384,11 @@ public class frmCrearPlanes extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField capacidad;
     private javax.swing.JTextField codigo;
-    private javax.swing.JTextArea descripcion;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JButton registrar;
     private javax.swing.JLabel registrarTxt;

@@ -23,11 +23,10 @@ public class frmAdministrarVuelo extends javax.swing.JPanel {
         vuelos=  vueloBL.listaAvion();        
         if (vuelos!=null){
             DefaultTableModel model = (DefaultTableModel) tblUsuarios.getModel();
-            Object rowData[] = new Object[4];
+            Object rowData[] = new Object[2];
             for(int i = 0; i < vuelos.size(); i++){
-                rowData[0] = vuelos.get(i).getCodigo();
+                rowData[0] = vuelos.get(i).getDescripcion();
                 rowData[1] = vuelos.get(i).getCapacidadMaxima();
-                rowData[2] = vuelos.get(i).getDescripcion();
                 model.addRow(rowData);
             }
 
@@ -63,7 +62,7 @@ public class frmAdministrarVuelo extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Codigo", "Capacidad máxima", "Descripción"
+                "Codigo", "Capacidad máxima"
             }
         ));
         tblUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -124,7 +123,13 @@ public class frmAdministrarVuelo extends javax.swing.JPanel {
         System.out.println("iD: "+this.vuelos.get(this.tblUsuarios.getSelectedRow()).getId());
         System.out.println("eee");
         this.setUsuarioSeleccionado(this.vuelos.get(this.tblUsuarios.getSelectedRow()).getId());
-        new frmCrearPlanes(x,true,this).setVisible(true);
+        if ( this.getUsuarioSeleccionado()!=-1 ){
+            new frmCrearPlanes(x,true,this).setVisible(true);
+        }else{
+                  JOptionPane.showMessageDialog(this,"Debe de seleccionar un vuelo");
+        }
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void borrarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarCuentaActionPerformed

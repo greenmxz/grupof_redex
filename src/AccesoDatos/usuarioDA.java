@@ -505,4 +505,18 @@ public class usuarioDA {
             System.out.println("ERROR registrarUsuarios "+e.getMessage());
         }
     }
+    public void cerrarSesionAll(){
+         try{
+            database connect = new database();
+            Statement sentencia = connect.getConnection().createStatement();
+            String query = "DELETE FROM sesion;";
+            sentencia = connect.getConnection().createStatement();
+             sentencia.executeUpdate(query);
+//                System.out.println("B " + query);
+            
+            connect.getConnection().close();
+        }catch(Exception e){
+            System.out.println("ERROR registrarUsuarios "+e.getMessage());
+        }
+    }
 }

@@ -168,6 +168,12 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 75, 400, 90));
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        frontLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                frontLoginMouseClicked(evt);
+            }
+        });
         jPanel2.add(frontLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 0, 50, 50));
 
         jPanel3.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, -1));
@@ -653,6 +659,11 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         
         
     }//GEN-LAST:event_lblRecoverPasswordMouseClicked
+
+    private void frontLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_frontLoginMouseClicked
+        // TODO add your handling code here:
+        usuarioBL.cerrarSesionAll();
+    }//GEN-LAST:event_frontLoginMouseClicked
          
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
