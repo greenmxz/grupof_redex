@@ -263,6 +263,7 @@ public class frmMenuProvisional extends javax.swing.JFrame {
             hora = "Buenos días.";
         else
             hora = "Buenas tardes.";
+        usuarioBL.cerrarSesion(id );
         JOptionPane.showMessageDialog(null,"Gracias por su visita.\n"+
                 hora,"Gracias",
                 JOptionPane.INFORMATION_MESSAGE);

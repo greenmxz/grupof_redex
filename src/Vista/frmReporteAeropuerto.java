@@ -262,10 +262,10 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
     public boolean filtroCapacidad(aeropuerto ae){
         // Si no se indica alguno, se infiere que no habrá filtro
         if(!(txtCapMax.getText().equals("")) && 
-                (ae.getCapActual() > Integer.parseInt(txtCapMax.getText())))
+                (ae.getCapMax()> Integer.parseInt(txtCapMax.getText())))
             return false;
         if(!(txtCapMin.getText().equals("")) && 
-                (ae.getCapActual() < Integer.parseInt(txtCapMin.getText())))
+                (ae.getCapMax() < Integer.parseInt(txtCapMin.getText())))
             return false;
         return true;
     }
