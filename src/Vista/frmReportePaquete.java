@@ -10,6 +10,7 @@ import Controlador.excelExport;
 import Controlador.generalBL;
 import Modelo.continente;
 import Modelo.paquete;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -89,10 +90,10 @@ public class frmReportePaquete extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         listContinenteD = new javax.swing.JList<>();
         panelFecha = new javax.swing.JPanel();
-        dtpSalida = new com.github.lgooddatepicker.components.DateTimePicker();
+        dtpDesde = new com.github.lgooddatepicker.components.DateTimePicker();
         jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        dtpSalida1 = new com.github.lgooddatepicker.components.DateTimePicker();
+        dtpHasta = new com.github.lgooddatepicker.components.DateTimePicker();
         panelAeropuerto = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -125,11 +126,11 @@ public class frmReportePaquete extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Código", "Ciudad origen", "Emisor", "Ciudad destino", "Receptor", "Estado", "Aero. origen", "Aero. destino"
+                "Código", "Ciudad origen", "Ciudad destino", "Fecha de entrada", "Aero. origen", "Aero. destino", "Estado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -138,10 +139,10 @@ public class frmReportePaquete extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblAirports);
 
-        panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 740, 120));
+        panelFondo.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 740, 120));
 
         jLabel2.setText("Resultado de consulta");
-        panelFondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
+        panelFondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
 
         panelFiltrado.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Opciones de filtrado"));
         panelFiltrado.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -155,7 +156,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
         chkEstadoEnCamino.setText("En camino");
         panelEstado.add(chkEstadoEnCamino, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 25, -1, -1));
 
-        panelFiltrado.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 190, 70));
+        panelFiltrado.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 190, 80));
 
         btnLimpiarFlitro.setText("Limpiar filtro");
         btnLimpiarFlitro.addActionListener(new java.awt.event.ActionListener() {
@@ -163,7 +164,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 btnLimpiarFlitroActionPerformed(evt);
             }
         });
-        panelFiltrado.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 180, 107, -1));
+        panelFiltrado.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 190, 107, -1));
 
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -171,7 +172,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 btnFiltrarActionPerformed(evt);
             }
         });
-        panelFiltrado.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 210, 107, -1));
+        panelFiltrado.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 220, 107, -1));
 
         panelContinenteO.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Continente origen"));
         panelContinenteO.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -203,16 +204,16 @@ public class frmReportePaquete extends javax.swing.JPanel {
 
         panelFecha.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rango temporal"));
         panelFecha.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        panelFecha.add(dtpSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 15, -1, 22));
+        panelFecha.add(dtpDesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 15, 290, 25));
 
         jLabel1.setText("Hasta");
-        panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 42, -1, -1));
+        panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
 
         jLabel6.setText("Desde");
         panelFecha.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
-        panelFecha.add(dtpSalida1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 42, -1, 22));
+        panelFecha.add(dtpHasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 45, 290, 25));
 
-        panelFiltrado.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 380, 70));
+        panelFiltrado.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 380, 80));
 
         panelAeropuerto.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Aeropuerto"));
         panelAeropuerto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -295,7 +296,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
 
         panelFiltrado.add(panelFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 280, 80));
 
-        panelFondo.add(panelFiltrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 740, 260));
+        panelFondo.add(panelFiltrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 740, 270));
 
         jLabel3.setText("REPORTE DE PAQUETES");
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -325,12 +326,11 @@ public class frmReportePaquete extends javax.swing.JPanel {
             paquete u = lstPaq.get(i);
             obj[0] = u.getCodigo();
             obj[1] = u.getCiudadOrigen();
-            obj[2] = u.getClienteEmisor();
-            obj[3] = u.getCiudadDestino();
-            obj[4] = u.getClienteReceptor();
-            obj[5] = u.getEstado();
-            obj[6] = u.getAeropuertoOrigen();
-            obj[7] = u.getAeropuertoDestino();
+            obj[2] = u.getCiudadDestino();
+            obj[3] = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(u.getFechaSalida());
+            obj[4] = u.getCiudadOrigen();
+            obj[5] = u.getCiudadDestino();
+            obj[6] = u.getEstado();
             modelo.addRow(obj);
         }
     }
@@ -375,7 +375,6 @@ public class frmReportePaquete extends javax.swing.JPanel {
                     return 1;
                 return 0;
             }
-            return 1;
         }
         return 1;
     }
@@ -391,22 +390,42 @@ public class frmReportePaquete extends javax.swing.JPanel {
                     DateTimeFormatter.ofPattern("dd/MM/yyyy"));;
         LocalTime horaSalida = LocalTime.of(0,0,0);
         /* Fecha de salida */
-        if(dtpSalida.getDatePicker().toString().equals("") &&
-               dtpSalida.getTimePicker().toString().equals("") ){
+        if(dtpDesde.getDatePicker().toString().equals("") &&
+               dtpDesde.getTimePicker().toString().equals("") ){
             fechaSalida = LocalDate.parse("01/10/2018",
                     DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             horaSalida = LocalTime.of(0,0,0);
         }
-        if(!dtpSalida.getDatePicker().toString().equals("") &&
-               dtpSalida.getTimePicker().toString().equals("")){
-            fechaSalida = dtpSalida.getDatePicker().getDate();
+        if(!dtpDesde.getDatePicker().toString().equals("") &&
+               dtpDesde.getTimePicker().toString().equals("")){
+            fechaSalida = dtpDesde.getDatePicker().getDate();
             horaSalida = LocalTime.of(0,0,0);
         }
-        if(dtpSalida.getDatePicker().toString().equals("") &&
-               !dtpSalida.getTimePicker().toString().equals("")){
+        if(dtpDesde.getDatePicker().toString().equals("") &&
+               !dtpDesde.getTimePicker().toString().equals("")){
             return 12;
         }
         return 0;
+    }
+    
+    public boolean filtroOrigen(paquete ae){
+        if(txtOrigen.getText().equals(""))
+            return true;
+        else
+            if(ae.getAeropuertoOrigen().equals(txtOrigen.getText()))
+                return true;
+        return false;
+            
+    }
+    
+    public boolean filtroDestino(paquete ae){
+        if(txtDestino.getText().equals(""))
+            return true;
+        else
+            if(ae.getAeropuertoDestino().equals(txtDestino.getText()))
+                return true;
+        return false;
+            
     }
     
     public boolean filtroEstado(paquete ae){
@@ -445,33 +464,63 @@ public class frmReportePaquete extends javax.swing.JPanel {
     
     public boolean filtroFechas(paquete ae){
         if(chkFechas.getModel().isSelected()){
-            Date fechaSalida = ae.getFechaSalida();
-            LocalDate dateSalida = fechaSalida.toInstant()
+            Date fechaAlmacen = ae.getFechaSalida();
+            LocalDate dateAlmacen = fechaAlmacen.toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalTime timeSalida = fechaSalida.toInstant()
+            LocalTime timeAlmacen = fechaAlmacen.toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalTime();
-            LocalDate filtroFechaSalida = LocalDate.parse("01/10/2018",
+            LocalDate filtroFechaDesde = LocalDate.parse("01/01/2018",
                         DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            LocalDate filtroFechaLlegada = LocalDate.now();
-            LocalTime filtroHoraSalida = LocalTime.of(0,0,0);
-            LocalTime filtroHoraLlegada = LocalTime.now();
+            LocalDate filtroFechaHasta = LocalDate.now();
+            LocalTime filtroHoraDesde = LocalTime.of(0,0,0);
+            LocalTime filtroHoraHasta = LocalTime.now();
 
-            /* Fecha de salida */
-            if(dtpSalida.getDatePicker().toString().equals("") &&
-                   dtpSalida.getTimePicker().toString().equals("") ){
-                filtroFechaSalida = LocalDate.parse("01/10/2018",
+            /* Fecha desde */
+            if(dtpDesde.getDatePicker().toString().equals("") &&
+                   dtpDesde.getTimePicker().toString().equals("") ){
+                filtroFechaDesde = LocalDate.parse("01/01/2018",
                         DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                filtroHoraSalida = LocalTime.of(0,0,0);
+                filtroHoraDesde = LocalTime.of(0,0,0);
             }
-            if(!dtpSalida.getDatePicker().toString().equals("") &&
-                   dtpSalida.getTimePicker().toString().equals("")){
-                filtroFechaSalida = dtpSalida.getDatePicker().getDate();
-                filtroHoraSalida = LocalTime.of(0,0,0);
+            else if(!dtpDesde.getDatePicker().toString().equals("") &&
+                   dtpDesde.getTimePicker().toString().equals("")){
+                filtroFechaDesde = dtpDesde.getDatePicker().getDate();
+                filtroHoraDesde = LocalTime.of(0,0,0);
+            }else{
+                filtroFechaDesde = dtpDesde.getDatePicker().getDate();
+                filtroHoraDesde = dtpDesde.getTimePicker().getTime();
             }
-            if((cmpDate(dateSalida, filtroFechaSalida) == 1) ||
-                    ((cmpDate(dateSalida, filtroFechaSalida) == 0) &&
-                    (cmpHour(timeSalida, filtroHoraSalida) == 1)))
+            /* Fecha hasta */
+            if(dtpHasta.getDatePicker().toString().equals("") &&
+                   dtpHasta.getTimePicker().toString().equals("") ){
+                filtroFechaHasta = LocalDate.parse("01/01/2018",
+                        DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                filtroHoraHasta = LocalTime.of(0,0,0);
+            }
+            else if(!dtpHasta.getDatePicker().toString().equals("") &&
+                   dtpHasta.getTimePicker().toString().equals("")){
+                filtroFechaHasta = dtpHasta.getDatePicker().getDate();
+                filtroHoraHasta = LocalTime.of(0,0,0);
+            }else{
+                filtroFechaHasta = dtpHasta.getDatePicker().getDate();
+                filtroHoraHasta = dtpHasta.getTimePicker().getTime();
+            }
+            System.out.println(dateAlmacen);
+            System.out.println(timeAlmacen);
+            System.out.println(filtroFechaDesde);
+            System.out.println(filtroHoraDesde);
+            System.out.println(filtroFechaHasta);
+            System.out.println(filtroHoraHasta);
+            if(((cmpDate(dateAlmacen, filtroFechaDesde) == 1) ||
+                    ((cmpDate(dateAlmacen, filtroFechaDesde) == 0) &&
+                    (cmpHour(timeAlmacen, filtroHoraDesde) == 1))) &&
+                    ((cmpDate(dateAlmacen, filtroFechaHasta) == -1) ||
+                    ((cmpDate(dateAlmacen, filtroFechaHasta) == 0) &&
+                    (cmpHour(timeAlmacen, filtroHoraHasta) == -1)))){
+                System.out.println("Nel");
                 return false;
+            }
+            System.out.println("Sí");
             return true;
         }else return true;
     }
@@ -485,21 +534,39 @@ public class frmReportePaquete extends javax.swing.JPanel {
     private void btnLimpiarFlitroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarFlitroActionPerformed
         chkEstadoEntregado.setSelected(false);
         chkEstadoEnCamino.setSelected(false);
-        dtpSalida.clear();
+        chkPaq.setSelected(false);
+        chkAerop.setSelected(false);
+        chkFechas.setSelected(false);
+        dtpDesde.clear();
+        dtpHasta.clear();
         listContinenteO.clearSelection();
         listContinenteD.clearSelection();
+        txtCodigo.setText("");
+        txtOrigen.setText("");
+        txtDestino.setText("");
         tablaDefault();
     }//GEN-LAST:event_btnLimpiarFlitroActionPerformed
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         // Primero se tendrá que validar el filtro
         filter = new ArrayList<paquete>();
-        if(fitroValido() == 0){
-            for(int i=0; i<lstPaq.size(); i++){
-                if(filtroEstado(lstPaq.get(i)) &&
-                    filtroContinente(lstPaq.get(i)) &&
-                    filtroFechas(lstPaq.get(i))){
-                    filter.add(lstPaq.get(i));
+        if((!txtCodigo.getText().equals("")) || (fitroValido() == 0)){
+            if(!txtCodigo.getText().equals("")){
+                for(int i=0; i<lstPaq.size(); i++)
+                    if(lstPaq.get(i).getCodigo().equals(txtCodigo.getText())){
+                        filter.add(lstPaq.get(i));
+                        break;
+                    }
+            }
+            else if(fitroValido() == 0){
+                for(int i=0; i<lstPaq.size(); i++){
+                    if(filtroEstado(lstPaq.get(i)) &&
+                        filtroContinente(lstPaq.get(i)) &&
+                        filtroFechas(lstPaq.get(i))&&
+                        filtroOrigen(lstPaq.get(i)) &&
+                        filtroDestino(lstPaq.get(i))){
+                        filter.add(lstPaq.get(i));
+                    }
                 }
             }
             DefaultTableModel modelo = (DefaultTableModel) tblAirports.getModel();
@@ -512,12 +579,11 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 paquete u = filter.get(i);
                 obj[0] = u.getCodigo();
                 obj[1] = u.getCiudadOrigen();
-                obj[2] = u.getClienteEmisor();
-                obj[3] = u.getCiudadDestino();
-                obj[4] = u.getClienteReceptor();
-                obj[5] = u.getEstado();
-                obj[6] = u.getAeropuertoOrigen();
-                obj[7] = u.getAeropuertoDestino();
+                obj[2] = u.getCiudadDestino();
+                obj[3] = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(u.getFechaSalida());
+                obj[4] = u.getCiudadOrigen();
+                obj[5] = u.getCiudadDestino();
+                obj[6] = u.getEstado();
                 modelo.addRow(obj);
             }
         }else{
@@ -598,8 +664,8 @@ public class frmReportePaquete extends javax.swing.JPanel {
     private javax.swing.JCheckBox chkEstadoEntregado;
     private javax.swing.JCheckBox chkFechas;
     private javax.swing.JCheckBox chkPaq;
-    private com.github.lgooddatepicker.components.DateTimePicker dtpSalida;
-    private com.github.lgooddatepicker.components.DateTimePicker dtpSalida1;
+    private com.github.lgooddatepicker.components.DateTimePicker dtpDesde;
+    private com.github.lgooddatepicker.components.DateTimePicker dtpHasta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
