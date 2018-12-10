@@ -17,10 +17,10 @@ public class frmMenuSecretary extends javax.swing.JFrame {
          usuarioBL = new usuarioBL();
         initComponents();
         this.idLog=usuarioLog.getId();
-        this.jLabel1.setText("Bienvenido, "+usuarioLog.getPersona().getNombre()+
+        this.jLabel1.setText("Bienvenido(a), "+usuarioLog.getPersona().getNombre()+
                 " "+usuarioLog.getPersona().getApellidoPaterno() + " - "+ usuarioLog.getPersona().getNumeroDocumentoIdentidad()+" - "+ usuarioLog.getPersona().getCiudad()+ " (Secretario)");
        
-        this.setTitle("Sistema de distribución de paquetes para RedEx");
+        this.setTitle("Sistema de distribución de paquetes - RedEx");
         setLocationRelativeTo(null);
         cerrar();
         Dimension size = panelMenu.getPreferredSize();
@@ -81,10 +81,12 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btnCerrarSesion = new Especial.RSButtonMetro();
         btnMenu = new javax.swing.JButton();
+        logoRedEx = new javax.swing.JLabel();
         panelMenu = new javax.swing.JPanel();
         btnPedidos = new Especial.RSButtonMetro();
         Vuelo = new Especial.RSButtonMetro();
         btnClientes1 = new Especial.RSButtonMetro();
+        btnAdministracion = new Especial.RSButtonMetro();
         panelPrincipal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -116,7 +118,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
                 btnCerrarSesionActionPerformed(evt);
             }
         });
-        panelInfoUsuario.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 30, 90, 15));
+        panelInfoUsuario.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 30, 90, 15));
 
         btnMenu.setBorder(null);
         btnMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -126,42 +128,54 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         });
         panelInfoUsuario.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 25, 25, 20));
 
+        logoRedEx.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/RedEx.png"))); // NOI18N
+        panelInfoUsuario.add(logoRedEx, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 0, -1, -1));
+
         panelFondo.add(panelInfoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 50));
 
         panelMenu.setBackground(new java.awt.Color(255, 255, 255));
         panelMenu.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnPedidos.setText("Pedidos");
+        btnPedidos.setText("    Pedidos");
         btnPedidos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPedidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPedidosActionPerformed(evt);
             }
         });
-        panelMenu.add(btnPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 140, 30));
+        panelMenu.add(btnPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 35, 140, 30));
 
-        Vuelo.setText("Vuelo");
+        Vuelo.setText("    Vuelos");
         Vuelo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         Vuelo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 VueloActionPerformed(evt);
             }
         });
-        panelMenu.add(Vuelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 140, 30));
+        panelMenu.add(Vuelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 95, 140, 30));
 
-        btnClientes1.setText("Clientes");
+        btnClientes1.setText("    Clientes");
         btnClientes1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnClientes1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClientes1ActionPerformed(evt);
             }
         });
-        panelMenu.add(btnClientes1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 35, 140, 30));
+        panelMenu.add(btnClientes1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 65, 140, 30));
+
+        btnAdministracion.setText("ADMINISTRACIÓN");
+        btnAdministracion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAdministracion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdministracionActionPerformed(evt);
+            }
+        });
+        panelMenu.add(btnAdministracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 140, 30));
 
         panelFondo.add(panelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 150, 500));
 
         panelPrincipal.setLayout(new javax.swing.BoxLayout(panelPrincipal, javax.swing.BoxLayout.LINE_AXIS));
-        panelFondo.add(panelPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 800, 500));
+        panelFondo.add(panelPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 4, 500));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -221,6 +235,10 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);
     }//GEN-LAST:event_VueloActionPerformed
 
+    private void btnAdministracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdministracionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAdministracionActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -258,12 +276,14 @@ public class frmMenuSecretary extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Especial.RSButtonMetro Vuelo;
+    private Especial.RSButtonMetro btnAdministracion;
     private Especial.RSButtonMetro btnCerrarSesion;
     private Especial.RSButtonMetro btnClientes1;
     private javax.swing.JButton btnMenu;
     private Especial.RSButtonMetro btnPedidos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel logoRedEx;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JPanel panelInfoUsuario;
     private javax.swing.JPanel panelMenu;

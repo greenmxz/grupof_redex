@@ -116,40 +116,40 @@ public class Secretario_Crear_Cliente extends javax.swing.JDialog {
         panelDatosBasicos.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Datos básicos del cliente"));
         panelDatosBasicos.setPreferredSize(new java.awt.Dimension(348, 3));
         panelDatosBasicos.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        panelDatosBasicos.add(txtDNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 40, 97, -1));
+        panelDatosBasicos.add(txtDNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, 150, -1));
 
         label2.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label2.setText("DNI:");
-        panelDatosBasicos.add(label2, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 40, -1, -1));
+        panelDatosBasicos.add(label2, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 40, -1, -1));
 
         label18.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label18.setText("Nombre:");
         panelDatosBasicos.add(label18, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 70, -1, -1));
-        panelDatosBasicos.add(txtNombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(81, 68, 222, -1));
+        panelDatosBasicos.add(txtNombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 150, -1));
 
         label19.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label19.setText("Apellido paterno:");
         panelDatosBasicos.add(label19, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 100, -1, -1));
 
         txtApPat.setToolTipText("");
-        panelDatosBasicos.add(txtApPat, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 200, -1));
+        panelDatosBasicos.add(txtApPat, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, 150, -1));
 
         label20.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label20.setText("Apellido materno :");
         panelDatosBasicos.add(label20, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 130, -1, -1));
-        panelDatosBasicos.add(txtApMat, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 130, 200, -1));
+        panelDatosBasicos.add(txtApMat, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 150, -1));
 
         label21.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label21.setText("Correo :");
         panelDatosBasicos.add(label21, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 160, -1, -1));
-        panelDatosBasicos.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, 240, -1));
+        panelDatosBasicos.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 160, 150, -1));
 
         label22.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label22.setText("Teléfono :");
         panelDatosBasicos.add(label22, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 190, -1, -1));
-        panelDatosBasicos.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, 170, -1));
+        panelDatosBasicos.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 150, -1));
 
-        panelFondo.add(panelDatosBasicos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 350, 230));
+        panelFondo.add(panelDatosBasicos, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 350, 230));
 
         panelUbicacion.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Ubicación del cliente"));
         panelUbicacion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -164,28 +164,28 @@ public class Secretario_Crear_Cliente extends javax.swing.JDialog {
                 cboContinenteActionPerformed(evt);
             }
         });
-        panelUbicacion.add(cboContinente, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, 210, -1));
+        panelUbicacion.add(cboContinente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, 150, -1));
 
         cboPais.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        panelUbicacion.add(cboPais, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, 210, -1));
+        panelUbicacion.add(cboPais, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 150, -1));
 
         label23.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label23.setText("Pais :");
         panelUbicacion.add(label23, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 72, -1, -1));
 
         cboCiudad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        panelUbicacion.add(cboCiudad, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 210, -1));
+        panelUbicacion.add(cboCiudad, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, 150, -1));
 
         label24.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label24.setText("Ciudad :");
         panelUbicacion.add(label24, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 102, -1, -1));
-        panelUbicacion.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 140, 210, 60));
+        panelUbicacion.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 150, 60));
 
         label25.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label25.setText("Dirección :");
         panelUbicacion.add(label25, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 138, -1, -1));
 
-        panelFondo.add(panelUbicacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 70, 350, 230));
+        panelFondo.add(panelUbicacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 60, 350, 230));
 
         btnCancelar.setText("Cancelar");
         btnCancelar.setToolTipText("");

@@ -74,6 +74,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         usuarioBL = new usuarioBL();
         userName.setForeground(new Color(133,133,133));
         password.setForeground(new Color(133,133,133));
+        this.setTitle("Iniciar sesión");
         password.setEchoChar((char)0);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -109,6 +110,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         password = new javax.swing.JPasswordField();
         jPanel2 = new javax.swing.JPanel();
         frontLogin = new javax.swing.JLabel();
+        logoRedEx = new javax.swing.JLabel();
         lblRecoverPassword = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -174,11 +176,14 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 frontLoginMouseClicked(evt);
             }
         });
-        jPanel2.add(frontLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 0, 50, 50));
+        jPanel2.add(frontLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 0, 50, 50));
 
-        jPanel3.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, -1));
+        logoRedEx.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/RedEx.png"))); // NOI18N
+        jPanel2.add(logoRedEx, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, -1, -1));
 
-        lblRecoverPassword.setText("Olvidé mi contraseña");
+        jPanel3.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 400, 50));
+
+        lblRecoverPassword.setText("¿Ha olvidado su contraseña?");
         lblRecoverPassword.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblRecoverPasswordMouseClicked(evt);
@@ -190,7 +195,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 lblRecoverPasswordMouseExited(evt);
             }
         });
-        jPanel3.add(lblRecoverPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 164, 100, 20));
+        jPanel3.add(lblRecoverPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 170, 140, 20));
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 250));
 
@@ -704,6 +709,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblRecoverPassword;
     private javax.swing.JButton login;
+    private javax.swing.JLabel logoRedEx;
     private javax.swing.JPasswordField password;
     private javax.swing.JLabel passwordImg;
     private javax.swing.JLabel userImg;
