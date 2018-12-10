@@ -207,11 +207,7 @@ public class DataProcessing {
                 }
             }
             });
-//            System.out.println("Mrgmr");
-//            for(int i=0; i<listPack.size();i++){
-//                listPack.get(i).print();
-//            }
-//            System.out.println("Packs' reading process successful!");
+
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("There are a several problem with the flights' reading process! Check it!");
@@ -229,6 +225,7 @@ public class DataProcessing {
                     [namePack.split(Pattern.quote(backslash)).length - 1]
                     .split("_")[2].substring(0, 4);
             listPack.clear();
+            //int id = 0;
             while( (line = reader.readLine()) != null){
                 String[] arr = line.split("-");
                 
@@ -240,7 +237,9 @@ public class DataProcessing {
                             Integer.valueOf(arr[1].substring(4, 6)),
                             Integer.valueOf(arr[1].substring(0, 4)));
                     //plannedPack.print();
+                    //plannedPack.setIdentificator(id);
                     listPack.add(plannedPack);
+                    //id++;
                 }
             }
             
@@ -279,6 +278,7 @@ public class DataProcessing {
                 }
             }
             });
+            
             
             if (listPack.size() > 0){
                 ArrayList<Paquete> aux = new ArrayList<Paquete>();
