@@ -43,12 +43,12 @@ public class frmCrearPlanes extends javax.swing.JDialog {
         index=  padre.getUsuarioSeleccionado();
         System.out.println("INDEX PADRE +"+index);
         if (index >=0){
-            this.registrarTxt.setText("Modificar avión");
+//            this.registrarTxt.setText("Modificar avión");
             this.registrar.setText("Modificar");
             this.avionSeleccionado=vueloBL.obtenerInfoVuelo(index);
             this.capacidad.setText(String.valueOf(this.avionSeleccionado.getCapacidadMaxima()) );
             this.codigo.setText(this.avionSeleccionado.getCodigo());
-            this.descripcion.setText(this.avionSeleccionado.getDescripcion());
+            //this.descripcion.setText(this.avionSeleccionado.getDescripcion());
             
             
 
@@ -115,7 +115,7 @@ public class frmCrearPlanes extends javax.swing.JDialog {
     }
     private boolean validarDatos(){
         if(this.codigo.getText().length()>0 && this.capacidad.getText().length()>0  
-           && this.descripcion.getText().length()>0){
+           ){
             return true;
         }else{
             return false;
@@ -135,27 +135,30 @@ public class frmCrearPlanes extends javax.swing.JDialog {
         codigo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         capacidad = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        descripcion = new javax.swing.JTextArea();
         registrar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        registrarTxt = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0))), "Vuelo"));
+        panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Detalle de plan de vuelo"));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Codigo:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 25, -1, -1));
 
         codigo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 codigoKeyTyped(evt);
             }
         });
+        jPanel1.add(codigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 25, 210, -1));
 
         jLabel2.setText("Capacidad:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 25, -1, -1));
 
         capacidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,48 +170,9 @@ public class frmCrearPlanes extends javax.swing.JDialog {
                 capacidadKeyTyped(evt);
             }
         });
+        jPanel1.add(capacidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 25, 210, -1));
 
-        jLabel13.setText("Descripción:");
-
-        descripcion.setColumns(20);
-        descripcion.setRows(5);
-        jScrollPane1.setViewportView(descripcion);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addGap(79, 79, 79)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(capacidad, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(codigo, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(216, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(codigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(capacidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(28, Short.MAX_VALUE))
-        );
+        panelFondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 61, 740, 80));
 
         registrar.setText("Registrar");
         registrar.addActionListener(new java.awt.event.ActionListener() {
@@ -216,8 +180,10 @@ public class frmCrearPlanes extends javax.swing.JDialog {
                 registrarActionPerformed(evt);
             }
         });
+        panelFondo.add(registrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 160, -1, -1));
 
         jButton2.setText("Limpiar");
+        panelFondo.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 160, 83, -1));
 
         jButton3.setText("Cancelar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -225,48 +191,11 @@ public class frmCrearPlanes extends javax.swing.JDialog {
                 jButton3ActionPerformed(evt);
             }
         });
+        panelFondo.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 160, 87, -1));
 
-        registrarTxt.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        registrarTxt.setText("Registrar vuelos");
-        registrarTxt.setToolTipText("");
-
-        javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
-        panelFondo.setLayout(panelFondoLayout);
-        panelFondoLayout.setHorizontalGroup(
-            panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(97, 97, 97)
-                        .addComponent(registrar)
-                        .addGap(47, 47, 47)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(53, 53, 53)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(254, 254, 254)
-                        .addComponent(registrarTxt))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(164, Short.MAX_VALUE))
-        );
-        panelFondoLayout.setVerticalGroup(
-            panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(registrarTxt)
-                .addGap(33, 33, 33)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(169, 169, 169)
-                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(registrar)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jPanel1.getAccessibleContext().setAccessibleName("Vuelo");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("CREACIÓN DE PLAN DE VUELO");
+        panelFondo.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 18, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -293,9 +222,8 @@ public class frmCrearPlanes extends javax.swing.JDialog {
         
             if (validarDatos()){
                 Avion v = new Avion();
-                v.setCodigo(codigo.getText());
+                v.setDescripcion(codigo.getText());
                 v.setCapacidadMaxima(Integer.parseInt(capacidad.getText()));
-                v.setDescripcion(descripcion.getText());
                 
                 
                 
@@ -303,11 +231,11 @@ public class frmCrearPlanes extends javax.swing.JDialog {
                     avionNuevo= new Avion();
                     avionNuevo.setId(this.index);
                     avionNuevo.setCapacidadMaxima(Integer.parseInt(this.capacidad.getText()));
-                    avionNuevo.setDescripcion(this.descripcion.getText());
-                    avionNuevo.setCodigo(this.codigo.getText());
+                    avionNuevo.setDescripcion(this.codigo.getText());
                     if (vueloBL.modificarVuelo(avionNuevo)){
                         
                         JOptionPane.showMessageDialog(this, "Se modifico correctamente");
+                        this.dispose();
                     }else{
                         JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
                     }
@@ -315,6 +243,7 @@ public class frmCrearPlanes extends javax.swing.JDialog {
                     if (vueloBL.registrarVuelo(v)){
                         
                     JOptionPane.showMessageDialog(this,"Se ha creado el vuelo correctamente");
+                    this.dispose();
                     }else{
                         JOptionPane.showMessageDialog(this, "Ha ocurrido un error inténtelo más tarde.");
                     }
@@ -401,16 +330,13 @@ public class frmCrearPlanes extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField capacidad;
     private javax.swing.JTextField codigo;
-    private javax.swing.JTextArea descripcion;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JButton registrar;
-    private javax.swing.JLabel registrarTxt;
     // End of variables declaration//GEN-END:variables
 }

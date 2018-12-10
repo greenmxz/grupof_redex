@@ -38,6 +38,10 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
         }
         listContinente.setModel(listModel);
         filter = lstAeropuerto;
+        lblAyudaMin.setToolTipText("Este valor debe estar entre 600 y 1000.\n No"
+                + " puede ser mayor al valor máximo colocado.");
+        lblAyudaMax.setToolTipText("Este valor debe estar entre 600 y 1000.\n No"
+                + " puede ser menor al valor mínimo colocado.");
     }
 
     @SuppressWarnings("unchecked")
@@ -58,6 +62,8 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         txtCapMin = new javax.swing.JTextField();
         txtCapMax = new javax.swing.JTextField();
+        lblAyudaMin = new javax.swing.JLabel();
+        lblAyudaMax = new javax.swing.JLabel();
         btnLimpiarFlitro = new javax.swing.JButton();
         btnFiltrar = new javax.swing.JButton();
         panelContinente = new javax.swing.JPanel();
@@ -113,28 +119,34 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
 
         panelFlitrado.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 110, 100));
 
-        panelCap.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rangos de capacidades"));
+        panelCap.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rangos de capacidad máxima"));
         panelCap.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setText("Capacidad mínima");
-        panelCap.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
+        jLabel6.setText("Valor mínimo");
+        panelCap.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 30, -1, -1));
 
-        jLabel7.setText("Capacidad máxima");
-        panelCap.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+        jLabel7.setText("Valor máximo");
+        panelCap.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 60, -1, -1));
 
         txtCapMin.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCapMinKeyTyped(evt);
             }
         });
-        panelCap.add(txtCapMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 60, -1));
+        panelCap.add(txtCapMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 30, 70, -1));
 
         txtCapMax.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCapMaxKeyTyped(evt);
             }
         });
-        panelCap.add(txtCapMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 60, -1));
+        panelCap.add(txtCapMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 70, -1));
+
+        lblAyudaMin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/ayuda.png"))); // NOI18N
+        panelCap.add(lblAyudaMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 30, -1, -1));
+
+        lblAyudaMax.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/ayuda.png"))); // NOI18N
+        panelCap.add(lblAyudaMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 60, -1, -1));
 
         panelFlitrado.add(panelCap, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, 210, 100));
 
@@ -262,10 +274,10 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
     public boolean filtroCapacidad(aeropuerto ae){
         // Si no se indica alguno, se infiere que no habrá filtro
         if(!(txtCapMax.getText().equals("")) && 
-                (ae.getCapActual() > Integer.parseInt(txtCapMax.getText())))
+                (ae.getCapMax()> Integer.parseInt(txtCapMax.getText())))
             return false;
         if(!(txtCapMin.getText().equals("")) && 
-                (ae.getCapActual() < Integer.parseInt(txtCapMin.getText())))
+                (ae.getCapMax() < Integer.parseInt(txtCapMin.getText())))
             return false;
         return true;
     }
@@ -367,6 +379,8 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblAyudaMax;
+    private javax.swing.JLabel lblAyudaMin;
     private javax.swing.JList<String> listContinente;
     private javax.swing.JPanel panelCap;
     private javax.swing.JPanel panelContinente;

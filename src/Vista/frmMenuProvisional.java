@@ -18,8 +18,8 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         usuarioBL= new usuarioBL();
         id = usuarioLog.getId();
         initComponents();
-        this.jLabel1.setText("Bienvenido, "+usuarioLog.getPersona().getNombre()+ " "+usuarioLog.getPersona().getApellidoPaterno() + " - "+ usuarioLog.getPersona().getNumeroDocumentoIdentidad()+" - "+ usuarioLog.getPersona().getCiudad()+ " (GERENTE)");
-        this.setTitle("Sistema de distribución de paquetes para RedEx");
+        this.jLabel1.setText("Bienvenido(a), "+usuarioLog.getPersona().getNombre()+ " "+usuarioLog.getPersona().getApellidoPaterno() + " - "+ usuarioLog.getPersona().getNumeroDocumentoIdentidad()+" - "+ usuarioLog.getPersona().getCiudad()+ " (GERENTE)");
+        this.setTitle("Sistema de distribución de paquetes - RedEx");
         setLocationRelativeTo(null);
         cerrar();
         Dimension size = panelMenu.getPreferredSize();
@@ -82,6 +82,7 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btnCerrarSesion = new Especial.RSButtonMetro();
         btnMenu = new javax.swing.JButton();
+        logoRedEx = new javax.swing.JLabel();
         panelMenu = new javax.swing.JPanel();
         btnAeropuertos = new Especial.RSButtonMetro();
         btnVuelos = new Especial.RSButtonMetro();
@@ -92,6 +93,7 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         btnGenData = new Especial.RSButtonMetro();
         btnFrecuencias = new Especial.RSButtonMetro();
         btnHistoriales = new Especial.RSButtonMetro();
+        btnReportes = new Especial.RSButtonMetro();
         panelPrincipal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -124,7 +126,7 @@ public class frmMenuProvisional extends javax.swing.JFrame {
                 btnCerrarSesionActionPerformed(evt);
             }
         });
-        panelInfoUsuario.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 30, 90, 15));
+        panelInfoUsuario.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 30, 90, 15));
 
         btnMenu.setBorder(null);
         btnMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -134,89 +136,97 @@ public class frmMenuProvisional extends javax.swing.JFrame {
         });
         panelInfoUsuario.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 25, 25, 20));
 
+        logoRedEx.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/RedEx.png"))); // NOI18N
+        panelInfoUsuario.add(logoRedEx, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 0, -1, -1));
+
         panelFondo.add(panelInfoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 50));
 
         panelMenu.setBackground(new java.awt.Color(255, 255, 255));
         panelMenu.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnAeropuertos.setText("Aeropuertos");
+        btnAeropuertos.setText("    Aeropuertos");
         btnAeropuertos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAeropuertos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAeropuertosActionPerformed(evt);
             }
         });
-        panelMenu.add(btnAeropuertos, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 140, 30));
+        panelMenu.add(btnAeropuertos, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 35, 140, 30));
 
-        btnVuelos.setText("Vuelos");
+        btnVuelos.setText("    Vuelos");
         btnVuelos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnVuelos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVuelosActionPerformed(evt);
             }
         });
-        panelMenu.add(btnVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 35, 140, 30));
+        panelMenu.add(btnVuelos, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 65, 140, 30));
 
-        btnPaquetes.setText("Paquetes");
+        btnPaquetes.setText("    Paquetes");
         btnPaquetes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPaquetes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPaquetesActionPerformed(evt);
             }
         });
-        panelMenu.add(btnPaquetes, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 65, 140, 30));
+        panelMenu.add(btnPaquetes, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 95, 140, 30));
 
-        btnSimulacion.setText("Simulación gráfica");
+        btnSimulacion.setText("    Simulación gráfica");
         btnSimulacion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSimulacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSimulacionActionPerformed(evt);
             }
         });
-        panelMenu.add(btnSimulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 225, 140, 30));
+        panelMenu.add(btnSimulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 255, 140, 30));
 
-        btnDetermUnit.setText("Generación de ruta");
+        btnDetermUnit.setText("SIMULACIÓN");
         btnDetermUnit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnDetermUnit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDetermUnitActionPerformed(evt);
             }
         });
-        panelMenu.add(btnDetermUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 165, 140, 30));
+        panelMenu.add(btnDetermUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 195, 140, 30));
 
         jSeparator1.setBackground(new java.awt.Color(1, 58, 223));
         jSeparator1.setForeground(new java.awt.Color(1, 58, 223));
         jSeparator1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jSeparator1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jSeparator1.setEnabled(false);
-        panelMenu.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 160, 140, 3));
+        panelMenu.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 190, 140, 3));
 
-        btnGenData.setText("Generación de data");
+        btnGenData.setText("    Generación de data");
         btnGenData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGenData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenDataActionPerformed(evt);
             }
         });
-        panelMenu.add(btnGenData, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 195, 140, 30));
+        panelMenu.add(btnGenData, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 225, 140, 30));
 
-        btnFrecuencias.setText("Frecuencias");
+        btnFrecuencias.setText("    Frecuencias");
         btnFrecuencias.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFrecuencias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFrecuenciasActionPerformed(evt);
             }
         });
-        panelMenu.add(btnFrecuencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 95, 140, 30));
+        panelMenu.add(btnFrecuencias, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 125, 140, 30));
 
-        btnHistoriales.setText("Historiales");
+        btnHistoriales.setText("    Historiales");
+        btnHistoriales.setToolTipText("");
         btnHistoriales.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHistoriales.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHistorialesActionPerformed(evt);
             }
         });
-        panelMenu.add(btnHistoriales, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 125, 140, 30));
+        panelMenu.add(btnHistoriales, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 155, 140, 30));
+
+        btnReportes.setText("REPORTES");
+        btnReportes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        panelMenu.add(btnReportes, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 140, 30));
 
         panelFondo.add(panelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 150, 500));
 
@@ -263,6 +273,7 @@ public class frmMenuProvisional extends javax.swing.JFrame {
             hora = "Buenos días.";
         else
             hora = "Buenas tardes.";
+        usuarioBL.cerrarSesion(id );
         JOptionPane.showMessageDialog(null,"Gracias por su visita.\n"+
                 hora,"Gracias",
                 JOptionPane.INFORMATION_MESSAGE);
@@ -284,9 +295,9 @@ public class frmMenuProvisional extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSimulacionActionPerformed
 
     private void btnDetermUnitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetermUnitActionPerformed
-        new CambiarPanel(panelPrincipal, new frmGeneracionRuta(this));
-        if(this.panelMenu.getX()>-1)
-            Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);   
+//        new CambiarPanel(panelPrincipal, new frmGeneracionRuta(this));
+//        if(this.panelMenu.getX()>-1)
+//            Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);   
     }//GEN-LAST:event_btnDetermUnitActionPerformed
 
     private void btnGenDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenDataActionPerformed
@@ -349,11 +360,13 @@ public class frmMenuProvisional extends javax.swing.JFrame {
     private Especial.RSButtonMetro btnHistoriales;
     private javax.swing.JButton btnMenu;
     private Especial.RSButtonMetro btnPaquetes;
+    private Especial.RSButtonMetro btnReportes;
     private Especial.RSButtonMetro btnSimulacion;
     private Especial.RSButtonMetro btnVuelos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel logoRedEx;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JPanel panelInfoUsuario;
     private javax.swing.JPanel panelMenu;

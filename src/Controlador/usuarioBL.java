@@ -47,6 +47,9 @@ public class usuarioBL {
     public boolean cerrarSesion(int i){
         return usuarioDA.cerrarSesion( i);
     }
+    public void cerrarSesionAll(){
+         usuarioDA.cerrarSesionAll( );
+    }
     public boolean existeNumDoc(int i){
         return usuarioDA.existeNumDoc(i);
     }

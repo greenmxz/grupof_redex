@@ -20,10 +20,10 @@ public class frmMenuAdmin extends javax.swing.JFrame {
          id = usuarioLog.getId();
         initComponents();
         id = usuarioLog.getId();
-        this.jLabel1.setText("Bienvenido, "+usuarioLog.getPersona().getNombre()+
+        this.jLabel1.setText("Bienvenido(a), "+usuarioLog.getPersona().getNombre()+
                 " "+usuarioLog.getPersona().getApellidoPaterno() + " - "+ usuarioLog.getPersona().getNumeroDocumentoIdentidad()+" - "+ usuarioLog.getPersona().getCiudad() +" (ADMINISTRADOR)");
        
-        this.setTitle("Sistema de distribución de paquetes para RedEx");
+        this.setTitle("Sistema de distribución de paquetes - RedEx");
         setLocationRelativeTo(null);
         cerrar();
         Dimension size = panelMenu.getPreferredSize();
@@ -82,6 +82,7 @@ public class frmMenuAdmin extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btnCerrarSesion = new Especial.RSButtonMetro();
         btnMenu = new javax.swing.JButton();
+        logoRedEx = new javax.swing.JLabel();
         panelMenu = new javax.swing.JPanel();
         btnCuentas = new Especial.RSButtonMetro();
         btnCargaMasiva1 = new Especial.RSButtonMetro();
@@ -116,7 +117,7 @@ public class frmMenuAdmin extends javax.swing.JFrame {
                 btnCerrarSesionActionPerformed(evt);
             }
         });
-        panelInfoUsuario.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 30, 90, 15));
+        panelInfoUsuario.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 30, 90, 15));
 
         btnMenu.setBorder(null);
         btnMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -126,12 +127,15 @@ public class frmMenuAdmin extends javax.swing.JFrame {
         });
         panelInfoUsuario.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 25, 25, 20));
 
+        logoRedEx.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/RedEx.png"))); // NOI18N
+        panelInfoUsuario.add(logoRedEx, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 0, -1, -1));
+
         panelFondo.add(panelInfoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 50));
 
         panelMenu.setBackground(new java.awt.Color(255, 255, 255));
         panelMenu.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnCuentas.setText("Cuentas (admin)");
+        btnCuentas.setText("Usuarios");
         btnCuentas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnCuentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,6 +247,7 @@ public class frmMenuAdmin extends javax.swing.JFrame {
     private javax.swing.JButton btnMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel logoRedEx;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JPanel panelInfoUsuario;
     private javax.swing.JPanel panelMenu;

@@ -48,6 +48,12 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         listContinenteD.setModel(listModel);
         filter = lstVuelo;
         this.x = x;
+        lblAyudaMin.setToolTipText("Este valor debe estar entre 200 y 300.\n No"
+                + " puede ser mayor al valor máximo colocado.");
+        lblAyudaMax.setToolTipText("Este valor debe estar entre 200 y 300.\n No"
+                + " puede ser menor al valor mínimo colocado.");
+        lblAyudaFecha.setToolTipText("Si se activa el filtro por hora, se mostrarán sólo los vuelos"
+                + " en las horas indicadas.");
     }
 
     public void setOrigen(String codigo){
@@ -77,8 +83,8 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         txtCapMin = new javax.swing.JTextField();
         txtCapMax = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        lblAyudaMin = new javax.swing.JLabel();
+        lblAyudaMax = new javax.swing.JLabel();
         btnLimpiarFlitro = new javax.swing.JButton();
         btnFiltrar = new javax.swing.JButton();
         panelContinenteO = new javax.swing.JPanel();
@@ -100,8 +106,8 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         dtpSalida = new com.lavantech.gui.comp.TimePanel();
         dtpLlegada = new com.lavantech.gui.comp.TimePanel();
-        panelUbic = new javax.swing.JPanel();
-        cboFiltro = new javax.swing.JComboBox<>();
+        chkFecha = new javax.swing.JCheckBox();
+        lblAyudaFecha = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -119,7 +125,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Código", "Salida", "Llegada", "Origen", "Destino", "Cap. máxima", "Cap. actual", "Estado"
+                "Código", "Hora de salida", "Hora de llegada", "Lugar de origen", "Lugar de destino", "Cap. máxima", "Cap. actual", "Estado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -154,36 +160,36 @@ public class frmReporteVuelo extends javax.swing.JPanel {
 
         jPanel1.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 120, 90));
 
-        panelCap.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rango de capacidades"));
+        panelCap.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rango de capacidad máxima"));
         panelCap.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setText("Valor de capacidad mínima:");
+        jLabel6.setText("Valor mínimo:");
         panelCap.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 25, -1, -1));
 
-        jLabel7.setText("Valor de capacidad máxima:");
-        panelCap.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 50, -1, -1));
+        jLabel7.setText("Valor máximo:");
+        panelCap.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 55, -1, -1));
 
         txtCapMin.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCapMinKeyTyped(evt);
             }
         });
-        panelCap.add(txtCapMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 25, 60, -1));
+        panelCap.add(txtCapMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 25, 60, -1));
 
         txtCapMax.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCapMaxKeyTyped(evt);
             }
         });
-        panelCap.add(txtCapMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, 60, -1));
+        panelCap.add(txtCapMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 55, 60, -1));
 
-        jLabel8.setText("paquetes");
-        panelCap.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 25, -1, -1));
+        lblAyudaMin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/ayuda.png"))); // NOI18N
+        panelCap.add(lblAyudaMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 25, -1, -1));
 
-        jLabel9.setText("paquetes");
-        panelCap.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, -1, -1));
+        lblAyudaMax.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/ayuda.png"))); // NOI18N
+        panelCap.add(lblAyudaMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 55, -1, -1));
 
-        jPanel1.add(panelCap, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 290, 90));
+        jPanel1.add(panelCap, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 220, 90));
 
         btnLimpiarFlitro.setText("Limpiar filtro");
         btnLimpiarFlitro.addActionListener(new java.awt.event.ActionListener() {
@@ -191,7 +197,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
                 btnLimpiarFlitroActionPerformed(evt);
             }
         });
-        jPanel1.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 170, 120, -1));
+        jPanel1.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 150, 120, -1));
 
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -199,7 +205,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
                 btnFiltrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 195, 120, -1));
+        jPanel1.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 180, 120, -1));
 
         panelContinenteO.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Continente origen"));
         panelContinenteO.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -274,35 +280,30 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         panelFecha.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Llegada");
-        panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 17, -1, -1));
+        panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 17, -1, -1));
 
         jLabel4.setText("Salida");
-        panelFecha.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 17, -1, -1));
+        panelFecha.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 17, -1, -1));
 
         dtpSalida.setCalendar(new java.util.GregorianCalendar(2018, 10, 12, 0, 0, 0));
         dtpSalida.setDisplayAnalog(false);
         dtpSalida.setSecDisplayed(false);
-        panelFecha.add(dtpSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, 50));
+        dtpSalida.setEnabled(false);
+        panelFecha.add(dtpSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 50));
 
         dtpLlegada.setCalendar(new java.util.GregorianCalendar(2018, 10, 12, 23, 59, 0));
         dtpLlegada.setDisplayAnalog(false);
         dtpLlegada.setSecDisplayed(false);
-        panelFecha.add(dtpLlegada, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, 50));
+        dtpLlegada.setEnabled(false);
+        panelFecha.add(dtpLlegada, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, -1, 50));
 
-        jPanel1.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 290, 90));
+        chkFecha.setText("Activar filtro de hora");
+        panelFecha.add(chkFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
 
-        panelUbic.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Filtrar ubicación por:"));
-        panelUbic.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        lblAyudaFecha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/ayuda.png"))); // NOI18N
+        panelFecha.add(lblAyudaFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 45, -1, -1));
 
-        cboFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Continente", "País" }));
-        cboFiltro.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cboFiltroItemStateChanged(evt);
-            }
-        });
-        panelUbic.add(cboFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 100, -1));
-
-        jPanel1.add(panelUbic, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 115, 120, 50));
+        jPanel1.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, 340, 90));
 
         panelFondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 40, 758, 240));
 
@@ -364,6 +365,9 @@ public class frmReporteVuelo extends javax.swing.JPanel {
             return 12;
         Date salida = dtpSalida.getCalendar().getTime();
         Date llegada = dtpLlegada.getCalendar().getTime();
+        if((salida.getHours() == llegada.getHours()) &&
+               (salida.getMinutes()== llegada.getMinutes()))
+            return 13;
         /* Las listas deben estar en un rango de 24 horas */
         return 0;
     }
@@ -409,35 +413,51 @@ public class frmReporteVuelo extends javax.swing.JPanel {
     public boolean filtroCapacidad(Vuelo ae){
         // Si no se indica alguno, se infiere que no habrá filtro
         if(!(txtCapMax.getText().equals("")) && 
-                (ae.getCapActual() > Integer.parseInt(txtCapMax.getText())))
+                (ae.getCapMax()> Integer.parseInt(txtCapMax.getText())))
             return false;
         if(!(txtCapMin.getText().equals("")) && 
-                (ae.getCapActual() < Integer.parseInt(txtCapMin.getText())))
+                (ae.getCapMax() < Integer.parseInt(txtCapMin.getText())))
             return false;
         return true;
     }
     
     public boolean filtroFechas(Vuelo ae){
-        Date fechaLlegada = ae.getFechaLlegada();
-        Date fechaSalida = ae.getFechaSalida();
-        GregorianCalendar gcSal = dtpSalida.getCalendar();
-        GregorianCalendar gcLle = dtpLlegada.getCalendar();
-        /* Si la fecha de salida es menor a la del respectivo gc
-        no se toma en cuenta */
-        if(fechaSalida.getHours() < gcSal.getTime().getHours())
-            return false;
-        else if(fechaSalida.getHours() == gcSal.getTime().getHours())
-            if(fechaSalida.getMinutes() < gcSal.getTime().getMinutes())
+        if(chkFecha.isSelected()){
+            Date fechaLlegada = ae.getFechaLlegada();
+            Date fechaSalida = ae.getFechaSalida();
+            Date gcSal = dtpSalida.getCalendar().getTime();
+            Date gcLle = dtpLlegada.getCalendar().getTime();
+            /* Salida < Llegada */
+//            if((gcSal.getHours() < gcLle.getHours()) ||
+//                    ((gcSal.getHours() == gcLle.getHours()) &&
+//                    ((gcSal.getMinutes() < gcLle.getMinutes())))){
+//                if(((gcSal.getHours() < fechaSalida.getHours()) ||
+//                        ((gcSal.getHours() == fechaSalida.getHours()) &&
+//                        (gcSal.getMinutes() < fechaSalida.getMinutes()))) &&
+//                        ((gcLle.getHours() > fechaLlegada.getHours()) ||
+//                        ((gcLle.getHours() == fechaLlegada.getHours()) &&
+//                        (gcLle.getMinutes() > fechaLlegada.getMinutes()))))
+//                    return false;
+//                else return true;
+//            }else{ /* Salida > Llegada */
+//                if(((gcSal.getHours() > fechaSalida.getHours()) ||
+//                        ((gcSal.getHours() == fechaSalida.getHours()) &&
+//                        (gcSal.getMinutes() > fechaSalida.getMinutes()))) &&
+//                        ((gcLle.getHours() < fechaLlegada.getHours()) ||
+//                        ((gcLle.getHours() == fechaLlegada.getHours()) &&
+//                        (gcLle).getMinutes() < fechaLlegada.getMinutes()))))
+//                    return false;
+//                else return true;
+//            }
+            if((gcSal.getHours() > fechaSalida.getHours()) ||
+                    ((gcSal.getHours() == fechaSalida.getHours()) &&
+                    (gcSal.getMinutes() > fechaSalida.getMinutes())))
                 return false;
-        /* Si la fecha de llegada es mayor a la del respectivo gc
-        no se toma en cuenta */
-        if(fechaLlegada.getHours() < fechaSalida.getHours())
-            return false;
-        if(fechaLlegada.getHours() > gcLle.getTime().getHours())
-            return false;
-        else if(fechaLlegada.getHours() == gcLle.getTime().getHours())
-            if(fechaLlegada.getMinutes() > gcLle.getTime().getMinutes())
+            if((gcLle.getHours() < fechaLlegada.getHours()) ||
+                    ((gcLle.getHours() == fechaLlegada.getHours()) &&
+                    (gcLle.getMinutes() < fechaLlegada.getMinutes())))
                 return false;
+        }
         return true;
     }
     
@@ -492,6 +512,14 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         listContinenteD.clearSelection();
         btnBuscarOrigen.setText("");
         btnBuscarDestino.setText("");
+        txtOrigen.setText("");
+        txtDestino.setText("");
+        listContinenteO.setEnabled(true);
+        listContinenteD.setEnabled(true);
+        btnBuscarOrigen.setEnabled(false);
+        btnBuscarDestino.setEnabled(false);
+        chkAerop.setSelected(false);
+        chkFecha.setSelected(false);
         tablaDefault();
     }//GEN-LAST:event_btnLimpiarFlitroActionPerformed
 
@@ -535,21 +563,27 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         }else{
             switch(fitroValido()){
                 case 10:
-                JOptionPane.showMessageDialog(null,
-                    "La capacidad mínima debe estar en el rango indicado",
-                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
-                break;
+                    JOptionPane.showMessageDialog(null,
+                        "La capacidad mínima debe estar en el rango indicado",
+                        "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+                    break;
                 case 11:
-                JOptionPane.showMessageDialog(null,
-                    "La capacidad máxima debe estar en el rango indicado",
-                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
-                break;
+                    JOptionPane.showMessageDialog(null,
+                        "La capacidad máxima debe estar en el rango indicado",
+                        "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+                    break;
                 case 12:
-                JOptionPane.showMessageDialog(null,
-                    "La capacidad mínima no puede ser mayor que la capacidad"
-                    + " máxima", "Mensaje de error",
-                    JOptionPane.INFORMATION_MESSAGE);
-                break;
+                    JOptionPane.showMessageDialog(null,
+                        "La capacidad mínima no puede ser mayor que la capacidad"
+                        + " máxima", "Mensaje de error",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case 13:
+                    JOptionPane.showMessageDialog(null,
+                        "Las fechas no pueden ser iguales"
+                        , "Mensaje de error",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    break;
             }
         }
     }//GEN-LAST:event_btnFiltrarActionPerformed
@@ -580,12 +614,6 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_chkAeropMouseClicked
 
-    private void cboFiltroItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboFiltroItemStateChanged
-         if(evt.getStateChange() == ItemEvent.SELECTED) {
-             System.out.println(cboFiltro.getSelectedIndex());
-         }
-    }//GEN-LAST:event_cboFiltroItemStateChanged
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarDestino;
@@ -593,11 +621,11 @@ public class frmReporteVuelo extends javax.swing.JPanel {
     private javax.swing.JButton btnExcel;
     private javax.swing.JButton btnFiltrar;
     private javax.swing.JButton btnLimpiarFlitro;
-    private javax.swing.JComboBox<String> cboFiltro;
     private javax.swing.JCheckBox chkAerop;
     private javax.swing.JCheckBox chkEstadoEstable;
     private javax.swing.JCheckBox chkEstadoLleno;
     private javax.swing.JCheckBox chkEstadoSaturado;
+    private javax.swing.JCheckBox chkFecha;
     private com.lavantech.gui.comp.TimePanel dtpLlegada;
     private com.lavantech.gui.comp.TimePanel dtpSalida;
     private javax.swing.JLabel jLabel1;
@@ -608,12 +636,13 @@ public class frmReporteVuelo extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel lblAyudaFecha;
+    private javax.swing.JLabel lblAyudaMax;
+    private javax.swing.JLabel lblAyudaMin;
     private javax.swing.JList<String> listContinenteD;
     private javax.swing.JList<String> listContinenteO;
     private javax.swing.JPanel panelAerop;
@@ -623,7 +652,6 @@ public class frmReporteVuelo extends javax.swing.JPanel {
     private javax.swing.JPanel panelEstado;
     private javax.swing.JPanel panelFecha;
     private javax.swing.JPanel panelFondo;
-    private javax.swing.JPanel panelUbic;
     private javax.swing.JTable tblAirports;
     private javax.swing.JTextField txtCapMax;
     private javax.swing.JTextField txtCapMin;

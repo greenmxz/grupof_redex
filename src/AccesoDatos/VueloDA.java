@@ -93,13 +93,12 @@ public class VueloDA {
     public boolean registrarVuelo(Avion a){
         try{
             database connect = new database();
-            String query = "insert into avion (codigo,capacidad_maxima,descripcion) values"
-                    + "(?,?,?)";
+            String query = "insert into avion (descripcion,capacidad_maxima) values"
+                    + "(?,?)";
             PreparedStatement stmt = connect.getConnection().prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             //manejo de fechas;
-            stmt.setString(1,a.getCodigo());
+            stmt.setString(1,a.getDescripcion());
             stmt.setInt(2,a.getCapacidadMaxima());
-            stmt.setString(3,a.getDescripcion());
 
 
             int count = stmt.executeUpdate();
@@ -192,7 +191,7 @@ public class VueloDA {
             while (rs.next( )){
                 Avion avion = new Avion();
                 avion.setId(rs.getInt("id"));
-                avion.setCodigo(rs.getString("codigo"));
+                //avion.setCodigo(rs.getString("codigo"));
                 avion.setDescripcion(rs.getString("descripcion"));
                 avion.setCapacidadMaxima(rs.getInt("capacidad_maxima"));
 
@@ -246,8 +245,8 @@ public class VueloDA {
                 
                 
                 avion.setId(rs.getInt("id"));
-                avion.setCodigo(rs.getString("codigo"));
-                avion.setDescripcion(rs.getString("descripcion"));
+                avion.setCodigo(rs.getString("descripcion"));
+                //avion.setDescripcion(rs.getString("descripcion"));
                 avion.setCapacidadMaxima(rs.getInt("capacidad_maxima"));
 
                 //lista.add(usuario);
@@ -264,7 +263,7 @@ public class VueloDA {
     public boolean modificarVuelo(Avion v){
          try {
             database connect = new database();
-            String queryPersona="update avion   set capacidad_maxima = ? , codigo = ?, "
+            String queryPersona="update avion   set capacidad_maxima = ? , "
                     + " descripcion= ? "
                     + "where id = ?";
 
@@ -277,9 +276,8 @@ public class VueloDA {
            
              //stmt.registerOutParameter("id",java.sql.Types.INTEGER );
             stmt.setInt(1,v.getCapacidadMaxima());
-            stmt.setString(2,v.getCodigo());
-            stmt.setString(3,v.getDescripcion());
-            stmt.setInt(4,v.getId());
+            stmt.setString(2,v.getDescripcion());
+            stmt.setInt(3,v.getId());
             int count = stmt.executeUpdate();
             
 
