@@ -266,87 +266,116 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         
     }//GEN-LAST:event_loginActionPerformed
 
-    public void actionPerformed(ActionEvent e) {        
-        try{                       
-            if (this.minutoMundial<59){
-                this.minutoMundial++;
-            }else{
-                this.minutoMundial=0;
-                if (this.horaMundial <23)
-                    this.horaMundial++;
-                else {
-                    this.minutoMundial=0;
-                    this.horaMundial=0; 
-                }    
-            }
 
-            if(this.esInicio == 1){
-                lecturaData();
-                this.esInicio = 0;
-            }
-            ArrayList<Modelo.paquete>listaPack=controladorPaquete.obtenerPaquetesCreados(usuarioLogin.getId());
-            listaPackNew=new ArrayList<>();
-            
-            int size=listaPack.size();
-            for(int i=0;i<size;i++){
-                int origenId=listaPack.get(i).getAeropuertoOrigenId();
-                int destinoId=listaPack.get(i).getAeropuertoDestinoId();
-                int origenHour=listaPack.get(i).getFechaSalida().getHours();
-                int origenMin=listaPack.get(i).getFechaSalida().getMinutes();
-                int origenDay=listaPack.get(i).getFechaSalida().getDay();
-                int origenMonth=listaPack.get(i).getFechaSalida().getMonth();
-                int origenYear=listaPack.get(i).getFechaSalida().getYear();
-                int id=listaPack.get(i).getId();
-                Algoritmo.Paquete pack=new Algoritmo.Paquete(origenHour,origenMin,origenId,destinoId,origenDay,origenMonth,origenYear);
-                pack.setIdentificator(id);
-                listaPackNew.add(pack);
-            }           
-            this.listPack.clear();
-            int numElem=0;
-            for(int i=0;i<listaPackGlobal.size();i++){
-                if(listaPackGlobal.get(i).getEnviado()==1)
-                    listaPackNew.remove(numElem);
-                else 
-                    numElem++;
-            }
-            if (this.minutoMundial== 0  && this.horaMundial%2==0 ){                              
-                if(listaPackNew.size()>0){
-                    if(esInicioPack==1){
-                        esInicioPack=0;
-                        EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
-                        t.start();
-                        t.join();
-                        this.tiempoAlgoMM = t.getTiempoAlgoMM();
-                        System.out.println("ES LA HORA ->>>>>>");
-                        listaPackProcesada=t.getListPackAlgo();
-                        listaPackNew.clear();
-                    }
-                    else if(esInicioPack2==1){
-                        esInicioPack2=0;
-                        EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
-                        t.start();
-                        t.join();
-                        this.tiempoAlgoMM = t.getTiempoAlgoMM();
-                        listaPackProcesada=t.getListPackAlgo();
-                        listaPackNew.clear();
-                    }
-                    else if(listaPackProcesada.size()==0 ){
-                        EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
-                        t.start();
-                        t.join();
-                        this.tiempoAlgoMM = t.getTiempoAlgoMM();
-                        listaPackProcesada=t.getListPackAlgo();
-                        listaPackNew.clear();
-                    }
+    public void actionPerformed(ActionEvent e) {
+        
+        try{
+            if (    usuarioLogin.getRol().equals("secretario") ){
+               //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                if (this.minutoMundial<59){
+                    this.minutoMundial++;
+                }else{
+
+                    this.minutoMundial=0;
+                    if (this.horaMundial <23)
+                        this.horaMundial++;
+                    else {
+                        this.minutoMundial=0;
+                        this.horaMundial=0; 
+                    }    
                 }
+
+
+                if(this.esInicio == 1){
+                    lecturaData();
+                    this.esInicio = 0;
+                }
+                ArrayList<Modelo.paquete>listaPack=controladorPaquete.obtenerPaquetesCreados(usuarioLogin.getId());
+                listaPackNew=new ArrayList<>();
+
+                int size=listaPack.size();
+                for(int i=0;i<size;i++){
+                    int origenId=listaPack.get(i).getAeropuertoOrigenId();
+                    int destinoId=listaPack.get(i).getAeropuertoDestinoId();
+                    int origenHour=listaPack.get(i).getFechaSalida().getHours();
+                    int origenMin=listaPack.get(i).getFechaSalida().getMinutes();
+                    int origenDay=listaPack.get(i).getFechaSalida().getDay();
+                    int origenMonth=listaPack.get(i).getFechaSalida().getMonth();
+                    int origenYear=listaPack.get(i).getFechaSalida().getYear();
+                    int id=listaPack.get(i).getId();
+                    Algoritmo.Paquete pack=new Algoritmo.Paquete(origenHour,origenMin,origenId,destinoId,origenDay,origenMonth,origenYear);
+                    pack.setIdentificator(id);
+                    listaPackNew.add(pack);
+                }
+
+                this.listPack.clear();
+                int numElem=0;
+                for(int i=0;i<listaPackGlobal.size();i++){
+                    if(listaPackGlobal.get(i).getEnviado()==1)
+                        listaPackNew.remove(numElem);
+                    else 
+                        numElem++;
+                }
+
+                if (this.minutoMundial== 0  && this.horaMundial%2==0 ){                              
+                    if(listaPackNew.size()>0){
+
+                            if(esInicioPack==1){
+                                esInicioPack=0;
+                                EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
+                                t.start();
+                                t.join();
+                                this.tiempoAlgoMM = t.getTiempoAlgoMM();
+
+                                System.out.println("ES LA HORA ->>>>>>");
+                                listaPackProcesada=t.getListPackAlgo();
+
+
+                                listaPackNew.clear();
+
+                            }
+                            else if(esInicioPack2==1){
+                                esInicioPack2=0;
+                                EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
+                                t.start();
+                                t.join();
+                                this.tiempoAlgoMM = t.getTiempoAlgoMM();
+
+                                System.out.println("ES LA HORA ->>>>>>");
+                                listaPackProcesada=t.getListPackAlgo();
+
+                                listaPackNew.clear();
+                            }
+                            else if(listaPackProcesada.size()==0 ){
+                                EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
+                                t.start();
+                                t.join();
+                                this.tiempoAlgoMM = t.getTiempoAlgoMM();
+
+                                System.out.println("ES LA HORA ->>>>>>");
+                                listaPackProcesada=t.getListPackAlgo();
+
+
+                                listaPackNew.clear();
+
+                            }
+
+                        }
+
+
+
+                }
+
+                try{
+
+                    cambiaEstadoMov();
+
+                }
+                catch(Exception exp){
+                    System.out.println("Error de detección de correo "+exp.getMessage());
+                } 
             }
-                           
-            try{                
-                cambiaEstadoMov();
-            }
-            catch(Exception exp){
-                System.out.println("Error de detección de correo "+exp.getMessage());
-            }
+            
        }catch(Exception ex){
            System.out.println("ERROR actionPerformed Login " + ex.getMessage() );
            ex.printStackTrace();

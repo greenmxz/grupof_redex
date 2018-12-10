@@ -211,7 +211,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
 
         new Login().setVisible(true);
-        this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
