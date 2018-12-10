@@ -54,6 +54,9 @@ public class frmReportePaquete extends javax.swing.JPanel {
         listContinenteD.setModel(listModel);
         filter = lstPaq;
         this.x = x;
+        lblAyudaFechas.setToolTipText("Si se activa el filtro por fecha, se mostrarán sólo los vuelos"
+                + " en las fechas indicadas. La fecha colocada en Desde debe ser más antigua que"
+                + " la colocada en Hasta.");
     }
 
     public void setOrigen(String codigo){
@@ -94,6 +97,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         dtpHasta = new com.github.lgooddatepicker.components.DateTimePicker();
+        lblAyudaFechas = new javax.swing.JLabel();
         panelAeropuerto = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -151,9 +155,11 @@ public class frmReportePaquete extends javax.swing.JPanel {
         panelEstado.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         chkEstadoEntregado.setText("Entregado");
+        chkEstadoEntregado.setEnabled(false);
         panelEstado.add(chkEstadoEntregado, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, -1, -1));
 
         chkEstadoEnCamino.setText("En camino");
+        chkEstadoEnCamino.setEnabled(false);
         panelEstado.add(chkEstadoEnCamino, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 25, -1, -1));
 
         panelFiltrado.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, 190, 80));
@@ -182,6 +188,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        listContinenteO.setEnabled(false);
         jScrollPane3.setViewportView(listContinenteO);
 
         panelContinenteO.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, 60));
@@ -196,6 +203,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        listContinenteD.setEnabled(false);
         jScrollPane2.setViewportView(listContinenteD);
 
         panelContinenteD.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 190, 60));
@@ -204,14 +212,21 @@ public class frmReportePaquete extends javax.swing.JPanel {
 
         panelFecha.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rango temporal"));
         panelFecha.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        panelFecha.add(dtpDesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 15, 290, 25));
+
+        dtpDesde.setEnabled(false);
+        panelFecha.add(dtpDesde, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 15, 275, 25));
 
         jLabel1.setText("Hasta");
         panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
 
         jLabel6.setText("Desde");
         panelFecha.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
-        panelFecha.add(dtpHasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 45, 290, 25));
+
+        dtpHasta.setEnabled(false);
+        panelFecha.add(dtpHasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 45, 275, 25));
+
+        lblAyudaFechas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/ayuda.png"))); // NOI18N
+        panelFecha.add(lblAyudaFechas, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 30, -1, -1));
 
         panelFiltrado.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 380, 80));
 
@@ -271,6 +286,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
         panelFiltro.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         chkAerop.setText("Buscar por aeropuerto");
+        chkAerop.setEnabled(false);
         chkAerop.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 chkAeropMouseClicked(evt);
@@ -287,11 +303,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
         panelFiltro.add(chkPaq, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
         chkFechas.setText("Activar fechas");
-        chkFechas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                chkFechasMouseClicked(evt);
-            }
-        });
+        chkFechas.setEnabled(false);
         panelFiltro.add(chkFechas, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, -1, -1));
 
         panelFiltrado.add(panelFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 280, 80));
@@ -463,7 +475,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
     }
     
     public boolean filtroFechas(paquete ae){
-        if(chkFechas.getModel().isSelected()){
+        if(chkFechas.isSelected()){
             Date fechaAlmacen = ae.getFechaSalida();
             LocalDate dateAlmacen = fechaAlmacen.toInstant()
                     .atZone(ZoneId.systemDefault()).toLocalDate();
@@ -517,10 +529,8 @@ public class frmReportePaquete extends javax.swing.JPanel {
                     ((cmpDate(dateAlmacen, filtroFechaHasta) == -1) ||
                     ((cmpDate(dateAlmacen, filtroFechaHasta) == 0) &&
                     (cmpHour(timeAlmacen, filtroHoraHasta) == -1)))){
-                System.out.println("Nel");
                 return false;
             }
-            System.out.println("Sí");
             return true;
         }else return true;
     }
@@ -532,18 +542,35 @@ public class frmReportePaquete extends javax.swing.JPanel {
     }//GEN-LAST:event_btnExcelActionPerformed
 
     private void btnLimpiarFlitroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarFlitroActionPerformed
-        chkEstadoEntregado.setSelected(false);
-        chkEstadoEnCamino.setSelected(false);
+        // Paquete
+        txtCodigo.setText("");
+        btnBuscarPaq.setEnabled(true);
+        // Config. inicial
         chkPaq.setSelected(false);
+        chkAerop.setEnabled(false);
         chkAerop.setSelected(false);
+        chkFechas.setEnabled(false);
         chkFechas.setSelected(false);
+        // Continente
+        listContinenteD.setEnabled(false);
+        listContinenteD.clearSelection();
+        listContinenteO.setEnabled(false);
+        listContinenteO.clearSelection();
+        // Aeropuerto
+        txtOrigen.setText("");
+        btnBuscarOrigen.setEnabled(false);
+        txtDestino.setText("");
+        btnBuscarDestino.setEnabled(false);
+        // Fechas
+        dtpDesde.setEnabled(false);
+        dtpHasta.setEnabled(false);
         dtpDesde.clear();
         dtpHasta.clear();
-        listContinenteO.clearSelection();
-        listContinenteD.clearSelection();
-        txtCodigo.setText("");
-        txtOrigen.setText("");
-        txtDestino.setText("");
+        // Estados
+        chkEstadoEntregado.setEnabled(false);
+        chkEstadoEntregado.setSelected(false);
+        chkEstadoEnCamino.setEnabled(false);
+        chkEstadoEnCamino.setSelected(false);
         tablaDefault();
     }//GEN-LAST:event_btnLimpiarFlitroActionPerformed
 
@@ -633,9 +660,9 @@ public class frmReportePaquete extends javax.swing.JPanel {
             listContinenteO.setEnabled(true);
             listContinenteD.setEnabled(true);
             btnBuscarOrigen.setEnabled(false);
-            btnBuscarOrigen.setText("");
+            txtOrigen.setText("");
             btnBuscarDestino.setEnabled(false);
-            btnBuscarDestino.setText("");
+            txtDestino.setText("");
         }
     }//GEN-LAST:event_chkAeropMouseClicked
 
@@ -643,12 +670,53 @@ public class frmReportePaquete extends javax.swing.JPanel {
         new Vista.frmBuscarPaquete(x,true,this).setVisible(true);
     }//GEN-LAST:event_btnBuscarPaqActionPerformed
 
-    private void chkFechasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkFechasMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chkFechasMouseClicked
-
     private void chkPaqMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkPaqMouseClicked
-        // TODO add your handling code here:
+        if(chkPaq.isSelected()){
+            // Paquete
+            btnBuscarPaq.setEnabled(false);
+            // Config. inicial
+            chkAerop.setEnabled(true);
+            chkFechas.setEnabled(true);
+            // Continente
+            listContinenteD.setEnabled(true);
+            listContinenteO.setEnabled(true);
+            // Fechas
+            dtpDesde.setEnabled(true);
+            dtpHasta.setEnabled(true);
+            // Estados
+            chkEstadoEntregado.setEnabled(true);
+            chkEstadoEnCamino.setEnabled(true);
+        }else{
+            // Paquete
+            txtCodigo.setText("");
+            btnBuscarPaq.setEnabled(true);
+            // Config. inicial
+            chkPaq.setSelected(false);
+            chkAerop.setEnabled(false);
+            chkAerop.setSelected(false);
+            chkFechas.setEnabled(false);
+            chkFechas.setSelected(false);
+            // Continente
+            listContinenteD.setEnabled(false);
+            listContinenteD.clearSelection();
+            listContinenteO.setEnabled(false);
+            listContinenteO.clearSelection();
+            // Aeropuerto
+            txtOrigen.setText("");
+            btnBuscarOrigen.setEnabled(false);
+            txtDestino.setText("");
+            btnBuscarDestino.setEnabled(false);
+            // Fechas
+            dtpDesde.setEnabled(false);
+            dtpHasta.setEnabled(false);
+            dtpDesde.clear();
+            dtpHasta.clear();
+            // Estados
+            chkEstadoEntregado.setEnabled(false);
+            chkEstadoEntregado.setSelected(false);
+            chkEstadoEnCamino.setEnabled(false);
+            chkEstadoEnCamino.setSelected(false);
+        }
     }//GEN-LAST:event_chkPaqMouseClicked
 
 
@@ -676,6 +744,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblAyudaFechas;
     private javax.swing.JList<String> listContinenteD;
     private javax.swing.JList<String> listContinenteO;
     private javax.swing.JPanel panelAeropuerto;

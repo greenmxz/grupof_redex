@@ -173,6 +173,7 @@
                 <Component class="javax.swing.JCheckBox" name="chkEstadoEntregado">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Entregado"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -183,6 +184,7 @@
                 <Component class="javax.swing.JCheckBox" name="chkEstadoEnCamino">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="En camino"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -263,6 +265,7 @@
                             <StringItem index="4" value="Item 5"/>
                           </StringArray>
                         </Property>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -317,6 +320,7 @@
                             <StringItem index="4" value="Item 5"/>
                           </StringArray>
                         </Property>
+                        <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -349,9 +353,12 @@
               </Layout>
               <SubComponents>
                 <Component class="com.github.lgooddatepicker.components.DateTimePicker" name="dtpDesde">
+                  <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="60" y="15" width="290" height="25"/>
+                      <AbsoluteConstraints x="60" y="15" width="275" height="25"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -376,9 +383,24 @@
                   </Constraints>
                 </Component>
                 <Component class="com.github.lgooddatepicker.components.DateTimePicker" name="dtpHasta">
+                  <Properties>
+                    <Property name="enabled" type="boolean" value="false"/>
+                  </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="60" y="45" width="290" height="25"/>
+                      <AbsoluteConstraints x="60" y="45" width="275" height="25"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JLabel" name="lblAyudaFechas">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/Resource/ayuda.png"/>
+                    </Property>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="345" y="30" width="-1" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -556,6 +578,7 @@
                 <Component class="javax.swing.JCheckBox" name="chkAerop">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Buscar por aeropuerto"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="chkAeropMouseClicked"/>
@@ -582,10 +605,8 @@
                 <Component class="javax.swing.JCheckBox" name="chkFechas">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Activar fechas"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="chkFechasMouseClicked"/>
-                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="150" y="40" width="-1" height="-1"/>

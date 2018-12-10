@@ -48,6 +48,12 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         listContinenteD.setModel(listModel);
         filter = lstVuelo;
         this.x = x;
+        lblAyudaMin.setToolTipText("Este valor debe estar entre 200 y 300.\n No"
+                + " puede ser mayor al valor máximo colocado.");
+        lblAyudaMax.setToolTipText("Este valor debe estar entre 200 y 300.\n No"
+                + " puede ser menor al valor mínimo colocado.");
+        lblAyudaFecha.setToolTipText("Si se activa el filtro por hora, se mostrarán sólo los vuelos"
+                + " en las horas indicadas.");
     }
 
     public void setOrigen(String codigo){
@@ -77,8 +83,8 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         txtCapMin = new javax.swing.JTextField();
         txtCapMax = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        lblAyudaMin = new javax.swing.JLabel();
+        lblAyudaMax = new javax.swing.JLabel();
         btnLimpiarFlitro = new javax.swing.JButton();
         btnFiltrar = new javax.swing.JButton();
         panelContinenteO = new javax.swing.JPanel();
@@ -101,6 +107,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         dtpSalida = new com.lavantech.gui.comp.TimePanel();
         dtpLlegada = new com.lavantech.gui.comp.TimePanel();
         chkFecha = new javax.swing.JCheckBox();
+        lblAyudaFecha = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -118,7 +125,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Código", "Salida", "Llegada", "Origen", "Destino", "Cap. máxima", "Cap. actual", "Estado"
+                "Código", "Hora de salida", "Hora de llegada", "Lugar de origen", "Lugar de destino", "Cap. máxima", "Cap. actual", "Estado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -153,36 +160,36 @@ public class frmReporteVuelo extends javax.swing.JPanel {
 
         jPanel1.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 120, 90));
 
-        panelCap.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rango de capacidades"));
+        panelCap.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rango de capacidad máxima"));
         panelCap.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setText("Valor de capacidad mínima:");
+        jLabel6.setText("Valor mínimo:");
         panelCap.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 25, -1, -1));
 
-        jLabel7.setText("Valor de capacidad máxima:");
-        panelCap.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 50, -1, -1));
+        jLabel7.setText("Valor máximo:");
+        panelCap.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 55, -1, -1));
 
         txtCapMin.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCapMinKeyTyped(evt);
             }
         });
-        panelCap.add(txtCapMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 25, 60, -1));
+        panelCap.add(txtCapMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 25, 60, -1));
 
         txtCapMax.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCapMaxKeyTyped(evt);
             }
         });
-        panelCap.add(txtCapMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, 60, -1));
+        panelCap.add(txtCapMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 55, 60, -1));
 
-        jLabel8.setText("paquetes");
-        panelCap.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 25, -1, -1));
+        lblAyudaMin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/ayuda.png"))); // NOI18N
+        panelCap.add(lblAyudaMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 25, -1, -1));
 
-        jLabel9.setText("paquetes");
-        panelCap.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, -1, -1));
+        lblAyudaMax.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/ayuda.png"))); // NOI18N
+        panelCap.add(lblAyudaMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 55, -1, -1));
 
-        jPanel1.add(panelCap, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 290, 90));
+        jPanel1.add(panelCap, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 220, 90));
 
         btnLimpiarFlitro.setText("Limpiar filtro");
         btnLimpiarFlitro.addActionListener(new java.awt.event.ActionListener() {
@@ -190,7 +197,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
                 btnLimpiarFlitroActionPerformed(evt);
             }
         });
-        jPanel1.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 170, 120, -1));
+        jPanel1.add(btnLimpiarFlitro, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 150, 120, -1));
 
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -198,7 +205,7 @@ public class frmReporteVuelo extends javax.swing.JPanel {
                 btnFiltrarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 195, 120, -1));
+        jPanel1.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 180, 120, -1));
 
         panelContinenteO.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Continente origen"));
         panelContinenteO.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -273,27 +280,30 @@ public class frmReporteVuelo extends javax.swing.JPanel {
         panelFecha.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Llegada");
-        panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 17, -1, -1));
+        panelFecha.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 17, -1, -1));
 
         jLabel4.setText("Salida");
-        panelFecha.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 17, -1, -1));
+        panelFecha.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 17, -1, -1));
 
         dtpSalida.setCalendar(new java.util.GregorianCalendar(2018, 10, 12, 0, 0, 0));
         dtpSalida.setDisplayAnalog(false);
         dtpSalida.setSecDisplayed(false);
         dtpSalida.setEnabled(false);
-        panelFecha.add(dtpSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, 50));
+        panelFecha.add(dtpSalida, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 50));
 
         dtpLlegada.setCalendar(new java.util.GregorianCalendar(2018, 10, 12, 23, 59, 0));
         dtpLlegada.setDisplayAnalog(false);
         dtpLlegada.setSecDisplayed(false);
         dtpLlegada.setEnabled(false);
-        panelFecha.add(dtpLlegada, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, 50));
+        panelFecha.add(dtpLlegada, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, -1, 50));
 
-        jPanel1.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 290, 90));
+        chkFecha.setText("Activar filtro de hora");
+        panelFecha.add(chkFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
 
-        chkFecha.setText("Activar fecha");
-        jPanel1.add(chkFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 130, -1, -1));
+        lblAyudaFecha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/ayuda.png"))); // NOI18N
+        panelFecha.add(lblAyudaFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 45, -1, -1));
+
+        jPanel1.add(panelFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 130, 340, 90));
 
         panelFondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 40, 758, 240));
 
@@ -626,12 +636,13 @@ public class frmReporteVuelo extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JLabel lblAyudaFecha;
+    private javax.swing.JLabel lblAyudaMax;
+    private javax.swing.JLabel lblAyudaMin;
     private javax.swing.JList<String> listContinenteD;
     private javax.swing.JList<String> listContinenteO;
     private javax.swing.JPanel panelAerop;
