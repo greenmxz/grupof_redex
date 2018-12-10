@@ -9,8 +9,6 @@ import java.util.Date;
 import java.time.LocalTime;
 
 public class TabuSearch {
-
-
     private ArrayList<Aeropuerto> listAirport;
     private ArrayList<Vuelo> listFlight;
     private ArrayList<Paquete> listPack;
@@ -31,7 +29,7 @@ public class TabuSearch {
     private int timeToCmp;
     private int cantReruteo = 0;
     private ArrayList<Integer> forbidden;
-    
+    private int intercont;
 
     public TabuSearch(){
         this.listPack=new ArrayList<Paquete>();
@@ -153,7 +151,7 @@ public class TabuSearch {
         for(int i=0; i<listFlight.size(); i++)
             capVuelos.add(0);
         for(int i=0; i<listAirport.size(); i++)
-            forbidden.add(10);
+            forbidden.add(15);
 //        for(int i=0; i<listFlight.size(); i++)
 //            listFlight.get(i).print();
         setListPack(paquetesAct);
@@ -169,14 +167,15 @@ public class TabuSearch {
                 if(validator(origin, destiny)){
                     String time = String.valueOf(paquetesAct.get(iter).getOriginHour()) + ":" + 
                             String.valueOf(paquetesAct.get(iter).getOriginMin());
+                    if(listAirport.get(this.originId-1).getContinent() == listAirport.get(this.destinyId-1).getContinent())
+                        this.intercont = 0;
+                    else this.intercont = 1;
                     tabuAlgorithm(origin, destiny, time);
                     ArrayList<Integer> optimal = getRouteOptimal();
                     if(optimal.size() > 0)
                         for(int i : optimal)
                             capVuelos.set(i-1, capVuelos.get(i-1)+1);
-
                     String solution = generateTabuString(optimal);
-
 //                    System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
                     if(solution.equals("")){
                         noAsign++;
@@ -336,6 +335,8 @@ public class TabuSearch {
         // Comprobar que ningún aeropuerto esté baneado
         if(bestRoute[0] == -1)
             return false;
+        if(listFlight.get(bestRoute[0]-1).getDestinyAirport() == this.destinyId)
+            return true;
         ArrayList<Integer> permitidos = new ArrayList<Integer>();
         boolean ward = true;
         for(int i=0; i<bestRoute.length; i++){
@@ -367,7 +368,7 @@ public class TabuSearch {
                    if(forbidden.get(destiny) < -1)
                        forbidden.set(destiny , forbidden.get(destiny)+1);
                    else
-                       forbidden.set(destiny , forbidden.get(destiny)+11);
+                       forbidden.set(destiny , forbidden.get(destiny)+16);
            }
        }
        return ward;
@@ -393,7 +394,7 @@ public class TabuSearch {
         }
     }
     
-    private int[] obtainNeighbor(int currentElement,
+    private ArrayList<Integer> obtainNeighbor(int currentElement,
             int[] route){
         int actualNode = this.originId - 1;
 //        System.out.println(currentElement);
@@ -404,32 +405,24 @@ public class TabuSearch {
         ArrayList<Integer> listNeighborAL = new ArrayList<Integer>();
         listNeighborAL =
                 (ArrayList<Integer>) flightMatrix.get(actualNode).clone();
-//        Collections.sort(listNeighborAL, new Comparator<Integer>() {
-//            @Override
-//            public int compare(Integer flight1, Integer flight2)
-//            {
-//                Integer comp1 = getListFlight().get(flight1-1).getOriginHour()*60 +
-//                        getListFlight().get(flight1-1).getOriginMin();
-//                Integer comp2 = getListFlight().get(flight2-1).getOriginHour()*60 +
-//                        getListFlight().get(flight2-1).getOriginMin();
-//                return comp1.compareTo(comp2);
-//            }
-//        });
-        int[] listNeighbor = new int[listNeighborAL.size()];
-        int[] listInferior = new int[listNeighborAL.size()];
-        int[] listSuperior = new int[listNeighborAL.size()];
-        for(int i=0; i<listNeighborAL.size(); i++){
-            listNeighbor[i] = -1;
-            listInferior[i] = -1;
-            listSuperior[i] = -1;
-        }
+        ArrayList<Integer> listSuperior = new ArrayList<Integer>();
+        ArrayList<Integer> listInferior = new ArrayList<Integer>();
+        
+//        int[] listNeighbor = new int[listNeighborAL.size()];
+//        int[] listInferior = new int[listNeighborAL.size()];
+//        int[] listSuperior = new int[listNeighborAL.size()];
+//        for(int i=0; i<listNeighborAL.size(); i++){
+//            listNeighbor[i] = -1;
+//            listInferior[i] = -1;
+//            listSuperior[i] = -1;
+//        }
         if(getLastMinusOne(route) > 0){
             /* Destiny */
             timeToCmp = obtainStandardHour(getListFlight().get(route[getLastMinusOne(route)-1]-1),'L');
         }
-        int iSup = 0, iInf = 0, iTop = 0;
-        
-        for(int i=0; i<listNeighbor.length; i++){
+//        int iSup = 0, iInf = 0, iTop = 0;
+//        
+        for(int i=0; i<listNeighborAL.size(); i++){
             /* Origin */
             cmpTime = obtainStandardHour(getListFlight().get(listNeighborAL.get(i)-1),'P');
             int[] provisional = route.clone();
@@ -438,36 +431,36 @@ public class TabuSearch {
 //                    (capVuelos.get(listNeighborAL.get(i)-1) > 280))
             if(capVuelos.get(listNeighborAL.get(i)-1) > 280)
                 continue;
-            if(cmpTime > timeToCmp){
-                listSuperior[iSup] = listNeighborAL.get(i);
-                iSup++;
+            if(cmpTime <= timeToCmp || ((cmpTime > timeToCmp) && (this.intercont == 1))){
+                listInferior.add(listNeighborAL.get(i));
             }else{
-                listInferior[iInf] = listNeighborAL.get(i);
-                iInf++;
+                listSuperior.add(listNeighborAL.get(i));
             }
         }
-        int iGen = 0;
-//        System.out.println("INICIO");
-        
-        for(int i=0; i<listSuperior.length; i++){
-            
-            if(listSuperior[i] == -1) break;
-            listNeighbor[iGen] = listSuperior[i];
-            iGen++;
-        }
-        for(int i=0; i<listInferior.length; i++){
-            if(listInferior[i] == -1) break;
-            listNeighbor[iGen] = listInferior[i];
-            iGen++;
-        }
-        //VECINOS
-//        System.out.print(currentElement);
-//        System.out.print(" ");
-//        if(currentElement > -1)
-//            System.out.print(String.valueOf(route[currentElement]) + " " + String.valueOf(actualNode));
-//        System.out.print(" ");
-//        printArray(listNeighbor);
-        return listNeighbor;
+//        int iGen = 0;
+////        System.out.println("INICIO");
+//        
+//        for(int i=0; i<listSuperior.length; i++){
+//            
+//            if(listSuperior[i] == -1) break;
+//            listNeighbor[iGen] = listSuperior[i];
+//            iGen++;
+//        }
+//        for(int i=0; i<listInferior.length; i++){
+//            if(listInferior[i] == -1) break;
+//            listNeighbor[iGen] = listInferior[i];
+//            iGen++;
+//        }
+//        //VECINOS
+////        System.out.print(currentElement);
+////        System.out.print(" ");
+////        if(currentElement > -1)
+////            System.out.print(String.valueOf(route[currentElement]) + " " + String.valueOf(actualNode));
+////        System.out.print(" ");
+////        printArray(listNeighbor);
+//        return listNeighbor;
+        listSuperior.addAll(listInferior);
+        return listSuperior;
     }
     
     public String generateTabuString(int[] solution){
@@ -505,7 +498,7 @@ public class TabuSearch {
         
         int bestFitness = 0;
         int[] bestRoute = originalRoute.clone();
-        int[] listNeighbor;
+        ArrayList<Integer> listNeighbor;
         int[] neighborRoute = generateInitialRoute();
         
         if(!finded)
@@ -562,24 +555,24 @@ public class TabuSearch {
         System.out.println();
     }
     
-    private int[] dfs(int[] route, int[] neighborList, int currentLevel, ArrayList<String> tabuString){
+    private int[] dfs(int[] route, ArrayList<Integer> neighborList, int currentLevel, ArrayList<String> tabuString){
 	if((route.equals(generateInitialRoute()) == false) && (isSolution(route) == 1)
                 && (isBanned(tabuString, route) == 0)){
             this.finded = true;
             return route;
         }
-	else if ((currentLevel > 1) && (neighborList.length == 0 || overload(route) == 1)){
+	else if ((currentLevel > 1) && (neighborList.isEmpty() || overload(route) == 1)){
             /* Entra si la ruta elegida está "sobrecargada" */
             String newTabu = generateTabuString(route);
             tabuString.add(newTabu);
             return generateInitialRoute();
         }
 	else{
-            int[] auxNeighborList = neighborList.clone();
+            ArrayList<Integer> auxNeighborList = (ArrayList<Integer>) neighborList.clone();
             int[] auxRoute = route.clone();
             if(currentLevel > 1)
                 auxNeighborList = obtainNeighbor((currentLevel-2), auxRoute);
-            if(getLastMinusOne(auxNeighborList) == 0){
+            if(auxNeighborList.isEmpty()){
 //                System.out.print("Ruta prov:"); printArray(auxRoute);
                 String newTabu = generateTabuString(auxRoute);
                 tabuString.add(newTabu);
@@ -593,8 +586,8 @@ public class TabuSearch {
                 }
             }
 //            System.out.print(currentLevel);
-            for(int i=0; i<getLastMinusOne(auxNeighborList); i++){
-                auxRoute[currentLevel-1] = auxNeighborList[i];
+            for(int i=0; i<auxNeighborList.size(); i++){
+                auxRoute[currentLevel-1] = auxNeighborList.get(i);
 //                printArray(auxRoute);
                 for(int iter = currentLevel; iter<auxRoute.length; iter++)
                     auxRoute[iter] = -1;
