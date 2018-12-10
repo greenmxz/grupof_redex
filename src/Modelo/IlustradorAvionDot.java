@@ -436,11 +436,11 @@ static final int FONT_SIZE = 11;
         }else{// VUELO INTERCONTINENTAL
             if (pack.getTiempoTranscurridoMM() > 2880){
                 // COLAPSA POR TIEMPO, VUELO CONTINENTAL QUE TARDA MAS DE DOS DIAS
-                System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
+//                System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
                 System.out.println("id pack " + id_pack);
-                JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+this.horaMundial+":"+this.minutoMundial+" por tardanza de vuelo\n"
-                                + "Vuelo "+v.getId()+ " de "+aero_origen+" a "+aero_destino);                            
-                            cerrado=1;
+//                JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+this.horaMundial+":"+this.minutoMundial+" por tardanza de vuelo\n"
+//                                + "Vuelo "+v.getId()+ " de "+aero_origen+" a "+aero_destino);                            
+//                            cerrado=1;
                 
             }
         }
@@ -562,7 +562,7 @@ static final int FONT_SIZE = 11;
                     this.cantMaxColapsoAero = aero.getCapActual();
                     this.aeroColapsoMax = aero.getCountry();
                     JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+this.horaMundial+":"+this.minutoMundial+" por capacidad de aeropuerto\n"
-                                + "Aeropuerto "+aero.getIdentificator()+ " de "+this.aeroColapsoMax+" con "+this.cantMaxColapsoAero+" paquetes.");                            
+                                + "Aeropuerto "+aero.getOfficialName() + " (" + aero.getIcaoCode()+ ") " + " de "+this.aeroColapsoMax+" con "+this.cantMaxColapsoAero+" paquetes.");                            
                             cerrado=1;
                 }
 
