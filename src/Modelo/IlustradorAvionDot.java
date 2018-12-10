@@ -32,6 +32,7 @@ import java.awt.geom.Rectangle2D;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -370,7 +371,7 @@ static final int FONT_SIZE = 11;
 
                                 //VERIFICA COLAPSO POR TIEMPO    
                                 verificaColapsoxTiempo(v,i);
-
+                                if(cerrado==1)return;
                                //System.out.println("AQUI EJEAJEAJ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ids.length);
                                 if (ids.length == 1){// es su ultimo paradero
                                     this.listPackAlgo.get(i).setEsFinal(1);
@@ -406,7 +407,11 @@ static final int FONT_SIZE = 11;
                         if (this.cantMaxColapsoAvion < v.getCapacidadActual()){
                             this.cantMaxColapsoAvion = v.getCapacidadActual();
                             this.avionColapsoMax = v.getId();
+                            JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+this.horaMundial+":"+this.minutoMundial+" por capacidad de vuelo\n"
+                                + "Vuelo "+v.getId() + " con "+v.getCapacidadActual()+" paquetes.");                            
+                            cerrado=1;
                         }
+                        
                     }
                 }
             }
@@ -433,6 +438,10 @@ static final int FONT_SIZE = 11;
                 // COLAPSA POR TIEMPO, VUELO CONTINENTAL QUE TARDA MAS DE DOS DIAS
                 System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
                 System.out.println("id pack " + id_pack);
+                JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+this.horaMundial+":"+this.minutoMundial+" por tardanza de vuelo\n"
+                                + "Vuelo "+v.getId()+ " de "+aero_origen+" a "+aero_destino);                            
+                            cerrado=1;
+                
             }
         }
     }
@@ -552,6 +561,9 @@ static final int FONT_SIZE = 11;
                 if (this.cantMaxColapsoAero < aero.getCapActual()) {
                     this.cantMaxColapsoAero = aero.getCapActual();
                     this.aeroColapsoMax = aero.getCountry();
+                    JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+this.horaMundial+":"+this.minutoMundial+" por capacidad de aeropuerto\n"
+                                + "Aeropuerto "+aero.getIdentificator()+ " de "+this.aeroColapsoMax+" con "+this.cantMaxColapsoAero+" paquetes.");                            
+                            cerrado=1;
                 }
 
             }
@@ -798,11 +810,12 @@ static final int FONT_SIZE = 11;
                 for (avionDot dot : this.avionesDot) {
 
                     cambiaEstadoMov(dot);
-
+                    if(cerrado==1) return;
                     if (dot.getEstado_mov() == 1) {
                         //COLOR DEL ALMACEN
                         cambiaEstadoAlmacen(dot);
                         mueveAvion(dot);
+                        if(cerrado==1) return;
                         //EL TIEMPO TRANSCURRIDO DEL AVION AUMENTA EN 1 min mientras esta en movimiento
                         if (dot.getEstado_mov() == 1) {
                             dot.setTiempoTranscurridoMM(dot.getTiempoTranscurridoMM() + 1);

@@ -175,7 +175,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         panelFondo.add(panelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 150, 500));
 
         panelPrincipal.setLayout(new javax.swing.BoxLayout(panelPrincipal, javax.swing.BoxLayout.LINE_AXIS));
-        panelFondo.add(panelPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 4, 500));
+        panelFondo.add(panelPrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 800, 500));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -211,7 +211,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
 
         new Login().setVisible(true);
-        this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
