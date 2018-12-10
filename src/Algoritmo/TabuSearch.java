@@ -167,9 +167,6 @@ public class TabuSearch {
                 if(validator(origin, destiny)){
                     String time = String.valueOf(paquetesAct.get(iter).getOriginHour()) + ":" + 
                             String.valueOf(paquetesAct.get(iter).getOriginMin());
-                    if(listAirport.get(this.originId-1).getContinent() == listAirport.get(this.destinyId-1).getContinent())
-                        this.intercont = 0;
-                    else this.intercont = 1;
                     tabuAlgorithm(origin, destiny, time);
                     ArrayList<Integer> optimal = getRouteOptimal();
                     if(optimal.size() > 0)
@@ -216,6 +213,9 @@ public class TabuSearch {
     public void tabuAlgorithm(String codeOrigin, String codeDestiny, String hourBegin){
         this.originId = inputProcess.searchAirportId(codeOrigin);
         this.destinyId = inputProcess.searchAirportId(codeDestiny);
+        if(listAirport.get(this.originId-1).getContinent() == listAirport.get(this.destinyId-1).getContinent())
+                        this.intercont = 0;
+                    else this.intercont = 1;
         tabuString = new ArrayList<String>();
         routeOptimal = new ArrayList<Integer>();
         rutaRiesgo = generateInitialRoute();
