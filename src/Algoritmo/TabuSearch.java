@@ -7,6 +7,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 
 public class TabuSearch {
 
@@ -31,7 +35,7 @@ public class TabuSearch {
     private int timeToCmp;
     private int cantReruteo = 0;
     private ArrayList<Integer> forbidden;
-    
+    //Map<Integer, Algoritmo.Paquete> mapPackAlgo = new HashMap<Integer, Algoritmo.Paquete>();
 
     public TabuSearch(){
         this.listPack=new ArrayList<Paquete>();
@@ -212,6 +216,63 @@ public class TabuSearch {
         System.out.println("Vacíos: " + String.valueOf(noAsign));
         */
         return aux;
+    }
+    
+    public void executeVCRPTabuSimulator(Map<Integer, Algoritmo.Paquete> paquetesAct){
+        numAirport = getListAirport().size();
+        capVuelos = new ArrayList<Integer>();
+        forbidden = new ArrayList<Integer>();
+        
+        for(int i=0; i<listFlight.size(); i++)
+            capVuelos.add(0);
+        for(int i=0; i<listAirport.size(); i++)
+            forbidden.add(10);
+
+        int noAsign = 0;
+   
+        Iterator iter = paquetesAct.keySet().iterator();
+        
+        while(iter.hasNext()){
+            Integer key = (Integer)iter.next();
+            Paquete pack = paquetesAct.get(key);
+            //NO APLICA ALGORITMO A LOS QUE SE ENCUENTRAN EN EL AIRE Y A LOS QUE YA NO NECESITAN
+            if ((pack.getEstado() == 0 || (pack.getEstado() == 1 && pack.getNuevo() == 0)) && pack.getEsFinal() == 0){// SOLO PARA 0 o 1 y no es final
+                int origin = pack.getOriginAirport();
+                int destiny = pack.getDestinyAirport();
+
+//                getListPack().get(iter).print();
+                if(validator(origin, destiny)){
+                    String time = String.valueOf(pack.getOriginHour()) + ":" + 
+                            String.valueOf(pack.getOriginMin());
+                    tabuAlgorithm(origin, destiny, time);
+                    ArrayList<Integer> optimal = getRouteOptimal();
+                    if(optimal.size() > 0)
+                        for(int i : optimal)
+                            capVuelos.set(i-1, capVuelos.get(i-1)+1);
+
+                    String solution = generateTabuString(optimal);
+
+//                    System.out.println("Solution " + String.valueOf(iter) + ": " + solution);
+                    if(solution.equals("")){
+                        noAsign++;
+    //                    System.out.println(iter);
+                    }else{// si hay solucion
+                        if(pack.getEstado() == 1){
+                            this.cantReruteo++;
+                            //System.out.println("estado -> " + paquetesAct.get(iter).getEsFinal());
+                            //System.out.println("Ruta anterior -> " + paquetesAct.get(iter).getRuta());
+                        }                        
+                        pack.setRuta(solution);
+
+                    }
+
+                }else{
+                    System.out.println("Some airport doesn't exist!");
+                }
+            }
+        }
+        System.out.println("Cantidad de Reruteos " + this.cantReruteo);
+        System.out.println("Vacíos: " + String.valueOf(noAsign));
     }
     
     public void tabuAlgorithm(String codeOrigin, String codeDestiny, String hourBegin){
