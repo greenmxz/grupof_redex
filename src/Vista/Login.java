@@ -39,7 +39,6 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 public class Login extends javax.swing.JFrame implements ActionListener {
     private static int esPrimero=1;
-//public class Login extends javax.swing.JFrame  {
     private usuarioBL usuarioBL ;
     private usuario usuarioLogin;
     private Encriptar td ;
@@ -59,13 +58,11 @@ public class Login extends javax.swing.JFrame implements ActionListener {
      private int esInicio = 1;
      private int esInicioPack=1;
      private int esInicioPack2=1;
-     private ArrayList<usuario>arrUsuarios;
      private PaqueteBL controladorPaquete= new PaqueteBL(); 
      ArrayList<Algoritmo.Paquete>listaPackNew;
      ArrayList<Algoritmo.Paquete>listaPackProcesada=new ArrayList<>();
      ArrayList<Algoritmo.Paquete>listaPackGlobal=new ArrayList<>();
-     //private EjecutaAlgoritmo ejAlgo;
-     
+    
 
     public Login() {
        
@@ -90,8 +87,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
         
         ImageIcon imgFront = new ImageIcon(getClass().getResource("/Resource/frontlogin.png"));
         ImageIcon iconFront= new ImageIcon (imgFront.getImage().getScaledInstance(frontLogin.getWidth(), frontLogin.getHeight(), Image.SCALE_DEFAULT));
-        frontLogin.setIcon(iconFront);
-        
+        frontLogin.setIcon(iconFront);        
         
     }
 
@@ -205,9 +201,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null,  "Ha excedido el número de intentos permitidos,\n "
                         + "Debe de esperar "+usuarioLogin.getTiempoRestanteBaneado()+ " segundos.");
             }else{
-                if (usuarioLogin.isEncontrado()){
-                    
-                    
+                if (usuarioLogin.isEncontrado()){                                        
                     boolean respuesta = usuarioBL.iniciarSesion(usuarioLogin.getId());
                     if (respuesta==true){
                         JOptionPane.showMessageDialog(null, "Bienvenido");
@@ -217,26 +211,21 @@ public class Login extends javax.swing.JFrame implements ActionListener {
 
                         if (usuarioLogin.getRol().equals("gerente")){
                             frmMenuProvisional menuGerente = new frmMenuProvisional(usuarioLogin);
-
                             menuGerente.setVisible(true);
                         }
                         if (usuarioLogin.getRol().equals("secretario")){
                             frmMenuSecretary menuSecre= new frmMenuSecretary(usuarioLogin);
-
                             menuSecre.setVisible(true);
                         }
                         if (usuarioLogin.getRol().equals("administrador")){
                             frmMenuAdmin menuAdmin = new frmMenuAdmin(usuarioLogin);
-
                             menuAdmin.setVisible(true);
                         }
-                        System.out.println("Estoy escondido");
+
                         /* Crear nuevo hilo*/
                         this.timer = new Timer(8, (ActionListener) this);
                         timer.start();
                         
-//                            EjecutaAlgoritmo e = new EjecutaAlgoritmo();
-//                            e.start();
                     }else{
                         JOptionPane.showMessageDialog(null, "ERROR: El usuario ya se encuentra logueado en otra instancia.");
                     }
@@ -260,20 +249,14 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                     }
                 }
             }
-            //userName.setText("Usuario");
         }else{
-            //userName.setText("Usuario");
-            JOptionPane.showMessageDialog(null, "Usuario o contrasena incorrectos");
-            
+            JOptionPane.showMessageDialog(null, "Usuario o contrasena incorrectos");           
         }
         
     }//GEN-LAST:event_loginActionPerformed
 
-    public void actionPerformed(ActionEvent e) {
-        
-        try{
-            
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void actionPerformed(ActionEvent e) {        
+        try{                       
             if (this.minutoMundial<59){
                 this.minutoMundial++;
             }else{
@@ -306,8 +289,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 Algoritmo.Paquete pack=new Algoritmo.Paquete(origenHour,origenMin,origenId,destinoId,origenDay,origenMonth,origenYear);
                 pack.setIdentificator(id);
                 listaPackNew.add(pack);
-            }
-           
+            }           
             this.listPack.clear();
             int numElem=0;
             for(int i=0;i<listaPackGlobal.size();i++){
@@ -316,60 +298,40 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 else 
                     numElem++;
             }
-
             if (this.minutoMundial== 0  && this.horaMundial%2==0 ){                              
                 if(listaPackNew.size()>0){
-
-                        if(esInicioPack==1){
-                            esInicioPack=0;
-                            EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
-                            t.start();
-                            t.join();
-                            this.tiempoAlgoMM = t.getTiempoAlgoMM();
-
-                            System.out.println("ES LA HORA ->>>>>>");
-                            listaPackProcesada=t.getListPackAlgo();
-                        
-                           
-                            listaPackNew.clear();
-                            
-                        }
-                        else if(esInicioPack2==1){
-                            esInicioPack2=0;
-                            EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
-                            t.start();
-                            t.join();
-                            this.tiempoAlgoMM = t.getTiempoAlgoMM();
-
-                            System.out.println("ES LA HORA ->>>>>>");
-                            listaPackProcesada=t.getListPackAlgo();
-                  
-                            listaPackNew.clear();
-                        }
-                        else if(listaPackProcesada.size()==0 ){
-                            EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
-                            t.start();
-                            t.join();
-                            this.tiempoAlgoMM = t.getTiempoAlgoMM();
-
-                            System.out.println("ES LA HORA ->>>>>>");
-                            listaPackProcesada=t.getListPackAlgo();
-                        
-                      
-                            listaPackNew.clear();
-                            
-                        }
-                        
+                    if(esInicioPack==1){
+                        esInicioPack=0;
+                        EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
+                        t.start();
+                        t.join();
+                        this.tiempoAlgoMM = t.getTiempoAlgoMM();
+                        System.out.println("ES LA HORA ->>>>>>");
+                        listaPackProcesada=t.getListPackAlgo();
+                        listaPackNew.clear();
                     }
-                
-                
-
+                    else if(esInicioPack2==1){
+                        esInicioPack2=0;
+                        EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
+                        t.start();
+                        t.join();
+                        this.tiempoAlgoMM = t.getTiempoAlgoMM();
+                        listaPackProcesada=t.getListPackAlgo();
+                        listaPackNew.clear();
+                    }
+                    else if(listaPackProcesada.size()==0 ){
+                        EjecutaAlgoritmo t = new EjecutaAlgoritmo(tabu,this.listaPackNew,this.tiempoAlgoMM,horaMundial,minutoMundial);
+                        t.start();
+                        t.join();
+                        this.tiempoAlgoMM = t.getTiempoAlgoMM();
+                        listaPackProcesada=t.getListPackAlgo();
+                        listaPackNew.clear();
+                    }
+                }
             }
                            
-            try{
-                
+            try{                
                 cambiaEstadoMov();
-
             }
             catch(Exception exp){
                 System.out.println("Error de detección de correo "+exp.getMessage());
@@ -389,17 +351,10 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             String ruta = pack.getRuta();
             // verifica si tiene camino por recorrer
             if (!ruta.equals("")){
-                //System.out.println(ruta);
-
-                //int tiempoPack = pack.getOriginHour()*60 + pack.getOriginMin();
-
-
                 String[] ids = ruta.split("-");
                 int idVuelo = Integer.parseInt(ids[0]);
                 Algoritmo.Vuelo v=this.tabu.getListFlight().get(idVuelo);
-                System.out.println("Paquete "+pack.getIdentificator());
-                System.out.println("Son las "+horaMundial+ " : "+minutoMundial);
-                System.out.println("Vuelo llego a las "+v.getDestinyHour() +" : "+v.getDestinyMin() );
+
                 if(horaMundial*60+minutoMundial==v.getDestinyHour()*60+v.getDestinyMin()){
                     AdministrarPedidoBL controladorPedido=new AdministrarPedidoBL();
                     String correos=controladorPedido.obtenerCorreosClientes(pack.getIdentificator());
@@ -440,7 +395,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 
                     }
                                     
-                   //System.out.println("AQUI EJEAJEAJ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ids.length);
+                  
                     if (ids.length == 1){// es su ultimo paradero
                         this.listaPackProcesada.get(i).setEsFinal(1);
             
@@ -526,33 +481,20 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             this.tabu.setListFlight(listaVuelosNew);
             this.tabu.generateFlightMatrix();
 
-            arrUsuarios=controladorCliente.obtenerUsuarios();
+     
 
-            
-            
-            //this.ejAlgo = new EjecutaAlgoritmo(this.tabu);
-                for (String a : this.Archivos){
-                    //dp.processPackNew("resources\\pack_enviados_generados\\" + a);
-                    dp.processPackNew("resources\\pack_enviados\\" + a);
-                }
+            for (String a : this.Archivos){
+                //dp.processPackNew("resources\\pack_enviados_generados\\" + a);
+                dp.processPackNew("resources\\pack_enviados\\" + a);
+            }
             this.tabu.setInputProcess(this.dp);
+            this.listPack = this.dp.getPackList();
+            if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
+                this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
 
-                System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
-
-
-                this.listPack = this.dp.getPackList();
-                //this.matrixPackXDay = this.dp.getMatrixPackXDay();
-                
-                System.out.println("numero total de paquetes: "+this.listPack.size());    
-                if (this.listPack.size()>0)//se coloca la fecha del primer pack como fecha del simulador
-                    this.calendar.set(this.listPack.get(0).getOriginYear(),this.listPack.get(0).getOriginMonth() - 1,this.listPack.get(0).getOriginDay());
-                
-                
-                //this.inicio = 1;
-              
         }catch(Exception ex){
            System.out.println("ERROR lecturaData " + ex.getMessage() );
-       }
+        }
         
     }
     private int buscarContinente(String c,ArrayList<continente>continentes){
@@ -626,11 +568,11 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 return;
             }//Xuq6t7Fr/Dg=
             td= new Encriptar();
-           String hashPwA = td.encrypt("123");
+            String hashPwA = td.encrypt("123");
             String hashPwB = td.decrypt(hashPwA);
             
-            System.out.println("ANTES DE ENCRIPTAR: "+hashPwA);
-            System.out.println("DESPUES DE ENCRIPTAR: "+hashPwB);
+            //System.out.println("ANTES DE ENCRIPTAR: "+hashPwA);
+            //System.out.println("DESPUES DE ENCRIPTAR: "+hashPwB);
             //String hashPw = MD5Hash(userRecuperar.getPassword());
             String hashPw = td.decrypt(userRecuperar.getPassword());
             

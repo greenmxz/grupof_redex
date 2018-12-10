@@ -32,6 +32,7 @@ import java.awt.geom.Rectangle2D;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -406,7 +407,11 @@ static final int FONT_SIZE = 11;
                         if (this.cantMaxColapsoAvion < v.getCapacidadActual()){
                             this.cantMaxColapsoAvion = v.getCapacidadActual();
                             this.avionColapsoMax = v.getId();
+                            JOptionPane.showMessageDialog(null, "El sistema colapsó por capacidad de vuelo\n"
+                                + "Vuelo "+v.getId() + " con "+v.getCapacidadActual()+" paquetes.");                            
+                            cerrado=1;
                         }
+                        
                     }
                 }
             }
