@@ -225,17 +225,19 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                             menuGerente.setVisible(true);
                         }
                         if (usuarioLogin.getRol().equals("secretario")){
+                             /* Crear nuevo hilo*/
+                            this.timer = new Timer(8, (ActionListener) this);
+                            timer.start();
                             frmMenuSecretary menuSecre= new frmMenuSecretary(usuarioLogin);
                             menuSecre.setVisible(true);
+                            
                         }
                         if (usuarioLogin.getRol().equals("administrador")){
                             frmMenuAdmin menuAdmin = new frmMenuAdmin(usuarioLogin);
                             menuAdmin.setVisible(true);
                         }
 
-                        /* Crear nuevo hilo*/
-                        this.timer = new Timer(8, (ActionListener) this);
-                        timer.start();
+                       
                         
                     }else{
                         JOptionPane.showMessageDialog(null, "ERROR: El usuario ya se encuentra logueado en otra instancia.");
