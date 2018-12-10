@@ -453,7 +453,8 @@ public class MapWorkerTest {
                     LocalDateTime now = LocalDateTime.now();
                     //String fecha=dateFormat.format(cal);
                     //System.out.println(fecha);
-                    getSaveSnapShot(f,"captures\\"+dtf.format(now)+".png");
+                    //getSaveSnapShot(f,"captures\\"+dtf.format(now)+".png");
+                    getSaveSnapShot(f,"captures/"+dtf.format(now)+".png");
                 }catch(Exception exp){
                     System.out.println("Error de captura");
                 }

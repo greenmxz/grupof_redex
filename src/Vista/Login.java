@@ -475,7 +475,8 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             ArrayList<aeropuerto>listaAeropuertos=new ArrayList<aeropuerto>();
             ArrayList<Modelo.Vuelo>listaVuelos=new ArrayList<Modelo.Vuelo>();
             
-            final File folder = new File("resources\\pack_enviados");
+            //final File folder = new File("resources\\pack_enviados");
+            final File folder = new File("resources/pack_enviados");
                 listFilesForFolder(folder);
                 
                 
@@ -526,8 +527,8 @@ public class Login extends javax.swing.JFrame implements ActionListener {
      
 
             for (String a : this.Archivos){
-                //dp.processPackNew("resources\\pack_enviados_generados\\" + a);
-                dp.processPackNew("resources\\pack_enviados\\" + a);
+                dp.processPackNew("resources/pack_enviados/" + a);
+                //dp.processPackNew("resources\\pack_enviados\\" + a);
             }
             this.tabu.setInputProcess(this.dp);
             this.listPack = this.dp.getPackList();
