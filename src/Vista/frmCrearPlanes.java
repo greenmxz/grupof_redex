@@ -19,7 +19,7 @@ import javax.swing.*;
 
 
 public class frmCrearPlanes extends javax.swing.JDialog {
-
+   
     /* Atributos */
     private generalBL generalBL;
     private ArrayList<rol> roles;
@@ -34,10 +34,12 @@ public class frmCrearPlanes extends javax.swing.JDialog {
     int id_persona;
     public frmCrearPlanes(java.awt.Frame parent, boolean modal,frmAdministrarVuelo padre) {
         super(parent, modal);
+         
         vueloBL=new VueloBL();
         generalBL = new generalBL();
         usuarioBL = new usuarioBL();
         initComponents();
+        jButton2.hide();
         setLocationRelativeTo(parent);
         inicializar();
         index=  padre.getUsuarioSeleccionado();
@@ -183,6 +185,11 @@ public class frmCrearPlanes extends javax.swing.JDialog {
         panelFondo.add(registrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 160, -1, -1));
 
         jButton2.setText("Limpiar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         panelFondo.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 160, 83, -1));
 
         jButton3.setText("Cancelar");
@@ -283,6 +290,10 @@ public class frmCrearPlanes extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
