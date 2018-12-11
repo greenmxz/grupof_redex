@@ -24,8 +24,6 @@ public class Secretario_Administrar_Cliente extends javax.swing.JPanel {
     private void initComponents() {
 
         panelFondo = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         panelFiltrado = new javax.swing.JPanel();
         label2 = new java.awt.Label();
         txtDNI = new javax.swing.JTextField();
@@ -37,6 +35,8 @@ public class Secretario_Administrar_Cliente extends javax.swing.JPanel {
         txtApMat = new javax.swing.JTextField();
         btnFiltrar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         btnModificar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
@@ -45,35 +45,28 @@ public class Secretario_Administrar_Cliente extends javax.swing.JPanel {
 
         panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("ADMINISTRACIÓN DE CLIENTES");
-        panelFondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(285, 22, -1, -1));
-
-        jLabel1.setText("Resultado de consulta");
-        panelFondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 258, -1, -1));
-
         panelFiltrado.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Opciones de filtrado"));
         panelFiltrado.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         label2.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label2.setText("DNI :");
-        panelFiltrado.add(label2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, -1, 20));
-        panelFiltrado.add(txtDNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 130, 20));
+        panelFiltrado.add(label2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, -1, 20));
+        panelFiltrado.add(txtDNI, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 40, 130, 20));
 
         label5.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label5.setText("Nombre :");
-        panelFiltrado.add(label5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 40, -1, 20));
-        panelFiltrado.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 40, 210, 20));
+        panelFiltrado.add(label5, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 40, -1, 20));
+        panelFiltrado.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 40, 200, 20));
 
         label10.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label10.setText("Apellido paterno :");
-        panelFiltrado.add(label10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, 20));
-        panelFiltrado.add(txtApPat, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, 210, 20));
+        panelFiltrado.add(label10, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, 90, 20));
+        panelFiltrado.add(txtApPat, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, 170, 20));
 
         label11.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         label11.setText("Apellido materno :");
         panelFiltrado.add(label11, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, -1, 20));
-        panelFiltrado.add(txtApMat, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 70, 210, 20));
+        panelFiltrado.add(txtApMat, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 70, 200, 20));
 
         btnFiltrar.setText("Filtrar");
         btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
@@ -81,7 +74,7 @@ public class Secretario_Administrar_Cliente extends javax.swing.JPanel {
                 btnFiltrarActionPerformed(evt);
             }
         });
-        panelFiltrado.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 160, -1));
+        panelFiltrado.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 110, 160, -1));
 
         btnLimpiar.setText("Limpiar filtro");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
@@ -89,9 +82,16 @@ public class Secretario_Administrar_Cliente extends javax.swing.JPanel {
                 btnLimpiarActionPerformed(evt);
             }
         });
-        panelFiltrado.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 160, -1));
+        panelFiltrado.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 110, 160, -1));
 
         panelFondo.add(panelFiltrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 68, 725, 156));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setText("ADMINISTRACIÓN DE CLIENTES");
+        panelFondo.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(285, 22, -1, -1));
+
+        jLabel1.setText("Resultado de consulta");
+        panelFondo.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 258, -1, -1));
 
         btnModificar.setText("Modificar");
         btnModificar.addActionListener(new java.awt.event.ActionListener() {
