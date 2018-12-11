@@ -129,19 +129,21 @@ public class TabuSimulator extends Thread{
             // EL ALGORITMO SOLO BRINDA RUTA A LOS PACKS DISPONIBLES Y A LOS NUEVOS
             //this.listPackAlgo.addAll(this.listPack);
             
-            this.listPackAlgoFusion.addAll(this.listPackAlgoAnterior);
-            this.listPackAlgoFusion.addAll(this.listPackAlgo);
+            //this.listPackAlgoFusion.addAll(this.listPackAlgoAnterior);
+            //this.listPackAlgoFusion.addAll(this.listPackAlgo);
             
-            System.out.println("cant de paquetes totales que aplicaran tabu - " + this.listPackAlgoFusion.size());
-            if (this.listPackAlgoFusion.size() > 0){
+            //System.out.println("cant de paquetes totales que aplicaran tabu - " + this.listPackAlgoFusion.size());
+            
+            if (this.listPackAlgo.size() > 0){
                 //se van agregando las rutas segun se aplique el algoritmo
                 //MUTEX
                 mutex.acquire();
                 System.out.println("ENTRO AL HILO");
                 
                 //OBTIENE RUTAS
-                this.tabu.executeVCRPTabu(this.listPackAlgoFusion);
-                
+//                this.tabu.executeVCRPTabu(this.listPackAlgoFusion);
+                    this.tabu.executeVCRPTabu(this.listPackAlgo);
+                    //this.listPack.addAll(listPackAlgo);
                 
             //if (this.listPackAlgo.size() > 0){
                     //this.rutasPaquetesAlgo.addAll(rutasPacksTrabajados);
@@ -170,6 +172,7 @@ public class TabuSimulator extends Thread{
         }
         catch(Exception ex ){
             System.out.println("HILOS ERROR: "+ex.getMessage());
+            ex.printStackTrace();
         }
       
         
@@ -184,11 +187,13 @@ public class TabuSimulator extends Thread{
     }
 
     public ArrayList<Paquete> getListPackAlgo() {
-        return listPackAlgoFusion;
+//        return listPackAlgoFusion;
+        return listPackAlgo;
     }
 
     public void setListPackAlgo(ArrayList<Paquete> listPackAlgo) {
-        this.listPackAlgoFusion = listPackAlgo;
+//        this.listPackAlgoFusion = listPackAlgo;
+        this.listPackAlgo = listPackAlgo;
     }
 
     public int getManual() {
