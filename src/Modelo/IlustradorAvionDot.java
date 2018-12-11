@@ -58,12 +58,12 @@ static final int FONT_SIZE = 11;
     private int diaMundial = 0;
     private int mesMundial = 0;
     private int anioMundial = 0;
-    private int timeMS=8;
+    private int timeMS=250;
     private int cantDays = 0;
     private int cantTics = 0;
     private int inicio = 0;
     private int inicioAlgo = 1;
-    private int algoritmoDelayMinutes = 60*2;
+    private int algoritmoDelayMinutes = 60*4;
     private int tiempoAlgoMM = 0;
     private ArrayList<String> Archivos = new ArrayList<>();
     private int cantMaxColapsoAero = 0;
@@ -436,13 +436,13 @@ static final int FONT_SIZE = 11;
         if (continente_origen == continente_destino){ // VUELO CONTINENTAL
             if (pack.getTiempoTranscurridoMM() > 1440){
                 // COLAPSA POR TIEMPO, VUELO CONTINENTAL QUE TARDA MAS DE UN DIA                System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
-                System.out.println("id pack " + id_pack);
+//                System.out.println("id pack " + id_pack);
             }
         }else{// VUELO INTERCONTINENTAL
             if (pack.getTiempoTranscurridoMM() > 2880){
                 // COLAPSA POR TIEMPO, VUELO CONTINENTAL QUE TARDA MAS DE DOS DIAS
 //                System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
-                System.out.println("id pack " + id_pack);
+//                System.out.println("id pack " + id_pack);
 
 //                String ceroHora="";
 //                String ceroMin="";
@@ -660,7 +660,7 @@ static final int FONT_SIZE = 11;
 //                      dp.processPackNew("resources\\pack_enviados\\" + a);
                 }
 
-                System.out.println("cant total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
+                System.out.println("Cantidad total de paquetes - " + this.dp.getPackList().size()); // todos los paquetes
 
 
                 this.listPack = this.dp.getPackList();
@@ -718,8 +718,8 @@ static final int FONT_SIZE = 11;
                 //AGREGA LISTA PAQUETES CON RUTAS A LA EXISTENTE
                 System.out.println("------>cantidad de packs  procesados " +  simulador.getListPackAlgo().size());
                 
-                //this.listPackAlgo.addAll(simulador.getListPackAlgo());
-                this.listPackAlgo = simulador.getListPackAlgo();
+                this.listPackAlgo.addAll(simulador.getListPackAlgo());
+                //this.listPackAlgo = simulador.getListPackAlgo();
                 
                 System.out.println("------>tiempo " +  totalTime/1000000000 + " segundos"); 
                 
