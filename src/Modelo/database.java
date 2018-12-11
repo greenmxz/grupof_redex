@@ -6,6 +6,7 @@
 package Modelo;
 
 import java.sql.*;
+import java.util.Properties;
 
 /**
  *
@@ -17,9 +18,21 @@ public class database {
     
     public database(){
         try{
+            Properties properties = new Properties();
+            properties.setProperty("user", "root");
+            //properties.setProperty("password", "root");
+            properties.setProperty("password", "burp12"); //Para Linux maquina 5 V
+            properties.setProperty("useSSL", "false");
+            properties.setProperty("autoReconnect", "true");
         this.setDriver("com.mysql.jdbc.Driver");
-        connection = DriverManager.getConnection( "jdbc:mysql://192.168.201.105:3306/redexdb?noAccessToProcedureBodies=true","root","burp12" );
+
+        //connection = DriverManager.getConnection( "jdbc:mysql://192.168.201.105:3306/redexdb?noAccessToProcedureBodies=true","root","burp12" );//Para linux con msje
+        
         //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb","root","root" );
+
+       // connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb",properties );
+        connection = DriverManager.getConnection( "jdbc:mysql://192.168.201.105:3306/redexdb?noAccessToProcedureBodies=true",properties );//Para linux sin msje
+
 //        System.out.println("Se ha conectado correctamente a la base de datos");
         }catch(Exception e){
             System.out.println("Ha ocurrido un error en la conexion "+ e.getMessage());
