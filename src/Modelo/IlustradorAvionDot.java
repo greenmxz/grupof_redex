@@ -72,7 +72,7 @@ static final int FONT_SIZE = 11;
     private int avionColapsoMax = -1;
     private int cantPacksEntrantes = 0;
     private int cantPacksSalientes = 0;
-   
+    
     //private ArrayList<String> rutasPaquetes = new ArrayList();
 
     private ArrayList<Algoritmo.Paquete> rutasPaquetesAlgo = new ArrayList();
@@ -407,7 +407,11 @@ static final int FONT_SIZE = 11;
                         if (this.cantMaxColapsoAvion < v.getCapacidadActual()){
                             this.cantMaxColapsoAvion = v.getCapacidadActual();
                             this.avionColapsoMax = v.getId();
-                            JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+this.horaMundial+":"+this.minutoMundial+" por capacidad de vuelo\n"
+                            String ceroHora="";
+                            String ceroMin="";
+                            if(horaMundial<10) ceroHora+="0";
+                            if (minutoMundial<10) ceroMin+="0";
+                            JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+ceroHora+this.horaMundial+":"+ceroMin+this.minutoMundial+" por capacidad de vuelo\n"
                                 + "Vuelo "+v.getId() + " con "+v.getCapacidadActual()+" paquetes.");                            
                             cerrado=1;
                         }
@@ -438,7 +442,11 @@ static final int FONT_SIZE = 11;
                 // COLAPSA POR TIEMPO, VUELO CONTINENTAL QUE TARDA MAS DE DOS DIAS
                 System.out.println("--------COLAPSO POR TIEMPO DE LLEGADA ------");
                 System.out.println("id pack " + id_pack);
-                JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+this.horaMundial+":"+this.minutoMundial+" por tardanza de vuelo\n"
+                String ceroHora="";
+                String ceroMin="";
+                if(horaMundial<10) ceroHora+="0";
+                if (minutoMundial<10) ceroMin+="0";
+                JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+ceroHora+this.horaMundial+":"+ceroMin+this.minutoMundial+" por tardanza de vuelo\n"
                                 + "Vuelo "+v.getId()+ " de "+aero_origen+" a "+aero_destino);                            
                             cerrado=1;
                 
@@ -561,7 +569,11 @@ static final int FONT_SIZE = 11;
                 if (this.cantMaxColapsoAero < aero.getCapActual()) {
                     this.cantMaxColapsoAero = aero.getCapActual();
                     this.aeroColapsoMax = aero.getCountry();
-                    JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+this.horaMundial+":"+this.minutoMundial+" por capacidad de aeropuerto\n"
+                    String ceroHora="";
+                    String ceroMin="";
+                    if(horaMundial<10) ceroHora+="0";
+                    if (minutoMundial<10) ceroMin+="0";
+                    JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+ceroHora+this.horaMundial+":"+ceroMin+this.minutoMundial+" por capacidad de aeropuerto\n"
                                 + "Aeropuerto "+aero.getIdentificator()+ " de "+this.aeroColapsoMax+" con "+this.cantMaxColapsoAero+" paquetes.");                            
                             cerrado=1;
                 }

@@ -395,26 +395,31 @@ public class Login extends javax.swing.JFrame implements ActionListener {
             if (!ruta.equals("")){
                 String[] ids = ruta.split("-");
                 int idVuelo = Integer.parseInt(ids[0]);
-                Algoritmo.Vuelo v=this.tabu.getListFlight().get(idVuelo);
-
+                Algoritmo.Vuelo v=this.tabu.getListFlight().get(idVuelo-1);
+                
                 if(horaMundial*60+minutoMundial==v.getDestinyHour()*60+v.getDestinyMin()){
                     AdministrarPedidoBL controladorPedido=new AdministrarPedidoBL();
+                    System.out.println("Vuelo "+ids[0]+" desde "+v.getOriginAirport()+ " a "+v.getDestinyAirport());
                     String correos=controladorPedido.obtenerCorreosClientes(pack.getIdentificator());
                     String [] correoMatrix=correos.split(",");
                     String emisor=correoMatrix[0];
                     String receptor = correoMatrix[1];
+                    String ceroHora="";
+                    String ceroMin="";
+                    if(horaMundial<10) ceroHora+="0";
+                    if (minutoMundial<10) ceroMin+="0";
                     MailWorkerTest mwt=new MailWorkerTest("redex.admi@gmail.com","grupofredex");
                     String asunto="Localización de paquete";
                     if(ids.length==1){
                         String cuerpoEmisor="Estimado usuario, "
                                 + "lo saludamos para informarle que el paquete de numero de tracking "
-                                + pack.getIdentificator()+ " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()).getCountry()
-                                +" en su paradero final a las "+v.getDestinyHour()+":"+v.getDestinyMin()+". Muchas gracias por su atención.";
+                                + pack.getIdentificator()+ " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()-1).getCountry()
+                                +" en su paradero final a las "+ceroHora+v.getDestinyHour()+":"+ceroMin+v.getDestinyMin()+". Muchas gracias por su atención.";
                         
                         String cuerpoReceptor="Estimado usuario, "
                                 + "lo saludamos para informarle que el paquete de numero de tracking "
-                                + pack.getIdentificator() + " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()).getCountry()
-                                +" en su paradero final a las "+v.getDestinyHour()+":"+v.getDestinyMin()+". Por favor, acercarse a recoger su encargo. Muchas gracias por su atención.";
+                                + pack.getIdentificator() + " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()-1).getCountry()
+                                +" en su paradero final a las "+ceroHora+v.getDestinyHour()+":"+ceroMin+v.getDestinyMin()+". Por favor, acercarse a recoger su encargo. Muchas gracias por su atención.";
                         mwt.enviarConGMail(emisor, asunto, cuerpoEmisor);
                         mwt.enviarConGMail(receptor,asunto,cuerpoReceptor);
                         mwt.enviarConGMail("redex.admi@gmail.com", asunto, cuerpoReceptor);
@@ -429,8 +434,8 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                     }else{
                         String cuerpo="Estimado usuario, "
                                     + "lo saludamos para informarle que el paquete de numero de tracking "
-                                + pack.getIdentificator() + " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()).getCountry()
-                                    +" a las "+v.getDestinyHour()+":"+v.getDestinyMin()+". Muchas gracias por su atención.";
+                                + pack.getIdentificator() + " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()-1).getCountry()
+                                    +" a las "+ceroHora+v.getDestinyHour()+":"+ceroMin+v.getDestinyMin()+". Muchas gracias por su atención.";
                         mwt.enviarConGMail(emisor, asunto, cuerpo);
                         mwt.enviarConGMail(receptor,asunto,cuerpo);
                         mwt.enviarConGMail("redex.admi@gmail.com", asunto, cuerpo);
