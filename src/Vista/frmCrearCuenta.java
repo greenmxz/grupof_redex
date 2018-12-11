@@ -29,10 +29,11 @@ public class frmCrearCuenta extends javax.swing.JDialog {
     int index;
     int id_persona;
     public frmCrearCuenta(java.awt.Frame parent, boolean modal,frmAdministrarCuenta padre) {
-        super(parent, modal);
+        super(parent, modal);     
         generalBL = new generalBL();
         usuarioBL = new usuarioBL();
-        initComponents();
+        initComponents();      
+        jButton2.hide();
         setLocationRelativeTo(parent);
         inicializar();
         index=  padre.getUsuarioSeleccionado();
@@ -360,9 +361,20 @@ public class frmCrearCuenta extends javax.swing.JDialog {
         panelFondo.add(registrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 410, -1, -1));
 
         jButton2.setText("Limpiar");
+        jButton2.setHideActionText(true);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         panelFondo.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 410, 83, -1));
 
         jButton3.setText("Cancelar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         panelFondo.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 410, 87, -1));
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -537,6 +549,15 @@ LocalDate localD = date.toLocalDate();
             contraseñaRepetir.setEchoChar('*');
         }
     }//GEN-LAST:event_cboCaracterMouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
