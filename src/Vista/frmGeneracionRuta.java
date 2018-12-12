@@ -137,9 +137,9 @@ public class frmGeneracionRuta extends javax.swing.JPanel {
             txtInforme.setText(texto);
             TabuSearch ts = new TabuSearch();
             String origen = txtOrigen.getText();
-            ts.inputData("resources\\aeropuertos.txt",
-                "resources\\planes_vuelo.txt",
-                "resources\\pack_enviados\\pack_enviado_" + origen + ".txt");
+            ts.inputData("resources/aeropuertos.txt",
+                "resources/planes_vuelo.txt",
+                "resources/pack_enviados/pack_enviado_" + origen + ".txt");
             String destino = txtDestino.getText();
             LocalDate dia = dtpLlegada.getDatePicker().getDate();
             LocalTime hora = dtpLlegada.getTimePicker().getTime();

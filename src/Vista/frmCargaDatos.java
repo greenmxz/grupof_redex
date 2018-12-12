@@ -42,7 +42,8 @@ public class frmCargaDatos extends javax.swing.JPanel {
     
     public void cargarHusos(){
         try{
-            BufferedReader reader = new BufferedReader(new FileReader("resources\\husos.txt"));
+           //BufferedReader reader = new BufferedReader(new FileReader("resources\\husos.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("resources/husos.txt"));
             String line;
             String continent = "";
             while( (line = reader.readLine()) != null){
@@ -382,7 +383,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
     
     public ArrayList<paquete> procesarPaquetes(String ruta){
         ArrayList<paquete> aux = new ArrayList<paquete>();
-        String backslash = "\\";
+        String backslash = "/";
         String identificator = ruta.split(Pattern.quote(backslash))[ruta.split(Pattern.quote(backslash)).length - 1]
                 .split("_")[2].substring(0, 4);
         int linea = 1;
@@ -676,7 +677,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
                     try{
                         for(String str : fileList){
                             PaqueteBL procBL = new PaqueteBL();
-                            procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion() + "\\" + str));
+                            procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion() + "/" + str));
                         }
                         JOptionPane.showMessageDialog(null,
                         "El proceso de registro de paquetes", "Término de proceso",

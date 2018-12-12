@@ -22,7 +22,7 @@ public class TabuSearch {
     private int[] rutaRiesgo;
     private int numAirport;
     private int numFlight;
-    private int numInt = 5;
+    private int numInt = 1;
     private int originId;
     private int destinyId;
     private int limit; // 2880 = intercontinental, 1440 = no
