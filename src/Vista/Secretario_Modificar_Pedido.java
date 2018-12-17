@@ -46,6 +46,9 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
     
     public Secretario_Modificar_Pedido() {
         initComponents();
+        label5.hide(); label4.hide();label2.hide(); label1.hide();
+        jComboBox2.hide();jComboBox1.hide();
+        jComboBox5.hide();jComboBox4.hide();
     }
     
     public Secretario_Modificar_Pedido(javax.swing.JTable tabla, pedido pedido,java.awt.Frame parent, boolean modal,frmAdministrarCuenta padre){
@@ -510,7 +513,7 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
         
                 
         
-        if (cliente_emisor != null && cliente_receptor != null && aeropuerto_origen != null && aeropuerto_destino != null){
+        if (cliente_emisor != null && cliente_receptor != null && aeropuerto_origen != null && aeropuerto_destino != null && jTextField3.getText()!=""){
             
             if (aeropuerto_origen.getId() == aeropuerto_destino.getId()){
                 JOptionPane.showMessageDialog(null, 

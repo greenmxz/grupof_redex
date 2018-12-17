@@ -37,6 +37,10 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
     public Secretario_Crear_Pedido(java.awt.Frame parent, boolean modal, javax.swing.JTable tabla,int id) {
         super(parent, modal);
         initComponents();
+        label5.hide(); label4.hide();label14.hide(); label15.hide();
+        jComboBox2.hide();jComboBox1.hide();
+        jComboBox5.hide();jComboBox4.hide();
+        
         inicializar_combo(jComboBox2,jComboBox1,jComboBox3);
         inicializar_combo(jComboBox5,jComboBox4,jComboBox6);
         this.tabla = tabla;
@@ -408,7 +412,7 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // REGISTRAR PEDIDO
 
-        if (cliente_emisor != null && cliente_receptor != null && aeropuerto_origen != null && aeropuerto_destino != null){
+        if (cliente_emisor != null && cliente_receptor != null && aeropuerto_origen != null && aeropuerto_destino != null && jTextField3.getText()!=""){
 
             if (aeropuerto_origen.getId() == aeropuerto_destino.getId()){
                 JOptionPane.showMessageDialog(null,
