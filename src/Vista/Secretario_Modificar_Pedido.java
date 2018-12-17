@@ -46,9 +46,7 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
     
     public Secretario_Modificar_Pedido() {
         initComponents();
-        label5.hide(); label4.hide();label2.hide(); label1.hide();
-        jComboBox2.hide();jComboBox1.hide();
-        jComboBox5.hide();jComboBox4.hide();
+
     }
     
     public Secretario_Modificar_Pedido(javax.swing.JTable tabla, pedido pedido,java.awt.Frame parent, boolean modal,frmAdministrarCuenta padre){
@@ -61,6 +59,9 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
         super(parent, modal);
         try{
             initComponents();  
+                    label5.hide(); label4.hide();label2.hide(); label1.hide();
+        jComboBox2.hide();jComboBox1.hide();
+        jComboBox5.hide();jComboBox4.hide();
             this.tabla = tabla;
             this.pedido = pedido;
             
