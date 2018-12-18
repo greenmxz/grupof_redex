@@ -352,8 +352,8 @@ public class AdministrarPedidoDA {
                         "id_aeropuerto_emisor = ?,\n" +
                         "id_cliente_receptor = ?,\n" +
                         "id_aeropuerto_receptor = ?,\n" +
-                        "id_aeropuerto_actual = ?,\n" +
-                        "id_estado = ?\n" +
+                        "id_aeropuerto_actual = ?\n" +
+                       
                         "WHERE id = ?;"; 
                         
                     PreparedStatement stmt = connect.getConnection().prepareStatement(query);
@@ -367,8 +367,8 @@ public class AdministrarPedidoDA {
                     stmt.setInt(7, pedido.getCliente_receptor().getId());
                     stmt.setInt(8, pedido.getAeropuerto_receptor().getId());
                     stmt.setInt(9, pedido.getAeropuerto_actual().getId());
-                    stmt.setString(10, pedido.getEstado());
-                    stmt.setInt(11, pedido.getId());
+                    
+                    stmt.setInt(10, pedido.getId());
                     System.out.println("query => " + query);
                     stmt.executeUpdate();
                     
