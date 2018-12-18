@@ -57,6 +57,7 @@ public class frmReportePaquete extends javax.swing.JPanel {
         lblAyudaFechas.setToolTipText("Si se activa el filtro por fecha, se mostrarán sólo los vuelos"
                 + " en las fechas indicadas. La fecha colocada en Desde debe ser más antigua que"
                 + " la colocada en Hasta.");
+        
     }
 
     public void setOrigen(String codigo){
@@ -292,6 +293,11 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 chkAeropMouseClicked(evt);
             }
         });
+        chkAerop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkAeropActionPerformed(evt);
+            }
+        });
         panelFiltro.add(chkAerop, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
 
         chkPaq.setText("Activar los filtros personalizados");
@@ -300,10 +306,20 @@ public class frmReportePaquete extends javax.swing.JPanel {
                 chkPaqMouseClicked(evt);
             }
         });
-        panelFiltro.add(chkPaq, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
+        chkPaq.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPaqActionPerformed(evt);
+            }
+        });
+        panelFiltro.add(chkPaq, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, 20));
 
         chkFechas.setText("Activar fechas");
         chkFechas.setEnabled(false);
+        chkFechas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkFechasActionPerformed(evt);
+            }
+        });
         panelFiltro.add(chkFechas, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 40, -1, -1));
 
         panelFiltrado.add(panelFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 280, 80));
@@ -718,6 +734,25 @@ public class frmReportePaquete extends javax.swing.JPanel {
             chkEstadoEnCamino.setSelected(false);
         }
     }//GEN-LAST:event_chkPaqMouseClicked
+
+    private void chkAeropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAeropActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkAeropActionPerformed
+
+    private void chkPaqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPaqActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkPaqActionPerformed
+
+    private void chkFechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFechasActionPerformed
+        if(chkFechas.isSelected()){
+            dtpDesde.setEnabled(true);
+            dtpHasta.setEnabled(true);
+            
+        }else{
+            dtpDesde.setEnabled(false);
+            dtpHasta.setEnabled(false);
+        }
+    }//GEN-LAST:event_chkFechasActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

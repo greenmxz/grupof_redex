@@ -94,9 +94,9 @@ public class frmGerenteSimulacion extends javax.swing.JPanel {
             txtInforme.setText(texto);
             TabuSearch ts;
             ts = new TabuSearch();
-            ts.inputData("resources\\aeropuertos.txt",
-                "resources\\planes_vuelo.txt",
-                "resources\\pack_enviados");
+            ts.inputData("resources/aeropuertos.txt",
+                "resources/planes_vuelo.txt",
+                "resources/pack_enviados");
             ts.generateFlightMatrix();
             long start = System.currentTimeMillis();
             ArrayList<String> solution = ts.executeVCRPTabu(ts.getListPack());
