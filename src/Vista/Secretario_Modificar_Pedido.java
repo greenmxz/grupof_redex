@@ -58,6 +58,10 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
         super(parent, modal);
         try{
             initComponents();  
+            label5.hide(); label4.hide();label2.hide(); label1.hide();
+            jComboBox2.hide();jComboBox1.hide();
+            jComboBox5.hide();jComboBox4.hide();
+            cboEstado.hide();jLabel5.hide();
             this.tabla = tabla;
             this.pedido = pedido;
             
@@ -551,9 +555,9 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
                     pedido.setAeropuerto_actual(aeropuerto_origen);
                     
                     //estado incial provicional
-                    int index = cboEstado.getSelectedIndex();
-                    estado e = this.list_estado.get(index);
-                    pedido.setEstado(e.getValor());
+//                    int index = cboEstado.getSelectedIndex();
+//                    estado e = this.list_estado.get(index);
+//                    pedido.setEstado(e.getValor());
                     
                     if(controlador_pedido.modificarPedido(pedido)){
                         JOptionPane.showMessageDialog(null, 
