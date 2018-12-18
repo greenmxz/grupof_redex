@@ -211,7 +211,7 @@ static final int FONT_SIZE = 11;
             Date diaNuevo = this.calendar.getTime();
 
             String newYear = Integer.toString(diaNuevo.getYear() + 1900);
-            String newMonth = Integer.toString(diaNuevo.getMonth());
+            String newMonth = Integer.toString(diaNuevo.getMonth()+ 1);
             String newDay = Integer.toString(diaNuevo.getDate());
 
             g2.drawString(" " + newDay + "/" + newMonth + "/" +newYear,780,35);
@@ -669,7 +669,7 @@ static final int FONT_SIZE = 11;
 
                 if (this.listPack.size()>0){//se coloca la fecha del primer pack como fecha del simulador
                     this.anioMundial = this.listPack.get(0).getOriginYear();
-                    this.mesMundial = this.listPack.get(0).getOriginMonth();
+                    this.mesMundial = this.listPack.get(0).getOriginMonth()-1;
                     this.diaMundial = this.listPack.get(0).getOriginDay();
                     this.calendar.set(this.anioMundial,this.mesMundial,this.diaMundial);
                     
@@ -755,7 +755,7 @@ static final int FONT_SIZE = 11;
 
                     DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
                     Calendar calendarioPack = Calendar.getInstance();
-                    calendarioPack.set(p.getOriginYear(),p.getOriginMonth(),p.getOriginDay());
+                    calendarioPack.set(p.getOriginYear(),p.getOriginMonth()-1,p.getOriginDay());
 
                     Date fechaPack = calendarioPack.getTime();
                     Date fechaActual = this.calendar.getTime();
@@ -803,6 +803,8 @@ static final int FONT_SIZE = 11;
 
                     this.cantDays++;
                 }
+                
+                System.out.println("----->Cant Paquetes Este Dia " + this.listPack.size());
 
                 System.out.println("----->Cant Paquetes Entrantes " + this.cantPacksEntrantes);
                 System.out.println("----->Cant Paquetes Salientes " + this.cantPacksSalientes);
