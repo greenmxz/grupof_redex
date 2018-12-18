@@ -226,7 +226,7 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                         }
                         if (usuarioLogin.getRol().equals("secretario")){
                              /* Crear nuevo hilo*/
-                            this.timer = new Timer(8, (ActionListener) this);
+                            this.timer = new Timer(60000, (ActionListener) this);
                             timer.start();
                             frmMenuSecretary menuSecre= new frmMenuSecretary(usuarioLogin);
                             menuSecre.setVisible(true);

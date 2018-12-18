@@ -74,7 +74,8 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
             }
             DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) cboEstado.getModel();           
             for(int i = 0; i < listEstado.size() ; i++){
-                modelo3.addElement(listEstado.get(i).getValor());
+                if(!listEstado.get(i).getValor().equals("\"\"")) 
+                    modelo3.addElement(listEstado.get(i).getValor());
             }
         }catch(Exception e){
             System.out.println("ERROR en inicializar_ComboBox "+e.getMessage());

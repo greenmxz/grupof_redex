@@ -345,6 +345,7 @@ static final int FONT_SIZE = 11;
                     //verificar si tiene paquetes que recojer
                     for(int i = 0; i < this.listPackAlgo.size();i++){
                         String ruta = this.listPackAlgo.get(i).getRuta();
+                        
                         // verifica si tiene camino por recorrer
                         if (!ruta.equals("")){
                             //System.out.println(ruta);
@@ -381,7 +382,7 @@ static final int FONT_SIZE = 11;
 
                                     //////////////////////////////// 
                                     // es su ruta final, remueve de listapack
-                                    v.getIdPacks().add(i);
+                                    v.getIdPacks().add(listPackAlgo.get(i).getIdentificator());
                                     v.setPack_finales(v.getPack_finales() + 1);
                                     this.listPackAlgo.get(i).setRuta(""); // su ruta se encuestra finalizada
 
@@ -412,6 +413,7 @@ static final int FONT_SIZE = 11;
                             String ceroMin="";
                             if(horaMundial<10) ceroHora+="0";
                             if (minutoMundial<10) ceroMin+="0";
+                           
                             JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+ceroHora+this.horaMundial+":"+ceroMin+this.minutoMundial+" por capacidad de vuelo\n"
                                 + "Vuelo "+v.getId() + " con "+v.getCapacidadActual()+" paquetes.");                            
                             cerrado=1;
@@ -578,7 +580,9 @@ static final int FONT_SIZE = 11;
                     String ceroMin="";
                     if(horaMundial<10) ceroHora+="0";
                     if (minutoMundial<10) ceroMin+="0";
-                    JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+ceroHora+this.horaMundial+":"+ceroMin+this.minutoMundial+" por capacidad de aeropuerto\n"
+                    int delta=aero.getCapActual()-aero.getCapMax();
+                    int idPack=v.getIdPacks().get(delta-1);
+                    JOptionPane.showMessageDialog(null, "El sistema colapsó a las "+ceroHora+this.horaMundial+":"+ceroMin+this.minutoMundial+" con el ingreso del paquete "+idPack+" por capacidad de aeropuerto\n"
                                 + "Aeropuerto "+aero.getIdentificator()+ " de "+this.aeroColapsoMax+" con "+this.cantMaxColapsoAero+" paquetes.");                            
 
                             cerrado=1;
