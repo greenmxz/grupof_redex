@@ -302,4 +302,18 @@ public class aeropuertoDA {
         }
     }
     
+    public void actualizarCapacidadActual(int id){
+        try{
+            database connect = new database();
+            
+            Statement sentencia = connect.getConnection().createStatement();
+            String update = "UPDATE `redexdb`.`aeropuerto` SET `cantidad_paquetes`=`cantidad_paquetes`+1 WHERE `id`='"+id+"';";
+            //System.out.println(query);
+            sentencia.executeUpdate(update);                               
+            
+            connect.getConnection().close();
+        }catch(Exception e){
+            System.out.println("ERROR registrarAeropuertos "+e.getMessage());
+        }
+    }
 }
