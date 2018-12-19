@@ -38,6 +38,7 @@ public class avionDot {
     private double t_llegada;
     private double t_restante;
     private int pack_finales;
+    private int es_continental;
     
     
     //MANEJO DE TIEMPOS, MANEJADO EN MINUTOS
@@ -294,7 +295,15 @@ public class avionDot {
     public void setTiempoTranscurridoMMAcu(int tiempoTranscurridoMMAcu) {
         this.tiempoTranscurridoMMAcu = tiempoTranscurridoMMAcu;
     }
+
+    public int getEs_continental() {
+        return es_continental;
+    }
+
+    public void setEs_continental(int es_continental) {
+        this.es_continental = es_continental;
+    }
     
-  
+    
     
 }

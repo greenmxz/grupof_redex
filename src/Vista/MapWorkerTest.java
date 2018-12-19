@@ -240,6 +240,8 @@ public class MapWorkerTest {
             int indexAeOrigen = buscaAeropuerto(this.listaAeropuertos,codAeOrigen);
             int indexAeDestino = buscaAeropuerto(this.listaAeropuertos,codAeDestino);
             
+            aeropuerto aero_orig = this.listaAeropuertos.get(indexAeOrigen);
+            aeropuerto aero_dest = this.listaAeropuertos.get(indexAeDestino);
             
             if (indexAeOrigen != -1){
                 double x = this.listaAeropuertos.get(indexAeOrigen).getCoordX();
@@ -261,7 +263,7 @@ public class MapWorkerTest {
             // PARA EL MANEJO DE TIEMPOS
             int horaSalida = dot.getHora_salida();
             int horaLlegada = dot.getHora_llegada();
-            int llegaDiaSig = revisaTiempo(horaSalida,horaLlegada);
+            int llegaDiaSig = revisaTiempo(horaSalida,horaLlegada,aero_orig,aero_dest);
             
             if (llegaDiaSig == 1){
                 horaLlegada += 24; // llega al dia siguiente
@@ -597,11 +599,16 @@ public class MapWorkerTest {
         return -1;
     }
     
-    public int revisaTiempo(int horaSalida, int horaLlegada){
+    public int revisaTiempo(int horaSalida, int horaLlegada,aeropuerto aero_orig,aeropuerto aero_dest){
+        int es_continental = 0;
+        if (aero_orig.getContinente().equals(aero_dest.getContinente()))
+            es_continental = 1;
+        else
+            es_continental = 0;
         
         if (horaLlegada <= horaSalida) return 1; // llega un dia despues
         
-        else if (horaLlegada - horaSalida < 9) return 1; // llega un dia despues
+        else if (horaLlegada - horaSalida < 9 && es_continental == 0) return 1; // llega un dia despues
         
         return 0; // llega el mismo dia
         

@@ -19,6 +19,7 @@ public class Paquete {
     private int procesado = 0; // 0:no ha sido procesado por algoritmo, 1: ya se encuentra procesado
     private int tiempoTranscurridoMM = 0;
     private int enviado=0;
+    private int es_continental;
 
     public Paquete(int originHour, int originMin, int originAirport,
             int destinyAirport){
@@ -169,6 +170,14 @@ public class Paquete {
 
     public void setEnviado(int enviado) {
         this.enviado = enviado;
+    }
+
+    public int getEs_continental() {
+        return es_continental;
+    }
+
+    public void setEs_continental(int es_continental) {
+        this.es_continental = es_continental;
     }
     
 }
