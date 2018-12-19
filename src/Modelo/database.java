@@ -23,17 +23,25 @@ public class database {
             properties.setProperty("password", "root");
             //properties.setProperty("password", "burp12"); //Para Linux maquina 5 V
             properties.setProperty("useSSL", "false");
-            properties.setProperty("autoReconnect", "true");
+            //properties.setProperty("autoReconnect", "true");
         this.setDriver("com.mysql.jdbc.Driver");
 
         //connection = DriverManager.getConnection( "jdbc:mysql://192.168.201.105:3306/redexdb?noAccessToProcedureBodies=true","root","burp12" );//Para linux con msje
         
         //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb","root","root" );
 
+
         //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb",properties );
         //connection = DriverManager.getConnection( "jdbc:mysql://192.168.1.4:3306/redexdb?noAccessToProcedureBodies=true",properties );//Para linux sin msje
         connection = DriverManager.getConnection( "jdbc:mysql://192.168.1.4:3306/redexdb?noAccessToProcedureBodies=true&allowPublicKeyRetrieval=true&useSSL=false",properties );
+
+
+        //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb",properties );
+       
+       // connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb",properties );
+
         //connection = DriverManager.getConnection( "jdbc:mysql://192.168.201.105:3306/redexdb?noAccessToProcedureBodies=true",properties );//Para linux sin msje
+
 
 //        System.out.println("Se ha conectado correctamente a la base de datos");
         }catch(Exception e){
