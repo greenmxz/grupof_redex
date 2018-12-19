@@ -39,7 +39,7 @@ public class avionDot {
     private double t_restante;
     private int pack_finales;
     private int es_continental;
-    
+    private int es_deReserva = 0;
     
     //MANEJO DE TIEMPOS, MANEJADO EN MINUTOS
     private int salidaMM;
@@ -302,6 +302,14 @@ public class avionDot {
 
     public void setEs_continental(int es_continental) {
         this.es_continental = es_continental;
+    }
+
+    public int getEs_deReserva() {
+        return es_deReserva;
+    }
+
+    public void setEs_deReserva(int es_deReserva) {
+        this.es_deReserva = es_deReserva;
     }
     
     

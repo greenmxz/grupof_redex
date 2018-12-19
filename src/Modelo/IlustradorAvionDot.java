@@ -326,18 +326,49 @@ static final int FONT_SIZE = 11;
         }
     }
 
+    int verificaSalidaReserva (avionDot v){
+        
+        if (v.getEs_deReserva() == 1) {
+            for (avionDot n : this.avionesDot) {
+                if (n.getId() == v.getId() && n.getEstado_mov() == 1 && n.getTiempoTranscurridoMM() > 1000) { // SI EL AVION NORMAL ESTA EN TRANSITO
+                    return 1; // VUELO NORMAL EN TRANSITO, SALE RESERVA
+                }
+            }
+            return 0;// VUELO NORMAL DISPONIBLE, NO SALE RESERVA
+        }else{
+            return 1;// ES UN VUELO NORMAL
+        }
+    }
+    
     
     public void cambiaEstadoMov(avionDot v){
         if(cerrado==0){
-            // VERIFICAR HORA DE SALIDA DEL AVION
-            if (v.getEstado_mov() == 0){
+            
+            if (v.getId() == 998 && this.minutoMundial == 41 && this.horaMundial == 18 && this.diaMundial == 16) {
+                System.out.println("DIA CLAVE");
+            }
+            
+            
+            // VERIFICAR SI ES AVION DE RESERVA
+            
+            int sale = verificaSalidaReserva(v); // SIEMPRE SALE SI ES UN AVION NORMAL
+            
 
+            
+            
+            // VERIFICAR HORA DE SALIDA DEL AVION
+            if (sale == 1 && v.getEstado_mov() == 0){
+                          
                 int tiempoActual = this.horaMundial*60 + this.minutoMundial;
 
                 int tiempoSalidaAvion = v.getSalidaMM();
-
+                
                 if (tiempoActual == tiempoSalidaAvion){
-
+                    
+                    if (v.getId() == 998 && this.minutoMundial == 41 && this.horaMundial == 18 && this.diaMundial == 16) {
+                        System.out.println("DIA CLAVE");
+                    }
+                    
                     v.setTiempoTranscurridoMM(tiempoSalidaAvion);
 
                     v.setEstado_mov(1);// en transito
@@ -361,14 +392,14 @@ static final int FONT_SIZE = 11;
                             String[] ids = ruta.split("-");
                             int idVuelo = Integer.parseInt(ids[0]);
                             
-//                            if (p.getIdentificator() == 500020 && v.getId() == 355 && idVuelo == 355 && this.minutoMundial == 44 && this.horaMundial == 5) {
-//                                    System.out.println("AQUI SUBE AL AVION o ERROR");
-//                            }
+                            if (p.getIdentificator() == 836037 && v.getId() == 998 && idVuelo == 998 && this.minutoMundial == 41 && this.horaMundial == 18 && this.diaMundial == 16) {
+                                    System.out.println("AQUI SUBE AL AVION o ERROR");
+                            }
 
                             //SI EL ES EL VUELO QUE REQUIERE EL PAQUETE, TIEMPO COINCIDE, EL PAQUETE ESTA DISPONIBLE Y HAY ESPACIO EN EL AVION
                             if (idVuelo == v.getId() && tiempoSalidaAvion >= tiempoPack && p.getEstado() == 1 && v.getCapacidadActual() < v.getCapacidadMax()){
                                 
-                                if (p.getIdentificator() == 500020) {
+                                if (p.getIdentificator() == 836037) {
                                     System.out.println("AQUI SUBE AL AVION");
                                 }
                                 
@@ -453,7 +484,7 @@ static final int FONT_SIZE = 11;
             if (pack.getEs_continental() == 1){ // VUELO CONTINENTAL
                 if (pack.getTiempoTranscurridoMM() > 1440){
 
-                    if (pack.getIdentificator() == 500020)
+                    if (pack.getIdentificator() == 836037)
                         System.out.println("ERROR");
 
 
@@ -464,7 +495,7 @@ static final int FONT_SIZE = 11;
             }else{// VUELO INTERCONTINENTAL
                 if (pack.getTiempoTranscurridoMM() > 2880){
 
-                    if (pack.getIdentificator() == 500020)
+                    if (pack.getIdentificator() == 836037)
                         System.out.println("ERROR");
 
 
@@ -626,7 +657,7 @@ static final int FONT_SIZE = 11;
             for (Integer id : v.getIdPacks()) {
                 if (!this.listPackAlgo.get(id).getRuta().equals("")) {
                     
-                    if (this.listPackAlgo.get(id).getIdentificator() == 500020){
+                    if (this.listPackAlgo.get(id).getIdentificator() == 836037){
                         System.out.println("AQUI LLEGA");
                     }
                     
@@ -640,7 +671,7 @@ static final int FONT_SIZE = 11;
                     pack.setOriginYear(this.anioMundial);
                     //pack.setTiempoTranscurridoMM(pack.getTiempoTranscurridoMM() + v.getTiempoTranscurridoMM());
                 } else {
-                    if (this.listPackAlgo.get(id).getIdentificator() == 500020){
+                    if (this.listPackAlgo.get(id).getIdentificator() == 836037){
                         System.out.println("AQUI LLEGA");
                     }
                     this.listPackAlgo.get(id).setEstado(3); // packs fuera
@@ -711,7 +742,7 @@ static final int FONT_SIZE = 11;
                         for (Paquete pack : diaAeroPacks){
                             pack.setIdentificator(index_pack);
                             
-                            if (index_pack == 500020)
+                            if (index_pack == 836037)
                                 System.out.println("AQUI VE CONTINENT");
 
                             
@@ -828,7 +859,7 @@ static final int FONT_SIZE = 11;
                         // es su hora de llegada al origen
                         if (tiempoActual == tiempoPack){
                             
-                            if (p.getIdentificator() == 500020){
+                            if (p.getIdentificator() == 836037){
                                 System.out.println("AQUI LIBERA");
                             }
                             

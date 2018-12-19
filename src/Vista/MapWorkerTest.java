@@ -130,6 +130,80 @@ public class MapWorkerTest {
         
     }
     
+    
+    avionDot creaDot(Vuelo v){
+         avionDot dot = new avionDot();
+            dot.setId(v.getId());
+            dot.setVisible(true);
+            dot.setEstado_almacen(0);
+            dot.setEstado_mov(0);
+            dot.setColor("verde");
+            dot.setIcaoOrigen(v.getAeropuertoOrigen());
+            dot.setIcaoDestino(v.getAeropuertoDestino());
+            dot.setIdAeroOrigen(v.getIdAeropuertoOrigen());
+            dot.setIdAeroDestino(v.getIdAeropuertoDestino());
+            dot.setPack_finales(0);
+            //hora de salida
+            Date fs = v.getFechaSalida();
+            Date fl =v.getFechaLlegada();
+            dot.setCapacidadActual(0);
+            dot.setCapacidadMax(300); // verificar si debe setear aca
+                     
+            dot.setHora_salida(fs.getHours());
+            dot.setMin_salida(fs.getMinutes());
+            
+            dot.setHora_llegada(fl.getHours());
+            dot.setMin_llegada(fl.getMinutes());
+            
+            dot.setT_llegada(abs((dot.getHora_llegada()*60 + dot.getMin_llegada()) -(dot.getHora_salida()*60 + dot.getMin_salida())));
+            dot.setT_restante(dot.getT_llegada());
+            
+            String codAeOrigen = v.getAeropuertoOrigen();
+            String codAeDestino = v.getAeropuertoDestino();
+            
+            int indexAeOrigen = buscaAeropuerto(this.listaAeropuertos,codAeOrigen);
+            int indexAeDestino = buscaAeropuerto(this.listaAeropuertos,codAeDestino);
+            
+            aeropuerto aero_orig = this.listaAeropuertos.get(indexAeOrigen);
+            aeropuerto aero_dest = this.listaAeropuertos.get(indexAeDestino);
+            
+            if (indexAeOrigen != -1){
+                double x = this.listaAeropuertos.get(indexAeOrigen).getCoordX();
+                double y = this.listaAeropuertos.get(indexAeOrigen).getCoordY();
+//               if (x == 0 || y == 0) 
+//                    continue;
+                dot.setOrigen(new CoordenadaDouble(x-10,y-10));
+                dot.setActual(new CoordenadaDouble(x-10,y-10));
+            }
+            if (indexAeDestino != -1){
+                double x = this.listaAeropuertos.get(indexAeDestino).getCoordX();
+                double y = this.listaAeropuertos.get(indexAeDestino).getCoordY();
+//                if (x == 0 || y == 0) 
+//                    continue;
+                dot.setDestino(new CoordenadaDouble(x,y));
+            }
+            
+            
+            // PARA EL MANEJO DE TIEMPOS
+            int horaSalida = dot.getHora_salida();
+            int horaLlegada = dot.getHora_llegada();
+            int llegaDiaSig = revisaTiempo(horaSalida,horaLlegada,aero_orig,aero_dest);
+            
+            if (llegaDiaSig == 1){
+                horaLlegada += 24; // llega al dia siguiente
+            }
+            
+            
+            dot.setSalidaMM(horaSalida*60 + dot.getMin_salida());
+            dot.setLlegadaMM(horaLlegada*60 + dot.getMin_llegada());
+            dot.setLlegaDiaSig(llegaDiaSig);
+            dot.setTiempoTranscurridoMM(0);
+            
+            return dot;
+    }
+    
+    
+    
     void display() throws IOException {
         JFrame f = new JFrame("MapWorker");
         f.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -208,74 +282,18 @@ public class MapWorkerTest {
         for(int i = 0;i < this.listaVuelos.size();i++){
             Vuelo v = this.listaVuelos.get(i);
             // crea AvionDot por vuelo
-            avionDot dot = new avionDot();
-            dot.setId(v.getId());
-            dot.setVisible(true);
-            dot.setEstado_almacen(0);
-            dot.setEstado_mov(0);
-            dot.setColor("verde");
-            dot.setIcaoOrigen(v.getAeropuertoOrigen());
-            dot.setIcaoDestino(v.getAeropuertoDestino());
-            dot.setIdAeroOrigen(v.getIdAeropuertoOrigen());
-            dot.setIdAeroDestino(v.getIdAeropuertoDestino());
-            dot.setPack_finales(0);
-            //hora de salida
-            Date fs = v.getFechaSalida();
-            Date fl =v.getFechaLlegada();
-            dot.setCapacidadActual(0);
-            dot.setCapacidadMax(300); // verificar si debe setear aca
-                     
-            dot.setHora_salida(fs.getHours());
-            dot.setMin_salida(fs.getMinutes());
-            
-            dot.setHora_llegada(fl.getHours());
-            dot.setMin_llegada(fl.getMinutes());
-            
-            dot.setT_llegada(abs((dot.getHora_llegada()*60 + dot.getMin_llegada()) -(dot.getHora_salida()*60 + dot.getMin_salida())));
-            dot.setT_restante(dot.getT_llegada());
-            
-            String codAeOrigen = v.getAeropuertoOrigen();
-            String codAeDestino = v.getAeropuertoDestino();
-            
-            int indexAeOrigen = buscaAeropuerto(this.listaAeropuertos,codAeOrigen);
-            int indexAeDestino = buscaAeropuerto(this.listaAeropuertos,codAeDestino);
-            
-            aeropuerto aero_orig = this.listaAeropuertos.get(indexAeOrigen);
-            aeropuerto aero_dest = this.listaAeropuertos.get(indexAeDestino);
-            
-            if (indexAeOrigen != -1){
-                double x = this.listaAeropuertos.get(indexAeOrigen).getCoordX();
-                double y = this.listaAeropuertos.get(indexAeOrigen).getCoordY();
-               if (x == 0 || y == 0) 
-                    continue;
-                dot.setOrigen(new CoordenadaDouble(x-10,y-10));
-                dot.setActual(new CoordenadaDouble(x-10,y-10));
-            }
-            if (indexAeDestino != -1){
-                double x = this.listaAeropuertos.get(indexAeDestino).getCoordX();
-                double y = this.listaAeropuertos.get(indexAeDestino).getCoordY();
-                if (x == 0 || y == 0) 
-                    continue;
-                dot.setDestino(new CoordenadaDouble(x,y));
-            }
-            
-            
-            // PARA EL MANEJO DE TIEMPOS
-            int horaSalida = dot.getHora_salida();
-            int horaLlegada = dot.getHora_llegada();
-            int llegaDiaSig = revisaTiempo(horaSalida,horaLlegada,aero_orig,aero_dest);
-            
-            if (llegaDiaSig == 1){
-                horaLlegada += 24; // llega al dia siguiente
-            }
-            
-            
-            dot.setSalidaMM(horaSalida*60 + dot.getMin_salida());
-            dot.setLlegadaMM(horaLlegada*60 + dot.getMin_llegada());
-            dot.setLlegaDiaSig(llegaDiaSig);
-            dot.setTiempoTranscurridoMM(0);
-            
+           
+            avionDot dot = creaDot(v);
+            dot.setEs_deReserva(0);
             this.avionesDot.add(dot);
+            ////////////////////////////////////////
+            //CREA AVION DE RESERVA
+            if (dot.getLlegaDiaSig() == 1){
+                avionDot dotReserva = creaDot(v);
+                dotReserva.setEs_deReserva(1);
+                this.avionesDot.add(dotReserva);
+            }
+            
             
         }
         
