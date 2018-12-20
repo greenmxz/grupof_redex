@@ -295,10 +295,10 @@ static final int FONT_SIZE = 11;
                         g2.setPaint(new Color (234, 203, 29));
                         break;
                     case "verde":
-                        g2.setPaint(new Color (106, 203, 29));
+                        g2.setPaint(new Color (0, 150, 0));
                         break;
                     case "blanco":
-                        g2.setPaint(new Color (255, 255, 255));
+                        g2.setPaint(new Color (130, 254, 125));
                         break;
                 }
 
@@ -344,7 +344,7 @@ static final int FONT_SIZE = 11;
     public void cambiaEstadoMov(avionDot v){
         if(cerrado==0){
             
-            if (v.getId() == 998 && this.minutoMundial == 41 && this.horaMundial == 18 && this.diaMundial == 16) {
+            if (v.getId() == 1036 && this.minutoMundial == 25 && this.horaMundial == 17 && this.diaMundial == 10) {
                 System.out.println("DIA CLAVE");
             }
             
@@ -365,7 +365,7 @@ static final int FONT_SIZE = 11;
                 
                 if (tiempoActual == tiempoSalidaAvion){
                     
-                    if (v.getId() == 998 && this.minutoMundial == 41 && this.horaMundial == 18 && this.diaMundial == 16) {
+                    if (v.getId() == 1036 && this.minutoMundial == 25 && this.horaMundial == 17 && this.diaMundial == 10) {
                         System.out.println("DIA CLAVE");
                     }
                     
@@ -392,14 +392,14 @@ static final int FONT_SIZE = 11;
                             String[] ids = ruta.split("-");
                             int idVuelo = Integer.parseInt(ids[0]);
                             
-                            if (p.getIdentificator() == 836037 && v.getId() == 998 && idVuelo == 998 && this.minutoMundial == 41 && this.horaMundial == 18 && this.diaMundial == 16) {
-                                    System.out.println("AQUI SUBE AL AVION o ERROR");
-                            }
+//                            if (p.getIdentificator() == 1778185 && v.getId() == 998 && idVuelo == 998 && this.minutoMundial == 41 && this.horaMundial == 18 && this.diaMundial == 16) {
+//                                    System.out.println("AQUI SUBE AL AVION o ERROR");
+//                            }
 
                             //SI EL ES EL VUELO QUE REQUIERE EL PAQUETE, TIEMPO COINCIDE, EL PAQUETE ESTA DISPONIBLE Y HAY ESPACIO EN EL AVION
                             if (idVuelo == v.getId() && tiempoSalidaAvion >= tiempoPack && p.getEstado() == 1 && v.getCapacidadActual() < v.getCapacidadMax()){
                                 
-                                if (p.getIdentificator() == 836037) {
+                                if (p.getIdentificator() == 1778185) {
                                     System.out.println("AQUI SUBE AL AVION");
                                 }
                                 
@@ -484,7 +484,7 @@ static final int FONT_SIZE = 11;
             if (pack.getEs_continental() == 1){ // VUELO CONTINENTAL
                 if (pack.getTiempoTranscurridoMM() > 1440){
 
-                    if (pack.getIdentificator() == 836037)
+                    if (pack.getIdentificator() == 1778185)
                         System.out.println("ERROR");
 
 
@@ -495,7 +495,7 @@ static final int FONT_SIZE = 11;
             }else{// VUELO INTERCONTINENTAL
                 if (pack.getTiempoTranscurridoMM() > 2880){
 
-                    if (pack.getIdentificator() == 836037)
+                    if (pack.getIdentificator() == 1778185)
                         System.out.println("ERROR");
 
 
@@ -657,7 +657,7 @@ static final int FONT_SIZE = 11;
             for (Integer id : v.getIdPacks()) {
                 if (!this.listPackAlgo.get(id).getRuta().equals("")) {
                     
-                    if (this.listPackAlgo.get(id).getIdentificator() == 836037){
+                    if (this.listPackAlgo.get(id).getIdentificator() == 1778185){
                         System.out.println("AQUI LLEGA");
                     }
                     
@@ -671,7 +671,7 @@ static final int FONT_SIZE = 11;
                     pack.setOriginYear(this.anioMundial);
                     //pack.setTiempoTranscurridoMM(pack.getTiempoTranscurridoMM() + v.getTiempoTranscurridoMM());
                 } else {
-                    if (this.listPackAlgo.get(id).getIdentificator() == 836037){
+                    if (this.listPackAlgo.get(id).getIdentificator() == 1778185){
                         System.out.println("AQUI LLEGA");
                     }
                     this.listPackAlgo.get(id).setEstado(3); // packs fuera
@@ -742,7 +742,7 @@ static final int FONT_SIZE = 11;
                         for (Paquete pack : diaAeroPacks){
                             pack.setIdentificator(index_pack);
                             
-                            if (index_pack == 836037)
+                            if (index_pack == 1778185)
                                 System.out.println("AQUI VE CONTINENT");
 
                             
@@ -859,7 +859,7 @@ static final int FONT_SIZE = 11;
                         // es su hora de llegada al origen
                         if (tiempoActual == tiempoPack){
                             
-                            if (p.getIdentificator() == 836037){
+                            if (p.getIdentificator() == 1778185){
                                 System.out.println("AQUI LIBERA");
                             }
                             
