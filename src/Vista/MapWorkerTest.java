@@ -147,7 +147,7 @@ public class MapWorkerTest {
             Date fs = v.getFechaSalida();
             Date fl =v.getFechaLlegada();
             dot.setCapacidadActual(0);
-            dot.setCapacidadMax(300); // verificar si debe setear aca
+            dot.setCapacidadMax(200); // verificar si debe setear aca
                      
             dot.setHora_salida(fs.getHours());
             dot.setMin_salida(fs.getMinutes());
