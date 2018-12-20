@@ -114,7 +114,7 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
             jTextField4.setText(Integer.toString(cliente_receptor.getPersona().getNumeroDocumentoIdentidad()));        
             jTextField6.setText(aeropuerto_origen.getNombre()); 
             jTextField7.setText(aeropuerto_destino.getNombre());
-            jTextField3.setText(Double.toString(pedido.getMonto()));
+            txtMonto.setText(Double.toString(pedido.getMonto()));
             jTextArea1.setText(pedido.getDescripcion());
 
 
@@ -174,7 +174,7 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
         // POR CAMBIAR
         int numero = (int) (Math.random() * 1000) + 1;
         
-        String codigo = "ENV"+cod+Integer.toString(numero);
+        String codigo = cod+Integer.toString(numero);
         
         return codigo;
     }
@@ -228,7 +228,7 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         label3 = new java.awt.Label();
-        jTextField3 = new javax.swing.JTextField();
+        txtMonto = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
@@ -331,12 +331,12 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
         label3.setText("Monto :");
         getContentPane().add(label3, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 430, -1, -1));
 
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        txtMonto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                txtMontoActionPerformed(evt);
             }
         });
-        getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 430, 69, -1));
+        getContentPane().add(txtMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 430, 69, -1));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Datos del cliente emisor"));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -512,24 +512,34 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // MODIFICAR PEDIDO
         
-                
-        
-        if (cliente_emisor != null && cliente_receptor != null && aeropuerto_origen != null && aeropuerto_destino != null){
-            
+        if (cliente_emisor != null && cliente_receptor != null && aeropuerto_origen != null && aeropuerto_destino != null && txtMonto!=null){
+
             if (aeropuerto_origen.getId() == aeropuerto_destino.getId()){
-                JOptionPane.showMessageDialog(null, 
-                            "Los aeropuertos deben ser diferentes", 
-                            "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null,
+                    "Los aeropuertos deben ser diferentes",
+                    "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                return;
             }else{
-                
+
                 if (cliente_emisor.getId() == cliente_receptor.getId()){
-                    JOptionPane.showMessageDialog(null, 
-                            "Los clientes deben ser diferentes", 
-                            "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null,
+                        "Los clientes deben ser diferentes",
+                        "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                    return;
                 }else{
-                    
-                    // MODIFICAR PEDIDO
-                    
+
+                    // REGISTRAR PEDIDO
+                    String monto=txtMonto.getText();
+                    int size=monto.length();
+                    for(int i=0;i<size;i++){
+                        if(!(monto.charAt(i)>='0' && monto.charAt(i)<='9')){
+                            JOptionPane.showMessageDialog(null,
+                                "El monto debe ser mayor a cero",
+                                "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                        }
+                        
+                    }
                     pedido pedido = new pedido();
                     pedido.setId(this.pedido.getId());
                     String codigo_pedido = this.pedido.getCodigo();
@@ -542,7 +552,7 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
                     pedido.setFecha_pedido(fecha_f_pedido);
                     ///////////////////////////////////
                     pedido.setDescripcion(jTextArea1.getText());
-                    pedido.setMonto(Double.parseDouble(jTextField3.getText()));
+                    pedido.setMonto(Double.parseDouble(txtMonto.getText()));
                     // cliente emisor
                     pedido.setCliente_emisor(cliente_emisor);
                     //areopuerto origen
@@ -555,9 +565,9 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
                     pedido.setAeropuerto_actual(aeropuerto_origen);
                     
                     //estado incial provicional
-//                    int index = cboEstado.getSelectedIndex();
-//                    estado e = this.list_estado.get(index);
-//                    pedido.setEstado(e.getValor());
+                    int index = cboEstado.getSelectedIndex();
+                    estado e = this.list_estado.get(index);
+                    pedido.setEstado(e.getValor());
                     
                     if(controlador_pedido.modificarPedido(pedido)){
                         JOptionPane.showMessageDialog(null, 
@@ -565,10 +575,12 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
                             "Mensaje", JOptionPane.INFORMATION_MESSAGE);
                         actualizar_Tabla();
                         this.dispose();
+                        return;
                     }else{
                         JOptionPane.showMessageDialog(null, 
                             "Error al modificar pedido.", 
                             "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                        return;
                     }
                     
                 }
@@ -581,24 +593,28 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null, 
                             "Se debe indicar el cliente emisor", 
                             "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                return;
             }
             
             if (cliente_receptor == null){
                 JOptionPane.showMessageDialog(null, 
                             "Se debe indicar el cliente receptor", 
                             "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                return;
             }
             
             if (aeropuerto_origen == null){
                 JOptionPane.showMessageDialog(null, 
                             "Se debe indicar un origen adecuado", 
                             "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                return;
             }
             
             if (aeropuerto_destino == null){
                 JOptionPane.showMessageDialog(null, 
                             "Se debe indicar un destino adecuado", 
                             "Mensaje Error", JOptionPane.INFORMATION_MESSAGE);
+                return;
             }
             
             
@@ -612,9 +628,9 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_txtMontoActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
@@ -733,7 +749,6 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
@@ -749,5 +764,6 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
     private java.awt.Label label5;
     private java.awt.Label label6;
     private java.awt.Label label7;
+    private javax.swing.JTextField txtMonto;
     // End of variables declaration//GEN-END:variables
 }

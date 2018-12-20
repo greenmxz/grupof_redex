@@ -20,8 +20,8 @@ public class database {
         try{
             Properties properties = new Properties();
             properties.setProperty("user", "root");
-            properties.setProperty("password", "root");
-            //properties.setProperty("password", "burp12"); //Para Linux maquina 5 V
+            //properties.setProperty("password", "root");
+            properties.setProperty("password", "burp12"); //Para Linux maquina 5 V
             properties.setProperty("useSSL", "false");
             //properties.setProperty("autoReconnect", "true");
         this.setDriver("com.mysql.jdbc.Driver");
@@ -31,7 +31,7 @@ public class database {
         //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb","root","root" );
 
 
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb",properties );
+        //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb",properties );
         //connection = DriverManager.getConnection( "jdbc:mysql://192.168.1.4:3306/redexdb?noAccessToProcedureBodies=true",properties );//Para linux sin msje
         //connection = DriverManager.getConnection( "jdbc:mysql://192.168.1.4:3306/redexdb?noAccessToProcedureBodies=true&allowPublicKeyRetrieval=true&useSSL=false",properties );
 
@@ -40,7 +40,7 @@ public class database {
        
        // connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb",properties );
 
-        //connection = DriverManager.getConnection( "jdbc:mysql://192.168.201.105:3306/redexdb?noAccessToProcedureBodies=true",properties );//Para linux sin msje
+        connection = DriverManager.getConnection( "jdbc:mysql://192.168.201.105:3306/redexdb?noAccessToProcedureBodies=true",properties );//Para linux sin msje
 
 
 //        System.out.println("Se ha conectado correctamente a la base de datos");

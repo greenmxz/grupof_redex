@@ -30,4 +30,8 @@ public class aeropuertoBL {
     public void registrarAeropuertos(ArrayList<aeropuerto> lstAerop){
         AdministrarAeropuertoDA.registrarAeropuertos(lstAerop);
     }
+
+    public void actualizarCapacidadActual(int id) {
+        AdministrarAeropuertoDA.actualizarCapacidadActual(id);
+    }
 }
