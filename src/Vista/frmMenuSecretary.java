@@ -14,6 +14,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
    private usuarioBL usuarioBL ;
    private int idLog;
     public frmMenuSecretary(usuario usuarioLog) {
+        setUsuarioLog(usuarioLog);
          usuarioBL = new usuarioBL();
         initComponents();
         this.idLog=usuarioLog.getId();
