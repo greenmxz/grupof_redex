@@ -25,7 +25,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         cerrar();
         Dimension size = panelMenu.getPreferredSize();
         panelMenu.setBounds(-150, 50, size.width, size.height);
-        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Pedido(this,usuarioLog.getId()));
+        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Pedido(this,usuarioLog.getId(),usuarioLog.getPersona().getCiudad()));
     }
         public usuario getUsuarioLog() {
         return usuarioLog;
@@ -192,7 +192,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPedidosActionPerformed
-        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Pedido(this,this.idLog));
+        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Pedido(this,this.idLog,usuarioLog.getPersona().getCiudad()));
         if(this.panelMenu.getX()>-1)
             Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);   
     }//GEN-LAST:event_btnPedidosActionPerformed

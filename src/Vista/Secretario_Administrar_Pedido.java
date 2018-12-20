@@ -29,12 +29,13 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     ArrayList<Vuelo> listVuelos;
     private javax.swing.JFrame parent;
     private int id;
-    
-    public Secretario_Administrar_Pedido(javax.swing.JFrame parent,int id) {
+    private String ciudad;
+    public Secretario_Administrar_Pedido(javax.swing.JFrame parent,int id,String ciudad) {
         this.parent = parent;
         initComponents();
         inicializar();
         this.id=id;
+        this.ciudad=ciudad;
     }
 
     /* Métodos */
@@ -394,7 +395,7 @@ public class Secretario_Administrar_Pedido extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        new Vista.Secretario_Crear_Pedido(parent,true,tblPedidos,id).setVisible(true);
+        new Vista.Secretario_Crear_Pedido(parent,true,tblPedidos,id,this.ciudad).setVisible(true);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed

@@ -74,6 +74,7 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
             ini_combo();
             set_index_comboBox(cboEstado,pedido.getEstado());
             inicializar_campos();
+            
         }catch(Exception e){
             System.out.println("ERROR Secretario_Modificar_Pedido "+e.getMessage());
         }
@@ -117,7 +118,8 @@ public class Secretario_Modificar_Pedido extends javax.swing.JDialog {
             txtMonto.setText(Double.toString(pedido.getMonto()));
             jTextArea1.setText(pedido.getDescripcion());
 
-
+            jComboBox3.setEnabled(false);
+            
             set_index_comboBox(jComboBox2,aeropuerto_origen.getContinente());
             set_index_comboBox(jComboBox1,aeropuerto_origen.getPais());
             set_index_comboBox(jComboBox3,aeropuerto_origen.getCiudad());

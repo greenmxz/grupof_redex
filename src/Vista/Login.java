@@ -319,7 +319,8 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                         numElem++;
                 }
 
-                if (this.minutoMundial== 0  && this.horaMundial%2==0 ){                              
+                //if (this.minutoMundial== 0  && this.horaMundial%2==0 ){   
+                if (this.minutoMundial%5==0 ){   
                     if(listaPackNew.size()>0){
 
                             if(esInicioPack==1){
@@ -368,14 +369,12 @@ public class Login extends javax.swing.JFrame implements ActionListener {
 
                 }
 
-                try{
+               
 
                     cambiaEstadoMov();
 
-                }
-                catch(Exception exp){
-                    System.out.println("Error de detección de correo "+exp.getMessage());
-                } 
+                
+               
             }
             
        }catch(Exception ex){
@@ -387,11 +386,23 @@ public class Login extends javax.swing.JFrame implements ActionListener {
     }
     public void cambiaEstadoMov(){
         
-        //for(int i = 0; i < 1;i++){
+        String mensajeRuta="Reporte de paquetes procesados: \n";
+        
         for(int i = 0; i < this.listaPackProcesada.size();i++){
             Algoritmo.Paquete pack = this.listaPackProcesada.get(i);
             String ruta = pack.getRuta();
+            
             // verifica si tiene camino por recorrer
+            
+            mensajeRuta+="Paquete procesado: "+pack.getIdentificator()+"\n";
+            mensajeRuta+="Ruta a seguir actual: ";
+            String[]rutaAux=pack.getRuta().split("-");
+            for(int r=0;r<rutaAux.length;r++){
+                Algoritmo.Vuelo vA=this.tabu.getListFlight().get(Integer.parseInt(rutaAux[r])-1);
+                mensajeRuta+=this.tabu.getListAirport().get(vA.getOriginAirport()-1).getCountry()+ " - ";
+            }
+            Algoritmo.Vuelo vA=this.tabu.getListFlight().get(Integer.parseInt(rutaAux[rutaAux.length-1])-1);
+            mensajeRuta+=this.tabu.getListAirport().get(vA.getDestinyAirport()-1).getCountry()+"\n";
             if (!ruta.equals("")){
                 String[] ids = ruta.split("-");
                 int idVuelo = Integer.parseInt(ids[0]);
@@ -420,8 +431,12 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                                 + "lo saludamos para informarle que el paquete de numero de tracking "
                                 + pack.getIdentificator() + " se encuentra en el país de "+this.tabu.getListAirport().get(v.getDestinyAirport()-1).getCountry()
                                 +" en su paradero final a las "+ceroHora+v.getDestinyHour()+":"+ceroMin+v.getDestinyMin()+". Por favor, acercarse a recoger su encargo. Muchas gracias por su atención.";
-                        mwt.enviarConGMail(emisor, asunto, cuerpoEmisor);
-                        mwt.enviarConGMail(receptor,asunto,cuerpoReceptor);
+                        try{
+                            mwt.enviarConGMail(emisor, asunto, cuerpoEmisor);
+                            mwt.enviarConGMail(receptor,asunto,cuerpoReceptor);
+                        }catch(Exception exp){
+                            System.out.println("Error de detección de correo 2");
+                        }
                         mwt.enviarConGMail("redex.admi@gmail.com", asunto, cuerpoReceptor);
                         numProcesados++;
                         if(listaPackProcesada.size()==numProcesados){
@@ -458,6 +473,8 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                 }
             }
         }
+        if(listaPackProcesada.size()!=0)
+         JOptionPane.showMessageDialog(null, mensajeRuta);
                    
     }
      public void listFilesForFolder(final File folder) {
