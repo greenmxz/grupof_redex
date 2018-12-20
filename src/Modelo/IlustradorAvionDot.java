@@ -295,7 +295,7 @@ static final int FONT_SIZE = 11;
                         g2.setPaint(new Color (234, 203, 29));
                         break;
                     case "verde":
-                        g2.setPaint(new Color (0, 150, 0));
+                        g2.setPaint(new Color (53, 246, 40));
                         break;
                     case "blanco":
                         g2.setPaint(new Color (255, 255, 255));
