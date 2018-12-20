@@ -319,7 +319,8 @@ public class Login extends javax.swing.JFrame implements ActionListener {
                         numElem++;
                 }
 
-                if (this.minutoMundial== 0  && this.horaMundial%2==0 ){                              
+                //if (this.minutoMundial== 0  && this.horaMundial%2==0 ){   
+                if (this.minutoMundial%5==0 ){   
                     if(listaPackNew.size()>0){
 
                             if(esInicioPack==1){

@@ -28,22 +28,26 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
     aeropuerto aeropuerto_origen = null;
     aeropuerto aeropuerto_destino = null;
     private static int id;
+    private String ciudad;
     public Secretario_Crear_Pedido(java.awt.Frame parent, boolean modal,int id) {
         super(parent, modal);
         initComponents();
         this.id=id;
     }
     
-    public Secretario_Crear_Pedido(java.awt.Frame parent, boolean modal, javax.swing.JTable tabla,int id) {
+    public Secretario_Crear_Pedido(java.awt.Frame parent, boolean modal, javax.swing.JTable tabla,int id,String ciudad) {
         super(parent, modal);
         initComponents();
             label5.hide(); label4.hide();label14.hide(); label15.hide();
         jComboBox2.hide();jComboBox1.hide();
         jComboBox5.hide();jComboBox4.hide();
+        jComboBox3.setEnabled(false);
         inicializar_combo(jComboBox2,jComboBox1,jComboBox3);
         inicializar_combo(jComboBox5,jComboBox4,jComboBox6);
+        jComboBox3.setSelectedItem(ciudad);
         this.tabla = tabla;
         this.id=id;
+        this.ciudad=ciudad;
     }
 
     /* Métodos */  
@@ -108,6 +112,7 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
             DefaultComboBoxModel modelo3 = (DefaultComboBoxModel) comboBox3.getModel();   
             for(int i = 0; i < list_ciudades.size() ; i++){
                 modelo3.addElement(list_ciudades.get(i).getNombre());
+                
             }
 
         }catch(Exception e){
