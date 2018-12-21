@@ -31,10 +31,10 @@ public class database {
         //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb","root","root" );
 
 
-        //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb",properties );
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb",properties ); //LOCAL ROOT ROOT
         //connection = DriverManager.getConnection( "jdbc:mysql://192.168.1.4:3306/redexdb?noAccessToProcedureBodies=true",properties );//Para linux sin msje
-        connection = DriverManager.getConnection( "jdbc:mysql://192.168.1.4:3306/redexdb?noAccessToProcedureBodies=true&allowPublicKeyRetrieval=true&useSSL=false",properties );
-
+        //connection = DriverManager.getConnection( "jdbc:mysql://192.168.1.4:3306/redexdb?noAccessToProcedureBodies=true&allowPublicKeyRetrieval=true&useSSL=false",properties );
+        //casa moises
 
         //connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/redexdb",properties );
        
