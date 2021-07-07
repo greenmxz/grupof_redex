@@ -1,5 +1,7 @@
 package Vista;
 
+import Controlador.usuarioBL;
+import Modelo.usuario;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -8,16 +10,32 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class frmMenuSecretary extends javax.swing.JFrame {
-    public frmMenuSecretary() {
+   private static usuario usuarioLog;
+   private usuarioBL usuarioBL ;
+   private int idLog;
+    public frmMenuSecretary(usuario usuarioLog) {
+         usuarioBL = new usuarioBL();
         initComponents();
-        this.setTitle("Sistema de distribución de paquetes para RedEx");
+        this.idLog=usuarioLog.getId();
+        this.jLabel1.setText("Bienvenido(a), "+usuarioLog.getPersona().getNombre()+
+                " "+usuarioLog.getPersona().getApellidoPaterno() + " - "+ usuarioLog.getPersona().getNumeroDocumentoIdentidad()+" - "+ usuarioLog.getPersona().getCiudad()+ " (Secretario)");
+       
+        this.setTitle("Sistema de distribución de paquetes - RedEx");
         setLocationRelativeTo(null);
         cerrar();
         Dimension size = panelMenu.getPreferredSize();
         panelMenu.setBounds(-150, 50, size.width, size.height);
-        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Pedido(this));
+        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Pedido(this,usuarioLog.getId()));
+    }
+        public usuario getUsuarioLog() {
+        return usuarioLog;
     }
 
+    public void setUsuarioLog(usuario usuarioLog) {
+        this.usuarioLog = usuarioLog;
+    }
+
+    
     public void cerrar(){
         try{
             this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -37,6 +55,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
                 ", ¿estás seguro de cerrar?", "Advertencia", 
                 JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
         if(valor==JOptionPane.YES_OPTION){
+            usuarioBL.cerrarSesion(idLog);
             String hora = "";
             if(LocalTime.now().getHour() >= 18 || LocalTime.now().getHour() < 4)
                 hora = "Buenas noches.";
@@ -44,6 +63,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
                 hora = "Buenos días.";
             else
                 hora = "Buenas tardes.";
+            usuarioBL.cerrarSesion(idLog );
             JOptionPane.showMessageDialog(null,"Gracias por su visita.\n"+
                     hora,"Gracias",
                     JOptionPane.INFORMATION_MESSAGE);
@@ -61,9 +81,12 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btnCerrarSesion = new Especial.RSButtonMetro();
         btnMenu = new javax.swing.JButton();
+        logoRedEx = new javax.swing.JLabel();
         panelMenu = new javax.swing.JPanel();
         btnPedidos = new Especial.RSButtonMetro();
-        btnClientes = new Especial.RSButtonMetro();
+        Vuelo = new Especial.RSButtonMetro();
+        btnClientes1 = new Especial.RSButtonMetro();
+        btnAdministracion = new Especial.RSButtonMetro();
         panelPrincipal = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -95,7 +118,7 @@ public class frmMenuSecretary extends javax.swing.JFrame {
                 btnCerrarSesionActionPerformed(evt);
             }
         });
-        panelInfoUsuario.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 30, 90, 15));
+        panelInfoUsuario.add(btnCerrarSesion, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 30, 90, 15));
 
         btnMenu.setBorder(null);
         btnMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -105,28 +128,49 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         });
         panelInfoUsuario.add(btnMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 25, 25, 20));
 
+        logoRedEx.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/RedEx.png"))); // NOI18N
+        panelInfoUsuario.add(logoRedEx, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 0, -1, -1));
+
         panelFondo.add(panelInfoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 50));
 
         panelMenu.setBackground(new java.awt.Color(255, 255, 255));
         panelMenu.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnPedidos.setText("Pedidos");
+        btnPedidos.setText("    Pedidos");
         btnPedidos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPedidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPedidosActionPerformed(evt);
             }
         });
-        panelMenu.add(btnPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 140, 30));
+        panelMenu.add(btnPedidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 35, 140, 30));
 
-        btnClientes.setText("Clientes");
-        btnClientes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnClientes.addActionListener(new java.awt.event.ActionListener() {
+        Vuelo.setText("    Vuelos");
+        Vuelo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        Vuelo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClientesActionPerformed(evt);
+                VueloActionPerformed(evt);
             }
         });
-        panelMenu.add(btnClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 35, 140, 30));
+        panelMenu.add(Vuelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 95, 140, 30));
+
+        btnClientes1.setText("    Clientes");
+        btnClientes1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnClientes1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClientes1ActionPerformed(evt);
+            }
+        });
+        panelMenu.add(btnClientes1, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 65, 140, 30));
+
+        btnAdministracion.setText("ADMINISTRACIÓN");
+        btnAdministracion.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnAdministracion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdministracionActionPerformed(evt);
+            }
+        });
+        panelMenu.add(btnAdministracion, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 140, 30));
 
         panelFondo.add(panelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 150, 500));
 
@@ -148,16 +192,10 @@ public class frmMenuSecretary extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPedidosActionPerformed
-        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Pedido(this));
+        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Pedido(this,this.idLog));
         if(this.panelMenu.getX()>-1)
             Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);   
     }//GEN-LAST:event_btnPedidosActionPerformed
-
-    private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
-        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Cliente(this));
-        if(this.panelMenu.getX()>-1)
-            Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);   
-    }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         String hora = "";
@@ -167,11 +205,13 @@ public class frmMenuSecretary extends javax.swing.JFrame {
             hora = "Buenos días.";
         else
             hora = "Buenas tardes.";
+        usuarioBL.cerrarSesion(idLog );
         JOptionPane.showMessageDialog(null,"Gracias por su visita.\n"+
                 hora,"Gracias",
                 JOptionPane.INFORMATION_MESSAGE);
+
         new Login().setVisible(true);
-        this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
@@ -182,6 +222,22 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         else
             Animacion.Animacion.mover_derecha(-150, 0, 2, 2, panelMenu);
     }//GEN-LAST:event_btnMenuActionPerformed
+
+    private void btnClientes1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientes1ActionPerformed
+        new CambiarPanel(panelPrincipal, new Secretario_Administrar_Cliente(this));
+        if(this.panelMenu.getX()>-1)
+        Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);
+    }//GEN-LAST:event_btnClientes1ActionPerformed
+
+    private void VueloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VueloActionPerformed
+        new CambiarPanel(panelPrincipal, new frmAdministrarVuelo(this));
+        if(this.panelMenu.getX()>-1)
+        Animacion.Animacion.mover_izquierda(0, -150, 2, 2, panelMenu);
+    }//GEN-LAST:event_VueloActionPerformed
+
+    private void btnAdministracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdministracionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAdministracionActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -213,18 +269,21 @@ public class frmMenuSecretary extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmMenuSecretary().setVisible(true);
+                new frmMenuSecretary( usuarioLog);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private Especial.RSButtonMetro Vuelo;
+    private Especial.RSButtonMetro btnAdministracion;
     private Especial.RSButtonMetro btnCerrarSesion;
-    private Especial.RSButtonMetro btnClientes;
+    private Especial.RSButtonMetro btnClientes1;
     private javax.swing.JButton btnMenu;
     private Especial.RSButtonMetro btnPedidos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel logoRedEx;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JPanel panelInfoUsuario;
     private javax.swing.JPanel panelMenu;

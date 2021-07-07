@@ -63,4 +63,16 @@ public class generalBL {
         return generalDA.listaEstados(codigo);
     }
     
+    public ArrayList<String> obtenerContinenteSalida(){
+        return generalDA.obtenerContinenteSalida();
+    }
+    
+    public ArrayList<String> obtenerContinenteLlegada(){
+        return generalDA.obtenerContinenteLlegada();
+    }
+    
+    public ArrayList<ArrayList<String>> obtenerPlanVuelo(String cod){
+        return generalDA.obtenerPlanVuelo(cod);
+    }
+    
 }

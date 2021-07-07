@@ -45,8 +45,8 @@ public class aeropuertoDA {
                 aeropuerto.setId(rs.getInt("id"));
                 aeropuerto.setNombre(rs.getString("nombre"));
                 aeropuerto.setCodigo(rs.getString("codigo"));
-                aeropuerto.setCapacidad_maxima(rs.getInt("capacidad_maxima"));
-                aeropuerto.setCantidad_paquetes(rs.getInt("cantidad_paquetes"));
+                aeropuerto.setCapMax(rs.getInt("capacidad_maxima"));
+                aeropuerto.setCapActual(rs.getInt("cantidad_paquetes"));
                 //ciudad
                 ciudad ciudad = general.obtenerCiudad(rs.getInt("id_ciudad"));
                 aeropuerto.setCiudad(ciudad.getNombre());
@@ -90,8 +90,8 @@ public class aeropuertoDA {
                 aeropuerto.setId(rs.getInt("id"));
                 aeropuerto.setNombre(rs.getString("nombre"));
                 aeropuerto.setCodigo(rs.getString("codigo"));
-                aeropuerto.setCapacidad_maxima(rs.getInt("capacidad_maxima"));
-                aeropuerto.setCantidad_paquetes(rs.getInt("cantidad_paquetes"));
+                aeropuerto.setCapMax(rs.getInt("capacidad_maxima"));
+                aeropuerto.setCapActual(rs.getInt("cantidad_paquetes"));
                 //ciudad
                 aeropuerto.setCiudad(rs.getString("ciudad"));
                 //pais
@@ -132,8 +132,8 @@ public class aeropuertoDA {
                 aeropuerto.setId(rs.getInt("id"));
                 aeropuerto.setNombre(rs.getString("nombre"));
                 aeropuerto.setCodigo(rs.getString("codigo"));
-                aeropuerto.setCapacidad_maxima(rs.getInt("capacidad_maxima"));
-                aeropuerto.setCantidad_paquetes(rs.getInt("cantidad_paquetes"));
+                aeropuerto.setCapMax(rs.getInt("capacidad_maxima"));
+                aeropuerto.setCapActual(rs.getInt("cantidad_paquetes"));
                 //ciudad
                 aeropuerto.setCiudad(rs.getString("ciudad"));
                 //pais
@@ -169,11 +169,11 @@ public class aeropuertoDA {
                 int idCiudad = 0, idAeropuerto = 0;
                 /* 1er paso: Registrar continente*/
                 // 
-                System.out.println("[" + continente + "," + pais + "," + ciudad + "," + codigo + "]");
+                //System.out.println("[" + continente + "," + pais + "," + ciudad + "," + codigo + "]");
                 Statement sentencia = connect.getConnection().createStatement();
                 String query = "SELECT id FROM redexdb.continente WHERE nombre = '" +
                         continente + "'";
-                System.out.println(query);
+                //System.out.println(query);
                 ResultSet rs = sentencia.executeQuery(query);
                 if(rs.next()){
                     if(rs.getObject("id") != null)
@@ -259,8 +259,8 @@ public class aeropuertoDA {
                     sentencia = connect.getConnection().createStatement();
                     query = "INSERT INTO redexdb.aeropuerto (id,nombre,codigo,capacidad_maxima,cantidad_paquetes,id_ciudad,activo) VALUES ('" +
                             String.valueOf(idAeropuerto) + "','" + nombre +
-                            "','" + codigo + "','" + lstAerop.get(i).getCapacidad_maxima() + "','" +
-                            lstAerop.get(i).getCantidad_paquetes() + "','" +
+                            "','" + codigo + "','" + lstAerop.get(i).getCapMax() + "','" +
+                            lstAerop.get(i).getCapActual() + "','" +
                             String.valueOf(idCiudad) + "','1')";
                     sentencia.executeUpdate(query);
                 }

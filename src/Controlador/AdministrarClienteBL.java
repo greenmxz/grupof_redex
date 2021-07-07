@@ -5,7 +5,7 @@
  */
 package Controlador;
 import AccesoDatos.AdministrarClienteDA;
-import Modelo.cliente;
+import Modelo.*;
 import java.util.ArrayList;
 /**
  *
@@ -30,6 +30,10 @@ public class AdministrarClienteBL {
         return AdministrarClienteDA.listarClientes(numeroDocumentoIdentidad, nombre, apellidoPaterno, apellidoMaterno);
     }
     
+    public ArrayList<cliente> listarClientes(){
+        return AdministrarClienteDA.listarClientes();
+    }
+    
     public int registrarCliente(cliente cliente){
         return AdministrarClienteDA.registrarCliente(cliente);
     }
@@ -41,4 +45,8 @@ public class AdministrarClienteBL {
     public boolean eliminarCliente(int id_cliente){
         return AdministrarClienteDA.eliminarCliente(id_cliente);
     }
+    public boolean registarClientes(ArrayList<persona> p){
+        return AdministrarClienteDA.registrarClientes(p);
+    }
+    
 }

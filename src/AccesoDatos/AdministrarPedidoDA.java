@@ -31,25 +31,13 @@ public class AdministrarPedidoDA {
     private aeropuertoDA controlador_aeropuerto= new aeropuertoDA();
     private generalBL general = new generalBL();
     
-    public java.sql.Date manejo_fechas(String s){
-        //manejo de fechas;
-            try {
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                java.util.Date fd =   formatter.parse(s);
-                java.sql.Date sqlDate = new java.sql.Date(fd.getTime());
-                return sqlDate;
-            }catch(Exception e){
-                System.out.println("ERROR "+e.getMessage());
-            return null;
-        }
-    }
-    
     
     public pedido obtenerPedido(int id_pedido){
 
       try{   
             database connect = new database();
-            String query = "select * from pedido where id = " + id_pedido + ";";
+            String query = " select *  from pedido as p "
+                    + " where p.id = " + id_pedido + ";";
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             
@@ -70,8 +58,8 @@ public class AdministrarPedidoDA {
                 pedido.setDescripcion(rs.getString("descripcion"));
                 pedido.setMonto(rs.getDouble("monto"));
                 
-                pedido.setEstado("Enviado"); // <---POR CAMBIAR
-                
+                //pedido.setEstado("Enviado"); // <---POR CAMBIAR
+                pedido.setEstado(rs.getString("id_estado")); 
                 //obtener clientes
                 cliente_emisor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_emisor"));
                 cliente_receptor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_receptor"));
@@ -101,7 +89,9 @@ public class AdministrarPedidoDA {
 
       try{   
             database connect = new database();
-            String query = "select * from pedido where codigo = '" + codigo + "';";
+            String query = "select * from pedido as p "
+                    
+                    + " where p.codigo = '" + codigo + "';";
             Statement sentencia= connect.getConnection().createStatement();
             ResultSet rs = sentencia.executeQuery(query);
             
@@ -122,8 +112,8 @@ public class AdministrarPedidoDA {
                 pedido.setDescripcion(rs.getString("descripcion"));
                 pedido.setMonto(rs.getDouble("monto"));
                 
-                pedido.setEstado("Enviado"); // <---POR CAMBIAR
-                
+                //pedido.setEstado("Enviado"); // <---POR CAMBIAR
+                pedido.setEstado(rs.getString("id_estado")); 
                 //obtener clientes
                 cliente_emisor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_emisor"));
                 cliente_receptor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_receptor"));
@@ -153,7 +143,7 @@ public class AdministrarPedidoDA {
         try {
             ArrayList<pedido> listPedidos = new ArrayList<>();
             database connect = new database();
-            String query = "select pedido.id, pedido.codigo, pedido.fecha_pedido, pedido.descripcion, pedido.monto, pedido.fecha_entrega, pedido.id_estado,\n" +
+            String query = "select pedido.id, pedido.id_estado,pedido.codigo, pedido.fecha_pedido, pedido.descripcion, pedido.monto, pedido.fecha_entrega,\n" +
                             "aero_emisor.id as id_aeropuerto_emisor, aero_emisor.nombre as aeropuerto_emisor, aero_emisor.codigo as aeropuerto_emisor_codigo,\n" +
                             "aero_receptor.id as id_aeropuerto_receptor, aero_receptor.nombre as aeropuerto_receptor, aero_receptor.codigo as aeropuerto_receptor_codigo,\n" +
                             "aero_actual.id as id_aeropuerto_actual, aero_actual.nombre as aeropuerto_actual, aero_actual.codigo as aeropuerto_actual_codigo,\n" +
@@ -162,6 +152,7 @@ public class AdministrarPedidoDA {
                             "cliente_receptor.id as id_cliente_receptor, cliente_receptor.codigo as codigo_cl_receptor,\n" +
                             "persona_receptor.numero_documento_identidad as cliente_receptor_dni\n" +
                             "from pedido\n" +
+                            
                             "inner join aeropuerto as aero_emisor on pedido.id_aeropuerto_emisor = aero_emisor.id\n" +
                             "inner join aeropuerto as aero_receptor on pedido.id_aeropuerto_receptor = aero_receptor.id\n" +
                             "inner join aeropuerto as aero_actual on pedido.id_aeropuerto_actual = aero_actual.id\n" +
@@ -208,11 +199,6 @@ public class AdministrarPedidoDA {
                     primero = false;
                 }
                 
-                if (!id_cliente_receptor.equals("")){
-                    if(!primero) query += " and ";
-                    query += " pedido.id_estado = '" + id_estado + "' ";
-                    primero = false;
-                }
             }
             
             query += ";";
@@ -239,8 +225,8 @@ public class AdministrarPedidoDA {
                 pedido.setDescripcion(rs.getString("descripcion"));
                 pedido.setMonto(rs.getDouble("monto"));
                 
-                pedido.setEstado("Enviado"); // <---POR CAMBIAR
-                
+               // pedido.setEstado("Enviado"); // <---POR CAMBIAR
+               //pedido.setEstado(rs.getString("estado")); 
                 //obtener clientes
                 cliente_emisor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_emisor"));
                 cliente_receptor = controlador_cliente.obtenerCliente(rs.getInt("id_cliente_receptor"));
@@ -311,7 +297,7 @@ public class AdministrarPedidoDA {
                     stmt.setInt(7, pedido.getCliente_receptor().getId());
                     stmt.setInt(8, pedido.getAeropuerto_receptor().getId());
                     stmt.setInt(9, pedido.getAeropuerto_actual().getId());
-                    stmt.setInt(10, general.obtenerIdGeneral("estado_pedido", pedido.getEstado()));
+                    stmt.setString(10, pedido.getEstado());
                     stmt.setString(11, "1");
                     stmt.executeUpdate();
                     
@@ -325,6 +311,30 @@ public class AdministrarPedidoDA {
          }
         
         
+    }
+    public String obtenerCorreosClientes(int pedido_id){
+        try{
+            database connect = new database();
+            String query="select p1.correo as 'correo_cliente_emisor' ,p2.correo as 'correo_cliente_receptor' from pedido as p\n" +
+                        "inner join cliente as c1 on c1.id = p.id_cliente_emisor\n" +
+                        "inner join cliente as c2 on c2.id = p.id_cliente_receptor\n" +
+                        "inner join persona as p1 on p1.id = c1.id_persona \n" +
+                        "inner join persona as p2 on p2.id = c2.id_persona"
+                        + " and p.id = " + pedido_id + ";";
+            System.out.println("query => " + query);
+            Statement sentencia= connect.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while (rs.next( )){
+                String correo=rs.getString("correo_cliente_emisor");
+                correo+=",";
+                correo+=rs.getString("correo_cliente_receptor");
+                return correo;
+            }
+        }catch(Exception ex){
+            System.out.println("ERROR en obtenerCorreosClientes " + ex.getMessage());
+             return null;
+        }
+        return null;
     }
     
      public boolean modificarPedido(pedido pedido){
@@ -357,7 +367,7 @@ public class AdministrarPedidoDA {
                     stmt.setInt(7, pedido.getCliente_receptor().getId());
                     stmt.setInt(8, pedido.getAeropuerto_receptor().getId());
                     stmt.setInt(9, pedido.getAeropuerto_actual().getId());
-                    stmt.setInt(10, general.obtenerIdGeneral("estado_pedido", pedido.getEstado()));
+                    stmt.setString(10, pedido.getEstado());
                     stmt.setInt(11, pedido.getId());
                     System.out.println("query => " + query);
                     stmt.executeUpdate();
@@ -372,6 +382,7 @@ public class AdministrarPedidoDA {
         
         
     }
+    
     
      public boolean eliminarPedido(int id_pedido){
         try{

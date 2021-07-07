@@ -10,28 +10,43 @@ package Modelo;
  * @author Nowa
  */
 public class aeropuerto {
+
+
     private int id;
     private String nombre;
     private String codigo;
-    private int capacidad_maxima;
-    private int cantidad_paquetes;
+    private int capMax;
+    private int capActual;
     private String continente;
     private String pais;
     private String ciudad;
     private double coordX;
     private double coordY;
-
-    public aeropuerto(){
-        
-    }
+    private String estado;
     
+    public aeropuerto(){
+        this.estado = "Estable";
+    }
+        /**
+     * @return the estado
+     */
+    public String getEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
     public aeropuerto(int id, String nombre, String codigo, String continente,
             String pais, String ciudad){
         this.id = id;
         this.nombre = nombre;
         this.codigo = codigo;
-        this.capacidad_maxima = 750;
-        this.cantidad_paquetes = 500;
+        this.capMax = 1000;
+        this.capActual = 0;
         this.continente = continente;
         this.pais = pais;
         this.ciudad = ciudad;
@@ -61,20 +76,20 @@ public class aeropuerto {
         this.codigo = codigo;
     }
 
-    public int getCapacidad_maxima() {
-        return capacidad_maxima;
+    public int getCapMax() {
+        return capMax;
     }
 
-    public void setCapacidad_maxima(int capacidad_maxima) {
-        this.capacidad_maxima = capacidad_maxima;
+    public void setCapMax(int capMax) {
+        this.capMax = capMax;
     }
 
-    public int getCantidad_paquetes() {
-        return cantidad_paquetes;
+    public int getCapActual() {
+        return capActual;
     }
 
-    public void setCantidad_paquetes(int cantidad_paquetes) {
-        this.cantidad_paquetes = cantidad_paquetes;
+    public void setCapActual(int capActual) {
+        this.capActual = capActual;
     }
 
     public String getContinente() {

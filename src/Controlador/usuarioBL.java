@@ -6,6 +6,7 @@
 package Controlador;
 
 import AccesoDatos.usuarioDA;
+import Modelo.persona;
 import Modelo.usuario;
 import java.util.ArrayList;
 
@@ -21,7 +22,10 @@ public class usuarioBL {
     public usuario obtenerUsuario(String nombreUsuario , String contraseña){
         return usuarioDA.obtenerUsuario(nombreUsuario,contraseña);
     }
-    
+    public usuario obtenerUsuarioRecuperar(String nombreUsuario){
+        return usuarioDA.obtenerUsuarioRecuperar(nombreUsuario);
+    }
+   
     public boolean crearUsuario(usuario usuario){
         return usuarioDA.registrarUsuario(usuario);
     }
@@ -37,4 +41,23 @@ public class usuarioBL {
     public boolean borrarUsuario(int i){
         return usuarioDA.borrarUsuario( i);
     }
+    public boolean iniciarSesion(int i){
+        return usuarioDA.iniciarSesion( i);
+    }
+    public boolean cerrarSesion(int i){
+        return usuarioDA.cerrarSesion( i);
+    }
+    public void cerrarSesionAll(){
+         usuarioDA.cerrarSesionAll( );
+    }
+    public boolean existeNumDoc(int i){
+        return usuarioDA.existeNumDoc(i);
+    }
+    public boolean existeUsuario(String usuario){
+        return usuarioDA.existeUsuario(usuario);
+    }
+    public void registrarUsuarios(ArrayList<persona> lstUser, ArrayList<ArrayList<String>> adic){
+        usuarioDA.registrarUsuarios(lstUser, adic);
+    }
+
 }

@@ -27,18 +27,24 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
     cliente cliente_receptor= null;
     aeropuerto aeropuerto_origen = null;
     aeropuerto aeropuerto_destino = null;
-    
-    public Secretario_Crear_Pedido(java.awt.Frame parent, boolean modal) {
+    private static int id;
+    public Secretario_Crear_Pedido(java.awt.Frame parent, boolean modal,int id) {
         super(parent, modal);
         initComponents();
+        this.id=id;
     }
     
-    public Secretario_Crear_Pedido(java.awt.Frame parent, boolean modal, javax.swing.JTable tabla) {
+    public Secretario_Crear_Pedido(java.awt.Frame parent, boolean modal, javax.swing.JTable tabla,int id) {
         super(parent, modal);
         initComponents();
+        label5.hide(); label4.hide();label14.hide(); label15.hide();
+        jComboBox2.hide();jComboBox1.hide();
+        jComboBox5.hide();jComboBox4.hide();
+        
         inicializar_combo(jComboBox2,jComboBox1,jComboBox3);
         inicializar_combo(jComboBox5,jComboBox4,jComboBox6);
         this.tabla = tabla;
+        this.id=id;
     }
 
     /* Métodos */  
@@ -59,7 +65,7 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
          DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
          modelo.setRowCount(0);
          String nombre,ap_pat,ap_mat;
-         Object[] obj = new Object[6];
+         Object[] obj = new Object[5];
          for (int i = 0; i < lista_pedidos.size(); i++){
              pedido pedido = lista_pedidos.get(i);
              obj[0] = pedido.getCodigo();
@@ -73,7 +79,7 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
              ap_pat = pedido.getCliente_receptor().getPersona().getApellidoPaterno();
              ap_mat = pedido.getCliente_receptor().getPersona().getApellidoMaterno();
              obj[4] = nombre + " " + ap_pat + " " + ap_mat;
-             obj[5] = pedido.getEstado();
+             //obj[5] = pedido.getEstado();
              modelo.addRow(obj);
         }
     }
@@ -367,13 +373,28 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // BUSCAR CLIENTE RECEPTOR
-        int dni_receptor = Integer.parseInt(jTextField4.getText());
-        cliente cliente_receptor = controlador_cliente.obtenerClienteDNI(dni_receptor);
-        String nombre = cliente_receptor.getPersona().getNombre() + " "
-        + cliente_receptor.getPersona().getApellidoPaterno() + " "
-        + cliente_receptor.getPersona().getApellidoMaterno();
-        jTextField5.setText(nombre);
-        this.cliente_receptor = cliente_receptor;
+//        int dni_receptor = Integer.parseInt(jTextField4.getText());
+//        cliente cliente_receptor = controlador_cliente.obtenerClienteDNI(dni_receptor);
+//        String nombre = cliente_receptor.getPersona().getNombre() + " "
+//        + cliente_receptor.getPersona().getApellidoPaterno() + " "
+//        + cliente_receptor.getPersona().getApellidoMaterno();
+//        jTextField5.setText(nombre);
+//        this.cliente_receptor = cliente_receptor;
+//        
+        
+        frmBuscarCliente frm = new frmBuscarCliente(this,true);
+        frm.setVisible(true);
+        System.out.println("AQUI");
+        cliente c = frm.getClienteSeleccionado();
+        //int dni_emisor = Integer.parseInt(jTextField1.getText());
+        if (c!= null){
+            String nombre = c.getPersona().getNombre() + " "
+            + c.getPersona().getApellidoPaterno() + " "
+            + c.getPersona().getApellidoMaterno();
+            jTextField4.setText(String.valueOf(c.getPersona().getNumeroDocumentoIdentidad()));
+            jTextField5.setText( nombre );
+            this.cliente_receptor = c;
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
@@ -391,7 +412,7 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // REGISTRAR PEDIDO
 
-        if (cliente_emisor != null && cliente_receptor != null && aeropuerto_origen != null && aeropuerto_destino != null){
+        if (cliente_emisor != null && cliente_receptor != null && aeropuerto_origen != null && aeropuerto_destino != null && jTextField3.getText()!=""){
 
             if (aeropuerto_origen.getId() == aeropuerto_destino.getId()){
                 JOptionPane.showMessageDialog(null,
@@ -431,7 +452,7 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
                     pedido.setAeropuerto_actual(aeropuerto_origen);
 
                     //estado incial provicional
-                    pedido.setEstado("Enviado");
+                    pedido.setEstado(String.valueOf(id));
 
                     if(controlador_pedido.registrarPedido(pedido)){
                         JOptionPane.showMessageDialog(null,
@@ -480,7 +501,7 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        //dispose();
+        dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -489,13 +510,21 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // BUSCAR CLIENTE_EMI POR DNI
-        int dni_emisor = Integer.parseInt(jTextField1.getText());
-        cliente cliente_emisor = controlador_cliente.obtenerClienteDNI(dni_emisor);
-        String nombre = cliente_emisor.getPersona().getNombre() + " "
-        + cliente_emisor.getPersona().getApellidoPaterno() + " "
-        + cliente_emisor.getPersona().getApellidoMaterno();
-        jTextField2.setText(nombre);
-        this.cliente_emisor = cliente_emisor;
+        frmBuscarCliente frm = new frmBuscarCliente(this,true);
+        frm.setVisible(true);
+        System.out.println("AQUI");
+        cliente c = frm.getClienteSeleccionado();
+        //int dni_emisor = Integer.parseInt(jTextField1.getText());
+        if (c!= null){
+            String nombre = c.getPersona().getNombre() + " "
+            + c.getPersona().getApellidoPaterno() + " "
+            + c.getPersona().getApellidoMaterno();
+            jTextField2.setText(nombre);
+            jTextField1.setText( String.valueOf(c.getPersona().getNumeroDocumentoIdentidad()) );
+            this.cliente_emisor = c;
+        }
+        //cliente cliente_emisor = controlador_cliente.obtenerClienteDNI(dni_emisor);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -536,7 +565,7 @@ public class Secretario_Crear_Pedido extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Secretario_Crear_Pedido dialog = new Secretario_Crear_Pedido(new javax.swing.JFrame(), true);
+                Secretario_Crear_Pedido dialog = new Secretario_Crear_Pedido(new javax.swing.JFrame(), true,id);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

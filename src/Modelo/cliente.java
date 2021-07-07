@@ -14,6 +14,7 @@ public class cliente {
     private int cantidad_pedidos;
     private persona persona;
     private String codigo;
+    
 
     public int getId() {
         return id;

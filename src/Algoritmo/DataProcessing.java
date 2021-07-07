@@ -1,16 +1,34 @@
 package Algoritmo;
 
+import Modelo.*;
+import Modelo.paquete;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.regex.Pattern;
 
 public class DataProcessing {
     private ArrayList<Aeropuerto> listAirport;
+    private static int cont =0;
+    public ArrayList<Aeropuerto> getListAirport() {
+        return listAirport;
+    }
+
+    public void setListAirport(ArrayList<Aeropuerto> listAirport) {
+        this.listAirport = listAirport;
+    }
     private ArrayList<Vuelo> listFlight;
+    
+    private ArrayList<aeropuerto> listAirportSimu;
+    private ArrayList<avionDot> listFlightSimu;
+    
     private ArrayList<Paquete> listPack;
+    private ArrayList<ArrayList<Paquete>> listPackXDay =  new ArrayList<ArrayList<Paquete>>();
+    private ArrayList<ArrayList<ArrayList<Paquete>>> matrixPackXDay = new ArrayList<ArrayList<ArrayList<Paquete>>>();
     private ArrayList<ArrayList<Integer>> flightMatrix = new ArrayList<ArrayList<Integer>>();
     private ArrayList<Vuelo> listFlightSorted;
     
@@ -40,7 +58,14 @@ public class DataProcessing {
         try{
             processAirport(nameAirport);
             processFlight(nameFlight);
-            processPack(namePack);
+//            processPack(namePack);
+            //new
+            File f = new File(namePack);
+            String[] fileList = f.list();
+            for(String str : fileList){
+                processPackNew(namePack + "\\" + str);
+            }
+            ///new
             generateFlightMatrix();
             //printFlightMatrix();
         }catch(Exception e){
@@ -111,7 +136,7 @@ public class DataProcessing {
                             Integer.parseInt(arr[2].split(":")[1]),
                             searchAirportId(arr[1]), Integer.parseInt(arr[3].split(":")[0]),
                             Integer.parseInt(arr[3].split(":")[1]));
-                    //plannedFlg.print();
+//                    plannedFlg.print();
                     listFlight.add(plannedFlg);
                 }
             }
@@ -124,9 +149,14 @@ public class DataProcessing {
     }
     
  public void processPack(String namePack){
+        ArrayList<Paquete> aux = new ArrayList<Paquete>();
+        String backslash = "\\";
         try{
             BufferedReader reader = new BufferedReader(new FileReader(namePack));
             String line;
+            String identificator = namePack.split(Pattern.quote(backslash))
+                    [namePack.split(Pattern.quote(backslash)).length - 1]
+                    .split("_")[2].substring(0, 4);
             while( (line = reader.readLine()) != null){
                 String[] arr = line.split("-");
                 if(arr[1].equals("20180418"))
@@ -134,12 +164,148 @@ public class DataProcessing {
                 if(arr.length == 4){
                     Paquete plannedPack = new Paquete(Integer.parseInt(arr[2].split(":")[0]),
                             Integer.parseInt(arr[2].split(":")[1]),
-                            searchAirportId("SKBO"), searchAirportId(arr[3]));
+                            searchAirportId(identificator), searchAirportId(arr[3]),
+                            Integer.valueOf(arr[1].substring(6, 8)),
+                            Integer.valueOf(arr[1].substring(4, 6)),
+                            Integer.valueOf(arr[1].substring(0, 4)));
                     //plannedPack.print();
                     listPack.add(plannedPack);
                 }
             }
-            System.out.println("Packs' reading process successful!");
+            Collections.sort(listPack, new Comparator<Paquete>() {
+            @Override
+            public int compare(Paquete pk1, Paquete pk2)
+            {
+                if(pk1.getOriginYear() > pk2.getOriginYear())
+                    return 1;
+                else if (pk1.getOriginYear() < pk2.getOriginYear())
+                    return -1;
+                else{
+                    if(pk1.getOriginMonth() > pk2.getOriginMonth())
+                        return 1;
+                    else if(pk1.getOriginMonth() < pk2.getOriginMonth())
+                        return -1;
+                    else{
+                        if(pk1.getOriginDay() > pk2.getOriginDay())
+                            return 1;
+                        else if(pk1.getOriginDay() < pk2.getOriginDay())
+                            return -1;
+                        else{
+                            if(pk1.getOriginHour() > pk2.getOriginHour())
+                                return 1;
+                            else if(pk1.getOriginHour() < pk2.getOriginHour())
+                                return -1;
+                            else{
+                                if(pk1.getOriginMin() > pk2.getOriginMin())
+                                    return 1;
+                                else if(pk1.getOriginMin() < pk2.getOriginMin())
+                                    return -1;
+                                else return 0;
+                            }
+                        }
+                    }
+                }
+            }
+            });
+//            System.out.println("Mrgmr");
+//            for(int i=0; i<listPack.size();i++){
+//                listPack.get(i).print();
+//            }
+//            System.out.println("Packs' reading process successful!");
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("There are a several problem with the flights' reading process! Check it!");
+        }
+    }
+
+ 
+  public void processPackNew(String namePack){
+
+        String backslash = "\\";
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(namePack));
+            String line;
+            String identificator = namePack.split(Pattern.quote(backslash))
+                    [namePack.split(Pattern.quote(backslash)).length - 1]
+                    .split("_")[2].substring(0, 4);
+            listPack.clear();
+            while( (line = reader.readLine()) != null){
+                String[] arr = line.split("-");
+                
+                if(arr.length == 4){
+                    Paquete plannedPack = new Paquete(Integer.parseInt(arr[2].split(":")[0]),
+                            Integer.parseInt(arr[2].split(":")[1]),
+                            searchAirportId(identificator), searchAirportId(arr[3]),
+                            Integer.valueOf(arr[1].substring(6, 8)),
+                            Integer.valueOf(arr[1].substring(4, 6)),
+                            Integer.valueOf(arr[1].substring(0, 4)));
+                    //plannedPack.print();
+                    listPack.add(plannedPack);
+                }
+            }
+            
+            Collections.sort(listPack, new Comparator<Paquete>() {
+            @Override
+            public int compare(Paquete pk1, Paquete pk2)
+            {
+                if(pk1.getOriginYear() > pk2.getOriginYear())
+                    return 1;
+                else if (pk1.getOriginYear() < pk2.getOriginYear())
+                    return -1;
+                else{
+                    if(pk1.getOriginMonth() > pk2.getOriginMonth())
+                        return 1;
+                    else if(pk1.getOriginMonth() < pk2.getOriginMonth())
+                        return -1;
+                    else{
+                        if(pk1.getOriginDay() > pk2.getOriginDay())
+                            return 1;
+                        else if(pk1.getOriginDay() < pk2.getOriginDay())
+                            return -1;
+                        else{
+                            if(pk1.getOriginHour() > pk2.getOriginHour())
+                                return 1;
+                            else if(pk1.getOriginHour() < pk2.getOriginHour())
+                                return -1;
+                            else{
+                                if(pk1.getOriginMin() > pk2.getOriginMin())
+                                    return 1;
+                                else if(pk1.getOriginMin() < pk2.getOriginMin())
+                                    return -1;
+                                else return 0;
+                            }
+                        }
+                    }
+                }
+            }
+            });
+            
+            if (listPack.size() > 0){
+                ArrayList<Paquete> aux = new ArrayList<Paquete>();
+                int day = listPack.get(0).getOriginDay();
+                
+                for (Paquete p : listPack){        
+                    if (listPack.size()==1){
+                        aux.add(p);
+                         listPackXDay.add(aux);
+                    }else{
+                        if (p.getOriginDay() == day){
+                            aux.add(p);
+                        }else{
+                            day = p.getOriginDay();
+                            listPackXDay.add(aux);
+                            aux = new ArrayList<Paquete>();
+                            aux.add(p);
+                        }
+                    }
+                    
+                }
+                matrixPackXDay.add(listPackXDay);
+                listPackXDay = new ArrayList<ArrayList<Paquete>>();
+            }
+            
+            cont ++;
+//            System.out.println("Packs' reading process successful!");
         }catch(Exception e){
             e.printStackTrace();
             System.out.println("There are a several problem with the flights' reading process! Check it!");
@@ -199,19 +365,25 @@ public class DataProcessing {
     public int getTrackTime(Vuelo evalFlight){
         int timeOrigin = evalFlight.getOriginHour()*60 + evalFlight.getOriginMin();
         int timeDestiny = evalFlight.getDestinyHour()*60 + evalFlight.getDestinyMin();
-        if(timeDestiny > timeOrigin)
-            return (timeDestiny - timeOrigin);
+//        System.out.println(String.valueOf(timeOrigin) + " " + String.valueOf(timeDestiny));
+        if(timeDestiny > timeOrigin){
+            if(listAirport.get(evalFlight.getOriginAirport()-1).getContinent() == 
+                    listAirport.get(evalFlight.getDestinyAirport()-1).getContinent()) // Es continental
+                return (timeDestiny - timeOrigin);
+            else return (timeDestiny - timeOrigin + 1440);
+        }
         else
-            return -1;
+            return (timeDestiny - timeOrigin + 1440);
     }
     
     public int getWaitTime(Vuelo currentFlight, Vuelo pastFlight){
         int timeDeparture = currentFlight.getOriginHour()*60 + currentFlight.getOriginMin(); //07
         int timeArrival = pastFlight.getDestinyHour()*60 + pastFlight.getDestinyMin();  //23
+//        System.out.println(String.valueOf(timeDeparture) + " " + String.valueOf(timeArrival));
         if(timeDeparture > timeArrival)
             return (timeDeparture - timeArrival);
         else
-            return -1;
+            return (timeDeparture - timeArrival + 1440);
     }
     
     public ArrayList<Integer> searchOriginList(int idSearch){       
@@ -227,4 +399,21 @@ public class DataProcessing {
     public int getFormatHour(int hour, int min){
         return hour*60 + min;        
     }
+
+    public ArrayList<ArrayList<Paquete>> getListPackXDay() {
+        return listPackXDay;
+    }
+
+    public void setListPackXDay(ArrayList<ArrayList<Paquete>> listPackXDay) {
+        this.listPackXDay = listPackXDay;
+    }
+
+    public ArrayList<ArrayList<ArrayList<Paquete>>> getMatrixPackXDay() {
+        return matrixPackXDay;
+    }
+
+    public void setMatrixPackXDay(ArrayList<ArrayList<ArrayList<Paquete>>> matrixPackXDay) {
+        this.matrixPackXDay = matrixPackXDay;
+    }
+    
 }

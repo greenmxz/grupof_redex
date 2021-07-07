@@ -22,7 +22,7 @@ public class generalDA {
         try{
             continente continente = new continente();
             database connect = new database();
-            String query =  "select tabla_general.id, tabla_general.codigo, tabla_general_detalle.valor \n" +
+            String query =  "select tabla_general_detalle.id, tabla_general.codigo, tabla_general_detalle.valor \n" +
                             "from tabla_general\n" +
                             "inner join tabla_general_detalle on tabla_general_detalle.id_tabla_general = tabla_general.id\n" +
                             "where tabla_general_detalle.activo = 1 and tabla_general.codigo = '"+codigo+"' and\n" +
@@ -174,6 +174,7 @@ public class generalDA {
     
     }
     
+    
     public ArrayList<rol> obtenerRoles(){
         try{
             database connection = new database();
@@ -283,7 +284,74 @@ public class generalDA {
         }
     }
     
+    public ArrayList<String> obtenerContinenteSalida(){
+        ArrayList<String> aux = new ArrayList<String>();
+        try{
+            database connection = new database();
+            String query = "SELECT n.nombre AS continente\n" +
+                "FROM redexdb.aeropuerto AS a, redexdb.ciudad AS c,\n" +
+                "redexdb.pais AS p, redexdb.continente AS n,\n" +
+                "redexdb.plan_vuelo as v\n" +
+                "WHERE a.id_ciudad = c.id AND c.id_pais = p.id AND\n" +
+                "p.id_continente = n.id AND v.id_aeropuerto_salida = a.id\n" +
+                "ORDER BY v.id";
+            Statement sentencia= connection.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while(rs.next()){
+                aux.add(rs.getString("continente"));
+            }
+        }catch(Exception ex){
+            return null;
+        }
+        return aux;
+    }
     
+    public ArrayList<String> obtenerContinenteLlegada(){
+        ArrayList<String> aux = new ArrayList<String>();
+        try{
+            database connection = new database();
+            String query = "SELECT n.nombre AS continente\n" +
+                "FROM redexdb.aeropuerto AS a, redexdb.ciudad AS c,\n" +
+                "redexdb.pais AS p, redexdb.continente AS n,\n" +
+                "redexdb.plan_vuelo as v\n" +
+                "WHERE a.id_ciudad = c.id AND c.id_pais = p.id AND\n" +
+                "p.id_continente = n.id AND v.id_aeropuerto_llegada = a.id\n" +
+                "ORDER BY v.id";
+            Statement sentencia= connection.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while(rs.next()){
+                aux.add(rs.getString("continente"));
+            }
+        }catch(Exception ex){
+            return null;
+        }
+        return aux;
+    }
     
+    public ArrayList<ArrayList<String>> obtenerPlanVuelo(String cod){
+        ArrayList<ArrayList<String>> aux = new ArrayList<ArrayList<String>>();
+       try{
+            database connection = new database();
+            String query = "SELECT v.id, a1.nombre, a2.nombre\n" +
+                "FROM redexdb.pedido_vuelo as pv, redexdb.pedido as p, redexdb.aeropuerto AS a1,\n" +
+                "redexdb.aeropuerto AS a2, redexdb.plan_vuelo as v\n" +
+                "WHERE pv.id_pedido = p.id AND pv.id_vuelo = v.id AND\n" +
+                "a1.id = v.id_aeropuerto_salida AND a2.id = v.id_aeropuerto_llegada AND p.codigo = '" +
+                cod + "'";
+            Statement sentencia= connection.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query);
+            while(rs.next()){
+                ArrayList<String> auxs = new ArrayList<String>();
+                auxs.add(rs.getString("Vuelo"));
+                auxs.add(rs.getString("Origen"));
+                auxs.add(rs.getString("Destino"));
+                aux.add(auxs);
+            }
+            connection.closeConnection();
+        }catch(Exception ex){
+            return null;
+        }
+        return aux;
+    }
     
 }

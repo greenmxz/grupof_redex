@@ -1,31 +1,56 @@
 package Algoritmo;
 
 public class Paquete {
+
 //    private static int count = 0;
-//    private int identificator;
+    private int identificator;
     private int originHour;
     private int originMin;
     private int originAirport;
     private int destinyAirport;
-    
+    private int originDay;
+    private int originMonth;
+    private int originYear;
+    private String ruta = "";
+    private int esFinal = 0; // 0: tiene varios pasos, 1: solo le falta un paso
+    private int estado = 0; // 0: no disponible, 1: en espera, 2: en transito
+
+    private int nuevo = 1; // 1: no ha dado ningun paso, 0: ha dado por lo menos un paso
+    private int procesado = 0; // 0:no ha sido procesado por algoritmo, 1: ya se encuentra procesado
+    private int tiempoTranscurridoMM = 0;
+    private int enviado=0;
+
     public Paquete(int originHour, int originMin, int originAirport,
             int destinyAirport){
-//        this.identificator = count + 1;
         this.originHour = originHour;
         this.originMin = originMin;
         this.originAirport = originAirport;
         this.destinyAirport = destinyAirport;
-//        count++;
     }
 
-//    public int getIdentificator() {
-//        return identificator;
-//    }
-//
-//    public void setIdentificator(int identificator) {
-//        this.identificator = identificator;
-//    }
+    public Paquete(int originHour, int originMin, int originAirport,
+            int destinyAirport, int originDay, int originMonth,
+            int originYear){
+        this.originHour = originHour;
+        this.originMin = originMin;
+        this.originAirport = originAirport;
+        this.destinyAirport = destinyAirport;
+        this.originDay = originDay;
+        this.originMonth = originMonth;
+        this.originYear = originYear;
+        
+    }
 
+  
+    
+    public int getIdentificator() {
+        return identificator;
+    }
+
+    public void setIdentificator(int identificator) {
+        this.identificator = identificator;
+    }
+    
     public int getOriginHour() {
         return originHour;
     }
@@ -58,12 +83,92 @@ public class Paquete {
         this.originAirport = originAirport;
     }
     
+    public int getOriginDay() {
+        return originDay;
+    }
+
+    public void setOriginDay(int originDay) {
+        this.originDay = originDay;
+    }
+
+    public int getOriginMonth() {
+        return originMonth;
+    }
+
+    public void setOriginMonth(int originMonth) {
+        this.originMonth = originMonth;
+    }
+
+    public int getOriginYear() {
+        return originYear;
+    }
+
+    public void setOriginYear(int originYear) {
+        this.originYear = originYear;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
+    
     public void print(){
         System.out.println("Pack " + " $ " +
                 String.valueOf(this.getOriginHour()) + ":" +
                 String.valueOf(this.getOriginMin()) + " route " +
                 String.valueOf(this.getOriginAirport()) + " -> " +
                 String.valueOf(this.getDestinyAirport()));
+    }
+
+    public int getEsFinal() {
+        return esFinal;
+    }
+
+    public void setEsFinal(int esFinal) {
+        this.esFinal = esFinal;
+    }
+
+    public int getNuevo() {
+        return nuevo;
+    }
+
+    public void setNuevo(int nuevo) {
+        this.nuevo = nuevo;
+    }
+
+    public int getTiempoTranscurridoMM() {
+        return tiempoTranscurridoMM;
+    }
+
+    public void setTiempoTranscurridoMM(int tiempoTranscurridoMM) {
+        this.tiempoTranscurridoMM = tiempoTranscurridoMM;
+    }
+
+    public int getProcesado() {
+        return procesado;
+    }
+
+    public void setProcesado(int procesado) {
+        this.procesado = procesado;
+    }
+
+    public int getEnviado() {
+        return enviado;
+    }
+
+    public void setEnviado(int enviado) {
+        this.enviado = enviado;
     }
     
 }

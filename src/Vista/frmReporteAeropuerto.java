@@ -1,7 +1,10 @@
 package Vista;
 
+import Controlador.aeropuertoBL;
 import Controlador.excelExport;
-import Modelo.aeropuertov2;
+import Controlador.generalBL;
+import Modelo.aeropuerto;
+import Modelo.continente;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
@@ -11,25 +14,34 @@ import javax.swing.table.DefaultTableModel;
 public class frmReporteAeropuerto extends javax.swing.JPanel {
 
     /* ATRIBUTOS */
-    private ArrayList<aeropuertov2> lstAeropuerto = new ArrayList<aeropuertov2>();
-    private ArrayList<aeropuertov2> filter = new ArrayList<aeropuertov2>();
+    private ArrayList<aeropuerto> lstAeropuerto = new ArrayList<aeropuerto>();
+    private ArrayList<aeropuerto> filter = new ArrayList<aeropuerto>();
     
     
     public frmReporteAeropuerto() {
         initComponents();
-        lstAeropuerto.add(new aeropuertov2("AAA01", "Aeropuerto Internacional Jorge Chávez", 
-                "América", "Lima", "Perú", 750, 720, "Saturado"));
-        lstAeropuerto.add(new aeropuertov2("AAA02", "Aeropuerto Internacional Ministro Pistarini", 
-                "América", "Argentina", "Buenos Aires", 950, 789, "Estable")); 
-        lstAeropuerto.add(new aeropuertov2("AAA03", "Aeropuerto Internacional El Alto", 
-                "América", "Bolivia", "La Paz", 920, 920, "Lleno")); 
+//        lstAeropuerto.add(new aeropuertov2("AAA01", "Aeropuerto Internacional Jorge Chávez", 
+//                "América", "Lima", "Perú", 750, 720, "Saturado"));
+//        lstAeropuerto.add(new aeropuertov2("AAA02", "Aeropuerto Internacional Ministro Pistarini", 
+//                "América", "Argentina", "Buenos Aires", 950, 789, "Estable")); 
+//        lstAeropuerto.add(new aeropuertov2("AAA03", "Aeropuerto Internacional El Alto", 
+//                "América", "Bolivia", "La Paz", 920, 920, "Lleno")); 
+        aeropuertoBL paqueteBL = new aeropuertoBL();
+        lstAeropuerto = paqueteBL.listaAeropuertos();
+        generalBL gen = new generalBL();
+        ArrayList<continente> list = gen.obtenerContinentes();
         tablaDefault();
         DefaultListModel listModel = new DefaultListModel();
         listModel.clear();
-        listModel.add(0,"América");
-        listModel.add(1,"Europa");
+        for(int i=0; i<list.size();i++){
+            listModel.add(i,list.get(i).getNombre());  
+        }
         listContinente.setModel(listModel);
         filter = lstAeropuerto;
+        lblAyudaMin.setToolTipText("Este valor debe estar entre 600 y 1000.\n No"
+                + " puede ser mayor al valor máximo colocado.");
+        lblAyudaMax.setToolTipText("Este valor debe estar entre 600 y 1000.\n No"
+                + " puede ser menor al valor mínimo colocado.");
     }
 
     @SuppressWarnings("unchecked")
@@ -50,6 +62,8 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         txtCapMin = new javax.swing.JTextField();
         txtCapMax = new javax.swing.JTextField();
+        lblAyudaMin = new javax.swing.JLabel();
+        lblAyudaMax = new javax.swing.JLabel();
         btnLimpiarFlitro = new javax.swing.JButton();
         btnFiltrar = new javax.swing.JButton();
         panelContinente = new javax.swing.JPanel();
@@ -105,28 +119,34 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
 
         panelFlitrado.add(panelEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 110, 100));
 
-        panelCap.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rangos de capacidades"));
+        panelCap.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Rangos de capacidad máxima"));
         panelCap.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel6.setText("Capacidad mínima");
-        panelCap.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
+        jLabel6.setText("Valor mínimo");
+        panelCap.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 30, -1, -1));
 
-        jLabel7.setText("Capacidad máxima");
-        panelCap.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+        jLabel7.setText("Valor máximo");
+        panelCap.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 60, -1, -1));
 
         txtCapMin.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCapMinKeyTyped(evt);
             }
         });
-        panelCap.add(txtCapMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 60, -1));
+        panelCap.add(txtCapMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 30, 70, -1));
 
         txtCapMax.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCapMaxKeyTyped(evt);
             }
         });
-        panelCap.add(txtCapMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 60, -1));
+        panelCap.add(txtCapMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 70, -1));
+
+        lblAyudaMin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/ayuda.png"))); // NOI18N
+        panelCap.add(lblAyudaMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 30, -1, -1));
+
+        lblAyudaMax.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/ayuda.png"))); // NOI18N
+        panelCap.add(lblAyudaMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 60, -1, -1));
 
         panelFlitrado.add(panelCap, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, 210, 100));
 
@@ -190,7 +210,7 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
         }
         Object[] obj = new Object[8];
         for(int i = 0; i < lstAeropuerto.size(); i++){
-            aeropuertov2 u = lstAeropuerto.get(i);
+            aeropuerto u = lstAeropuerto.get(i);
             obj[0] = u.getCodigo();
             obj[1] = u.getNombre();
             obj[2] = u.getContinente();
@@ -221,7 +241,7 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
         return 0;
     }
     
-    public boolean filtroEstado(aeropuertov2 ae){
+    public boolean filtroEstado(aeropuerto ae){
         boolean chk1 = chkEstadoEstable.isSelected();
         boolean chk2 = chkEstadoSaturado.isSelected();
         boolean chk3 = chkEstadoLleno.isSelected();
@@ -239,25 +259,25 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
         return true;
     }
     
-    public boolean filtroContinente(aeropuertov2 ae){
+    public boolean filtroContinente(aeropuerto ae){
         if(listContinente.getSelectedIndex() > -1){
             if((listContinente.getSelectedIndex() == 0) &&
                     (ae.getContinente().equals("Europa")))
                 return false;
             if((listContinente.getSelectedIndex() == 1) &&
-                    (ae.getContinente().equals("América")))
+                    (ae.getContinente().equals("America del Sur")))
                 return false;
         }
         return true;
     }
     
-    public boolean filtroCapacidad(aeropuertov2 ae){
+    public boolean filtroCapacidad(aeropuerto ae){
         // Si no se indica alguno, se infiere que no habrá filtro
         if(!(txtCapMax.getText().equals("")) && 
-                (ae.getCapActual() > Integer.parseInt(txtCapMax.getText())))
+                (ae.getCapMax()> Integer.parseInt(txtCapMax.getText())))
             return false;
         if(!(txtCapMin.getText().equals("")) && 
-                (ae.getCapActual() < Integer.parseInt(txtCapMin.getText())))
+                (ae.getCapMax() < Integer.parseInt(txtCapMin.getText())))
             return false;
         return true;
     }
@@ -296,7 +316,7 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
         // Primero se tendrá que validar el filtro
-        filter = new ArrayList<aeropuertov2>();
+        filter = new ArrayList<aeropuerto>();
         if(fitroValido() == 0){
             for(int i=0; i<lstAeropuerto.size(); i++){
                 if(filtroEstado(lstAeropuerto.get(i)) &&
@@ -312,7 +332,7 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
             }
             Object[] obj = new Object[8];
             for(int i = 0; i < filter.size(); i++){
-                aeropuertov2 u = filter.get(i);
+                aeropuerto u = filter.get(i);
                 obj[0] = u.getCodigo();
                 obj[1] = u.getNombre();
                 obj[2] = u.getContinente();
@@ -359,6 +379,8 @@ public class frmReporteAeropuerto extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblAyudaMax;
+    private javax.swing.JLabel lblAyudaMin;
     private javax.swing.JList<String> listContinente;
     private javax.swing.JPanel panelCap;
     private javax.swing.JPanel panelContinente;

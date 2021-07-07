@@ -5,6 +5,7 @@
  */
 package Vista;
 
+import Algoritmo.Aeropuerto;
 import Modelo.IlustradorAvionDot;
 import Modelo.avionDot;
 import java.awt.Color;
@@ -34,15 +35,34 @@ import org.openstreetmap.josm.data.projection.Projection;
 import Modelo.aeropuerto;
 import Controlador.aeropuertoBL;
 import Controlador.VueloBL;
+import Controlador.generalBL;
 import Modelo.Vuelo;
+import Modelo.continente;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Panel;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import static java.lang.Math.abs;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.Timer;
+import java.util.Date;
+import java.util.*;
+import javax.imageio.ImageIO;
+
 
 /**
  *
@@ -50,26 +70,44 @@ import javax.swing.Timer;
  */
 public class MapWorkerTest {
     
-    
+    private ArrayList<continente> continentes = new ArrayList<continente>();
+    private ArrayList<Vuelo> vuelosNew = new ArrayList<Vuelo>();
+    private generalBL general = new generalBL();
+    private VueloBL vueloBL = new VueloBL();
     private aeropuertoBL controladorAeropuerto = new aeropuertoBL();
     private ArrayList<aeropuerto> listaAeropuertos = new ArrayList<>();
-    
+     private ArrayList<Algoritmo.Aeropuerto> listaAeropuertosNew = new ArrayList<>();
     private VueloBL controladorVuelo = new VueloBL();
     private ArrayList<Vuelo> listaVuelos = new ArrayList<>();
-    
+    private ArrayList<Algoritmo.Vuelo> listaVuelosNew = new ArrayList<>();
     private final List<Coordinate> route = new ArrayList<>();
-    
     
     
     private final ArrayList<CoordenadaDouble>origen=new ArrayList<>();
     private final ArrayList<CoordenadaDouble>destino=new ArrayList<>();
-    
-    
-    
-    
+      
     private ArrayList<avionDot> avionesDot = new ArrayList<>();
     
     
+    
+    
+  
+
+    public static BufferedImage getScreenShot(Component component) {
+
+        BufferedImage image = new BufferedImage(component.getWidth(),component.getHeight(),BufferedImage.TYPE_INT_RGB);
+        // call the Component's paint method, using
+        // the Graphics object of the image.
+        component.paint( image.getGraphics() ); // alternately use .printAll(..)
+        return image;
+    }
+    public static void getSaveSnapShot(Component component, String fileName) throws Exception {
+        BufferedImage img = getScreenShot(component);
+        // write the captured image as a PNG
+        ImageIO.write(img, "png", new File(fileName));
+    }
+    
+
     public int buscaAeropuerto( ArrayList<aeropuerto> listaAe, String codigo){
         try{
             int index = 0;
@@ -94,29 +132,30 @@ public class MapWorkerTest {
     
     void display() throws IOException {
         JFrame f = new JFrame("MapWorker");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         
-        JMapViewer map = new JMapViewer() {
-        
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(1040, 780);
-            }
 
-            @Override
-            public String getToolTipText(MouseEvent e) {
-                Coordinate c = (Coordinate) getPosition(e.getX(), e.getY());
-                return c.getLat() + " " + c.getLon();
-            }
-        };
-        
-        map.setToolTipText("");
-        //Coordinate start = new Coordinate(-34.9286, 138.6);
-        Coordinate start =new Coordinate(0,0);
-        route.add(start);
-        MapPolygonImpl poly = new MapPolygonImpl(route);
-        poly.setColor(Color.blue);
-        map.addMapPolygon(poly);
+//        JMapViewer map = new JMapViewer() {
+//        
+//            @Override
+//            public Dimension getPreferredSize() {
+//                return new Dimension(1040, 780);
+//            }
+//
+//            @Override
+//            public String getToolTipText(MouseEvent e) {
+//                Coordinate c = (Coordinate) getPosition(e.getX(), e.getY());
+//                return c.getLat() + " " + c.getLon();
+//            }
+//        };
+//        map.setMapRectanglesVisible(false);
+//        map.setToolTipText("");
+//        //Coordinate start = new Coordinate(-34.9286, 138.6);
+//        Coordinate start =new Coordinate(0,0);
+//        route.add(start);
+//        MapPolygonImpl poly = new MapPolygonImpl(route);
+//        poly.setColor(Color.blue);
+//        map.addMapPolygon(poly);
         
         
         // Lectura de Aeropuertos
@@ -141,31 +180,20 @@ public class MapWorkerTest {
                 String paisAe = arr[10];//pais
                 
                 
-                int h=map.getPreferredSize().height;
-                int w=map.getPreferredSize().width;
+                //int h=map.getPreferredSize().height;
+                //int w=map.getPreferredSize().width;
                
-                /*
-                double x=(lon+180)*(w/360)*1.419;
-                double latRad = lat*Math.PI/180;
-
-                double mercN = Math.log(Math.tan((Math.PI/4)+(latRad/2)));
-                double y     = (h/2)-(w*mercN/(2*Math.PI))-20;*/
-                
-                //double x=Double.parseDouble(arr[6]);
-                //double y=Double.parseDouble(arr[7]);
                 
                 int index = buscaAeropuerto(this.listaAeropuertos,codigoAe);
                 
                 if (index != -1){
                     //  si existe aeropuerto en data del profe se asigna coordenadas y pinta puntito
-                    map.addMapMarker(new MapMarkerDot(lat,lon)); // pinta puntito amarillo
+                    //map.addMapMarker(new MapMarkerDot(lat,lon)); // pinta puntito amarillo
+                    
                     this.listaAeropuertos.get(index).setCoordX(coordX);
                     this.listaAeropuertos.get(index).setCoordY(coordY);
                 }
-                //origen.add(new CoordenadaDouble(coordX,coordY));
-                
-                //destino.add(new CoordenadaDouble(0,0));
-                //puntosXY.add(map.getMapPosition(num2, num1));
+
                 c++;
             }            
         }catch (Exception ex){
@@ -176,12 +204,35 @@ public class MapWorkerTest {
         // Se lee planes de vuelo para llenar los AvionesDot
         
         this.listaVuelos = controladorVuelo.listaVuelos();
-        int i = 0;
-        for(Vuelo v : this.listaVuelos){
+        
+        for(int i = 0;i < this.listaVuelos.size();i++){
+            Vuelo v = this.listaVuelos.get(i);
             // crea AvionDot por vuelo
             avionDot dot = new avionDot();
-            
+            dot.setId(v.getId());
             dot.setVisible(true);
+            dot.setEstado_almacen(0);
+            dot.setEstado_mov(0);
+            dot.setColor("verde");
+            dot.setIcaoOrigen(v.getAeropuertoOrigen());
+            dot.setIcaoDestino(v.getAeropuertoDestino());
+            dot.setIdAeroOrigen(v.getIdAeropuertoOrigen());
+            dot.setIdAeroDestino(v.getIdAeropuertoDestino());
+            dot.setPack_finales(0);
+            //hora de salida
+            Date fs = v.getFechaSalida();
+            Date fl =v.getFechaLlegada();
+            dot.setCapacidadActual(0);
+            dot.setCapacidadMax(300); // verificar si debe setear aca
+                     
+            dot.setHora_salida(fs.getHours());
+            dot.setMin_salida(fs.getMinutes());
+            
+            dot.setHora_llegada(fl.getHours());
+            dot.setMin_llegada(fl.getMinutes());
+            
+            dot.setT_llegada(abs((dot.getHora_llegada()*60 + dot.getMin_llegada()) -(dot.getHora_salida()*60 + dot.getMin_salida())));
+            dot.setT_restante(dot.getT_llegada());
             
             String codAeOrigen = v.getAeropuertoOrigen();
             String codAeDestino = v.getAeropuertoDestino();
@@ -195,8 +246,8 @@ public class MapWorkerTest {
                 double y = this.listaAeropuertos.get(indexAeOrigen).getCoordY();
                if (x == 0 || y == 0) 
                     continue;
-                dot.setOrigen(new CoordenadaDouble(x,y));
-                dot.setActual(new CoordenadaDouble(x,y));
+                dot.setOrigen(new CoordenadaDouble(x-10,y-10));
+                dot.setActual(new CoordenadaDouble(x-10,y-10));
             }
             if (indexAeDestino != -1){
                 double x = this.listaAeropuertos.get(indexAeDestino).getCoordX();
@@ -205,56 +256,67 @@ public class MapWorkerTest {
                     continue;
                 dot.setDestino(new CoordenadaDouble(x,y));
             }
+            
+            
+            // PARA EL MANEJO DE TIEMPOS
+            int horaSalida = dot.getHora_salida();
+            int horaLlegada = dot.getHora_llegada();
+            int llegaDiaSig = revisaTiempo(horaSalida,horaLlegada);
+            
+            if (llegaDiaSig == 1){
+                horaLlegada += 24; // llega al dia siguiente
+            }
+            
+            
+            dot.setSalidaMM(horaSalida*60 + dot.getMin_salida());
+            dot.setLlegadaMM(horaLlegada*60 + dot.getMin_llegada());
+            dot.setLlegaDiaSig(llegaDiaSig);
+            dot.setTiempoTranscurridoMM(0);
+            
             this.avionesDot.add(dot);
+            
         }
         
         
-        /*
-        try{
-            String line;
-            BufferedReader reader = new BufferedReader(new FileReader("citiesXYDestino.csv"));
-            while( (line = reader.readLine()) != null){
-                String[] arr = line.split(",");
-                double x = Double.parseDouble(arr[0]);
-                double y = Double.parseDouble(arr[1]);                                            
-                
-                destino.add(new CoordenadaDouble(x,y));
-            }            
-        }catch (Exception ex){
-            System.out.println("Error de lectura");
-        }*/
-        
-        
-//        try{
-//            String line;
-//            
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("citiesXY.csv"));
-//            int size=origen.size();
-//            
-//            for(int i=0;i<size;i++){
-//                String str;
-//                double x=origen.get(i).getX();
-//                double y=origen.get(i).getY();
-//                str = new String(String.valueOf(x)+","+String.valueOf(y));
-//                
-//                
-//                writer.write(str+"\n");
-//            }
-//            writer.close();
-//        }catch (Exception ex){
-//            System.out.println("Error de escritura");
-//        }
+        //map.setDisplayPosition(start, 2);
+
+        this.continentes = general.obtenerContinentes();
+
+        for (aeropuerto a : this.listaAeropuertos){
+            Aeropuerto newAero = new Aeropuerto();
+            
+            newAero.setIdentificator(a.getId());
+            newAero.setIcaoCode(a.getCodigo());
+            newAero.setCityId(a.getCiudad());
+            int idCont = buscarContinente(a.getContinente());
+            newAero.setContinent(idCont);
+            newAero.setCountry(a.getPais());
+            newAero.setCapMax(a.getCapMax());
+
+           newAero.setCapActual(a.getCapActual());
+           newAero.setCoordX(a.getCoordX());
+           newAero.setCoordY(a.getCoordY());
+           newAero.setColor("verde");
+
+            this.listaAeropuertosNew.add(newAero);
+            
+ 
+        }
 
 
-        
-        
+        for (Modelo.Vuelo a : this.listaVuelos){
+            Algoritmo.Vuelo v = new Algoritmo.Vuelo(a.getIdAeropuertoOrigen(),a.getFechaSalida().getHours(),a.getFechaSalida().getMinutes(),
+            a.getIdAeropuertoDestino(),a.getFechaLlegada().getHours(),a.getFechaLlegada().getMinutes()
+            );
+            this.listaVuelosNew.add(v);
 
-
-        map.setDisplayPosition(start, 2);
-        IlustradorAvionDot ilustradorAvion = new IlustradorAvionDot(this.avionesDot);   
+        }
+        
+        IlustradorAvionDot ilustradorAvion = new IlustradorAvionDot(this.avionesDot,this.listaAeropuertosNew,this.listaVuelosNew);   
         ilustradorAvion.setVisible(true);
-        ilustradorAvion.setSize(map.getPreferredSize());
-        ilustradorAvion.setOpaque(false);
+        //ilustradorAvion.setSize(map.getPreferredSize());
+        //ilustradorAvion.setOpaque(false);
+        
         JButton button1 = new JButton();
         button1.setLocation(900,900);
         button1.setText("<<");
@@ -269,13 +331,20 @@ public class MapWorkerTest {
         button4.setLocation(900,900);
         button4.setText("Reanudar");
         
+        JButton button5 = new JButton();
+        button5.setLocation(900,900);
+        button5.setText("Capturar Imagen");
+        
+        JButton button6 = new JButton();
+        button6.setLocation(900,900);
+        button6.setText("Cerrar");
         
         JLabel label = new JLabel();
         label.setText("Velocidad");
         
         
         JLabel label2 = new JLabel();
-        label.setText(String.valueOf(ilustradorAvion.getT().getDelay()));
+        label.setText("X"+String.valueOf(ilustradorAvion.getT().getDelay()));
         
         
         
@@ -366,9 +435,55 @@ public class MapWorkerTest {
                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
 
+        });
+        
+        
+        button5.addActionListener(new ActionListener() {//Disminuir velocidad
+            
+            private void button5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+                // BUCAR AEROPUERTO ORIGEN
+                
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    //String fecha=dateFormat.format(cal);
+                    //System.out.println(fecha);
+                    getSaveSnapShot(f,"captures\\"+dtf.format(now)+".png");
+                }catch(Exception exp){
+                    System.out.println("Error de captura");
+                }
+                  
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
 
         });
         
+        button6.addActionListener(new ActionListener(){
+            private void button5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+                // BUCAR AEROPUERTO ORIGEN
+                
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    //ilustradorAvion.setVisible(false);
+                    ilustradorAvion.setCerrado(1);
+                    //ilustradorAvion.removeAll();
+                    f.dispose();
+                    
+                }catch(Exception exp){
+                    System.out.println("Error en cerrar ventana");
+                }
+                  
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
         /*
                 System.out.println("AQUI AQUI");
         velocidad*=2;*/
@@ -380,7 +495,8 @@ public class MapWorkerTest {
         ilustradorAvion.add(button3);
         ilustradorAvion.add(button4);
         ilustradorAvion.add(label2);
-        
+        ilustradorAvion.add(button5);
+        ilustradorAvion.add(button6);
         ilustradorAvion.addMouseListener(new MouseListener() {//Disminuir velocidad
             
 
@@ -454,69 +570,42 @@ public class MapWorkerTest {
 
 
         });
-        ilustradorAvion.setLocation(map.getLocation());
-        map.add(ilustradorAvion); 
-        map.setZoomControlsVisible(false);
+        //ilustradorAvion.setLocation(map.getLocation());
+        //map.add(ilustradorAvion); 
+        //map.setZoomControlsVisible(false);
        
-        f.add(map);
+        f.add(ilustradorAvion);
         //f.setResizable(false);
         Dimension d = new Dimension(1040,780);
         f.setMaximumSize( d);
         f.setResizable(false);
         System.out.println( "MI SIZE: " + f.getMaximumSize( ));
         f.pack();
-        f.setSize(map.getPreferredSize());
+        f.setSize(1023,697);
         f.setLocationRelativeTo(null);
         f.setVisible(true);
         
         //new MapWorker(map, start).execute();
     }
-
-    private class MapWorker extends SwingWorker<Void, Coordinate> {
-
-        private final JMapViewer map;
-        private Coordinate last;
-        private MapMarkerDot lastdot;
-        private MapMarkerDot actualdot;
-        
-        public MapWorker(JMapViewer map, Coordinate start)  {
-            this.map = map;
-            this.last = start;
-        }
-        
-        @Override
-        protected Void doInBackground() throws Exception {
-            while (!isCancelled()) {
-                
-                lastdot=new MapMarkerDot(last.getLat(),last.getLon());
-                last = new Coordinate(last.getLat() + 1, last.getLon() + 1);
-                actualdot=new MapMarkerDot(last.getLat(),last.getLon());
-                publish(last);
-                
-                //Thread.sleep(1000);
-                
+    private int buscarContinente(String c){
+        for (continente cont :this.continentes){
+            if (cont.getNombre().equals(c)){
+                return cont.getId();
             }
-            return null;
         }
-
-        @Override
-        protected void process(List<Coordinate> chunks) {
-            //for (Coordinate c : chunks) {
-                //route.add(c);
-                
-                
-                //map.removeAllMapMarkers();
-                
-                
-                
-                
-             //map.removeMapMarker(lastdot);
-                map.addMapMarker(actualdot);
-                
-            //}
-            map.repaint();
-        }
+        return -1;
     }
+    
+    public int revisaTiempo(int horaSalida, int horaLlegada){
+        
+        if (horaLlegada <= horaSalida) return 1; // llega un dia despues
+        
+        else if (horaLlegada - horaSalida < 9) return 1; // llega un dia despues
+        
+        return 0; // llega el mismo dia
+        
+    } 
+    
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {

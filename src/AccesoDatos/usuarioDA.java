@@ -9,6 +9,8 @@ import java.sql.*;
 import Modelo.database;
 import Modelo.persona;
 import Modelo.usuario;
+import Modelo.*;
+import static Modelo.Hashing.MD5Hash;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -22,26 +24,40 @@ import java.util.ArrayList;
  * @author Moises
  */
 public class usuarioDA {
-    public usuario obtenerUsuario(String nombreUsuario, String contraseña){ 
+    private Encriptar td ;
+    public usuario obtenerUsuario(String nombreUsuario, String contraseña){
+        
         try {
+
+            td = new Encriptar();
+            //String hashPw = MD5Hash(contraseña);
+            //String hashPw = td.encrypt(contraseña);
+
+          
+            Encriptador enc = new Encriptador();
+            
+            String hashPw = enc.encrypt(contraseña);
+            System.out.println( " Antes de encriptar :" + contraseña + "\n Despus de encr: "+ hashPw);
             database connect = new database();
             String query = "{CALL obtenerUsuario(?,?)}";
 
             CallableStatement stmt = connect.getConnection().prepareCall(query);
             stmt.setString(1, nombreUsuario);
-            stmt.setString(2, contraseña);
+            stmt.setString(2, hashPw);//     contraseña
             
             ResultSet rs = stmt.executeQuery();
             while (rs.next( )){
-                System.out.println("Äqui"+ rs.getInt("id"));
+               
                usuario usuario= new usuario();
-               if (rs.getBoolean("encontrado")){                     
+               if (rs.getBoolean("encontrado")){  
+                    System.out.println("Äqui"+ rs.getInt("id"));
                     persona persona= new persona();
 
                     System.out.println(rs.getInt("id")+ " "+rs.getString("codigo")+ " "+rs.getString("password"));
+                    
                     usuario.setId(rs.getInt("id_usuario"));
                     usuario.setCodigo(nombreUsuario);
-                    usuario.setPassword(contraseña);
+                    usuario.setPassword(hashPw); //     contraseña
                     
                     usuario.setNumeroIntentos(rs.getInt("numero_intentos"));
                     usuario.setTiempoRestanteBaneado(rs.getInt("tiempo_restante"));
@@ -61,6 +77,8 @@ public class usuarioDA {
                     persona.setTipoDocumento(rs.getString("tipo_documento"));
                     
                     usuario.setPersona(persona);
+                    
+
                     return usuario;
                 }else{
                    if (rs.getBoolean("castigar")){
@@ -82,8 +100,95 @@ public class usuarioDA {
             return null;
         }
     }
+    public boolean iniciarSesion(int idUsuario){
+        try{
+            database connect = new database();
+            String query = "{CALL iniciarSesion(?)}";
+
+            CallableStatement stmt = connect.getConnection().prepareCall(query);
+            stmt.setInt(1, idUsuario);
+
+            
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next( )){
+                boolean rpta = rs.getBoolean("respuesta");
+                System.out.println("RPTA: "+rpta);
+                if (rpta==true );
+                    return rpta;
+                
+                
+            }
+            return false;
+            
+            
+            
+        }catch(Exception ex){
+            System.out.println("ERROR INICIO " +ex.getMessage());
+            return false;
+        }
+    }
+    public boolean cerrarSesion(int idUsuario){
+        try{
+            database connect = new database();
+            String query = "{CALL cerrarSesion(?)}";
+
+            CallableStatement stmt = connect.getConnection().prepareCall(query);
+            stmt.setInt(1, idUsuario);
+
+            
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next( )){
+                boolean rpta = rs.getBoolean("respuesta");
+                if (rpta==true );
+                    return rpta;
+                
+                
+            }
+             return false;
+            
+            
+        }catch(Exception ex){
+            System.out.println("ERROR INICIO " +ex.getMessage());
+            return false;
+        }
+    }
+    public usuario obtenerUsuarioRecuperar(String nombreUsuario){
+        try{
+            
+            database connection = new database();
+             String query="select * from usuario as u "+
+                 " inner join persona as p on p.id = u.id_persona "+
+                "where u.codigo = '" + nombreUsuario + "';" ;
+        //PreparedStatement stmt = connection.getConnection().prepareStatement(query);
+//          Statement stmt = connection.getConnection().createStatement();
+//            ResultSet rs = stmt.executeQuery(query);
+            
+           Statement sentencia= connection.getConnection().createStatement();
+            ResultSet rs = sentencia.executeQuery(query); 
+            while (rs.next()){
+                usuario usuarioNuevo= new usuario();
+                
+                usuarioNuevo.setCodigo(nombreUsuario);
+                usuarioNuevo.setPassword(rs.getString("password"));
+                usuarioNuevo.getPersona().setCorreo("correo");
+                 return usuarioNuevo;
+            }
+           return null;
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+            return null;
+        }
+        
+    }
+
      public boolean registrarUsuario(usuario usuario){
          try {
+
+            Encriptador enc = new Encriptador();
+            //String hashPw = MD5Hash(usuario.getPassword()); // Hasheamos la contraseña a registrar.
+            String hashPw = enc.encrypt(usuario.getPassword());
+            System.out.println( " Antes de encriptar :" + usuario.getPassword() + "\n Despus de encr: "+ hashPw);
+
             database connect = new database();
             String queryPersona="insert into persona (nombre,apellido_paterno,apellido_materno,"
                     + "numero_documento_identidad,direccion,fecha_nacimiento,id_ciudad,id_tipo_documento,correo)"
@@ -129,7 +234,7 @@ public class usuarioDA {
                     + "values (?,?,(select id from rol where nombre=? ),?,now())"; 
             PreparedStatement stmt2 = connect.getConnection().prepareStatement(queryUsuario);
             stmt2.setString(1,usuario.getCodigo());
-            stmt2.setString(2,usuario.getPassword());
+            stmt2.setString(2,hashPw);//usuario.getPassword()
             stmt2.setString(3,usuario.getRol());
             stmt2.setLong(4,id);
             stmt2.executeUpdate();
@@ -307,6 +412,111 @@ public class usuarioDA {
              return false;
          }
          
-     }
+    }
+    public boolean existeNumDoc(int index){
+        int id=-1;
+        try{
+            database connect = new database();
+            String queryUsuario="select numero_documento_identidad from persona where numero_documento_identidad = ?";
+            PreparedStatement stmt=connect.getConnection().prepareStatement(queryUsuario);
+            stmt.setInt(1, index);
+            stmt.execute();
+            ResultSet rs = stmt.executeQuery();
+            //ArrayList<usuario> lista = new ArrayList<>();
+            
+            if (rs.next( ))
+                id=rs.getInt("numero_documento_identidad");
+            
+            
+            connect.getConnection().close();
+            
+            return id==index;
+        }catch(Exception exp){
+            System.out.println("Error: "+exp.getMessage());
+            return false;
+        }
+    }
+    public boolean existeUsuario(String usuario){
+        String user=null;
+        try{
+            database connect = new database();
+            String queryUsuario="select codigo from usuario where codigo = ?";
+            PreparedStatement stmt=connect.getConnection().prepareStatement(queryUsuario);
+            stmt.setString(1, usuario);
+            stmt.execute();
+            ResultSet rs = stmt.executeQuery();
+            //ArrayList<usuario> lista = new ArrayList<>();
+            
+            if (rs.next( ))
+                user=rs.getString("codigo");
+            
+            
+            connect.getConnection().close();
+            
+            return usuario.equals(user);
+        }catch(Exception exp){
+            System.out.println("Error: "+exp.getMessage());
+            return false;
+        }
+    }
     
+    public void registrarUsuarios(ArrayList<persona> lstUser, ArrayList<ArrayList<String>> adic){
+        try{
+            database connect = new database();
+            for(int i=0; i<lstUser.size(); i++){
+                Statement sentencia = connect.getConnection().createStatement();
+                String query = "SELECT MAX(id) AS id FROM redexdb.persona";
+                ResultSet rs = sentencia.executeQuery(query);
+                rs.next();
+                int idPersona = rs.getInt("id") + 1;
+                /* Como es nuevo, se registra */
+                sentencia = connect.getConnection().createStatement();
+                query = "INSERT INTO redexdb.persona (id,nombre,apellido_paterno, apellido_materno,"
+                        + "numero_documento_identidad,direccion,correo,telefono,fecha_nacimiento"
+                        + ",id_ciudad,id_tipo_documento,activo) VALUES ('" +
+                        String.valueOf(idPersona) + "','" + lstUser.get(i).getNombre() + "','" + 
+                        lstUser.get(i).getApellidoPaterno() + "','" + lstUser.get(i).getApellidoMaterno() + "','" +
+                        String.valueOf(lstUser.get(i).getNumeroDocumentoIdentidad()) + "','" +
+                        lstUser.get(i).getDireccion() + "','" + lstUser.get(i).getCorreo() + "','" +
+                        lstUser.get(i).getTelefono() + "','" + 
+                        new SimpleDateFormat("yyyy-mm-dd").format(lstUser.get(i).getFechaNacimiento()) + "','" + 
+                        lstUser.get(i).getCiudad() + "','" + lstUser.get(i).getTipoDocumento() + "',1)";
+//                System.out.println("A " + query);
+                sentencia.executeUpdate(query);
+                
+                /* 2er paso: Registrar usuario*/
+                //
+                sentencia = connect.getConnection().createStatement();
+                query = "SELECT MAX(id) AS id FROM redexdb.usuario";
+                rs = sentencia.executeQuery(query);
+                rs.next();
+                int idUsuario = rs.getInt("id") + 1;
+                /* Como es nuevo, se registra */
+                sentencia = connect.getConnection().createStatement();
+                query = "INSERT INTO redexdb.usuario (id,codigo,password,activo,id_rol,id_persona) " +
+                        "VALUES ('" + String.valueOf(idUsuario) + "','" + adic.get(i).get(0) + "','" +
+                        adic.get(i).get(1) + "',1,'" + adic.get(i).get(2) + "','" + 
+                        String.valueOf(idPersona) + "')";
+                sentencia.executeUpdate(query);
+//                System.out.println("B " + query);
+            }
+            connect.getConnection().close();
+        }catch(Exception e){
+            System.out.println("ERROR registrarUsuarios "+e.getMessage());
+        }
+    }
+    public void cerrarSesionAll(){
+         try{
+            database connect = new database();
+            Statement sentencia = connect.getConnection().createStatement();
+            String query = "DELETE FROM sesion;";
+            sentencia = connect.getConnection().createStatement();
+             sentencia.executeUpdate(query);
+//                System.out.println("B " + query);
+            
+            connect.getConnection().close();
+        }catch(Exception e){
+            System.out.println("ERROR registrarUsuarios "+e.getMessage());
+        }
+    }
 }

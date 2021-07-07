@@ -1,30 +1,63 @@
 package Vista;
 
+import Controlador.AdministrarClienteBL;
 import Controlador.PaqueteBL;
 import Controlador.VueloBL;
 import Controlador.aeropuertoBL;
+import Controlador.usuarioBL;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import Modelo.Archivo;
 import Modelo.Vuelo;
 import Modelo.aeropuerto;
+import Modelo.cliente;
 import Modelo.paquete;
+import Modelo.persona;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class frmCargaDatos extends javax.swing.JPanel {
 
     private ArrayList<Archivo> listFile = new ArrayList<Archivo>();
+    private ArrayList<String> listAerop = new ArrayList<String>();
+    private ArrayList<Integer> listHusos = new ArrayList<Integer>();
+    private javax.swing.JFrame x;
+    private ArrayList<ArrayList<String>> usuarios = new ArrayList<ArrayList<String>>();
     
-    public frmCargaDatos() {
+    public frmCargaDatos(javax.swing.JFrame x) {
         initComponents();
+        cargarHusos();
+    }
+    
+    public void cargarHusos(){
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader("resources\\husos.txt"));
+            String line;
+            String continent = "";
+            while( (line = reader.readLine()) != null){
+                String[] arr = line.split("\\s+");
+                listAerop.add(arr[0]);
+                listHusos.add(Integer.parseInt(arr[1]));
+            } 
+//            for(int i=0; i<listAerop.size(); i++){
+//                System.out.println("Aerop: " + listAerop.get(i) + " GMT" + 
+//                        String.valueOf(-listHusos.get(i)));
+//            }
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("ERRORR!");
+        }
     }
     
     public void actualizarTabla(){
@@ -76,6 +109,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
     
     public ArrayList<aeropuerto> procesarAeropuertos(String ruta){
         ArrayList<aeropuerto> aux = new ArrayList<aeropuerto>();
+        int linea = 1;
         try{
             BufferedReader reader = new BufferedReader(new FileReader(ruta));
             String line;
@@ -83,17 +117,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
             while( (line = reader.readLine()) != null){
                 String[] arr = line.split("\\s+");
                 if(arr.length == 1 || arr[1].equals("OACI") || arr[1].equals("ICAO")) continue;
-//                for(int i=0; i<arr.length; i++){
-//                    System.out.print("'");
-//                    System.out.print(arr[i] + "' ");
-//                }
                 int[] espacios = hallarEspacios(line);
-//                System.out.print("[");
-//                for(int i=0; i<espacios.length; i++){
-//                    System.out.print(espacios[i]);
-//                    System.out.print(",");
-//                }
-//                System.out.print("]");
                 if(arr[0].equals("")){
                     continent = "";
                     for(int i=1;(i==1 ||(espacios[i] == 1) || (espacios[i-1] == 1)); i++){
@@ -128,70 +152,303 @@ public class frmCargaDatos extends javax.swing.JPanel {
 //                    System.out.println(" País: " + country);
                     aeropuerto airpt = new aeropuerto(Integer.parseInt(arr[0]), nameAir, arr[1],
                             continent, country, nameAir);
-                    airpt.print();
+                    //airpt.print();
                     aux.add(airpt);
                 }
+                linea++;
             }
             System.out.println("Airports' reading process successful!");
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("There are a several problem with the airports' reading process! Check it!");
+            if(linea == 1)
+                JOptionPane.showMessageDialog(null,
+                    "La línea 1 contiene un error de formato. No se podrá continuar con"
+                            + "la carga hasta que el error se corrija",
+                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+            int reply = JOptionPane.showConfirmDialog(null,
+                    "La línea " + String.valueOf(linea) + " contiene un error de formato.\n"
+                            + "¿Desea guardar los aeropuertos ya leídos?",
+                    "Mensaje de error", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                return aux;
+            }
+            else {
+               JOptionPane.showMessageDialog(null, "Registro cancelado");
+               return new ArrayList<aeropuerto>();
+            }
+        }
+        return aux;
+    }
+    public ArrayList<persona> procesarClientes(String ruta){
+        ArrayList<persona> aux = new ArrayList<persona>();
+        int linea = 1;
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(ruta));
+            String line;
+            String continent = "";
+            this.usuarios = new ArrayList<ArrayList<String>>();
+            while( (line = reader.readLine()) != null){
+                String[] arr = line.split(",");
+                System.out.println(arr);
+                persona p = new persona();
+                //nombre,apellido_paterno,apellido_materno,numero_documento_identidad,direccion,correo,telefono,fecha_nacimiento,id_ciudad,id_tipo_documento,
+                p.setNombre(arr[0]);
+                p.setApellidoPaterno(arr[1]);
+                p.setApellidoMaterno(arr[2]);
+                p.setNumeroDocumentoIdentidad(Integer.parseInt(arr[3]));
+                p.setDireccion(arr[4]);
+                p.setCorreo(arr[5]);
+                p.setTelefono(arr[6]);
+                
+                Date date1=new SimpleDateFormat("dd-MM-yyyy").parse(arr[7]);
+                
+                p.setFechaNacimiento(date1);
+                p.setCiudad((arr[8]));
+                p.setTipoDocumento(arr[9]);
+                
+                aux.add(p);
+                linea++;
+            }
+            System.out.println("Clients' reading process successful!");
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            if(linea == 1)
+                JOptionPane.showMessageDialog(null,
+                    "La línea 1 contiene un error de formato. No se podrá continuar con"
+                            + "la carga hasta que el error se corrija",
+                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+            int reply = JOptionPane.showConfirmDialog(null,
+                    "La línea " + String.valueOf(linea) + " contiene un error de formato.\n"
+                            + "¿Desea guardar los clientes ya leídos?",
+                    "Mensaje de error", JOptionPane.YES_NO_OPTION);
+            if (reply == JOptionPane.YES_OPTION) {
+                return aux;
+            }
+            else {
+               JOptionPane.showMessageDialog(null, "Registro cancelado");
+               return new ArrayList<persona>();
+            }
+        }
+        return aux;
+    }
+    
+    public ArrayList<persona> procesarEmpleados(String ruta){
+        ArrayList<persona> aux = new ArrayList<persona>();
+        int linea = 1;
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader(ruta));
+            String line;
+            String continent = "";
+            this.usuarios = new ArrayList<ArrayList<String>>();
+            while( (line = reader.readLine()) != null){
+                String[] arr = line.split(",");
+                System.out.println(arr);
+                persona p = new persona();
+                
+                if(Integer.parseInt(arr[9]) < 1)
+                    throw new Exception();
+                
+//                arr[1].replace("O'", "O");
+//                arr[2].replace("O'", "O");
+                //nombre,apellido_paterno,apellido_materno,numero_documento_identidad,direccion,correo,telefono,fecha_nacimiento,id_ciudad,id_tipo_documento,
+                p.setNombre(arr[0]);
+                p.setApellidoPaterno(arr[1]);
+                p.setApellidoMaterno(arr[2]);
+                p.setNumeroDocumentoIdentidad(Integer.parseInt(arr[3]));
+                p.setDireccion(arr[4]);
+                p.setCorreo(arr[5]);
+                p.setTelefono(arr[6]);
+                
+                Date date1=new SimpleDateFormat("dd-MM-yyyy").parse(arr[7]);
+                
+                p.setFechaNacimiento(date1);
+                p.setCiudad((arr[8]));
+                p.setTipoDocumento(arr[9]);
+                
+                ArrayList<String> auxx = new ArrayList<String>();
+                auxx.add(arr[10]);
+                auxx.add(arr[11]);
+                auxx.add(arr[12]);
+                
+                aux.add(p);
+                this.usuarios.add(auxx);
+                linea++;
+            }
+            System.out.println("Employee's reading process successful!");
+        }catch(Exception e){
+//            e.printStackTrace();
+            System.out.println(e.getMessage());
+            if(linea == 1)
+                JOptionPane.showMessageDialog(null,
+                    "La línea 1 contiene un error de formato. No se podrá continuar con"
+                            + "la carga hasta que el error se corrija",
+                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+            else{
+                int reply = JOptionPane.showConfirmDialog(null,
+                        "La línea " + String.valueOf(linea) + " contiene un error de formato.\n"
+                                + "¿Desea guardar los empleados ya leídos?",
+                        "Mensaje de error", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    return aux;
+                }
+                else {
+                   JOptionPane.showMessageDialog(null, "Registro cancelado");
+                   return new ArrayList<persona>();
+                }
+            }
         }
         return aux;
     }
     
     public ArrayList<Vuelo> procesarVuelos(String ruta){
         ArrayList<Vuelo> aux = new ArrayList<Vuelo>();
+        int linea = 1;
         try{
             BufferedReader reader = new BufferedReader(new FileReader(ruta));
             String line;
             while( (line = reader.readLine()) != null){
                 String[] arr = line.split("-");
+                int indexO = listAerop.indexOf(arr[0]);
+                int indexD = listAerop.indexOf(arr[1]);
                 if(arr.length == 4){
-                    Vuelo plannedFlg = new Vuelo("Da igual",
-                            Date.from(LocalTime.of(Integer.parseInt(arr[2].split(":")[0]),
-                                    Integer.parseInt(arr[2].split(":")[1])).atDate(LocalDate.of(2018, 11, 2)).
-                                            atZone(ZoneId.systemDefault()).toInstant()),
-                            Date.from(LocalTime.of(Integer.parseInt(arr[3].split(":")[0]),
-                                    Integer.parseInt(arr[3].split(":")[1])).atDate(LocalDate.of(2018, 11, 2)).
-                                        atZone(ZoneId.systemDefault()).toInstant()), arr[0], arr[1]);
-                    plannedFlg.print();
+//                    Vuelo plannedFlg = new Vuelo("1",
+//                            Date.from(LocalTime.of(Integer.parseInt(arr[2].split(":")[0]),
+//                                    Integer.parseInt(arr[2].split(":")[1])).atDate(LocalDate.of(2018, 11, 2)).
+//                                            atZone(ZoneId.systemDefault()).toInstant()),
+//                            Date.from(LocalTime.of(Integer.parseInt(arr[3].split(":")[0]),
+//                                    Integer.parseInt(arr[3].split(":")[1])).atDate(LocalDate.of(2018, 11, 2)).
+//                                        atZone(ZoneId.systemDefault()).toInstant()), arr[0], arr[1]);
+                    if((Integer.parseInt(arr[2].split(":")[0]) < 0) &&  (Integer.parseInt(arr[2].split(":")[0]) > 23) &&
+                            (Integer.parseInt(arr[2].split(":")[1]) < 0) &&  (Integer.parseInt(arr[2].split(":")[1]) > 59) &&
+                            (Integer.parseInt(arr[3].split(":")[0]) < 0) &&  (Integer.parseInt(arr[3].split(":")[0]) > 23) &&
+                            (Integer.parseInt(arr[3].split(":")[1]) < 0) &&  (Integer.parseInt(arr[3].split(":")[1]) > 59)
+                            )
+                        throw new Exception();
+                    int horaO = Integer.parseInt(arr[2].split(":")[0]);
+                    int horaD = Integer.parseInt(arr[3].split(":")[0]);
+                    int aumentoO = listHusos.get(indexO);
+                    int aumentoD = listHusos.get(indexD);
+                    if((horaO + aumentoO) >= 24)
+                        horaO += aumentoO - 24;
+                    else if(horaO + aumentoO < 0)
+                        horaO += aumentoO + 24;
+                    else
+                        horaO += aumentoO;
+                    if((horaD + aumentoD) >= 24)
+                        horaD += aumentoD - 24;
+                    else if(horaD + aumentoD < 0)
+                        horaD += aumentoD + 24;
+                    else
+                        horaD += aumentoD;
+                    Vuelo plannedFlg = new Vuelo("1",
+                            Date.from(LocalTime.of(horaO, Integer.parseInt(arr[2].split(":")[1]))
+                                    .atDate(LocalDate.of(2018, 11, 2))
+                                    .atZone(ZoneId.systemDefault()).toInstant()),
+                            Date.from(LocalTime.of(horaD, Integer.parseInt(arr[3].split(":")[1]))
+                                    .atDate(LocalDate.of(2018, 11, 2))
+                                    .atZone(ZoneId.systemDefault()).toInstant()), arr[0], arr[1]);
+
+                    //plannedFlg.print();
                     aux.add(plannedFlg);
                 }
+                else throw new Exception();
+                linea++;
             }
             System.out.println("Flights' reading process successful!");
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("There are a several problem with the flights' reading process! Check it!");
+            if(linea == 1)
+                JOptionPane.showMessageDialog(null,
+                    "La línea 1 contiene un error de formato. No se podrá continuar con"
+                            + "la carga hasta que el error se corrija",
+                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+            else{
+                int reply = JOptionPane.showConfirmDialog(null,
+                        "La línea " + String.valueOf(linea) + " contiene un error de formato.\n"
+                                + "¿Desea guardar los vuelos ya leídos?",
+                        "Mensaje de error", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    return aux;
+                }
+                else {
+                   JOptionPane.showMessageDialog(null, "Registro cancelado");
+                   return new ArrayList<Vuelo>();
+                }
+            }
         }
         return aux;
     }
     
     public ArrayList<paquete> procesarPaquetes(String ruta){
         ArrayList<paquete> aux = new ArrayList<paquete>();
+        String backslash = "\\";
+        String identificator = ruta.split(Pattern.quote(backslash))[ruta.split(Pattern.quote(backslash)).length - 1]
+                .split("_")[2].substring(0, 4);
+        int linea = 1;
         try{
             BufferedReader reader = new BufferedReader(new FileReader(ruta));
             String line;
             while( (line = reader.readLine()) != null){
                 String[] arr = line.split("-");
-                if(arr[1].equals("20180418"))
-                    break;
+//                if(arr[1].equals("20180418")) // Se debe comentar para el final
+//                    break;
                 if(arr.length == 4){
+//                    paquete plannedPack = new paquete(arr[0],
+//                            Date.from(LocalTime.of(Integer.parseInt(arr[2].split(":")[0]),
+//                                   Integer.parseInt(arr[2].split(":")[1])).atDate(LocalDate.of(
+//                                        Integer.parseInt(arr[1].substring(0, 4)),
+//                                        Integer.parseInt(arr[1].substring(4, 6)),
+//                                        Integer.parseInt(arr[1].substring(6, 8)))).
+//                                        atZone(ZoneId.systemDefault()).toInstant()), identificator, arr[3]);
+                    if((Integer.parseInt(arr[2].split(":")[0]) < 0) &&  (Integer.parseInt(arr[2].split(":")[0]) > 23) &&
+                            (Integer.parseInt(arr[2].split(":")[1]) < 0) &&  (Integer.parseInt(arr[2].split(":")[1]) > 59) &&
+                            (Integer.parseInt(arr[1].substring(0,2)) != 20) && (Integer.parseInt(arr[1].substring(4,6)) > 12) &&
+                            (Integer.parseInt(arr[1].substring(6,8)) > 31)
+                            )
+                        throw new Exception();
+                    int indexO = listAerop.indexOf(arr[3]);
+                    int horaO = Integer.parseInt(arr[2].split(":")[0]);
+                    int aumentoO = listHusos.get(indexO);
+                    if((horaO + aumentoO) >= 24)
+                        horaO += aumentoO - 24;
+                    else if(horaO + aumentoO < 0)
+                        horaO += aumentoO + 24;
+                    else
+                        horaO += aumentoO;
                     paquete plannedPack = new paquete(arr[0],
-                            Date.from(LocalTime.of(Integer.parseInt(arr[2].split(":")[0]),
-                                   Integer.parseInt(arr[2].split(":")[1])).atDate(LocalDate.of(
-                                        Integer.parseInt(arr[1].substring(0, 4)),
-                                        Integer.parseInt(arr[1].substring(4, 6)),
-                                        Integer.parseInt(arr[1].substring(6, 8)))).
-                                        atZone(ZoneId.systemDefault()).toInstant()), "SKBO", arr[3]);
-                    plannedPack.print();
+                            Date.from(LocalTime.of(horaO, Integer.parseInt(arr[2].split(":")[1]))
+                                    .atDate(LocalDate.of(
+                                    Integer.parseInt(arr[1].substring(0, 4)),
+                                    Integer.parseInt(arr[1].substring(4, 6)),
+                                    Integer.parseInt(arr[1].substring(6, 8)))).
+                                    atZone(ZoneId.systemDefault()).toInstant()), identificator, arr[3]);
+                    
                     aux.add(plannedPack);
                 }
+                linea++;
             }
             System.out.println("Packs' reading process successful!");
         }catch(Exception e){
             e.printStackTrace();
-            System.out.println("There are a several problem with the flights' reading process! Check it!");
+            if(linea == 1)
+                JOptionPane.showMessageDialog(null,
+                    "La línea 1 contiene un error de formato. No se podrá continuar con"
+                            + "la carga hasta que el error se corrija",
+                    "Mensaje de error", JOptionPane.INFORMATION_MESSAGE);
+            else{
+                int reply = JOptionPane.showConfirmDialog(null,
+                        "La línea " + String.valueOf(linea) + " contiene un error de formato.\n"
+                                + "¿Desea guardar los paquetes ya leídos?",
+                        "Mensaje de error", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    return aux;
+                }
+                else {
+                   JOptionPane.showMessageDialog(null, "Registro cancelado");
+                   return new ArrayList<paquete>();
+                }
+            }
         }
         return aux;
     }
@@ -217,6 +474,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
         btnEliminar = new javax.swing.JButton();
         btnAnhadir = new javax.swing.JButton();
         btnProcesar = new javax.swing.JButton();
+        btnAyuda = new javax.swing.JButton();
 
         panelFondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -259,7 +517,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
         lblSelecArch.setText("Seleccione un archivo:");
         panelFondo.add(lblSelecArch, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, -1, -1));
 
-        chkCargaMultiple.setText("¿Activar carga múltiple?");
+        chkCargaMultiple.setText("¿Obtener ruta?");
         panelFondo.add(chkCargaMultiple, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 50, -1, -1));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Detalle"));
@@ -274,7 +532,7 @@ public class frmCargaDatos extends javax.swing.JPanel {
         jLabel3.setText("Contenido del archivo:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
-        cboTipoInfo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Aeropuertos", "Vuelos", "Paquetes", "Clientes" }));
+        cboTipoInfo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Aeropuertos", "Vuelos", "Paquetes", "Clientes", "Empleados" }));
         jPanel1.add(cboTipoInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 180, -1));
 
         lblPathArch.setText("Ruta:");
@@ -311,6 +569,14 @@ public class frmCargaDatos extends javax.swing.JPanel {
         });
         panelFondo.add(btnProcesar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 420, 100, -1));
 
+        btnAyuda.setText("Ayuda");
+        btnAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAyudaActionPerformed(evt);
+            }
+        });
+        panelFondo.add(btnAyuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 50, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -324,11 +590,10 @@ public class frmCargaDatos extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArchivoActionPerformed
-        JFileChooser chooser = new JFileChooser("G:\\PUCP\\9no Ciclo\\DP1\\Sistema\\algoritmo\\tabuProvisional");
+        JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Archivos de texto (extensión TXT)", "txt");
         chooser.setFileFilter(filter);
-        chooser.setMultiSelectionEnabled(chkCargaMultiple.getModel().isSelected());
         boolean repetido = false;
         while(!repetido){
             int returnVal = chooser.showOpenDialog(null);
@@ -348,7 +613,10 @@ public class frmCargaDatos extends javax.swing.JPanel {
                     continue;
                 }
                 txtNombreArch.setText(chooser.getSelectedFile().getName());
-                txtPathArch.setText(chooser.getSelectedFile().getPath());
+                if(chkCargaMultiple.getModel().isSelected())
+                    txtPathArch.setText(chooser.getSelectedFile().getParent());
+                else
+                    txtPathArch.setText(chooser.getSelectedFile().getPath());
                 break;
             }
         }
@@ -375,23 +643,84 @@ public class frmCargaDatos extends javax.swing.JPanel {
 
     private void btnProcesarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesarActionPerformed
         for(int i=0; i<listFile.size(); i++){
+            boolean order = false;
             if(listFile.get(i).getTipo() == "Aeropuertos"){
                 aeropuertoBL procBL = new aeropuertoBL();
-                procBL.registrarAeropuertos(procesarAeropuertos(listFile.get(i).getUbicacion()));
+                try{
+                    procBL.registrarAeropuertos(procesarAeropuertos(listFile.get(i).getUbicacion()));
+                    JOptionPane.showMessageDialog(null,
+                    "El proceso de registro de aeropuertos", "Término de proceso",
+                    JOptionPane.INFORMATION_MESSAGE);
+                }catch(Exception e){order = true;}
             }else if(listFile.get(i).getTipo() == "Vuelos"){
                 VueloBL procBL = new VueloBL();
-                procBL.registrarVuelos(procesarVuelos(listFile.get(i).getUbicacion()));
+                try{
+                    procBL.registrarVuelos(procesarVuelos(listFile.get(i).getUbicacion()));
+                    JOptionPane.showMessageDialog(null,
+                    "El proceso de registro de vuelos", "Término de proceso",
+                    JOptionPane.INFORMATION_MESSAGE);
+                }catch(Exception e){order = true;}
+            }else if (listFile.get(i).getTipo() == "Clientes"){
+               AdministrarClienteBL procBL = new AdministrarClienteBL();
+                //procBL.registrarClientes(procesarClientes(listFile.get(i).getUbicacion()));
+                try{
+                    procBL.registarClientes(procesarClientes(listFile.get(i).getUbicacion()));
+                    JOptionPane.showMessageDialog(null,
+                    "El proceso de registro de clientes", "Término de proceso",
+                    JOptionPane.INFORMATION_MESSAGE);
+                }catch(Exception e){order = true;}
             }else if(listFile.get(i).getTipo() == "Paquetes"){
-                PaqueteBL procBL = new PaqueteBL();
-                procesarPaquetes(listFile.get(i).getUbicacion());
-                procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion()));
+                if(chkCargaMultiple.getModel().isSelected()){
+                    File f = new File(listFile.get(i).getUbicacion());
+                    String[] fileList = f.list();
+                    try{
+                        for(String str : fileList){
+                            PaqueteBL procBL = new PaqueteBL();
+                            procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion() + "\\" + str));
+                        }
+                        JOptionPane.showMessageDialog(null,
+                        "El proceso de registro de paquetes", "Término de proceso",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    }catch(Exception e){order = true;}
+                }else{
+                    PaqueteBL procBL = new PaqueteBL();
+                    try{
+                        procBL.registrarPaquetes(procesarPaquetes(listFile.get(i).getUbicacion()));
+                        JOptionPane.showMessageDialog(null,
+                        "El proceso de registro de paquetes", "Término de proceso",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    }catch(Exception e){order = true;}
+                }
+            }else if(listFile.get(i).getTipo() == "Empleados"){
+                usuarioBL procBL = new usuarioBL();
+                try{
+                    ArrayList<persona> aux = procesarEmpleados(listFile.get(i).getUbicacion());
+                    if(aux.isEmpty())
+                        throw new Exception();
+                    procBL.registrarUsuarios(aux, this.usuarios);
+                    JOptionPane.showMessageDialog(null,
+                    "El proceso de registro de empleados ha ", "Término de proceso",
+                    JOptionPane.INFORMATION_MESSAGE);
+                }catch(Exception e){order = true;}
             }
+            Archivo auxx = listFile.get(i);
+            if(order)
+                listFile.remove(auxx);
+        }
+        DefaultTableModel modelTable = (DefaultTableModel) tblArchivos.getModel();
+        while(modelTable.getRowCount() > 0){
+            modelTable.removeRow(0);
         }
     }//GEN-LAST:event_btnProcesarActionPerformed
+
+    private void btnAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAyudaActionPerformed
+        new frmAyudaCarga(x,true).setVisible(true);
+    }//GEN-LAST:event_btnAyudaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnhadir;
     private javax.swing.JButton btnArchivo;
+    private javax.swing.JButton btnAyuda;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnProcesar;
     private javax.swing.JComboBox<String> cboTipoInfo;

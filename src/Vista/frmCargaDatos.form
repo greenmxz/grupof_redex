@@ -117,7 +117,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="chkCargaMultiple">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&#xbf;Activar carga m&#xfa;ltiple?"/>
+            <Property name="text" type="java.lang.String" value="&#xbf;Obtener ruta?"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -180,11 +180,12 @@
             <Component class="javax.swing.JComboBox" name="cboTipoInfo">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
+                  <StringArray count="5">
                     <StringItem index="0" value="Aeropuertos"/>
                     <StringItem index="1" value="Vuelos"/>
                     <StringItem index="2" value="Paquetes"/>
                     <StringItem index="3" value="Clientes"/>
+                    <StringItem index="4" value="Empleados"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -257,6 +258,19 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="360" y="420" width="100" height="-1"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnAyuda">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Ayuda"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAyudaActionPerformed"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="650" y="50" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>

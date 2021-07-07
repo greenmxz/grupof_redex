@@ -109,7 +109,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="700" y="30" width="90" height="15"/>
+                  <AbsoluteConstraints x="550" y="30" width="90" height="15"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -125,6 +125,18 @@
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="5" y="25" width="25" height="20"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="javax.swing.JLabel" name="logoRedEx">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/Resource/RedEx.png"/>
+                </Property>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="650" y="0" width="-1" height="-1"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -148,7 +160,7 @@
           <SubComponents>
             <Component class="Especial.RSButtonMetro" name="btnAeropuertos">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Aeropuertos"/>
+                <Property name="text" type="java.lang.String" value="    Aeropuertos"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
@@ -156,13 +168,13 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="5" y="5" width="140" height="30"/>
+                  <AbsoluteConstraints x="5" y="35" width="140" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>
             <Component class="Especial.RSButtonMetro" name="btnVuelos">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Vuelos"/>
+                <Property name="text" type="java.lang.String" value="    Vuelos"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
@@ -170,13 +182,13 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="5" y="35" width="140" height="30"/>
+                  <AbsoluteConstraints x="5" y="65" width="140" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>
             <Component class="Especial.RSButtonMetro" name="btnPaquetes">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Paquetes"/>
+                <Property name="text" type="java.lang.String" value="    Paquetes"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
@@ -184,13 +196,13 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="5" y="65" width="140" height="30"/>
+                  <AbsoluteConstraints x="5" y="95" width="140" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>
             <Component class="Especial.RSButtonMetro" name="btnSimulacion">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Simulaci&#xf3;n (amp.)"/>
+                <Property name="text" type="java.lang.String" value="    Simulaci&#xf3;n gr&#xe1;fica"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
@@ -198,13 +210,13 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="5" y="165" width="140" height="30"/>
+                  <AbsoluteConstraints x="5" y="255" width="140" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>
             <Component class="Especial.RSButtonMetro" name="btnDetermUnit">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Generaci&#xf3;n de ruta"/>
+                <Property name="text" type="java.lang.String" value="SIMULACI&#xd3;N"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
@@ -212,7 +224,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="5" y="105" width="140" height="30"/>
+                  <AbsoluteConstraints x="5" y="195" width="140" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>
@@ -236,13 +248,13 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="5" y="100" width="140" height="3"/>
+                  <AbsoluteConstraints x="5" y="190" width="140" height="3"/>
                 </Constraint>
               </Constraints>
             </Component>
             <Component class="Especial.RSButtonMetro" name="btnGenData">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Generaci&#xf3;n de data"/>
+                <Property name="text" type="java.lang.String" value="    Generaci&#xf3;n de data"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
@@ -250,7 +262,47 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="5" y="135" width="140" height="30"/>
+                  <AbsoluteConstraints x="5" y="225" width="140" height="30"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="Especial.RSButtonMetro" name="btnFrecuencias">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="    Frecuencias"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFrecuenciasActionPerformed"/>
+              </Events>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="5" y="125" width="140" height="30"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="Especial.RSButtonMetro" name="btnHistoriales">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="    Historiales"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHistorialesActionPerformed"/>
+              </Events>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="5" y="155" width="140" height="30"/>
+                </Constraint>
+              </Constraints>
+            </Component>
+            <Component class="Especial.RSButtonMetro" name="btnReportes">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="REPORTES"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+              </Properties>
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                  <AbsoluteConstraints x="5" y="5" width="140" height="30"/>
                 </Constraint>
               </Constraints>
             </Component>

@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class frmGeneracionRuta extends javax.swing.JPanel {
@@ -135,10 +136,10 @@ public class frmGeneracionRuta extends javax.swing.JPanel {
                     "**************************************\n\n";
             txtInforme.setText(texto);
             TabuSearch ts = new TabuSearch();
+            String origen = txtOrigen.getText();
             ts.inputData("resources\\aeropuertos.txt",
                 "resources\\planes_vuelo.txt",
-                "resources\\pack_enviados\\pack_enviado_SKBO.txt");
-            String origen = txtOrigen.getText();
+                "resources\\pack_enviados\\pack_enviado_" + origen + ".txt");
             String destino = txtDestino.getText();
             LocalDate dia = dtpLlegada.getDatePicker().getDate();
             LocalTime hora = dtpLlegada.getTimePicker().getTime();
@@ -146,9 +147,31 @@ public class frmGeneracionRuta extends javax.swing.JPanel {
                     new Date(dia.getYear()-1900, dia.getMonthValue()-1, dia.getDayOfMonth(),
                         hora.getHour(), hora.getMinute()));
             long start = System.currentTimeMillis();
-//            texto = ts.executeVCRPTabu();
-            texto += ts.tabuAlgorithm(origen, destino, fecha);
+            ts.tabuAlgorithm(origen, destino, fecha);
+            ArrayList<Integer> solution = ts.getRouteOptimal();
+            
+            
+            for(int i : solution){
+                if(solution.get(0) != i)
+                    System.out.print(" to ");
+                System.out.print(i);
+            }
+            System.out.print(" (longitud: " + String.valueOf(ts.getRouteLenght(solution)) +
+                    ") ");
+            ArrayList<String> stringSol = ts.getAirportsRouteICAO();
+            for(String i : stringSol){
+                if(stringSol.get(0) != i)
+                    System.out.print(" ->");
+                System.out.print(i);
+            }
+            System.out.println(" ");
+            
+            
+            System.out.println("\\");
+            int lenghtOptimal = ts.getLenghtOptimal();
+            System.out.println("Optimal route's lenght is: " + String.valueOf(lenghtOptimal));
             long elapsedTime = System.currentTimeMillis() - start;
+            
             texto += "\nTiempo empleado: " + String.valueOf(elapsedTime) + " mseg";
             texto += "\n\nSIMULACIÓN UNITARIA FINALIZADA\n" + 
                     "**************************************\n";
